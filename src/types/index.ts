@@ -19,6 +19,12 @@ export type ApplicationStatus =
   | 'rejected'
   | 'withdrawn'
 
+export interface ApplicationNote {
+  id: number
+  content: string
+  created_at: string
+}
+
 export interface JobApplication {
   id: number
   company: string
@@ -29,6 +35,7 @@ export interface JobApplication {
   notes: string
   created_at: string
   updated_at: string
+  note_entries?: ApplicationNote[]
 }
 
 export type ViewMode = 'table' | 'kanban'

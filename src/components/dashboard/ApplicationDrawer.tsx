@@ -4,6 +4,7 @@ import { JobApplication } from '../../types'
 import { useEscapeKey } from '../../hooks/useEscapeKey'
 import { useFocusTrap } from '../../hooks/useFocusTrap'
 import StatusBadge from './StatusBadge'
+import NoteTimeline from './NoteTimeline'
 import { EditIcon, TrashIcon, CloseIcon, CalendarIcon, ClockIcon, LinkIcon } from '../icons'
 import { getAvatarColor } from '../../lib/avatar'
 import { formatLong, formatMedium } from '../../lib/dates'
@@ -132,6 +133,10 @@ export default function ApplicationDrawer({ app, onClose, onEdit, onDelete }: Pr
                   </div>
                 </>
               )}
+
+              {/* Note timeline */}
+              <div className="border-t border-gray-100 dark:border-gray-800" />
+              <NoteTimeline applicationId={app.id} />
 
               {/* Stage timeline */}
               <div className="border-t border-gray-100 dark:border-gray-800" />

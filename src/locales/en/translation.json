@@ -141,6 +141,14 @@
       "title": "{{count}} application(s) need follow-up",
       "daysAgo": "{{days}}d ago"
     },
+    "notes": {
+      "title": "Notes",
+      "placeholder": "Add a note...",
+      "add": "Add",
+      "empty": "No notes yet.",
+      "addFailed": "Failed to add note.",
+      "deleteFailed": "Failed to delete note."
+    },
     "toast": {
       "added": "Application added",
       "saved": "Changes saved",

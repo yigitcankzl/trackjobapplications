@@ -141,6 +141,14 @@
       "title": "{{count}} başvuru takip gerektiyor",
       "daysAgo": "{{days}} gün önce"
     },
+    "notes": {
+      "title": "Notlar",
+      "placeholder": "Not ekle...",
+      "add": "Ekle",
+      "empty": "Henüz not yok.",
+      "addFailed": "Not eklenemedi.",
+      "deleteFailed": "Not silinemedi."
+    },
     "toast": {
       "added": "Başvuru eklendi",
       "saved": "Değişiklikler kaydedildi",

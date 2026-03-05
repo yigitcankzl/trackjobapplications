@@ -9,9 +9,9 @@ export default function LoginPage() {
   const [isSignUp, setIsSignUp] = useState(false)
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-blue-100 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 p-4">
       {/* Card */}
-      <div className="relative w-full max-w-4xl h-[560px] bg-white rounded-2xl shadow-2xl overflow-hidden">
+      <div className="relative w-full max-w-4xl h-[560px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl overflow-hidden">
 
         {/* Sign Up Form — right side */}
         <div
@@ -39,7 +39,7 @@ export default function LoginPage() {
         <OverlayPanel isSignUp={isSignUp} onSwitch={() => setIsSignUp(!isSignUp)} />
       </div>
 
-      <p className="absolute bottom-6 text-xs text-gray-400">
+      <p className="absolute bottom-6 text-xs text-gray-400 dark:text-gray-500">
         {t('footer.copyright', { year: new Date().getFullYear() })}
       </p>
     </div>

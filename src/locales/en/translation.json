@@ -152,7 +152,9 @@
       "dashboard": "Dashboard",
       "analytics": "Analytics",
       "signOut": "Sign Out",
-      "profile": "Profile"
+      "profile": "Profile",
+      "darkMode": "Dark Mode",
+      "lightMode": "Light Mode"
     },
     "viewTable": "Table view",
     "viewKanban": "Kanban view",

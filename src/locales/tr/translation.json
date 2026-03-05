@@ -152,7 +152,9 @@
       "dashboard": "Dashboard",
       "analytics": "Analitik",
       "signOut": "Çıkış Yap",
-      "profile": "Profil"
+      "profile": "Profil",
+      "darkMode": "Karanlık Mod",
+      "lightMode": "Aydınlık Mod"
     },
     "viewTable": "Tablo görünümü",
     "viewKanban": "Kanban görünümü",

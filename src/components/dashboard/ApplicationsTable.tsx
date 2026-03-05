@@ -5,6 +5,11 @@ import { EditIcon, TrashIcon, ClipboardIcon } from '../icons'
 import { getAvatarColor } from '../../lib/avatar'
 import { formatMedium } from '../../lib/dates'
 
+function needsFollowUp(app: JobApplication): boolean {
+  if (app.status !== 'applied' && app.status !== 'interview') return false
+  return (Date.now() - new Date(app.updated_at).getTime()) / (1000 * 60 * 60 * 24) >= 3
+}
+
 interface Props {
   applications: JobApplication[]
   onView: (app: JobApplication) => void
@@ -57,7 +62,10 @@ export default function ApplicationsTable({ applications, onView, onEdit, onDele
                     {app.company[0].toUpperCase()}
                   </div>
                   <div className="min-w-0">
-                    <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 leading-tight">{app.company}</p>
+                    <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 leading-tight flex items-center gap-1.5">
+                      {app.company}
+                      {needsFollowUp(app) && <span className="w-2 h-2 rounded-full bg-amber-400 flex-shrink-0" title="Follow-up needed" />}
+                    </p>
                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate">{app.position}</p>
                     {app.notes && (
                       <p className="text-xs text-gray-400 mt-0.5 truncate max-w-xs italic">{app.notes}</p>

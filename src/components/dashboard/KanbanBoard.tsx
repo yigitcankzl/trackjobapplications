@@ -6,6 +6,11 @@ import { EditIcon, TrashIcon } from '../icons'
 import { getAvatarColor } from '../../lib/avatar'
 import { formatShort } from '../../lib/dates'
 
+function needsFollowUp(app: JobApplication): boolean {
+  if (app.status !== 'applied' && app.status !== 'interview') return false
+  return (Date.now() - new Date(app.updated_at).getTime()) / (1000 * 60 * 60 * 24) >= 3
+}
+
 interface Props {
   applications: JobApplication[]
   onView: (app: JobApplication) => void
@@ -46,7 +51,10 @@ function KanbanCard({ app, onView, onEdit, onDelete, onDragStart, onDragEnd, isD
             {app.company[0].toUpperCase()}
           </div>
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 leading-tight truncate">{app.company}</p>
+            <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 leading-tight truncate flex items-center gap-1.5">
+              {app.company}
+              {needsFollowUp(app) && <span className="w-2 h-2 rounded-full bg-amber-400 flex-shrink-0" />}
+            </p>
           </div>
         </div>
         <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">

@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { ThemeProvider } from './context/ThemeContext'
 import { ToastProvider } from './context/ToastContext'
 import { AuthProvider } from './context/AuthContext'
 import ErrorBoundary from './components/ErrorBoundary'
@@ -12,6 +13,7 @@ import ProfilePage from './pages/ProfilePage'
 export default function App() {
   return (
     <ErrorBoundary>
+      <ThemeProvider>
       <ToastProvider>
         <BrowserRouter>
           <AuthProvider>
@@ -26,6 +28,7 @@ export default function App() {
           </AuthProvider>
         </BrowserRouter>
       </ToastProvider>
+      </ThemeProvider>
     </ErrorBoundary>
   )
 }

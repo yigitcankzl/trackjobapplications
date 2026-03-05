@@ -30,3 +30,19 @@ class Application(models.Model):
 
     def __str__(self):
         return f"{self.company} — {self.position}"
+
+
+class ApplicationNote(models.Model):
+    application = models.ForeignKey(
+        Application,
+        on_delete=models.CASCADE,
+        related_name="note_entries",
+    )
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"Note on {self.application} at {self.created_at}"

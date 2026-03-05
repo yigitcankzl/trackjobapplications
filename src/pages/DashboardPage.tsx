@@ -93,10 +93,10 @@ export default function DashboardPage() {
         title={t('dashboard.title')}
         action={
           <div className="flex items-center gap-2">
-            <div className="flex items-center bg-gray-100 rounded-xl p-1 gap-0.5">
+            <div className="flex items-center bg-gray-100 dark:bg-gray-800 rounded-xl p-1 gap-0.5">
               <button
                 onClick={() => setView('table')}
-                className={`p-1.5 rounded-lg transition-colors ${view === 'table' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+                className={`p-1.5 rounded-lg transition-colors ${view === 'table' ? 'bg-white dark:bg-gray-700 text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200'}`}
                 aria-label={t('dashboard.viewTable')}
                 aria-pressed={view === 'table'}
               >
@@ -104,7 +104,7 @@ export default function DashboardPage() {
               </button>
               <button
                 onClick={() => setView('kanban')}
-                className={`p-1.5 rounded-lg transition-colors ${view === 'kanban' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+                className={`p-1.5 rounded-lg transition-colors ${view === 'kanban' ? 'bg-white dark:bg-gray-700 text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200'}`}
                 aria-label={t('dashboard.viewKanban')}
                 aria-pressed={view === 'kanban'}
               >

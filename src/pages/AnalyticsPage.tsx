@@ -57,8 +57,8 @@ export default function AnalyticsPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Status distribution */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-          <h2 className="text-sm font-semibold text-gray-800 mb-5">{t('analytics.statusDistribution')}</h2>
+        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm p-6">
+          <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-5">{t('analytics.statusDistribution')}</h2>
           <div className="space-y-3.5">
             {STATUSES.map(status => {
               const count = counts[status]
@@ -69,9 +69,9 @@ export default function AnalyticsPage() {
                     <span className={`text-xs font-semibold ${STATUS_TEXT[status]}`}>
                       {t(`dashboard.status.${status}`)}
                     </span>
-                    <span className="text-xs font-bold text-gray-700">{count}</span>
+                    <span className="text-xs font-bold text-gray-700 dark:text-gray-300">{count}</span>
                   </div>
-                  <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <div className="w-full h-2 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
                     <div
                       className={`h-full rounded-full transition-all duration-500 ${STATUS_COLORS[status]}`}
                       style={{ width: `${pct}%` }}
@@ -83,7 +83,7 @@ export default function AnalyticsPage() {
           </div>
 
           {/* Legend */}
-          <div className="mt-6 pt-5 border-t border-gray-100 flex flex-wrap gap-3">
+          <div className="mt-6 pt-5 border-t border-gray-100 dark:border-gray-800 flex flex-wrap gap-3">
             {STATUSES.map(status => (
               <div key={status} className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg ${STATUS_BG[status]}`}>
                 <span className={`w-2 h-2 rounded-full flex-shrink-0 ${STATUS_COLORS[status]}`} />
@@ -96,8 +96,8 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Applications per month */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-          <h2 className="text-sm font-semibold text-gray-800 mb-5">{t('analytics.applicationsPerMonth')}</h2>
+        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm p-6">
+          <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-5">{t('analytics.applicationsPerMonth')}</h2>
           {byMonth.length === 0 ? (
             <div className="flex items-center justify-center h-40 text-sm text-gray-400">{t('analytics.noData')}</div>
           ) : (
@@ -106,7 +106,7 @@ export default function AnalyticsPage() {
                 const heightPct = Math.round(count / maxMonthCount * 100)
                 return (
                   <div key={key} className="flex-1 flex flex-col items-center gap-1.5 min-w-0">
-                    <span className="text-xs font-bold text-gray-700">{count}</span>
+                    <span className="text-xs font-bold text-gray-700 dark:text-gray-300">{count}</span>
                     <div className="w-full relative" style={{ height: '120px' }}>
                       <div
                         className="absolute bottom-0 w-full bg-blue-500 rounded-t-lg transition-all duration-500"
@@ -123,8 +123,8 @@ export default function AnalyticsPage() {
       </div>
 
       {/* Pipeline funnel */}
-      <div className="mt-6 bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-        <h2 className="text-sm font-semibold text-gray-800 mb-5">{t('analytics.pipeline')}</h2>
+      <div className="mt-6 bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm p-6">
+        <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-5">{t('analytics.pipeline')}</h2>
         <div className="flex items-center gap-0 overflow-x-auto pb-2">
           {(['applied', 'interview', 'offer'] as ApplicationStatus[]).map((status, i, arr) => {
             const count = counts[status]

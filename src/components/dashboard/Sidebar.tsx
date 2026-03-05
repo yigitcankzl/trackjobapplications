@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { Link, NavLink } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
-import { HomeIcon, BarChartIcon, SignOutIcon, BriefcaseIcon } from '../icons'
+import { HomeIcon, BarChartIcon, SignOutIcon, BriefcaseIcon, ProfileIcon } from '../icons'
 
 export default function Sidebar() {
   const { t } = useTranslation()
@@ -10,6 +10,7 @@ export default function Sidebar() {
   const NAV_ITEMS = [
     { label: t('dashboard.nav.dashboard'), to: '/dashboard', icon: <HomeIcon /> },
     { label: t('dashboard.nav.analytics'), to: '/analytics', icon: <BarChartIcon /> },
+    { label: t('dashboard.nav.profile'), to: '/profile', icon: <ProfileIcon /> },
   ]
 
   return (

@@ -7,6 +7,7 @@ import WelcomePage from './pages/WelcomePage'
 import LoginPage from './pages/LoginPage'
 import DashboardPage from './pages/DashboardPage'
 import AnalyticsPage from './pages/AnalyticsPage'
+import ProfilePage from './pages/ProfilePage'
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/dashboard" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />
               <Route path="/analytics" element={<PrivateRoute><AnalyticsPage /></PrivateRoute>} />
+              <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </AuthProvider>

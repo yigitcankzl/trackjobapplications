@@ -151,7 +151,8 @@
     "nav": {
       "dashboard": "Dashboard",
       "analytics": "Analitik",
-      "signOut": "Çıkış Yap"
+      "signOut": "Çıkış Yap",
+      "profile": "Profil"
     },
     "viewTable": "Tablo görünümü",
     "viewKanban": "Kanban görünümü",
@@ -173,6 +174,26 @@
     "noData": "Henüz veri yok",
     "pipeline": "Başvuru Hattı",
     "conversion": "% dönüşüm"
+  },
+  "profile": {
+    "title": "Profil",
+    "firstName": "Ad",
+    "lastName": "Soyad",
+    "saveProfile": "Profili Kaydet",
+    "profileSaved": "Profil kaydedildi",
+    "changePassword": "Şifre Değiştir",
+    "oldPassword": "Mevcut Şifre",
+    "newPassword": "Yeni Şifre",
+    "confirmNewPassword": "Yeni Şifre Tekrarı",
+    "passwordChanged": "Şifre başarıyla değiştirildi",
+    "resume": "Özgeçmiş / CV",
+    "uploadResume": "Özgeçmiş Yükle",
+    "downloadResume": "Özgeçmişi İndir",
+    "errors": {
+      "passwordMismatch": "Şifreler eşleşmiyor",
+      "saveFailed": "Profil kaydedilemedi",
+      "passwordChangeFailed": "Şifre değiştirilemedi"
+    }
   },
   "footer": {
     "rights": "Tüm hakları saklıdır.",

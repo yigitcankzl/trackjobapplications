@@ -151,7 +151,8 @@
     "nav": {
       "dashboard": "Dashboard",
       "analytics": "Analytics",
-      "signOut": "Sign Out"
+      "signOut": "Sign Out",
+      "profile": "Profile"
     },
     "viewTable": "Table view",
     "viewKanban": "Kanban view",
@@ -173,6 +174,26 @@
     "noData": "No data yet",
     "pipeline": "Application Pipeline",
     "conversion": "% conversion"
+  },
+  "profile": {
+    "title": "Profile",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "saveProfile": "Save Profile",
+    "profileSaved": "Profile saved",
+    "changePassword": "Change Password",
+    "oldPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmNewPassword": "Confirm New Password",
+    "passwordChanged": "Password changed successfully",
+    "resume": "Resume / CV",
+    "uploadResume": "Upload Resume",
+    "downloadResume": "Download Resume",
+    "errors": {
+      "passwordMismatch": "Passwords do not match",
+      "saveFailed": "Failed to save profile",
+      "passwordChangeFailed": "Failed to change password"
+    }
   },
   "footer": {
     "rights": "All rights reserved.",

@@ -3,6 +3,8 @@ export interface User {
   email: string
   first_name: string
   last_name: string
+  avatar?: string | null
+  resume?: string | null
 }
 
 export interface AuthTokens {

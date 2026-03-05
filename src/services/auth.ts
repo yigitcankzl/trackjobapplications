@@ -67,3 +67,22 @@ export async function fetchMe(): Promise<User> {
   const { data } = await api.get<User>('/auth/me/')
   return data
 }
+
+export async function updateProfile(formData: FormData): Promise<User> {
+  const { data } = await api.put<User>('/auth/me/', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  })
+  return data
+}
+
+export async function changePassword(
+  oldPassword: string,
+  newPassword: string,
+  newPassword2: string,
+): Promise<void> {
+  await api.post('/auth/change-password/', {
+    old_password: oldPassword,
+    new_password: newPassword,
+    new_password2: newPassword2,
+  })
+}

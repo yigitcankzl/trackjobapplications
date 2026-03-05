@@ -9,12 +9,14 @@ import AddApplicationModal from '../components/dashboard/AddApplicationModal'
 import ConfirmModal from '../components/dashboard/ConfirmModal'
 import TableFilters from '../components/dashboard/TableFilters'
 import ApplicationDrawer from '../components/dashboard/ApplicationDrawer'
+import ReminderBanner from '../components/dashboard/ReminderBanner'
 import Button from '../components/ui/Button'
 import { PlusIcon, TableIcon, KanbanIcon } from '../components/icons'
 import { getApplications, createApplication, updateApplication, deleteApplication } from '../services/applications'
 import { ApplicationStatus, JobApplication, ViewMode } from '../types'
 import { useToast } from '../context/ToastContext'
 import { useApplicationFilters } from '../hooks/useApplicationFilters'
+import { useApplicationReminders } from '../hooks/useApplicationReminders'
 
 export default function DashboardPage() {
   const { t } = useTranslation()
@@ -29,6 +31,7 @@ export default function DashboardPage() {
 
   const { search, setSearch, statusFilter, setStatusFilter, sortKey, sortDir, handleSortChange, filtered } =
     useApplicationFilters(apps)
+  const reminders = useApplicationReminders(apps)
 
   useEffect(() => {
     getApplications()
@@ -119,6 +122,8 @@ export default function DashboardPage() {
           </div>
         }
       />
+
+      <ReminderBanner reminders={reminders} />
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
         <StatCard label={t('dashboard.stats.total')} value={stats.total} color="text-gray-900" />

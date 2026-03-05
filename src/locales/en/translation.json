@@ -136,6 +136,10 @@
     "kanban": {
       "noApplications": "No applications"
     },
+    "reminders": {
+      "title": "{{count}} application(s) need follow-up",
+      "daysAgo": "{{days}}d ago"
+    },
     "toast": {
       "added": "Application added",
       "saved": "Changes saved",

@@ -136,6 +136,10 @@
     "kanban": {
       "noApplications": "Başvuru yok"
     },
+    "reminders": {
+      "title": "{{count}} başvuru takip gerektiyor",
+      "daysAgo": "{{days}} gün önce"
+    },
     "toast": {
       "added": "Başvuru eklendi",
       "saved": "Değişiklikler kaydedildi",

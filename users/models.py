@@ -30,6 +30,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(blank=False, max_length=30, verbose_name="First Name")
     last_name = models.CharField(blank=False, max_length=30, verbose_name="Last Name")
     date_joined = models.DateTimeField(auto_now_add=True, verbose_name="Date Joined")
+    avatar = models.ImageField(upload_to="avatars/", blank=True, null=True)
+    resume = models.FileField(upload_to="resumes/", blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 

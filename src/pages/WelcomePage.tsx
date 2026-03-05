@@ -9,20 +9,20 @@ export default function WelcomePage() {
   const { t } = useTranslation()
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 flex flex-col">
       {/* Navbar */}
       <nav className="flex items-center justify-between px-10 py-5">
         <div className="flex items-center gap-2.5">
           <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-blue-500 flex items-center justify-center shadow-md">
             <BriefcaseIcon />
           </div>
-          <span className="text-lg font-bold text-gray-800 tracking-tight">TrackJobs</span>
+          <span className="text-lg font-bold text-gray-800 dark:text-gray-100 tracking-tight">TrackJobs</span>
         </div>
         <div className="flex items-center gap-2">
           <LanguageSwitcher />
           <button
             onClick={() => navigate('/login')}
-            className="px-5 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors"
+            className="px-5 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
           >
             {t('nav.signIn')}
           </button>
@@ -38,20 +38,20 @@ export default function WelcomePage() {
       {/* Hero */}
       <main className="flex-1 flex flex-col items-center justify-center text-center px-6 pb-16">
         {/* Badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-100 text-blue-700 text-xs font-semibold mb-6 border border-blue-200">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-xs font-semibold mb-6 border border-blue-200 dark:border-blue-800">
           <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
           {t('welcome.badge')}
         </div>
 
         {/* Headline */}
-        <h1 className="text-5xl font-extrabold text-gray-900 leading-tight max-w-2xl mb-5">
+        <h1 className="text-5xl font-extrabold text-gray-900 dark:text-gray-100 leading-tight max-w-2xl mb-5">
           {t('welcome.headline')}{' '}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-400">
             {t('welcome.headlineHighlight')}
           </span>
         </h1>
 
-        <p className="text-gray-500 text-lg max-w-xl mb-10 leading-relaxed">
+        <p className="text-gray-500 dark:text-gray-400 text-lg max-w-xl mb-10 leading-relaxed">
           {t('welcome.subtitle')}
         </p>
 
@@ -65,7 +65,7 @@ export default function WelcomePage() {
           </button>
           <button
             onClick={() => navigate('/login')}
-            className="px-8 py-3.5 rounded-xl text-sm font-medium text-gray-600 bg-white border border-gray-200 hover:border-blue-300 hover:text-blue-600 hover:shadow-sm transition-all duration-200"
+            className="px-8 py-3.5 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 hover:text-blue-600 dark:hover:text-blue-400 hover:shadow-sm transition-all duration-200"
           >
             {t('nav.signIn')}
           </button>
@@ -96,7 +96,7 @@ export default function WelcomePage() {
       </main>
 
       {/* Footer */}
-      <footer className="text-center py-5 text-xs text-gray-400">
+      <footer className="text-center py-5 text-xs text-gray-400 dark:text-gray-500">
         © {new Date().getFullYear()} TrackJobs. {t('footer.rights')}
       </footer>
     </div>

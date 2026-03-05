@@ -69,6 +69,7 @@
     "title": "Başvurular",
     "addApplication": "Başvuru Ekle",
     "editApplication": "Başvuruyu Düzenle",
+    "exportCsv": "CSV İndir",
     "stats": {
       "total": "Toplam",
       "applied": "Başvuruldu",

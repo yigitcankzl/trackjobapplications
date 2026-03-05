@@ -17,7 +17,7 @@ export default function Button({ variant = 'primary', className = '', children, 
   return (
     <button
       {...props}
-      className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${VARIANT_CLASSES[variant]} ${className}`}
+      className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${VARIANT_CLASSES[variant]} ${className}`}
     >
       {children}
     </button>

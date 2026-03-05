@@ -69,6 +69,7 @@
     "title": "Applications",
     "addApplication": "Add Application",
     "editApplication": "Edit Application",
+    "exportCsv": "Export CSV",
     "stats": {
       "total": "Total",
       "applied": "Applied",

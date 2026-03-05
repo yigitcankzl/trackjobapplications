@@ -11,7 +11,8 @@ import TableFilters from '../components/dashboard/TableFilters'
 import ApplicationDrawer from '../components/dashboard/ApplicationDrawer'
 import ReminderBanner from '../components/dashboard/ReminderBanner'
 import Button from '../components/ui/Button'
-import { PlusIcon, TableIcon, KanbanIcon } from '../components/icons'
+import { PlusIcon, TableIcon, KanbanIcon, DownloadIcon } from '../components/icons'
+import { exportApplicationsCsv } from '../lib/exportCsv'
 import { getApplications, createApplication, updateApplication, deleteApplication } from '../services/applications'
 import { ApplicationStatus, JobApplication, ViewMode } from '../types'
 import { useToast } from '../context/ToastContext'
@@ -115,6 +116,10 @@ export default function DashboardPage() {
               </button>
             </div>
 
+            <Button variant="secondary" onClick={() => exportApplicationsCsv(apps)}>
+              <DownloadIcon />
+              {t('dashboard.exportCsv')}
+            </Button>
             <Button onClick={() => setAddOpen(true)}>
               <PlusIcon />
               {t('dashboard.addApplication')}

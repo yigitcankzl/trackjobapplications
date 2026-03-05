@@ -86,7 +86,7 @@ export default function ProfilePage() {
       <Header title={t('profile.title')} />
       <div className="max-w-2xl mx-auto space-y-8 pb-12">
         {/* Profile Info */}
-        <form onSubmit={handleSaveProfile} className="bg-white rounded-2xl border border-gray-100 p-6 space-y-6">
+        <form onSubmit={handleSaveProfile} className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6 space-y-6">
           {/* Avatar */}
           <div className="flex items-center gap-5">
             <div className="relative">
@@ -107,29 +107,29 @@ export default function ProfilePage() {
               <input ref={avatarInput} type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
             </div>
             <div>
-              <p className="text-sm font-semibold text-gray-800">{user?.first_name} {user?.last_name}</p>
-              <p className="text-xs text-gray-400">{user?.email}</p>
+              <p className="text-sm font-semibold text-gray-800 dark:text-gray-100">{user?.first_name} {user?.last_name}</p>
+              <p className="text-xs text-gray-400 dark:text-gray-500">{user?.email}</p>
             </div>
           </div>
 
           {/* Name fields */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">{t('profile.firstName')}</label>
+              <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">{t('profile.firstName')}</label>
               <input
                 type="text"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
+                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 dark:text-gray-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">{t('profile.lastName')}</label>
+              <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">{t('profile.lastName')}</label>
               <input
                 type="text"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
+                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 dark:text-gray-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
               />
             </div>
           </div>
@@ -141,7 +141,7 @@ export default function ProfilePage() {
               <button
                 type="button"
                 onClick={() => resumeInput.current?.click()}
-                className="flex items-center gap-2 px-3 py-2 text-sm rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors"
+                className="flex items-center gap-2 px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
               >
                 <UploadIcon />
                 {t('profile.uploadResume')}
@@ -172,36 +172,36 @@ export default function ProfilePage() {
         </form>
 
         {/* Change Password */}
-        <form onSubmit={handleChangePassword} className="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
-          <h2 className="text-sm font-semibold text-gray-800">{t('profile.changePassword')}</h2>
+        <form onSubmit={handleChangePassword} className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6 space-y-4">
+          <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-100">{t('profile.changePassword')}</h2>
           <div>
-            <label className="block text-xs font-medium text-gray-500 mb-1">{t('profile.oldPassword')}</label>
+            <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">{t('profile.oldPassword')}</label>
             <input
               type="password"
               value={oldPassword}
               onChange={(e) => setOldPassword(e.target.value)}
-              className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
+              className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 dark:text-gray-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
               required
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">{t('profile.newPassword')}</label>
+              <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">{t('profile.newPassword')}</label>
               <input
                 type="password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
+                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 dark:text-gray-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
                 required
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">{t('profile.confirmNewPassword')}</label>
+              <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">{t('profile.confirmNewPassword')}</label>
               <input
                 type="password"
                 value={newPassword2}
                 onChange={(e) => setNewPassword2(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
+                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 dark:text-gray-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
                 required
               />
             </div>

@@ -34,10 +34,10 @@ function KanbanCard({ app, onView, onEdit, onDelete, onDragStart, onDragEnd, isD
       onDragStart={() => onDragStart(app.id)}
       onDragEnd={onDragEnd}
       onClick={() => onView(app)}
-      className={`group bg-white rounded-xl border shadow-sm p-4 transition-all duration-200 cursor-pointer ${
+      className={`group bg-white dark:bg-gray-900 rounded-xl border shadow-sm p-4 transition-all duration-200 cursor-pointer ${
         isDragging
           ? 'opacity-40 scale-95 border-blue-200'
-          : 'border-gray-100 hover:shadow-md hover:border-blue-100'
+          : 'border-gray-100 dark:border-gray-800 hover:shadow-md hover:border-blue-100 dark:hover:border-blue-800'
       }`}
     >
       <div className="flex items-start justify-between gap-2 mb-3">
@@ -46,7 +46,7 @@ function KanbanCard({ app, onView, onEdit, onDelete, onDragStart, onDragEnd, isD
             {app.company[0].toUpperCase()}
           </div>
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-gray-900 leading-tight truncate">{app.company}</p>
+            <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 leading-tight truncate">{app.company}</p>
           </div>
         </div>
         <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
@@ -67,7 +67,7 @@ function KanbanCard({ app, onView, onEdit, onDelete, onDragStart, onDragEnd, isD
         </div>
       </div>
 
-      <p className="text-xs text-gray-500 mb-3 leading-relaxed">{app.position}</p>
+      <p className="text-xs text-gray-500 dark:text-gray-400 mb-3 leading-relaxed">{app.position}</p>
 
       {app.notes && (
         <p className="text-xs text-gray-400 italic mb-3 truncate">{app.notes}</p>
@@ -139,10 +139,10 @@ export default function KanbanBoard({ applications, onView, onEdit, onDelete, on
             {/* Column header */}
             <div className="flex items-center gap-2 mb-3">
               <span className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${STATUS_COLORS[status]}`} />
-              <span className="text-xs font-semibold text-gray-700 uppercase tracking-wide">
+              <span className="text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide">
                 {t(`dashboard.status.${status}`)}
               </span>
-              <span className="ml-auto text-xs font-semibold text-gray-400 bg-gray-100 rounded-full px-2 py-0.5">
+              <span className="ml-auto text-xs font-semibold text-gray-400 bg-gray-100 dark:bg-gray-800 rounded-full px-2 py-0.5">
                 {colApps.length}
               </span>
             </div>
@@ -154,7 +154,7 @@ export default function KanbanBoard({ applications, onView, onEdit, onDelete, on
               }`}
             >
               {colApps.length === 0 && !isOver ? (
-                <div className="rounded-xl border-2 border-dashed border-gray-100 py-8 text-center">
+                <div className="rounded-xl border-2 border-dashed border-gray-100 dark:border-gray-800 py-8 text-center">
                   <p className="text-xs text-gray-300">{t('dashboard.kanban.noApplications')}</p>
                 </div>
               ) : (

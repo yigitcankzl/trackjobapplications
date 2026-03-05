@@ -96,10 +96,10 @@ export default function AddApplicationModal({ open, onClose, onSubmit, initialDa
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
-        className="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-4 overflow-hidden"
+        className="relative bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-lg mx-4 overflow-hidden"
       >
-        <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
-          <h2 id="modal-title" className="text-base font-semibold text-gray-900">
+        <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100 dark:border-gray-800">
+          <h2 id="modal-title" className="text-base font-semibold text-gray-900 dark:text-gray-100">
             {isEdit ? t('dashboard.editApplication') : t('dashboard.addApplication')}
           </h2>
           <button
@@ -114,7 +114,7 @@ export default function AddApplicationModal({ open, onClose, onSubmit, initialDa
         <form onSubmit={handleSubmit} noValidate>
           <div className="px-6 py-5 space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                 {t('dashboard.form.company')} <span className="text-red-400">*</span>
               </label>
               <input
@@ -126,14 +126,14 @@ export default function AddApplicationModal({ open, onClose, onSubmit, initialDa
                 className={`w-full px-3.5 py-2.5 rounded-xl border text-sm outline-none transition-colors placeholder:text-gray-300 ${
                   errors.company
                     ? 'border-red-300 focus:border-red-400 focus:ring-2 focus:ring-red-100'
-                    : 'border-gray-200 focus:border-blue-400 focus:ring-2 focus:ring-blue-100'
+                    : 'border-gray-200 dark:border-gray-700 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900'
                 }`}
               />
               {errors.company && <p className="mt-1 text-xs text-red-500">{errors.company}</p>}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                 {t('dashboard.form.position')} <span className="text-red-400">*</span>
               </label>
               <input
@@ -144,7 +144,7 @@ export default function AddApplicationModal({ open, onClose, onSubmit, initialDa
                 className={`w-full px-3.5 py-2.5 rounded-xl border text-sm outline-none transition-colors placeholder:text-gray-300 ${
                   errors.position
                     ? 'border-red-300 focus:border-red-400 focus:ring-2 focus:ring-red-100'
-                    : 'border-gray-200 focus:border-blue-400 focus:ring-2 focus:ring-blue-100'
+                    : 'border-gray-200 dark:border-gray-700 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900'
                 }`}
               />
               {errors.position && <p className="mt-1 text-xs text-red-500">{errors.position}</p>}
@@ -152,11 +152,11 @@ export default function AddApplicationModal({ open, onClose, onSubmit, initialDa
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('dashboard.form.status')}</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">{t('dashboard.form.status')}</label>
                 <select
                   value={form.status}
                   onChange={e => setForm(f => ({ ...f, status: e.target.value as ApplicationStatus }))}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-colors bg-white"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900 transition-colors bg-white dark:bg-gray-800 dark:text-gray-100"
                 >
                   {STATUS_KEYS.map(status => (
                     <option key={status} value={status}>{t(`dashboard.status.${status}`)}</option>
@@ -165,7 +165,7 @@ export default function AddApplicationModal({ open, onClose, onSubmit, initialDa
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                   {t('dashboard.form.appliedDate')} <span className="text-red-400">*</span>
                 </label>
                 <input
@@ -175,7 +175,7 @@ export default function AddApplicationModal({ open, onClose, onSubmit, initialDa
                   className={`w-full px-3.5 py-2.5 rounded-xl border text-sm outline-none transition-colors ${
                     errors.applied_date
                       ? 'border-red-300 focus:border-red-400 focus:ring-2 focus:ring-red-100'
-                      : 'border-gray-200 focus:border-blue-400 focus:ring-2 focus:ring-blue-100'
+                      : 'border-gray-200 dark:border-gray-700 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900'
                   }`}
                 />
                 {errors.applied_date && <p className="mt-1 text-xs text-red-500">{errors.applied_date}</p>}
@@ -183,29 +183,29 @@ export default function AddApplicationModal({ open, onClose, onSubmit, initialDa
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('dashboard.form.jobUrl')}</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">{t('dashboard.form.jobUrl')}</label>
               <input
                 type="url"
                 placeholder={t('dashboard.form.jobUrlPlaceholder')}
                 value={form.url}
                 onChange={e => setForm(f => ({ ...f, url: e.target.value }))}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-colors placeholder:text-gray-300"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900 transition-colors placeholder:text-gray-300 dark:bg-gray-800 dark:text-gray-100"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('dashboard.form.notes')}</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">{t('dashboard.form.notes')}</label>
               <textarea
                 placeholder={t('dashboard.form.notesPlaceholder')}
                 value={form.notes}
                 onChange={e => setForm(f => ({ ...f, notes: e.target.value }))}
                 rows={3}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-colors resize-none placeholder:text-gray-300"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900 transition-colors resize-none placeholder:text-gray-300 dark:bg-gray-800 dark:text-gray-100"
               />
             </div>
           </div>
 
-          <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-100 bg-gray-50/50">
+          <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/50">
             <Button type="button" variant="secondary" onClick={onClose}>
               {t('dashboard.form.cancel')}
             </Button>

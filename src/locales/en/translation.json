@@ -118,7 +118,9 @@
       "saveChanges": "Save Changes",
       "companyRequired": "Company is required",
       "positionRequired": "Position is required",
-      "dateRequired": "Date is required"
+      "dateRequired": "Date is required",
+      "source": "Source",
+      "selectSource": "Select source..."
     },
     "drawer": {
       "title": "Application Detail",
@@ -193,7 +195,16 @@
     "conversion": "% conversion",
     "weekly": "Weekly",
     "monthly": "Monthly",
-    "applicationsOverTime": "Applications Over Time"
+    "applicationsOverTime": "Applications Over Time",
+    "sourceDistribution": "Source Distribution"
+  },
+  "source": {
+    "linkedin": "LinkedIn",
+    "indeed": "Indeed",
+    "glassdoor": "Glassdoor",
+    "referral": "Referral",
+    "company_website": "Company Website",
+    "other": "Other"
   },
   "profile": {
     "title": "Profile",

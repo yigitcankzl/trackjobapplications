@@ -118,7 +118,9 @@
       "saveChanges": "Değişiklikleri Kaydet",
       "companyRequired": "Şirket zorunludur",
       "positionRequired": "Pozisyon zorunludur",
-      "dateRequired": "Tarih zorunludur"
+      "dateRequired": "Tarih zorunludur",
+      "source": "Kaynak",
+      "selectSource": "Kaynak seç..."
     },
     "drawer": {
       "title": "Başvuru Detayı",
@@ -193,7 +195,16 @@
     "conversion": "% dönüşüm",
     "weekly": "Haftalık",
     "monthly": "Aylık",
-    "applicationsOverTime": "Zaman İçinde Başvurular"
+    "applicationsOverTime": "Zaman İçinde Başvurular",
+    "sourceDistribution": "Kaynak Dağılımı"
+  },
+  "source": {
+    "linkedin": "LinkedIn",
+    "indeed": "Indeed",
+    "glassdoor": "Glassdoor",
+    "referral": "Referans",
+    "company_website": "Şirket Sitesi",
+    "other": "Diğer"
   },
   "profile": {
     "title": "Profil",

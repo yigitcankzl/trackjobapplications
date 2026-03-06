@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { JobApplication } from '../../types'
 import StatusBadge from './StatusBadge'
@@ -32,6 +33,7 @@ function EmptyState() {
 
 export default function ApplicationsTable({ applications, onView, onEdit, onDelete }: Props) {
   const { t } = useTranslation()
+  const navigate = useNavigate()
 
   if (applications.length === 0) {
     return (
@@ -54,7 +56,7 @@ export default function ApplicationsTable({ applications, onView, onEdit, onDele
         </thead>
         <tbody className="divide-y divide-gray-50 dark:divide-gray-800">
           {applications.map(app => (
-            <tr key={app.id} onClick={() => onView(app)} className="group hover:bg-blue-50/30 dark:hover:bg-blue-900/20 transition-colors duration-150 cursor-pointer">
+            <tr key={app.id} onClick={() => navigate(`/applications/${app.id}`)} className="group hover:bg-blue-50/30 dark:hover:bg-blue-900/20 transition-colors duration-150 cursor-pointer">
               {/* Company + Position + Notes */}
               <td className="px-6 py-4">
                 <div className="flex items-center gap-3.5">

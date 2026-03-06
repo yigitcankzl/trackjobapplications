@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { JobApplication, ApplicationStatus } from '../../types'
 import { STATUS_COLORS } from '../../constants/applicationStatus'
@@ -33,12 +34,13 @@ interface CardProps {
 
 function KanbanCard({ app, onView, onEdit, onDelete, onDragStart, onDragEnd, isDragging }: CardProps) {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   return (
     <div
       draggable
       onDragStart={() => onDragStart(app.id)}
       onDragEnd={onDragEnd}
-      onClick={() => onView(app)}
+      onClick={() => navigate(`/applications/${app.id}`)}
       className={`group bg-white dark:bg-gray-900 rounded-xl border shadow-sm p-4 transition-all duration-200 cursor-pointer ${
         isDragging
           ? 'opacity-40 scale-95 border-blue-200'

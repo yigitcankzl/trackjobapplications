@@ -158,7 +158,7 @@ export default function ProfilePage() {
 
           {/* Resume */}
           <div>
-            <label className="block text-xs font-medium text-gray-500 mb-2">{t('profile.resume')}</label>
+            <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">{t('profile.resume')}</label>
             <DragDropZone
               onFileDrop={file => setResumeFile(file)}
               accept=".pdf,.doc,.docx"

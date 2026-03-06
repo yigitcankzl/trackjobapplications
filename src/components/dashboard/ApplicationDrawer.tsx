@@ -78,7 +78,7 @@ export default function ApplicationDrawer({ app, onClose, onEdit, onDelete }: Pr
               {/* Details grid */}
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center flex-shrink-0 mt-0.5">
                     <CalendarIcon />
                   </div>
                   <div>
@@ -90,7 +90,7 @@ export default function ApplicationDrawer({ app, onClose, onEdit, onDelete }: Pr
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <div className="w-8 h-8 rounded-lg bg-gray-50 dark:bg-gray-800 flex items-center justify-center flex-shrink-0 mt-0.5">
                     <ClockIcon />
                   </div>
                   <div>
@@ -103,7 +103,7 @@ export default function ApplicationDrawer({ app, onClose, onEdit, onDelete }: Pr
 
                 {app.interview_date && (
                   <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <div className="w-8 h-8 rounded-lg bg-purple-50 dark:bg-purple-900/30 flex items-center justify-center flex-shrink-0 mt-0.5">
                       <CalendarIcon />
                     </div>
                     <div>
@@ -117,7 +117,7 @@ export default function ApplicationDrawer({ app, onClose, onEdit, onDelete }: Pr
 
                 {app.url && (
                   <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <div className="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center flex-shrink-0 mt-0.5">
                       <LinkIcon />
                     </div>
                     <div className="min-w-0">
@@ -193,14 +193,14 @@ export default function ApplicationDrawer({ app, onClose, onEdit, onDelete }: Pr
             <div className="flex items-center gap-3 px-6 py-4 border-t border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/50">
               <button
                 onClick={() => { onEdit(app); onClose() }}
-                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 transition-colors"
+                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors"
               >
                 <EditIcon />
                 {t('dashboard.drawer.edit')}
               </button>
               <button
                 onClick={() => { onDelete(app); onClose() }}
-                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-red-600 bg-red-50 hover:bg-red-100 transition-colors"
+                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-red-600 dark:text-red-300 bg-red-50 dark:bg-red-900/30 hover:bg-red-100 dark:hover:bg-red-900/50 transition-colors"
               >
                 <TrashIcon />
                 {t('dashboard.drawer.delete')}

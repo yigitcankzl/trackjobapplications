@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import DashboardLayout from '../components/layout/DashboardLayout'
 import Header from '../components/dashboard/Header'
-import StatCard from '../components/dashboard/StatCard'
+import DraggableStatCard from '../components/dashboard/DraggableStatCard'
 import ApplicationsTable from '../components/dashboard/ApplicationsTable'
 import KanbanBoard from '../components/dashboard/KanbanBoard'
 import AddApplicationModal from '../components/dashboard/AddApplicationModal'
@@ -19,6 +19,7 @@ import { ApplicationStatus, JobApplication, ViewMode } from '../types'
 import { useToast } from '../context/ToastContext'
 import { useApplicationFilters } from '../hooks/useApplicationFilters'
 import { useApplicationReminders } from '../hooks/useApplicationReminders'
+import { useWidgetOrder } from '../hooks/useWidgetOrder'
 
 export default function DashboardPage() {
   const { t } = useTranslation()
@@ -37,6 +38,7 @@ export default function DashboardPage() {
   const { search, setSearch, statusFilter, setStatusFilter, sortKey, sortDir, handleSortChange, filtered } =
     useApplicationFilters(apps)
   const reminders = useApplicationReminders(apps)
+  const { order, dragIdx, onDragStart, onDragOver, onDragEnd } = useWidgetOrder()
 
   const loadPage = useCallback((p: number) => {
     getApplications(p)
@@ -145,11 +147,29 @@ export default function DashboardPage() {
       <ReminderBanner reminders={reminders} />
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
-        <StatCard label={t('dashboard.stats.total')} value={stats.total} color="text-gray-900" />
-        <StatCard label={t('dashboard.stats.applied')} value={stats.applied} color="text-blue-600" />
-        <StatCard label={t('dashboard.stats.interview')} value={stats.interview} color="text-amber-600" />
-        <StatCard label={t('dashboard.stats.offer')} value={stats.offer} color="text-emerald-600" />
-        <StatCard label={t('dashboard.stats.rejected')} value={stats.rejected} color="text-red-500" />
+        {order.map((key, idx) => {
+          const config: Record<string, { label: string; value: string | number; color: 'text-gray-900' | 'text-blue-600' | 'text-amber-600' | 'text-emerald-600' | 'text-red-500' }> = {
+            total: { label: t('dashboard.stats.total'), value: stats.total, color: 'text-gray-900' },
+            applied: { label: t('dashboard.stats.applied'), value: stats.applied, color: 'text-blue-600' },
+            interview: { label: t('dashboard.stats.interview'), value: stats.interview, color: 'text-amber-600' },
+            offer: { label: t('dashboard.stats.offer'), value: stats.offer, color: 'text-emerald-600' },
+            rejected: { label: t('dashboard.stats.rejected'), value: stats.rejected, color: 'text-red-500' },
+          }
+          const c = config[key]
+          return (
+            <DraggableStatCard
+              key={key}
+              label={c.label}
+              value={c.value}
+              color={c.color}
+              index={idx}
+              isDragging={dragIdx === idx}
+              onDragStart={onDragStart}
+              onDragOver={onDragOver}
+              onDragEnd={onDragEnd}
+            />
+          )
+        })}
       </div>
 
       <TableFilters

@@ -11,3 +11,6 @@ redis==5.0.8
 drf-spectacular==0.28.0
 django-filter==24.3
 openpyxl==3.1.5
+pytest==8.3.4
+pytest-django==4.9.0
+factory-boy==3.3.1

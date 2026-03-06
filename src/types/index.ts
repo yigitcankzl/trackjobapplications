@@ -48,6 +48,13 @@ export interface JobApplication {
   note_entries?: ApplicationNote[]
 }
 
+export interface PaginatedResponse<T> {
+  count: number
+  next: string | null
+  previous: string | null
+  results: T[]
+}
+
 export type ViewMode = 'table' | 'kanban'
 export type SortKey = 'date' | 'company' | 'status'
 export type StatusFilter = ApplicationStatus | 'all'

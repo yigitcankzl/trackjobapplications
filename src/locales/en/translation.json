@@ -206,6 +206,8 @@
     "resume": "Resume / CV",
     "uploadResume": "Upload Resume",
     "downloadResume": "Download Resume",
+    "dropAvatar": "Drop image here",
+    "dropResume": "Drop file here",
     "errors": {
       "passwordMismatch": "Passwords do not match",
       "saveFailed": "Failed to save profile",

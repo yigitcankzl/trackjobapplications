@@ -206,6 +206,8 @@
     "resume": "Özgeçmiş / CV",
     "uploadResume": "Özgeçmiş Yükle",
     "downloadResume": "Özgeçmişi İndir",
+    "dropAvatar": "Fotoğrafı buraya bırak",
+    "dropResume": "Dosyayı buraya bırak",
     "errors": {
       "passwordMismatch": "Şifreler eşleşmiyor",
       "saveFailed": "Profil kaydedilemedi",

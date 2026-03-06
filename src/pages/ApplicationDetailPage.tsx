@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import DashboardLayout from '../components/layout/DashboardLayout'
 import Header from '../components/dashboard/Header'
 import StatusBadge from '../components/dashboard/StatusBadge'
+import SourceBadge from '../components/dashboard/SourceBadge'
 import NoteTimeline from '../components/dashboard/NoteTimeline'
 import AddApplicationModal from '../components/dashboard/AddApplicationModal'
 import ConfirmModal from '../components/dashboard/ConfirmModal'
@@ -94,8 +95,9 @@ export default function ApplicationDetailPage() {
             <div className="flex-1 min-w-0">
               <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">{app.company}</h2>
               <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{app.position}</p>
-              <div className="mt-2">
+              <div className="mt-2 flex items-center gap-2">
                 <StatusBadge status={app.status} />
+                {app.source && <SourceBadge source={app.source} />}
               </div>
             </div>
             <div className="flex items-center gap-2 flex-shrink-0">

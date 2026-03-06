@@ -4,6 +4,7 @@ import { JobApplication } from '../../types'
 import { useEscapeKey } from '../../hooks/useEscapeKey'
 import { useFocusTrap } from '../../hooks/useFocusTrap'
 import StatusBadge from './StatusBadge'
+import SourceBadge from './SourceBadge'
 import NoteTimeline from './NoteTimeline'
 import { EditIcon, TrashIcon, CloseIcon, CalendarIcon, ClockIcon, LinkIcon } from '../icons'
 import { getAvatarColor } from '../../lib/avatar'
@@ -65,8 +66,9 @@ export default function ApplicationDrawer({ app, onClose, onEdit, onDelete }: Pr
                 <div className="min-w-0 pt-1">
                   <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 leading-tight">{app.company}</h2>
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{app.position}</p>
-                  <div className="mt-2">
+                  <div className="mt-2 flex items-center gap-2">
                     <StatusBadge status={app.status} />
+                    {app.source && <SourceBadge source={app.source} />}
                   </div>
                 </div>
               </div>

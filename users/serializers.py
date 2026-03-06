@@ -33,6 +33,19 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ("id", "email", "first_name", "last_name", "date_joined", "is_staff", "avatar", "resume", "notification_email")
         read_only_fields = ("id", "email", "date_joined", "is_staff")
 
+    def validate_avatar(self, value):
+        if value and value.size > 5 * 1024 * 1024:
+            raise serializers.ValidationError("Avatar file size must be under 5 MB.")
+        return value
+
+    def validate_resume(self, value):
+        if value and value.size > 10 * 1024 * 1024:
+            raise serializers.ValidationError("Resume file size must be under 10 MB.")
+        allowed = (".pdf", ".doc", ".docx")
+        if value and not value.name.lower().endswith(allowed):
+            raise serializers.ValidationError("Resume must be a PDF, DOC, or DOCX file.")
+        return value
+
 
 class ChangePasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField(required=True)

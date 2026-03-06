@@ -19,6 +19,14 @@ export type ApplicationStatus =
   | 'rejected'
   | 'withdrawn'
 
+export type ApplicationSource =
+  | 'linkedin'
+  | 'indeed'
+  | 'glassdoor'
+  | 'referral'
+  | 'company_website'
+  | 'other'
+
 export interface ApplicationNote {
   id: number
   content: string
@@ -32,6 +40,7 @@ export interface JobApplication {
   status: ApplicationStatus
   applied_date: string
   url?: string
+  source?: ApplicationSource | ''
   notes: string
   created_at: string
   updated_at: string

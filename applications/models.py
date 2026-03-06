@@ -32,6 +32,7 @@ class Application(models.Model):
     url = models.URLField(blank=True, default="")
     source = models.CharField(max_length=20, choices=SOURCE_CHOICES, blank=True, default="")
     interview_date = models.DateTimeField(null=True, blank=True)
+    tags = models.ManyToManyField("Tag", blank=True, related_name="applications")
     notes = models.TextField(blank=True, default="")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -44,6 +45,23 @@ class Application(models.Model):
 
     def __str__(self):
         return f"{self.company} — {self.position}"
+
+
+class Tag(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="tags",
+    )
+    name = models.CharField(max_length=50)
+    color = models.CharField(max_length=7, default="#3B82F6")
+
+    class Meta:
+        unique_together = ("user", "name")
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.name
 
 
 class ApplicationNote(models.Model):

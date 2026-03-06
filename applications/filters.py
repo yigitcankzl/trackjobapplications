@@ -11,6 +11,8 @@ class ApplicationFilter(django_filters.FilterSet):
         field_name="applied_date", lookup_expr="lte"
     )
 
+    tags = django_filters.BaseInFilter(field_name="tags__id", distinct=True)
+
     class Meta:
         model = Application
         fields = ["status", "source"]

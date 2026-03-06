@@ -5,8 +5,8 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.pagination import PageNumberPagination
 
 from .filters import ApplicationFilter
-from .models import Application, ApplicationNote
-from .serializers import ApplicationSerializer, ApplicationNoteSerializer
+from .models import Application, ApplicationNote, Tag
+from .serializers import ApplicationSerializer, ApplicationNoteSerializer, TagSerializer
 
 
 class ApplicationPagination(PageNumberPagination):
@@ -29,7 +29,19 @@ class ApplicationViewSet(viewsets.ModelViewSet):
     ordering = ["-applied_date"]
 
     def get_queryset(self):
-        return self.request.user.applications.prefetch_related("note_entries").all()
+        return self.request.user.applications.prefetch_related("note_entries", "tags").all()
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+
+class TagViewSet(viewsets.ModelViewSet):
+    serializer_class = TagSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    pagination_class = None
+
+    def get_queryset(self):
+        return self.request.user.tags.all()
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)

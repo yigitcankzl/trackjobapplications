@@ -79,8 +79,15 @@ class ApplicationViewSet(viewsets.ModelViewSet):
             deleted, _ = self.get_queryset().filter(id__in=ids).delete()
         return Response({"deleted": deleted})
 
-    @action(detail=False, methods=["post"], url_path="import", parser_classes=[MultiPartParser])
+    @action(
+        detail=False,
+        methods=["post"],
+        url_path="import",
+        parser_classes=[MultiPartParser],
+        throttle_classes=[ScopedRateThrottle],
+    )
     def import_applications(self, request):
+        self.throttle_scope = "import"
         file = request.FILES.get("file")
         if not file:
             return Response({"error": "No file provided."}, status=status.HTTP_400_BAD_REQUEST)

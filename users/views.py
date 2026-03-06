@@ -4,13 +4,21 @@ from rest_framework.response import Response
 from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.views import APIView
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .serializers import ChangePasswordSerializer, LogoutSerializer, RegisterSerializer, UserSerializer
+
+
+class ThrottledTokenObtainPairView(TokenObtainPairView):
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "login"
 
 
 class RegisterView(generics.CreateAPIView):
     serializer_class = RegisterSerializer
     permission_classes = [permissions.AllowAny]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "register"
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

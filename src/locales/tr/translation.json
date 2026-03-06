@@ -214,6 +214,17 @@
       "passwordChangeFailed": "Şifre değiştirilemedi"
     }
   },
+  "detail": {
+    "title": "Başvuru Detayı",
+    "backToDashboard": "Dashboard'a Dön",
+    "applied": "Başvuru Tarihi",
+    "lastUpdated": "Son Güncelleme",
+    "jobPosting": "İş İlanı",
+    "notes": "Notlar",
+    "stage": "Aşama",
+    "edit": "Düzenle",
+    "delete": "Sil"
+  },
   "footer": {
     "rights": "Tüm hakları saklıdır.",
     "copyright": "© {{year}} TrackJobs. Tüm hakları saklıdır."

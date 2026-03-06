@@ -214,6 +214,17 @@
       "passwordChangeFailed": "Failed to change password"
     }
   },
+  "detail": {
+    "title": "Application Detail",
+    "backToDashboard": "Back to Dashboard",
+    "applied": "Applied",
+    "lastUpdated": "Last Updated",
+    "jobPosting": "Job Posting",
+    "notes": "Notes",
+    "stage": "Stage",
+    "edit": "Edit",
+    "delete": "Delete"
+  },
   "footer": {
     "rights": "All rights reserved.",
     "copyright": "© {{year}} TrackJobs. All rights reserved."

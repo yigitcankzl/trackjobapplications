@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import DashboardLayout from '../components/layout/DashboardLayout'
 import Header from '../components/dashboard/Header'
@@ -21,6 +21,14 @@ export default function ProfilePage() {
   const [avatarFile, setAvatarFile] = useState<File | null>(null)
   const [resumeFile, setResumeFile] = useState<File | null>(null)
   const [saving, setSaving] = useState(false)
+
+  useEffect(() => {
+    if (user) {
+      setFirstName(user.first_name)
+      setLastName(user.last_name)
+      setNotificationEmail(user.notification_email ?? '')
+    }
+  }, [user])
 
   const [oldPassword, setOldPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')

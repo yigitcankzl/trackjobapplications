@@ -180,7 +180,7 @@ export default function ApplicationDrawer({ app, onClose, onEdit, onDelete }: Pr
                           </span>
                         </div>
                         {i < 2 && (
-                          <div className={`h-0.5 flex-1 -mt-4 ${isPast || isActive ? 'bg-blue-200' : 'bg-gray-100'}`} />
+                          <div className={`h-0.5 flex-1 -mt-4 ${isPast || isActive ? 'bg-blue-200 dark:bg-blue-800' : 'bg-gray-100 dark:bg-gray-800'}`} />
                         )}
                       </div>
                     )

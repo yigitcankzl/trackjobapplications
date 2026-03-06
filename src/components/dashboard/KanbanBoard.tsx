@@ -143,7 +143,11 @@ export default function KanbanBoard({ applications, onView, onEdit, onDelete, on
             key={status}
             className="flex-shrink-0 w-64"
             onDragOver={e => handleDragOver(e, status)}
-            onDragLeave={() => setDragOverCol(null)}
+            onDragLeave={(e) => {
+              if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+                setDragOverCol(null)
+              }
+            }}
             onDrop={() => handleDrop(status)}
           >
             {/* Column header */}

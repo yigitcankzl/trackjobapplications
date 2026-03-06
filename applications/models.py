@@ -38,6 +38,9 @@ class Application(models.Model):
 
     class Meta:
         ordering = ["-applied_date"]
+        indexes = [
+            models.Index(fields=["status", "updated_at"]),
+        ]
 
     def __str__(self):
         return f"{self.company} — {self.position}"

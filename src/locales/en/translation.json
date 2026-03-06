@@ -246,6 +246,10 @@
   "calendar": {
     "title": "Calendar"
   },
+  "pagination": {
+    "prev": "Previous",
+    "next": "Next"
+  },
   "footer": {
     "rights": "All rights reserved.",
     "copyright": "© {{year}} TrackJobs. All rights reserved."

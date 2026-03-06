@@ -246,6 +246,10 @@
   "calendar": {
     "title": "Takvim"
   },
+  "pagination": {
+    "prev": "Önceki",
+    "next": "Sonraki"
+  },
   "footer": {
     "rights": "Tüm hakları saklıdır.",
     "copyright": "© {{year}} TrackJobs. Tüm hakları saklıdır."

@@ -56,8 +56,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const refreshUser = useCallback(async () => {
-    const me = await auth.fetchMe()
-    setUser(me)
+    try {
+      const me = await auth.fetchMe()
+      setUser(me)
+    } catch {
+      auth.clearTokens()
+      setUser(null)
+    }
   }, [])
 
   const logout = useCallback(async () => {

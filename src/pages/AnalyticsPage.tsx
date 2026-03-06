@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import DashboardLayout from '../components/layout/DashboardLayout'
 import Header from '../components/dashboard/Header'
@@ -35,6 +35,8 @@ export default function AnalyticsPage() {
   const offerRate = total > 0 ? Math.round(counts.offer / total * 100) : 0
   const maxCount = Math.max(...Object.values(counts), 1)
 
+  const [timeView, setTimeView] = useState<'weekly' | 'monthly'>('monthly')
+
   const monthMap: Record<string, number> = {}
   for (const app of apps) {
     const key = app.applied_date.slice(0, 7)
@@ -42,6 +44,21 @@ export default function AnalyticsPage() {
   }
   const byMonth = Object.entries(monthMap).sort(([a], [b]) => a.localeCompare(b))
   const maxMonthCount = Math.max(...byMonth.map(([, c]) => c), 1)
+
+  const byWeek = useMemo(() => {
+    const weekMap: Record<string, number> = {}
+    for (const app of apps) {
+      const d = new Date(app.applied_date)
+      const day = d.getDay()
+      const diff = d.getDate() - day + (day === 0 ? -6 : 1)
+      const monday = new Date(d)
+      monday.setDate(diff)
+      const key = monday.toISOString().slice(0, 10)
+      weekMap[key] = (weekMap[key] ?? 0) + 1
+    }
+    return Object.entries(weekMap).sort(([a], [b]) => a.localeCompare(b)).slice(-12)
+  }, [apps])
+  const maxWeekCount = Math.max(...byWeek.map(([, c]) => c), 1)
 
   return (
     <DashboardLayout>
@@ -95,30 +112,58 @@ export default function AnalyticsPage() {
           </div>
         </div>
 
-        {/* Applications per month */}
+        {/* Applications over time */}
         <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm p-6">
-          <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-5">{t('analytics.applicationsPerMonth')}</h2>
-          {byMonth.length === 0 ? (
-            <div className="flex items-center justify-center h-40 text-sm text-gray-400">{t('analytics.noData')}</div>
-          ) : (
-            <div className="flex items-end gap-3 h-44">
-              {byMonth.map(([key, count]) => {
-                const heightPct = Math.round(count / maxMonthCount * 100)
-                return (
-                  <div key={key} className="flex-1 flex flex-col items-center gap-1.5 min-w-0">
-                    <span className="text-xs font-bold text-gray-700 dark:text-gray-300">{count}</span>
-                    <div className="w-full relative" style={{ height: '120px' }}>
-                      <div
-                        className="absolute bottom-0 w-full bg-blue-500 rounded-t-lg transition-all duration-500"
-                        style={{ height: `${heightPct}%` }}
-                      />
-                    </div>
-                    <span className="text-xs text-gray-400 text-center leading-tight">{formatMonthYear(key)}</span>
-                  </div>
-                )
-              })}
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-200">{t('analytics.applicationsOverTime')}</h2>
+            <div className="flex items-center bg-gray-100 dark:bg-gray-800 rounded-xl p-1 gap-0.5">
+              <button
+                onClick={() => setTimeView('weekly')}
+                className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
+                  timeView === 'weekly' ? 'bg-white dark:bg-gray-700 text-blue-600 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700'
+                }`}
+              >
+                {t('analytics.weekly')}
+              </button>
+              <button
+                onClick={() => setTimeView('monthly')}
+                className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
+                  timeView === 'monthly' ? 'bg-white dark:bg-gray-700 text-blue-600 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700'
+                }`}
+              >
+                {t('analytics.monthly')}
+              </button>
             </div>
-          )}
+          </div>
+          {(() => {
+            const data = timeView === 'monthly' ? byMonth : byWeek
+            const maxVal = timeView === 'monthly' ? maxMonthCount : maxWeekCount
+            if (data.length === 0) {
+              return <div className="flex items-center justify-center h-40 text-sm text-gray-400">{t('analytics.noData')}</div>
+            }
+            return (
+              <div className="flex items-end gap-3 h-44">
+                {data.map(([key, count]) => {
+                  const heightPct = Math.round(count / maxVal * 100)
+                  const label = timeView === 'monthly'
+                    ? formatMonthYear(key)
+                    : new Date(key).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+                  return (
+                    <div key={key} className="flex-1 flex flex-col items-center gap-1.5 min-w-0">
+                      <span className="text-xs font-bold text-gray-700 dark:text-gray-300">{count}</span>
+                      <div className="w-full relative" style={{ height: '120px' }}>
+                        <div
+                          className="absolute bottom-0 w-full bg-blue-500 rounded-t-lg transition-all duration-500"
+                          style={{ height: `${heightPct}%` }}
+                        />
+                      </div>
+                      <span className="text-xs text-gray-400 text-center leading-tight">{label}</span>
+                    </div>
+                  )
+                })}
+              </div>
+            )
+          })()}
         </div>
       </div>
 

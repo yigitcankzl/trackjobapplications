@@ -5,6 +5,7 @@ export interface User {
   last_name: string
   avatar?: string | null
   resume?: string | null
+  notification_email?: string
 }
 
 export interface AuthTokens {

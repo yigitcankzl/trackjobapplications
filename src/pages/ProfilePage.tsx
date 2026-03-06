@@ -16,6 +16,7 @@ export default function ProfilePage() {
 
   const [firstName, setFirstName] = useState(user?.first_name ?? '')
   const [lastName, setLastName] = useState(user?.last_name ?? '')
+  const [notificationEmail, setNotificationEmail] = useState(user?.notification_email ?? '')
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null)
   const [avatarFile, setAvatarFile] = useState<File | null>(null)
   const [resumeFile, setResumeFile] = useState<File | null>(null)
@@ -46,6 +47,7 @@ export default function ProfilePage() {
       const fd = new FormData()
       fd.append('first_name', firstName)
       fd.append('last_name', lastName)
+      fd.append('notification_email', notificationEmail)
       if (avatarFile) fd.append('avatar', avatarFile)
       if (resumeFile) fd.append('resume', resumeFile)
       await updateProfile(fd)
@@ -139,6 +141,19 @@ export default function ProfilePage() {
                 className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 dark:text-gray-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
               />
             </div>
+          </div>
+
+          {/* Notification Email */}
+          <div>
+            <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">{t('profile.notificationEmail')}</label>
+            <input
+              type="email"
+              value={notificationEmail}
+              onChange={(e) => setNotificationEmail(e.target.value)}
+              placeholder={user?.email}
+              className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 dark:text-gray-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
+            />
+            <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">{t('profile.notificationEmailHint')}</p>
           </div>
 
           {/* Resume */}

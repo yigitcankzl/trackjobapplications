@@ -220,6 +220,8 @@
     "newPassword": "Yeni Şifre",
     "confirmNewPassword": "Yeni Şifre Tekrarı",
     "passwordChanged": "Şifre başarıyla değiştirildi",
+    "notificationEmail": "Bildirim E-postası",
+    "notificationEmailHint": "Boş bırakırsanız giriş e-postanız kullanılır",
     "resume": "Özgeçmiş / CV",
     "uploadResume": "Özgeçmiş Yükle",
     "downloadResume": "Özgeçmişi İndir",

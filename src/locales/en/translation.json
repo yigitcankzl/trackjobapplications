@@ -220,6 +220,8 @@
     "newPassword": "New Password",
     "confirmNewPassword": "Confirm New Password",
     "passwordChanged": "Password changed successfully",
+    "notificationEmail": "Notification Email",
+    "notificationEmailHint": "Leave blank to use your login email for notifications",
     "resume": "Resume / CV",
     "uploadResume": "Upload Resume",
     "downloadResume": "Download Resume",

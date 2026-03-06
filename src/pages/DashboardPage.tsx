@@ -134,23 +134,23 @@ export default function DashboardPage() {
   async function handleBulkUpdateStatus(status: ApplicationStatus) {
     try {
       const { updated } = await bulkUpdateStatus(selectedIds, status)
-      addToast(`Updated ${updated} application(s)`)
+      addToast(t('dashboard.toast.bulkStatusUpdated', { count: updated }))
       setSelectedIds([])
       loadPage(page)
     } catch {
-      addToast('Bulk update failed', 'error')
+      addToast(t('dashboard.errors.bulkUpdateFailed'), 'error')
     }
   }
 
   async function handleBulkDelete() {
     try {
       const { deleted } = await bulkDelete(selectedIds)
-      addToast(`Deleted ${deleted} application(s)`)
+      addToast(t('dashboard.toast.bulkDeleted', { count: deleted }))
       setSelectedIds([])
       const maxPage = Math.ceil((totalCount - selectedIds.length) / PAGE_SIZE) || 1
       loadPage(Math.min(page, maxPage))
     } catch {
-      addToast('Bulk delete failed', 'error')
+      addToast(t('dashboard.errors.bulkDeleteFailed'), 'error')
     }
   }
 
@@ -262,14 +262,12 @@ export default function DashboardPage() {
           selectedIds={selectedIds}
           onToggleSelect={toggleSelect}
           onToggleSelectAll={toggleSelectAll}
-          onView={setDrawerApp}
           onEdit={setEditTarget}
           onDelete={setDeleteTarget}
         />
       ) : (
         <KanbanBoard
           applications={apps}
-          onView={setDrawerApp}
           onEdit={setEditTarget}
           onDelete={setDeleteTarget}
           onStatusChange={handleStatusChange}

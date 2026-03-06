@@ -15,7 +15,6 @@ function needsFollowUp(app: JobApplication): boolean {
 
 interface Props {
   applications: JobApplication[]
-  onView: (app: JobApplication) => void
   onEdit: (app: JobApplication) => void
   onDelete: (app: JobApplication) => void
   onStatusChange: (id: number, newStatus: ApplicationStatus) => void
@@ -25,7 +24,6 @@ const COLUMNS: ApplicationStatus[] = ['applied', 'interview', 'offer', 'rejected
 
 interface CardProps {
   app: JobApplication
-  onView: (app: JobApplication) => void
   onEdit: (app: JobApplication) => void
   onDelete: (app: JobApplication) => void
   onDragStart: (id: number) => void
@@ -33,7 +31,7 @@ interface CardProps {
   isDragging: boolean
 }
 
-function KanbanCard({ app, onView, onEdit, onDelete, onDragStart, onDragEnd, isDragging }: CardProps) {
+function KanbanCard({ app, onEdit, onDelete, onDragStart, onDragEnd, isDragging }: CardProps) {
   const { t } = useTranslation()
   const navigate = useNavigate()
   return (
@@ -95,7 +93,7 @@ function KanbanCard({ app, onView, onEdit, onDelete, onDragStart, onDragEnd, isD
   )
 }
 
-export default function KanbanBoard({ applications, onView, onEdit, onDelete, onStatusChange }: Props) {
+export default function KanbanBoard({ applications, onEdit, onDelete, onStatusChange }: Props) {
   const { t } = useTranslation()
   const draggedId = useRef<number | null>(null)
   const [draggingId, setDraggingId] = useState<number | null>(null)
@@ -183,7 +181,6 @@ export default function KanbanBoard({ applications, onView, onEdit, onDelete, on
                   <KanbanCard
                     key={app.id}
                     app={app}
-                    onView={onView}
                     onEdit={onEdit}
                     onDelete={onDelete}
                     onDragStart={handleDragStart}

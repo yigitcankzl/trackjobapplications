@@ -8,3 +8,4 @@ Pillow==11.1.0
 celery==5.4.0
 django-celery-beat==2.9.0
 redis==5.0.8
+drf-spectacular==0.28.0

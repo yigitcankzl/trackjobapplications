@@ -9,6 +9,11 @@ export async function getApplications(): Promise<JobApplication[]> {
   return data
 }
 
+export async function getApplication(id: number): Promise<JobApplication> {
+  const { data } = await api.get<JobApplication>(`/applications/${id}/`)
+  return data
+}
+
 export async function createApplication(payload: CreatePayload): Promise<JobApplication> {
   const { data } = await api.post<JobApplication>('/applications/', payload)
   return data

@@ -5,8 +5,9 @@ import Header from '../components/dashboard/Header'
 import StatCard from '../components/dashboard/StatCard'
 import { useToast } from '../context/ToastContext'
 import { getApplications } from '../services/applications'
-import { ApplicationStatus, JobApplication } from '../types'
+import { ApplicationSource, ApplicationStatus, JobApplication } from '../types'
 import { STATUS_COLORS, STATUS_TEXT, STATUS_BG } from '../constants/applicationStatus'
+import { SOURCE_CONFIG, SOURCE_KEYS } from '../constants/applicationSource'
 import { formatMonthYear } from '../lib/dates'
 import { ChevronRightIcon } from '../components/icons'
 
@@ -194,6 +195,43 @@ export default function AnalyticsPage() {
           })}
         </div>
       </div>
+
+      {/* Source distribution */}
+      {(() => {
+        const sourceCounts: Partial<Record<ApplicationSource, number>> = {}
+        for (const app of apps) {
+          if (app.source) {
+            sourceCounts[app.source] = (sourceCounts[app.source] ?? 0) + 1
+          }
+        }
+        const entries = SOURCE_KEYS.filter(k => sourceCounts[k]).map(k => [k, sourceCounts[k]!] as const)
+        if (entries.length === 0) return null
+        const maxSrc = Math.max(...entries.map(([, c]) => c), 1)
+        return (
+          <div className="mt-6 bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm p-6">
+            <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-5">{t('analytics.sourceDistribution')}</h2>
+            <div className="space-y-3.5">
+              {entries.map(([src, count]) => {
+                const pct = Math.round(count / maxSrc * 100)
+                return (
+                  <div key={src}>
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">{t(`source.${src}`)}</span>
+                      <span className="text-xs font-bold text-gray-700 dark:text-gray-300">{count}</span>
+                    </div>
+                    <div className="w-full h-2 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+                      <div
+                        className={`h-full rounded-full transition-all duration-500 ${SOURCE_CONFIG[src].color}`}
+                        style={{ width: `${pct}%` }}
+                      />
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )
+      })()}
     </DashboardLayout>
   )
 }

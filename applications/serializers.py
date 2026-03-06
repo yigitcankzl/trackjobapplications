@@ -4,6 +4,8 @@ from .models import Application, ApplicationNote
 
 
 class ApplicationNoteSerializer(serializers.ModelSerializer):
+    content = serializers.CharField(max_length=10000)
+
     class Meta:
         model = ApplicationNote
         fields = ("id", "content", "created_at")

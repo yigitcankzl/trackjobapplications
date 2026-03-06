@@ -7,6 +7,7 @@ import { useToast } from '../context/ToastContext'
 import { updateProfile, changePassword } from '../services/auth'
 import { getAvatarColor } from '../lib/avatar'
 import { CameraIcon, UploadIcon, DownloadIcon } from '../components/icons'
+import DragDropZone from '../components/profile/DragDropZone'
 
 export default function ProfilePage() {
   const { t } = useTranslation()
@@ -88,29 +89,35 @@ export default function ProfilePage() {
         {/* Profile Info */}
         <form onSubmit={handleSaveProfile} className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6 space-y-6">
           {/* Avatar */}
-          <div className="flex items-center gap-5">
-            <div className="relative">
-              {avatarSrc ? (
-                <img src={avatarSrc} alt="" className="w-20 h-20 rounded-full object-cover" />
-              ) : (
-                <div className={`w-20 h-20 rounded-full flex items-center justify-center text-2xl font-bold ${colorClass}`}>
-                  {initials}
-                </div>
-              )}
-              <button
-                type="button"
-                onClick={() => avatarInput.current?.click()}
-                className="absolute bottom-0 right-0 w-7 h-7 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-sm hover:bg-blue-700 transition-colors"
-              >
-                <CameraIcon />
-              </button>
-              <input ref={avatarInput} type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
+          <DragDropZone
+            onFileDrop={file => { setAvatarFile(file); setAvatarPreview(URL.createObjectURL(file)) }}
+            accept="image/*"
+            label={t('profile.dropAvatar')}
+          >
+            <div className="flex items-center gap-5 p-1">
+              <div className="relative">
+                {avatarSrc ? (
+                  <img src={avatarSrc} alt="" className="w-20 h-20 rounded-full object-cover" />
+                ) : (
+                  <div className={`w-20 h-20 rounded-full flex items-center justify-center text-2xl font-bold ${colorClass}`}>
+                    {initials}
+                  </div>
+                )}
+                <button
+                  type="button"
+                  onClick={() => avatarInput.current?.click()}
+                  className="absolute bottom-0 right-0 w-7 h-7 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-sm hover:bg-blue-700 transition-colors"
+                >
+                  <CameraIcon />
+                </button>
+                <input ref={avatarInput} type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-gray-800 dark:text-gray-100">{user?.first_name} {user?.last_name}</p>
+                <p className="text-xs text-gray-400 dark:text-gray-500">{user?.email}</p>
+              </div>
             </div>
-            <div>
-              <p className="text-sm font-semibold text-gray-800 dark:text-gray-100">{user?.first_name} {user?.last_name}</p>
-              <p className="text-xs text-gray-400 dark:text-gray-500">{user?.email}</p>
-            </div>
-          </div>
+          </DragDropZone>
 
           {/* Name fields */}
           <div className="grid grid-cols-2 gap-4">
@@ -137,29 +144,35 @@ export default function ProfilePage() {
           {/* Resume */}
           <div>
             <label className="block text-xs font-medium text-gray-500 mb-2">{t('profile.resume')}</label>
-            <div className="flex items-center gap-3">
-              <button
-                type="button"
-                onClick={() => resumeInput.current?.click()}
-                className="flex items-center gap-2 px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-              >
-                <UploadIcon />
-                {t('profile.uploadResume')}
-              </button>
-              {resumeFile && <span className="text-xs text-gray-400">{resumeFile.name}</span>}
-              {!resumeFile && user?.resume && (
-                <a
-                  href={user.resume}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1 text-xs text-blue-600 hover:underline"
+            <DragDropZone
+              onFileDrop={file => setResumeFile(file)}
+              accept=".pdf,.doc,.docx"
+              label={t('profile.dropResume')}
+            >
+              <div className="flex items-center gap-3 p-1">
+                <button
+                  type="button"
+                  onClick={() => resumeInput.current?.click()}
+                  className="flex items-center gap-2 px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                 >
-                  <DownloadIcon />
-                  {t('profile.downloadResume')}
-                </a>
-              )}
-              <input ref={resumeInput} type="file" accept=".pdf,.doc,.docx" className="hidden" onChange={(e) => setResumeFile(e.target.files?.[0] ?? null)} />
-            </div>
+                  <UploadIcon />
+                  {t('profile.uploadResume')}
+                </button>
+                {resumeFile && <span className="text-xs text-gray-400">{resumeFile.name}</span>}
+                {!resumeFile && user?.resume && (
+                  <a
+                    href={user.resume}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1 text-xs text-blue-600 hover:underline"
+                  >
+                    <DownloadIcon />
+                    {t('profile.downloadResume')}
+                  </a>
+                )}
+                <input ref={resumeInput} type="file" accept=".pdf,.doc,.docx" className="hidden" onChange={(e) => setResumeFile(e.target.files?.[0] ?? null)} />
+              </div>
+            </DragDropZone>
           </div>
 
           <button

@@ -4,7 +4,7 @@ import DashboardLayout from '../components/layout/DashboardLayout'
 import Header from '../components/dashboard/Header'
 import StatCard from '../components/dashboard/StatCard'
 import { useToast } from '../context/ToastContext'
-import { getApplications } from '../services/applications'
+import { getAllApplications } from '../services/applications'
 import { ApplicationSource, ApplicationStatus, JobApplication } from '../types'
 import { STATUS_COLORS, STATUS_TEXT, STATUS_BG } from '../constants/applicationStatus'
 import { SOURCE_CONFIG, SOURCE_KEYS } from '../constants/applicationSource'
@@ -19,7 +19,7 @@ export default function AnalyticsPage() {
   const [apps, setApps] = useState<JobApplication[]>([])
 
   useEffect(() => {
-    getApplications()
+    getAllApplications()
       .then(setApps)
       .catch(() => addToast(t('dashboard.errors.loadFailed'), 'error'))
   }, [addToast, t])

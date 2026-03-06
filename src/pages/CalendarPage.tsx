@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import DashboardLayout from '../components/layout/DashboardLayout'
 import Header from '../components/dashboard/Header'
-import { getApplications } from '../services/applications'
+import { getAllApplications } from '../services/applications'
 import { useToast } from '../context/ToastContext'
 import { JobApplication } from '../types'
 import { getAvatarColor } from '../lib/avatar'
@@ -30,7 +30,7 @@ export default function CalendarPage() {
   const [month, setMonth] = useState(now.getMonth())
 
   useEffect(() => {
-    getApplications()
+    getAllApplications()
       .then(setApps)
       .catch(() => addToast(t('dashboard.errors.loadFailed'), 'error'))
   }, [addToast, t])

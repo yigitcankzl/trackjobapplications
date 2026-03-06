@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import DashboardLayout from '../components/layout/DashboardLayout'
 import Header from '../components/dashboard/Header'
@@ -10,6 +10,7 @@ import ConfirmModal from '../components/dashboard/ConfirmModal'
 import TableFilters from '../components/dashboard/TableFilters'
 import ApplicationDrawer from '../components/dashboard/ApplicationDrawer'
 import ReminderBanner from '../components/dashboard/ReminderBanner'
+import Pagination from '../components/ui/Pagination'
 import Button from '../components/ui/Button'
 import { PlusIcon, TableIcon, KanbanIcon, DownloadIcon } from '../components/icons'
 import { exportApplicationsCsv } from '../lib/exportCsv'
@@ -23,6 +24,9 @@ export default function DashboardPage() {
   const { t } = useTranslation()
   const { addToast } = useToast()
   const [apps, setApps] = useState<JobApplication[]>([])
+  const [page, setPage] = useState(1)
+  const [totalCount, setTotalCount] = useState(0)
+  const PAGE_SIZE = 20
 
   const [view, setView] = useState<ViewMode>('table')
   const [drawerApp, setDrawerApp] = useState<JobApplication | null>(null)
@@ -34,24 +38,34 @@ export default function DashboardPage() {
     useApplicationFilters(apps)
   const reminders = useApplicationReminders(apps)
 
-  useEffect(() => {
-    getApplications()
-      .then(setApps)
+  const loadPage = useCallback((p: number) => {
+    getApplications(p)
+      .then(res => {
+        setApps(res.results)
+        setTotalCount(res.count)
+        setPage(p)
+      })
       .catch(() => addToast(t('dashboard.errors.loadFailed'), 'error'))
   }, [addToast, t])
 
+  useEffect(() => {
+    loadPage(1)
+  }, [loadPage])
+
+  const totalPages = Math.ceil(totalCount / PAGE_SIZE)
+
   const stats = useMemo(() => ({
-    total: apps.length,
+    total: totalCount,
     applied: apps.filter(a => a.status === 'applied').length,
     interview: apps.filter(a => a.status === 'interview').length,
     offer: apps.filter(a => a.status === 'offer').length,
     rejected: apps.filter(a => a.status === 'rejected').length,
-  }), [apps])
+  }), [apps, totalCount])
 
   async function handleAdd(data: Omit<JobApplication, 'id' | 'created_at' | 'updated_at'>) {
     try {
-      const created = await createApplication(data)
-      setApps(prev => [created, ...prev])
+      await createApplication(data)
+      loadPage(1)
       addToast(t('dashboard.toast.added'))
     } catch {
       addToast(t('dashboard.errors.addFailed'), 'error')
@@ -83,7 +97,7 @@ export default function DashboardPage() {
     if (!deleteTarget) return
     try {
       await deleteApplication(deleteTarget.id)
-      setApps(prev => prev.filter(a => a.id !== deleteTarget.id))
+      loadPage(page)
       setDeleteTarget(null)
       addToast(t('dashboard.toast.deleted'))
     } catch {
@@ -164,6 +178,8 @@ export default function DashboardPage() {
           onStatusChange={handleStatusChange}
         />
       )}
+
+      <Pagination page={page} totalPages={totalPages} onPageChange={loadPage} />
 
       <AddApplicationModal
         open={addOpen}

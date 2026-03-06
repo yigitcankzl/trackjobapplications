@@ -9,7 +9,7 @@ RUN npm ci
 COPY . .
 
 EXPOSE 3000
-CMD ["npm", "run", "dev"]
+CMD ["npx", "vite", "--host", "0.0.0.0", "--port", "3000"]
 
 # --- Build stage ---
 FROM node:18-alpine AS builder

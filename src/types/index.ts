@@ -41,6 +41,7 @@ export interface JobApplication {
   applied_date: string
   url?: string
   source?: ApplicationSource | ''
+  interview_date?: string | null
   notes: string
   created_at: string
   updated_at: string

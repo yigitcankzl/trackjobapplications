@@ -24,7 +24,7 @@ interface FormData {
 interface Props {
   open: boolean
   onClose: () => void
-  onSubmit: (data: Omit<JobApplication, 'id' | 'created_at' | 'updated_at'>) => void
+  onSubmit: (data: Omit<JobApplication, 'id' | 'created_at' | 'updated_at'> & { tag_ids?: number[] }) => void
   initialData?: JobApplication
 }
 
@@ -95,7 +95,7 @@ export default function AddApplicationModal({ open, onClose, onSubmit, initialDa
       interview_date: form.interview_date || null,
       notes: form.notes.trim(),
       tag_ids: form.tag_ids,
-    } as any)
+    })
     onClose()
   }
 

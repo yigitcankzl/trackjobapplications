@@ -11,6 +11,15 @@ class Application(models.Model):
         ("withdrawn", "Withdrawn"),
     ]
 
+    SOURCE_CHOICES = [
+        ("linkedin", "LinkedIn"),
+        ("indeed", "Indeed"),
+        ("glassdoor", "Glassdoor"),
+        ("referral", "Referral"),
+        ("company_website", "Company Website"),
+        ("other", "Other"),
+    ]
+
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -21,6 +30,7 @@ class Application(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="applied")
     applied_date = models.DateField()
     url = models.URLField(blank=True, default="")
+    source = models.CharField(max_length=20, choices=SOURCE_CHOICES, blank=True, default="")
     notes = models.TextField(blank=True, default="")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

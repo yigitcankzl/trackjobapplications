@@ -22,6 +22,7 @@ class ApplicationSerializer(serializers.ModelSerializer):
             "status",
             "applied_date",
             "url",
+            "source",
             "notes",
             "created_at",
             "updated_at",

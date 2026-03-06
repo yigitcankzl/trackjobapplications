@@ -145,6 +145,10 @@ CELERY_BEAT_SCHEDULE = {
         "task": "applications.tasks.check_stale_applications",
         "schedule": crontab(hour=9, minute=0),
     },
+    "interview-reminders": {
+        "task": "applications.tasks.send_interview_reminders",
+        "schedule": crontab(hour=8, minute=0),
+    },
 }
 
 # Email

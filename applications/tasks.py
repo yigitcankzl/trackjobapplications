@@ -7,7 +7,7 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.utils import timezone
 
-from .models import Application
+from .models import Application, InterviewStage
 
 logger = logging.getLogger(__name__)
 
@@ -51,4 +51,49 @@ def check_stale_applications():
         return result
     except Exception:
         logger.exception("check_stale_applications task failed")
+        raise
+
+
+@shared_task
+def send_interview_reminders():
+    """Email reminder for interviews in the next 24 hours."""
+    try:
+        now = timezone.now()
+        upcoming = InterviewStage.objects.filter(
+            scheduled_at__gte=now,
+            scheduled_at__lte=now + timedelta(hours=24),
+            completed=False,
+        ).select_related("application__user")
+
+        by_user = defaultdict(list)
+        for stage in upcoming:
+            email = stage.application.user.notification_email or stage.application.user.email
+            by_user[email].append(stage)
+
+        for email, stages in by_user.items():
+            lines = [
+                f"- {s.get_stage_type_display()} at {s.application.company} — {s.application.position} "
+                f"({s.scheduled_at.strftime('%Y-%m-%d %H:%M')})"
+                for s in stages
+            ]
+            body = (
+                f"You have {len(stages)} upcoming interview(s) in the next 24 hours:\n\n"
+                + "\n".join(lines)
+                + "\n\nGood luck!"
+            )
+            try:
+                send_mail(
+                    subject=f"TrackJobs: {len(stages)} interview(s) coming up!",
+                    message=body,
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[email],
+                )
+            except Exception:
+                logger.exception("Failed to send interview reminder to %s", email)
+
+        result = f"Sent interview reminders to {len(by_user)} user(s) for {sum(len(s) for s in by_user.values())} interview(s)"
+        logger.info(result)
+        return result
+    except Exception:
+        logger.exception("send_interview_reminders task failed")
         raise

@@ -53,3 +53,23 @@ export async function createNote(applicationId: number, content: string): Promis
 export async function deleteNote(applicationId: number, noteId: number): Promise<void> {
   await api.delete(`/applications/${applicationId}/notes/${noteId}/`)
 }
+
+// Bulk actions
+export async function bulkUpdateStatus(ids: number[], status: string): Promise<{ updated: number }> {
+  const { data } = await api.post('/applications/bulk-update-status/', { ids, status })
+  return data
+}
+
+export async function bulkDelete(ids: number[]): Promise<{ deleted: number }> {
+  const { data } = await api.post('/applications/bulk-delete/', { ids })
+  return data
+}
+
+// Import
+export async function importApplications(file: File, columnMapping?: Record<string, string>): Promise<{ created: number; errors: Array<{ row: number; errors: Record<string, string[]> }> }> {
+  const formData = new FormData()
+  formData.append('file', file)
+  if (columnMapping) formData.append('column_mapping', JSON.stringify(columnMapping))
+  const { data } = await api.post('/applications/import/', formData)
+  return data
+}

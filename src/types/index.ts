@@ -34,6 +34,46 @@ export interface ApplicationNote {
   created_at: string
 }
 
+export interface Tag {
+  id: number
+  name: string
+  color: string
+}
+
+export interface ApplicationContact {
+  id: number
+  name: string
+  email: string
+  phone: string
+  role: string
+  created_at: string
+}
+
+export type InterviewStageType =
+  | 'phone_screen'
+  | 'technical'
+  | 'behavioral'
+  | 'onsite'
+  | 'take_home'
+  | 'final'
+  | 'other'
+
+export interface InterviewStage {
+  id: number
+  stage_type: InterviewStageType
+  scheduled_at: string
+  notes: string
+  completed: boolean
+  created_at: string
+}
+
+export interface ApplicationAttachment {
+  id: number
+  file: string
+  name: string
+  uploaded_at: string
+}
+
 export interface JobApplication {
   id: number
   company: string
@@ -43,10 +83,14 @@ export interface JobApplication {
   url?: string
   source?: ApplicationSource | ''
   interview_date?: string | null
+  tags?: Tag[]
   notes: string
   created_at: string
   updated_at: string
   note_entries?: ApplicationNote[]
+  contacts?: ApplicationContact[]
+  interview_stages?: InterviewStage[]
+  attachments?: ApplicationAttachment[]
 }
 
 export interface PaginatedResponse<T> {

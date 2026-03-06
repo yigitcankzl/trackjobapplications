@@ -69,9 +69,7 @@ export async function fetchMe(): Promise<User> {
 }
 
 export async function updateProfile(formData: FormData): Promise<User> {
-  const { data } = await api.put<User>('/auth/me/', formData, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  })
+  const { data } = await api.put<User>('/auth/me/', formData)
   return data
 }
 

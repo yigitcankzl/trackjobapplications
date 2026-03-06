@@ -190,7 +190,10 @@
     "applicationsPerMonth": "Aylık Başvurular",
     "noData": "Henüz veri yok",
     "pipeline": "Başvuru Hattı",
-    "conversion": "% dönüşüm"
+    "conversion": "% dönüşüm",
+    "weekly": "Haftalık",
+    "monthly": "Aylık",
+    "applicationsOverTime": "Zaman İçinde Başvurular"
   },
   "profile": {
     "title": "Profil",

@@ -190,7 +190,10 @@
     "applicationsPerMonth": "Applications per Month",
     "noData": "No data yet",
     "pipeline": "Application Pipeline",
-    "conversion": "% conversion"
+    "conversion": "% conversion",
+    "weekly": "Weekly",
+    "monthly": "Monthly",
+    "applicationsOverTime": "Applications Over Time"
   },
   "profile": {
     "title": "Profile",

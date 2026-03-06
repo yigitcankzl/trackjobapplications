@@ -1,9 +1,22 @@
+import os
+import uuid
+
 from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,
     PermissionsMixin,
 )
 from django.db import models
+
+
+def avatar_upload_path(instance, filename):
+    ext = os.path.splitext(filename)[1]
+    return f"avatars/{uuid.uuid4().hex}{ext}"
+
+
+def resume_upload_path(instance, filename):
+    ext = os.path.splitext(filename)[1]
+    return f"resumes/{uuid.uuid4().hex}{ext}"
 
 
 class UserManager(BaseUserManager):
@@ -30,8 +43,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(blank=False, max_length=30, verbose_name="First Name")
     last_name = models.CharField(blank=False, max_length=30, verbose_name="Last Name")
     date_joined = models.DateTimeField(auto_now_add=True, verbose_name="Date Joined")
-    avatar = models.ImageField(upload_to="avatars/", blank=True, null=True)
-    resume = models.FileField(upload_to="resumes/", blank=True, null=True)
+    avatar = models.ImageField(upload_to=avatar_upload_path, blank=True, null=True)
+    resume = models.FileField(upload_to=resume_upload_path, blank=True, null=True)
     notification_email = models.EmailField(blank=True, default="")
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)

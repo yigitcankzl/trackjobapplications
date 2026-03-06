@@ -10,16 +10,20 @@ import ConfirmModal from '../components/dashboard/ConfirmModal'
 import TableFilters from '../components/dashboard/TableFilters'
 import ApplicationDrawer from '../components/dashboard/ApplicationDrawer'
 import ReminderBanner from '../components/dashboard/ReminderBanner'
+import BulkActionBar from '../components/dashboard/BulkActionBar'
+import ImportModal from '../components/dashboard/ImportModal'
+import InterviewReminderPopup from '../components/dashboard/InterviewReminderPopup'
 import Pagination from '../components/ui/Pagination'
 import Button from '../components/ui/Button'
 import { PlusIcon, TableIcon, KanbanIcon, DownloadIcon } from '../components/icons'
 import { exportApplicationsCsv } from '../lib/exportCsv'
-import { getApplications, createApplication, updateApplication, deleteApplication } from '../services/applications'
+import { getApplications, createApplication, updateApplication, deleteApplication, bulkUpdateStatus, bulkDelete } from '../services/applications'
 import { ApplicationFilters, ApplicationStatus, JobApplication, ViewMode } from '../types'
 import { useToast } from '../context/ToastContext'
 import { useApplicationFilters } from '../hooks/useApplicationFilters'
 import { useApplicationReminders } from '../hooks/useApplicationReminders'
 import { useWidgetOrder } from '../hooks/useWidgetOrder'
+import { useInterviewReminders } from '../hooks/useInterviewReminders'
 
 export default function DashboardPage() {
   const { t } = useTranslation()
@@ -35,6 +39,8 @@ export default function DashboardPage() {
   const [editTarget, setEditTarget] = useState<JobApplication | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<JobApplication | null>(null)
   const [loading, setLoading] = useState(true)
+  const [selectedIds, setSelectedIds] = useState<number[]>([])
+  const [importOpen, setImportOpen] = useState(false)
 
   const filtersRef = useRef<ApplicationFilters>({})
 
@@ -42,6 +48,7 @@ export default function DashboardPage() {
     const f = filters ?? filtersRef.current
     filtersRef.current = f
     setLoading(true)
+    setSelectedIds([])
     getApplications(p, f)
       .then(res => {
         setApps(res.results)
@@ -67,6 +74,7 @@ export default function DashboardPage() {
 
   const reminders = useApplicationReminders(apps)
   const { order, dragIdx, onDragStart, onDragOver, onDragEnd } = useWidgetOrder()
+  const { upcoming: interviewReminders, dismissAll: dismissInterviewReminders } = useInterviewReminders(apps)
 
   const totalPages = Math.ceil(totalCount / PAGE_SIZE)
 
@@ -122,6 +130,44 @@ export default function DashboardPage() {
     }
   }
 
+  // Bulk actions
+  async function handleBulkUpdateStatus(status: ApplicationStatus) {
+    try {
+      const { updated } = await bulkUpdateStatus(selectedIds, status)
+      addToast(`Updated ${updated} application(s)`)
+      setSelectedIds([])
+      loadPage(page)
+    } catch {
+      addToast('Bulk update failed', 'error')
+    }
+  }
+
+  async function handleBulkDelete() {
+    try {
+      const { deleted } = await bulkDelete(selectedIds)
+      addToast(`Deleted ${deleted} application(s)`)
+      setSelectedIds([])
+      const maxPage = Math.ceil((totalCount - selectedIds.length) / PAGE_SIZE) || 1
+      loadPage(Math.min(page, maxPage))
+    } catch {
+      addToast('Bulk delete failed', 'error')
+    }
+  }
+
+  function toggleSelect(id: number) {
+    setSelectedIds(prev =>
+      prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+    )
+  }
+
+  function toggleSelectAll() {
+    if (selectedIds.length === apps.length) {
+      setSelectedIds([])
+    } else {
+      setSelectedIds(apps.map(a => a.id))
+    }
+  }
+
   return (
     <DashboardLayout>
       <Header
@@ -147,6 +193,9 @@ export default function DashboardPage() {
               </button>
             </div>
 
+            <Button variant="secondary" onClick={() => setImportOpen(true)}>
+              Import
+            </Button>
             <Button variant="secondary" onClick={() => exportApplicationsCsv(apps)}>
               <DownloadIcon />
               {t('dashboard.exportCsv')}
@@ -210,6 +259,9 @@ export default function DashboardPage() {
       ) : view === 'table' ? (
         <ApplicationsTable
           applications={apps}
+          selectedIds={selectedIds}
+          onToggleSelect={toggleSelect}
+          onToggleSelectAll={toggleSelectAll}
           onView={setDrawerApp}
           onEdit={setEditTarget}
           onDelete={setDeleteTarget}
@@ -225,6 +277,24 @@ export default function DashboardPage() {
       )}
 
       <Pagination page={page} totalPages={totalPages} onPageChange={p => loadPage(p)} />
+
+      <BulkActionBar
+        selectedCount={selectedIds.length}
+        onUpdateStatus={handleBulkUpdateStatus}
+        onDelete={handleBulkDelete}
+        onClear={() => setSelectedIds([])}
+      />
+
+      <ImportModal
+        open={importOpen}
+        onClose={() => setImportOpen(false)}
+        onSuccess={() => loadPage(1)}
+      />
+
+      <InterviewReminderPopup
+        reminders={interviewReminders}
+        onDismiss={dismissInterviewReminders}
+      />
 
       <AddApplicationModal
         open={addOpen}

@@ -25,8 +25,9 @@ export default function SignInForm({ onSwitch }: Props) {
     try {
       await login(email, password)
       navigate('/dashboard')
-    } catch {
-      addToast(t('auth.errors.invalidCredentials'), 'error')
+    } catch (err: unknown) {
+      const detail = (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail
+      addToast(detail || t('auth.errors.invalidCredentials'), 'error')
     } finally {
       setIsLoading(false)
     }

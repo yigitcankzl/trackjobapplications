@@ -32,8 +32,14 @@ export default function SignUpForm({ onSwitch }: Props) {
     try {
       await register(email, firstName, lastName, password, password2)
       navigate('/dashboard')
-    } catch {
-      addToast(t('auth.errors.registrationFailed'), 'error')
+    } catch (err: unknown) {
+      const data = (err as { response?: { data?: Record<string, string[]> } })?.response?.data
+      if (data) {
+        const messages = Object.values(data).flat().join(' ')
+        addToast(messages || t('auth.errors.registrationFailed'), 'error')
+      } else {
+        addToast(t('auth.errors.registrationFailed'), 'error')
+      }
     } finally {
       setIsLoading(false)
     }

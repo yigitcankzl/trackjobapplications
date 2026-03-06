@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Tag } from '../../types'
 import { getTags, createTag } from '../../services/tags'
+import { useToast } from '../../context/ToastContext'
 import TagBadge from './TagBadge'
 
 interface Props {
@@ -13,13 +14,14 @@ const PRESET_COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#
 
 export default function TagSelector({ selectedIds, onChange }: Props) {
   const { t } = useTranslation()
+  const { addToast } = useToast()
   const [tags, setTags] = useState<Tag[]>([])
   const [showCreate, setShowCreate] = useState(false)
   const [newName, setNewName] = useState('')
   const [newColor, setNewColor] = useState(PRESET_COLORS[0])
 
   useEffect(() => {
-    getTags().then(setTags).catch(() => {})
+    getTags().then(setTags).catch(() => addToast('Failed to load tags', 'error'))
   }, [])
 
   function toggle(id: number) {
@@ -38,7 +40,9 @@ export default function TagSelector({ selectedIds, onChange }: Props) {
       onChange([...selectedIds, tag.id])
       setNewName('')
       setShowCreate(false)
-    } catch { /* ignore */ }
+    } catch {
+      addToast('Failed to create tag', 'error')
+    }
   }
 
   return (

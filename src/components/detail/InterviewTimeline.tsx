@@ -26,7 +26,7 @@ export default function InterviewTimeline({ applicationId }: Props) {
   const [form, setForm] = useState({ stage_type: 'phone_screen' as InterviewStageType, scheduled_at: '', notes: '' })
 
   useEffect(() => {
-    getInterviews(applicationId).then(setStages).catch(() => {})
+    getInterviews(applicationId).then(setStages).catch(() => addToast('Failed to load interviews', 'error'))
   }, [applicationId])
 
   async function handleAdd() {

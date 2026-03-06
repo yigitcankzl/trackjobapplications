@@ -14,7 +14,7 @@ export default function AttachmentList({ applicationId }: Props) {
   const fileRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-    getAttachments(applicationId).then(setAttachments).catch(() => {})
+    getAttachments(applicationId).then(setAttachments).catch(() => addToast('Failed to load attachments', 'error'))
   }, [applicationId])
 
   async function handleUpload(files: FileList) {

@@ -1,7 +1,10 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import permissions, viewsets
+from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import get_object_or_404
 from rest_framework.pagination import PageNumberPagination
 
+from .filters import ApplicationFilter
 from .models import Application, ApplicationNote
 from .serializers import ApplicationSerializer, ApplicationNoteSerializer
 
@@ -19,6 +22,11 @@ class ApplicationViewSet(viewsets.ModelViewSet):
     serializer_class = ApplicationSerializer
     permission_classes = [permissions.IsAuthenticated]
     pagination_class = ApplicationPagination
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_class = ApplicationFilter
+    search_fields = ["company", "position"]
+    ordering_fields = ["applied_date", "company", "status", "created_at"]
+    ordering = ["-applied_date"]
 
     def get_queryset(self):
         return self.request.user.applications.prefetch_related("note_entries").all()

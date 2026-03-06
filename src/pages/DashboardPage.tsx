@@ -34,6 +34,7 @@ export default function DashboardPage() {
   const [addOpen, setAddOpen] = useState(false)
   const [editTarget, setEditTarget] = useState<JobApplication | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<JobApplication | null>(null)
+  const [loading, setLoading] = useState(true)
 
   const { search, setSearch, statusFilter, setStatusFilter, sortKey, sortDir, handleSortChange, filtered } =
     useApplicationFilters(apps)
@@ -41,6 +42,7 @@ export default function DashboardPage() {
   const { order, dragIdx, onDragStart, onDragOver, onDragEnd } = useWidgetOrder()
 
   const loadPage = useCallback((p: number) => {
+    setLoading(true)
     getApplications(p)
       .then(res => {
         setApps(res.results)
@@ -48,6 +50,7 @@ export default function DashboardPage() {
         setPage(p)
       })
       .catch(() => addToast(t('dashboard.errors.loadFailed'), 'error'))
+      .finally(() => setLoading(false))
   }, [addToast, t])
 
   useEffect(() => {
@@ -182,7 +185,11 @@ export default function DashboardPage() {
         onSortChange={handleSortChange}
       />
 
-      {view === 'table' ? (
+      {loading ? (
+        <div className="flex items-center justify-center py-24">
+          <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+        </div>
+      ) : view === 'table' ? (
         <ApplicationsTable
           applications={filtered}
           onView={setDrawerApp}

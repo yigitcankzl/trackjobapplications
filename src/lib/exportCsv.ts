@@ -6,9 +6,9 @@ export function exportApplicationsCsv(apps: JobApplication[]) {
   const rows = apps.map(app => [
     escape(app.company),
     escape(app.position),
-    app.status,
+    escape(app.status),
     app.applied_date,
-    app.url ?? '',
+    escape(app.url ?? ''),
     escape(app.notes),
   ])
 

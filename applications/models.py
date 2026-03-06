@@ -78,3 +78,68 @@ class ApplicationNote(models.Model):
 
     def __str__(self):
         return f"Note on {self.application} at {self.created_at}"
+
+
+class ApplicationContact(models.Model):
+    application = models.ForeignKey(
+        Application,
+        on_delete=models.CASCADE,
+        related_name="contacts",
+    )
+    name = models.CharField(max_length=100)
+    email = models.EmailField(blank=True, default="")
+    phone = models.CharField(max_length=30, blank=True, default="")
+    role = models.CharField(max_length=100, blank=True, default="")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.name} ({self.role})"
+
+
+class InterviewStage(models.Model):
+    STAGE_CHOICES = [
+        ("phone_screen", "Phone Screen"),
+        ("technical", "Technical Interview"),
+        ("behavioral", "Behavioral Interview"),
+        ("onsite", "On-site"),
+        ("take_home", "Take-home Assignment"),
+        ("final", "Final Round"),
+        ("other", "Other"),
+    ]
+
+    application = models.ForeignKey(
+        Application,
+        on_delete=models.CASCADE,
+        related_name="interview_stages",
+    )
+    stage_type = models.CharField(max_length=20, choices=STAGE_CHOICES)
+    scheduled_at = models.DateTimeField()
+    notes = models.TextField(blank=True, default="")
+    completed = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["scheduled_at"]
+
+    def __str__(self):
+        return f"{self.get_stage_type_display()} - {self.application}"
+
+
+class ApplicationAttachment(models.Model):
+    application = models.ForeignKey(
+        Application,
+        on_delete=models.CASCADE,
+        related_name="attachments",
+    )
+    file = models.FileField(upload_to="attachments/")
+    name = models.CharField(max_length=255)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-uploaded_at"]
+
+    def __str__(self):
+        return self.name

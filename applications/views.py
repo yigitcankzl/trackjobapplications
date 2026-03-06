@@ -3,10 +3,18 @@ from rest_framework import permissions, viewsets
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import get_object_or_404
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 
 from .filters import ApplicationFilter
-from .models import Application, ApplicationNote, Tag
-from .serializers import ApplicationSerializer, ApplicationNoteSerializer, TagSerializer
+from .models import Application, ApplicationAttachment, ApplicationContact, ApplicationNote, InterviewStage, Tag
+from .serializers import (
+    ApplicationAttachmentSerializer,
+    ApplicationContactSerializer,
+    ApplicationNoteSerializer,
+    ApplicationSerializer,
+    InterviewStageSerializer,
+    TagSerializer,
+)
 
 
 class ApplicationPagination(PageNumberPagination):
@@ -69,3 +77,61 @@ class ApplicationNoteViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         application = self._get_application()
         serializer.save(application=application)
+
+
+class _NestedApplicationMixin:
+    """Shared logic for nested viewsets under /applications/{pk}/..."""
+
+    def _get_application(self):
+        return get_object_or_404(
+            Application,
+            pk=self.kwargs["application_pk"],
+            user=self.request.user,
+        )
+
+
+class ApplicationContactViewSet(_NestedApplicationMixin, viewsets.ModelViewSet):
+    serializer_class = ApplicationContactSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    pagination_class = None
+
+    def get_queryset(self):
+        return ApplicationContact.objects.filter(
+            application__pk=self.kwargs["application_pk"],
+            application__user=self.request.user,
+        )
+
+    def perform_create(self, serializer):
+        serializer.save(application=self._get_application())
+
+
+class InterviewStageViewSet(_NestedApplicationMixin, viewsets.ModelViewSet):
+    serializer_class = InterviewStageSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    pagination_class = None
+
+    def get_queryset(self):
+        return InterviewStage.objects.filter(
+            application__pk=self.kwargs["application_pk"],
+            application__user=self.request.user,
+        )
+
+    def perform_create(self, serializer):
+        serializer.save(application=self._get_application())
+
+
+class ApplicationAttachmentViewSet(_NestedApplicationMixin, viewsets.ModelViewSet):
+    serializer_class = ApplicationAttachmentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
+    pagination_class = None
+    http_method_names = ["get", "post", "delete"]
+
+    def get_queryset(self):
+        return ApplicationAttachment.objects.filter(
+            application__pk=self.kwargs["application_pk"],
+            application__user=self.request.user,
+        )
+
+    def perform_create(self, serializer):
+        serializer.save(application=self._get_application())

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Application, ApplicationNote, Tag
+from .models import Application, ApplicationAttachment, ApplicationContact, ApplicationNote, InterviewStage, Tag
 
 
 class ApplicationNoteInline(admin.TabularInline):
@@ -9,12 +9,30 @@ class ApplicationNoteInline(admin.TabularInline):
     readonly_fields = ("created_at",)
 
 
+class ApplicationContactInline(admin.TabularInline):
+    model = ApplicationContact
+    extra = 0
+    readonly_fields = ("created_at",)
+
+
+class InterviewStageInline(admin.TabularInline):
+    model = InterviewStage
+    extra = 0
+    readonly_fields = ("created_at",)
+
+
+class ApplicationAttachmentInline(admin.TabularInline):
+    model = ApplicationAttachment
+    extra = 0
+    readonly_fields = ("uploaded_at",)
+
+
 @admin.register(Application)
 class ApplicationAdmin(admin.ModelAdmin):
     list_display = ("company", "position", "status", "user", "applied_date")
     list_filter = ("status", "source")
     search_fields = ("company", "position")
-    inlines = [ApplicationNoteInline]
+    inlines = [ApplicationNoteInline, ApplicationContactInline, InterviewStageInline, ApplicationAttachmentInline]
 
 
 @admin.register(Tag)

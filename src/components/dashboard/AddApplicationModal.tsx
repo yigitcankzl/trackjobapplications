@@ -15,6 +15,7 @@ interface FormData {
   applied_date: string
   url: string
   source: string
+  interview_date: string
   notes: string
 }
 
@@ -33,6 +34,7 @@ function getInitialForm(): FormData {
     applied_date: new Date().toISOString().split('T')[0],
     url: '',
     source: '',
+    interview_date: '',
     notes: '',
   }
 }
@@ -45,6 +47,7 @@ function toFormData(app: JobApplication): FormData {
     applied_date: app.applied_date,
     url: app.url ?? '',
     source: app.source ?? '',
+    interview_date: app.interview_date ? app.interview_date.slice(0, 16) : '',
     notes: app.notes,
   }
 }
@@ -85,6 +88,7 @@ export default function AddApplicationModal({ open, onClose, onSubmit, initialDa
       applied_date: form.applied_date,
       url: form.url.trim() || undefined,
       source: (form.source as ApplicationSource) || undefined,
+      interview_date: form.interview_date || null,
       notes: form.notes.trim(),
     })
     onClose()
@@ -211,6 +215,16 @@ export default function AddApplicationModal({ open, onClose, onSubmit, initialDa
                   ))}
                 </select>
               </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">{t('dashboard.form.interviewDate')}</label>
+              <input
+                type="datetime-local"
+                value={form.interview_date}
+                onChange={e => setForm(f => ({ ...f, interview_date: e.target.value }))}
+                className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900 transition-colors bg-white dark:bg-gray-800 dark:text-gray-100"
+              />
             </div>
 
             <div>

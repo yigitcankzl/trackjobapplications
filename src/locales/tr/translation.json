@@ -120,12 +120,14 @@
       "positionRequired": "Pozisyon zorunludur",
       "dateRequired": "Tarih zorunludur",
       "source": "Kaynak",
-      "selectSource": "Kaynak seç..."
+      "selectSource": "Kaynak seç...",
+      "interviewDate": "Mülakat Tarihi"
     },
     "drawer": {
       "title": "Başvuru Detayı",
       "applied": "Başvuru Tarihi",
       "lastUpdated": "Son Güncelleme",
+      "interviewDate": "Mülakat Tarihi",
       "jobPosting": "İş İlanı",
       "notes": "Notlar",
       "stage": "Aşama",
@@ -167,6 +169,7 @@
     },
     "nav": {
       "dashboard": "Dashboard",
+      "calendar": "Takvim",
       "analytics": "Analitik",
       "signOut": "Çıkış Yap",
       "profile": "Profil",
@@ -233,11 +236,15 @@
     "backToDashboard": "Dashboard'a Dön",
     "applied": "Başvuru Tarihi",
     "lastUpdated": "Son Güncelleme",
+    "interviewDate": "Mülakat Tarihi",
     "jobPosting": "İş İlanı",
     "notes": "Notlar",
     "stage": "Aşama",
     "edit": "Düzenle",
     "delete": "Sil"
+  },
+  "calendar": {
+    "title": "Takvim"
   },
   "footer": {
     "rights": "Tüm hakları saklıdır.",

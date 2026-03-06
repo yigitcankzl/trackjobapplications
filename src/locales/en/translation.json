@@ -120,12 +120,14 @@
       "positionRequired": "Position is required",
       "dateRequired": "Date is required",
       "source": "Source",
-      "selectSource": "Select source..."
+      "selectSource": "Select source...",
+      "interviewDate": "Interview Date"
     },
     "drawer": {
       "title": "Application Detail",
       "applied": "Applied",
       "lastUpdated": "Last Updated",
+      "interviewDate": "Interview Date",
       "jobPosting": "Job Posting",
       "notes": "Notes",
       "stage": "Stage",
@@ -167,6 +169,7 @@
     },
     "nav": {
       "dashboard": "Dashboard",
+      "calendar": "Calendar",
       "analytics": "Analytics",
       "signOut": "Sign Out",
       "profile": "Profile",
@@ -233,11 +236,15 @@
     "backToDashboard": "Back to Dashboard",
     "applied": "Applied",
     "lastUpdated": "Last Updated",
+    "interviewDate": "Interview Date",
     "jobPosting": "Job Posting",
     "notes": "Notes",
     "stage": "Stage",
     "edit": "Edit",
     "delete": "Delete"
+  },
+  "calendar": {
+    "title": "Calendar"
   },
   "footer": {
     "rights": "All rights reserved.",

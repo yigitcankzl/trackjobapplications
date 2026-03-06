@@ -42,12 +42,12 @@ export default function CalendarPage() {
   const dayMap = useMemo(() => {
     const map: Record<number, JobApplication[]> = {}
     for (const app of interviewApps) {
-      const [y, m, day] = app.interview_date!.split('-').map(Number)
-      const d = new Date(y, m - 1, day)
+      const [y, m, dd] = app.interview_date!.split('-').map(Number)
+      const d = new Date(y, m - 1, dd)
       if (d.getFullYear() === year && d.getMonth() === month) {
-        const day = d.getDate()
-        if (!map[day]) map[day] = []
-        map[day].push(app)
+        const dayNum = d.getDate()
+        if (!map[dayNum]) map[dayNum] = []
+        map[dayNum].push(app)
       }
     }
     return map

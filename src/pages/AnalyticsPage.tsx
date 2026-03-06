@@ -49,10 +49,10 @@ export default function AnalyticsPage() {
   const byWeek = useMemo(() => {
     const weekMap: Record<string, number> = {}
     for (const app of apps) {
-      const [y, m, day] = app.applied_date.split('-').map(Number)
-      const d = new Date(y, m - 1, day)
-      const day = d.getDay()
-      const diff = d.getDate() - day + (day === 0 ? -6 : 1)
+      const [y, m, dd] = app.applied_date.split('-').map(Number)
+      const d = new Date(y, m - 1, dd)
+      const dow = d.getDay()
+      const diff = d.getDate() - dow + (dow === 0 ? -6 : 1)
       const monday = new Date(d)
       monday.setDate(diff)
       const key = monday.toISOString().slice(0, 10)

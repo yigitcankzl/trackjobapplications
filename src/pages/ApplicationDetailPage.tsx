@@ -141,6 +141,18 @@ export default function ApplicationDetailPage() {
             </div>
           </div>
 
+          {app.interview_date && (
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 rounded-lg bg-purple-50 dark:bg-purple-900/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <CalendarIcon />
+              </div>
+              <div>
+                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-0.5">{t('detail.interviewDate')}</p>
+                <p className="text-sm text-gray-800 dark:text-gray-200">{formatLong(app.interview_date)}</p>
+              </div>
+            </div>
+          )}
+
           {app.url && (
             <div className="flex items-start gap-3">
               <div className="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center flex-shrink-0 mt-0.5">

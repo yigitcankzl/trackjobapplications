@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import DashboardLayout from '../components/layout/DashboardLayout'
 import Header from '../components/dashboard/Header'
@@ -15,7 +15,7 @@ import Button from '../components/ui/Button'
 import { PlusIcon, TableIcon, KanbanIcon, DownloadIcon } from '../components/icons'
 import { exportApplicationsCsv } from '../lib/exportCsv'
 import { getApplications, createApplication, updateApplication, deleteApplication } from '../services/applications'
-import { ApplicationStatus, JobApplication, ViewMode } from '../types'
+import { ApplicationFilters, ApplicationStatus, JobApplication, ViewMode } from '../types'
 import { useToast } from '../context/ToastContext'
 import { useApplicationFilters } from '../hooks/useApplicationFilters'
 import { useApplicationReminders } from '../hooks/useApplicationReminders'
@@ -36,14 +36,13 @@ export default function DashboardPage() {
   const [deleteTarget, setDeleteTarget] = useState<JobApplication | null>(null)
   const [loading, setLoading] = useState(true)
 
-  const { search, setSearch, statusFilter, setStatusFilter, sortKey, sortDir, handleSortChange, filtered } =
-    useApplicationFilters(apps)
-  const reminders = useApplicationReminders(apps)
-  const { order, dragIdx, onDragStart, onDragOver, onDragEnd } = useWidgetOrder()
+  const filtersRef = useRef<ApplicationFilters>({})
 
-  const loadPage = useCallback((p: number) => {
+  const loadPage = useCallback((p: number, filters?: ApplicationFilters) => {
+    const f = filters ?? filtersRef.current
+    filtersRef.current = f
     setLoading(true)
-    getApplications(p)
+    getApplications(p, f)
       .then(res => {
         setApps(res.results)
         setTotalCount(res.count)
@@ -53,9 +52,21 @@ export default function DashboardPage() {
       .finally(() => setLoading(false))
   }, [addToast, t])
 
-  useEffect(() => {
-    loadPage(1)
+  const handleFiltersChange = useCallback((filters: ApplicationFilters) => {
+    loadPage(1, filters)
   }, [loadPage])
+
+  const {
+    search, setSearch,
+    statusFilter, setStatusFilter,
+    sourceFilter, setSourceFilter,
+    dateAfter, setDateAfter,
+    dateBefore, setDateBefore,
+    sortKey, sortDir, handleSortChange,
+  } = useApplicationFilters(handleFiltersChange)
+
+  const reminders = useApplicationReminders(apps)
+  const { order, dragIdx, onDragStart, onDragOver, onDragEnd } = useWidgetOrder()
 
   const totalPages = Math.ceil(totalCount / PAGE_SIZE)
 
@@ -181,6 +192,12 @@ export default function DashboardPage() {
         onSearchChange={setSearch}
         statusFilter={statusFilter}
         onStatusFilterChange={setStatusFilter}
+        sourceFilter={sourceFilter}
+        onSourceFilterChange={setSourceFilter}
+        dateAfter={dateAfter}
+        onDateAfterChange={setDateAfter}
+        dateBefore={dateBefore}
+        onDateBeforeChange={setDateBefore}
         sortKey={sortKey}
         sortDir={sortDir}
         onSortChange={handleSortChange}
@@ -192,14 +209,14 @@ export default function DashboardPage() {
         </div>
       ) : view === 'table' ? (
         <ApplicationsTable
-          applications={filtered}
+          applications={apps}
           onView={setDrawerApp}
           onEdit={setEditTarget}
           onDelete={setDeleteTarget}
         />
       ) : (
         <KanbanBoard
-          applications={filtered}
+          applications={apps}
           onView={setDrawerApp}
           onEdit={setEditTarget}
           onDelete={setDeleteTarget}
@@ -207,7 +224,7 @@ export default function DashboardPage() {
         />
       )}
 
-      <Pagination page={page} totalPages={totalPages} onPageChange={loadPage} />
+      <Pagination page={page} totalPages={totalPages} onPageChange={p => loadPage(p)} />
 
       <AddApplicationModal
         open={addOpen}

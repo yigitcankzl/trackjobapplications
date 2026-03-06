@@ -59,3 +59,12 @@ export interface PaginatedResponse<T> {
 export type ViewMode = 'table' | 'kanban'
 export type SortKey = 'date' | 'company' | 'status'
 export type StatusFilter = ApplicationStatus | 'all'
+
+export interface ApplicationFilters {
+  search?: string
+  status?: ApplicationStatus
+  source?: ApplicationSource
+  applied_date_after?: string
+  applied_date_before?: string
+  ordering?: string
+}

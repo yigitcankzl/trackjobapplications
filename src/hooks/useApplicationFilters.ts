@@ -1,13 +1,22 @@
-import { useMemo, useState } from 'react'
-import { ApplicationStatus, JobApplication, SortKey, StatusFilter } from '../types'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { ApplicationFilters, ApplicationSource, SortKey, StatusFilter } from '../types'
 
-const STATUS_ORDER: ApplicationStatus[] = ['applied', 'interview', 'offer', 'rejected', 'withdrawn']
+const SORT_MAP: Record<SortKey, string> = {
+  date: 'applied_date',
+  company: 'company',
+  status: 'status',
+}
 
-export function useApplicationFilters(apps: JobApplication[]) {
+export function useApplicationFilters(onFiltersChange: (filters: ApplicationFilters) => void) {
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all')
+  const [sourceFilter, setSourceFilter] = useState<ApplicationSource | ''>('')
+  const [dateAfter, setDateAfter] = useState('')
+  const [dateBefore, setDateBefore] = useState('')
   const [sortKey, setSortKey] = useState<SortKey>('date')
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc')
+
+  const timerRef = useRef<ReturnType<typeof setTimeout>>()
 
   function handleSortChange(key: SortKey) {
     if (sortKey === key) {
@@ -18,30 +27,48 @@ export function useApplicationFilters(apps: JobApplication[]) {
     }
   }
 
-  const filtered = useMemo(() => {
-    const q = search.toLowerCase()
-    return apps
-      .filter(a => statusFilter === 'all' || a.status === statusFilter)
-      .filter(a =>
-        a.company.toLowerCase().includes(q) || a.position.toLowerCase().includes(q),
-      )
-      .sort((a, b) => {
-        let cmp = 0
-        if (sortKey === 'date') cmp = a.applied_date.localeCompare(b.applied_date)
-        if (sortKey === 'company') cmp = a.company.localeCompare(b.company)
-        if (sortKey === 'status') cmp = STATUS_ORDER.indexOf(a.status) - STATUS_ORDER.indexOf(b.status)
-        return sortDir === 'asc' ? cmp : -cmp
-      })
-  }, [apps, search, statusFilter, sortKey, sortDir])
+  const buildFilters = useCallback((): ApplicationFilters => {
+    const filters: ApplicationFilters = {}
+    if (search) filters.search = search
+    if (statusFilter !== 'all') filters.status = statusFilter
+    if (sourceFilter) filters.source = sourceFilter
+    if (dateAfter) filters.applied_date_after = dateAfter
+    if (dateBefore) filters.applied_date_before = dateBefore
+    const prefix = sortDir === 'desc' ? '-' : ''
+    filters.ordering = `${prefix}${SORT_MAP[sortKey]}`
+    return filters
+  }, [search, statusFilter, sourceFilter, dateAfter, dateBefore, sortKey, sortDir])
+
+  // Debounce search, immediate for other filters
+  useEffect(() => {
+    clearTimeout(timerRef.current)
+    timerRef.current = setTimeout(() => {
+      onFiltersChange(buildFilters())
+    }, 300)
+    return () => clearTimeout(timerRef.current)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search])
+
+  // Immediate trigger for non-search filters
+  useEffect(() => {
+    onFiltersChange(buildFilters())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [statusFilter, sourceFilter, dateAfter, dateBefore, sortKey, sortDir])
 
   return {
     search,
     setSearch,
     statusFilter,
     setStatusFilter,
+    sourceFilter,
+    setSourceFilter,
+    dateAfter,
+    setDateAfter,
+    dateBefore,
+    setDateBefore,
     sortKey,
     sortDir,
     handleSortChange,
-    filtered,
+    buildFilters,
   }
 }

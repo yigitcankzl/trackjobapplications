@@ -1,11 +1,18 @@
 import api from '../lib/axios'
-import { ApplicationNote, JobApplication, PaginatedResponse } from '../types'
+import { ApplicationFilters, ApplicationNote, JobApplication, PaginatedResponse } from '../types'
 
 type CreatePayload = Omit<JobApplication, 'id' | 'created_at' | 'updated_at'>
 type UpdatePayload = Partial<CreatePayload>
 
-export async function getApplications(page = 1): Promise<PaginatedResponse<JobApplication>> {
-  const { data } = await api.get<PaginatedResponse<JobApplication>>('/applications/', { params: { page } })
+export async function getApplications(page = 1, filters: ApplicationFilters = {}): Promise<PaginatedResponse<JobApplication>> {
+  const params: Record<string, string | number> = { page }
+  if (filters.search) params.search = filters.search
+  if (filters.status) params.status = filters.status
+  if (filters.source) params.source = filters.source
+  if (filters.applied_date_after) params.applied_date_after = filters.applied_date_after
+  if (filters.applied_date_before) params.applied_date_before = filters.applied_date_before
+  if (filters.ordering) params.ordering = filters.ordering
+  const { data } = await api.get<PaginatedResponse<JobApplication>>('/applications/', { params })
   return data
 }
 

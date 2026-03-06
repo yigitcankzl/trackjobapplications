@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { SortKey, StatusFilter } from '../../types'
+import { ApplicationSource, SortKey, StatusFilter } from '../../types'
 import { SearchIcon, CloseIcon, ChevronUpIcon } from '../icons'
 import { useSearchHistory } from '../../hooks/useSearchHistory'
 import SearchHistoryDropdown from './SearchHistoryDropdown'
@@ -10,16 +10,38 @@ interface Props {
   onSearchChange: (v: string) => void
   statusFilter: StatusFilter
   onStatusFilterChange: (v: StatusFilter) => void
+  sourceFilter: ApplicationSource | ''
+  onSourceFilterChange: (v: ApplicationSource | '') => void
+  dateAfter: string
+  onDateAfterChange: (v: string) => void
+  dateBefore: string
+  onDateBeforeChange: (v: string) => void
   sortKey: SortKey
   sortDir: 'asc' | 'desc'
   onSortChange: (key: SortKey) => void
 }
+
+const SOURCE_OPTIONS: { value: ApplicationSource | ''; label: string }[] = [
+  { value: '', label: 'All Sources' },
+  { value: 'linkedin', label: 'LinkedIn' },
+  { value: 'indeed', label: 'Indeed' },
+  { value: 'glassdoor', label: 'Glassdoor' },
+  { value: 'referral', label: 'Referral' },
+  { value: 'company_website', label: 'Company Website' },
+  { value: 'other', label: 'Other' },
+]
 
 export default function TableFilters({
   search,
   onSearchChange,
   statusFilter,
   onStatusFilterChange,
+  sourceFilter,
+  onSourceFilterChange,
+  dateAfter,
+  onDateAfterChange,
+  dateBefore,
+  onDateBeforeChange,
   sortKey,
   sortDir,
   onSortChange,
@@ -45,10 +67,10 @@ export default function TableFilters({
 
   return (
     <div className="flex flex-col gap-3 mb-4">
-      {/* Search + Sort row */}
-      <div className="flex items-center gap-3">
+      {/* Search + Source + Date range + Sort row */}
+      <div className="flex items-center gap-3 flex-wrap">
         {/* Search */}
-        <div className="relative flex-1 max-w-xs">
+        <div className="relative flex-1 min-w-[200px] max-w-xs">
           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
             <SearchIcon />
           </span>
@@ -81,6 +103,34 @@ export default function TableFilters({
             onRemove={removeSearch}
             onClearAll={clearAll}
             visible={searchFocused && !search}
+          />
+        </div>
+
+        {/* Source filter */}
+        <select
+          value={sourceFilter}
+          onChange={e => onSourceFilterChange(e.target.value as ApplicationSource | '')}
+          className="px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-sm bg-white dark:bg-gray-900 dark:text-gray-100 outline-none focus:border-blue-400"
+        >
+          {SOURCE_OPTIONS.map(opt => (
+            <option key={opt.value} value={opt.value}>{opt.label}</option>
+          ))}
+        </select>
+
+        {/* Date range */}
+        <div className="flex items-center gap-1.5">
+          <input
+            type="date"
+            value={dateAfter}
+            onChange={e => onDateAfterChange(e.target.value)}
+            className="px-2 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-sm bg-white dark:bg-gray-900 dark:text-gray-100 outline-none focus:border-blue-400"
+          />
+          <span className="text-gray-400 text-xs">—</span>
+          <input
+            type="date"
+            value={dateBefore}
+            onChange={e => onDateBeforeChange(e.target.value)}
+            className="px-2 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-sm bg-white dark:bg-gray-900 dark:text-gray-100 outline-none focus:border-blue-400"
           />
         </div>
 

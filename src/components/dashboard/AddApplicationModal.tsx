@@ -7,6 +7,7 @@ import { useEscapeKey } from '../../hooks/useEscapeKey'
 import { useFocusTrap } from '../../hooks/useFocusTrap'
 import { CloseIcon } from '../icons'
 import Button from '../ui/Button'
+import TagSelector from './TagSelector'
 
 interface FormData {
   company: string
@@ -17,6 +18,7 @@ interface FormData {
   source: string
   interview_date: string
   notes: string
+  tag_ids: number[]
 }
 
 interface Props {
@@ -36,6 +38,7 @@ function getInitialForm(): FormData {
     source: '',
     interview_date: '',
     notes: '',
+    tag_ids: [],
   }
 }
 
@@ -49,6 +52,7 @@ function toFormData(app: JobApplication): FormData {
     source: app.source ?? '',
     interview_date: app.interview_date ? app.interview_date.slice(0, 16) : '',
     notes: app.notes,
+    tag_ids: app.tags?.map(t => t.id) ?? [],
   }
 }
 
@@ -90,7 +94,8 @@ export default function AddApplicationModal({ open, onClose, onSubmit, initialDa
       source: form.source ? (form.source as ApplicationSource) : undefined,
       interview_date: form.interview_date || null,
       notes: form.notes.trim(),
-    })
+      tag_ids: form.tag_ids,
+    } as any)
     onClose()
   }
 
@@ -236,6 +241,11 @@ export default function AddApplicationModal({ open, onClose, onSubmit, initialDa
                 rows={3}
                 className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900 transition-colors resize-none placeholder:text-gray-300 dark:bg-gray-800 dark:text-gray-100"
               />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">{t('dashboard.form.tags')}</label>
+              <TagSelector selectedIds={form.tag_ids} onChange={ids => setForm(f => ({ ...f, tag_ids: ids }))} />
             </div>
           </div>
 

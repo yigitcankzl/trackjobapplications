@@ -100,7 +100,11 @@
       "sortCompany": "Company",
       "sortStatus": "Status",
       "recentSearches": "Recent searches",
-      "clearAll": "Clear all"
+      "clearAll": "Clear all",
+      "source": "Source",
+      "allSources": "All Sources",
+      "dateAfter": "From",
+      "dateBefore": "To"
     },
     "form": {
       "company": "Company",
@@ -121,7 +125,8 @@
       "dateRequired": "Date is required",
       "source": "Source",
       "selectSource": "Select source...",
-      "interviewDate": "Interview Date"
+      "interviewDate": "Interview Date",
+      "tags": "Tags"
     },
     "drawer": {
       "title": "Application Detail",
@@ -160,13 +165,19 @@
       "added": "Application added",
       "saved": "Changes saved",
       "statusUpdated": "Status updated",
-      "deleted": "Application deleted"
+      "deleted": "Application deleted",
+      "bulkStatusUpdated": "Status updated for {{count}} applications",
+      "bulkDeleted": "{{count}} applications deleted",
+      "importSuccess": "Imported {{count}} applications"
     },
     "errors": {
       "loadFailed": "Failed to load applications.",
       "addFailed": "Failed to add application.",
       "editFailed": "Failed to save changes.",
-      "deleteFailed": "Failed to delete application."
+      "deleteFailed": "Failed to delete application.",
+      "bulkUpdateFailed": "Failed to update applications.",
+      "bulkDeleteFailed": "Failed to delete applications.",
+      "importFailed": "Failed to import file."
     },
     "nav": {
       "dashboard": "Dashboard",
@@ -234,6 +245,24 @@
       "passwordChangeFailed": "Failed to change password"
     }
   },
+    "bulk": {
+      "selected": "{{count}} selected",
+      "updateStatus": "Update Status",
+      "deleteSelected": "Delete Selected",
+      "confirmDelete": "Delete {{count}} applications? This cannot be undone."
+    },
+    "import": {
+      "title": "Import Applications",
+      "selectFile": "Select CSV or Excel file",
+      "preview": "Preview",
+      "mapColumns": "Map Columns",
+      "import": "Import",
+      "close": "Close",
+      "results": "Import Results",
+      "created": "{{count}} created",
+      "errors": "{{count}} errors"
+    }
+  },
   "detail": {
     "title": "Application Detail",
     "backToDashboard": "Back to Dashboard",
@@ -244,7 +273,10 @@
     "notes": "Notes",
     "stage": "Stage",
     "edit": "Edit",
-    "delete": "Delete"
+    "delete": "Delete",
+    "contacts": "Contacts",
+    "interviews": "Interview Stages",
+    "attachments": "Attachments"
   },
   "calendar": {
     "title": "Calendar"

@@ -100,7 +100,11 @@
       "sortCompany": "Şirket",
       "sortStatus": "Durum",
       "recentSearches": "Son aramalar",
-      "clearAll": "Tümünü temizle"
+      "clearAll": "Tümünü temizle",
+      "source": "Kaynak",
+      "allSources": "Tüm Kaynaklar",
+      "dateAfter": "Başlangıç",
+      "dateBefore": "Bitiş"
     },
     "form": {
       "company": "Şirket",
@@ -121,7 +125,8 @@
       "dateRequired": "Tarih zorunludur",
       "source": "Kaynak",
       "selectSource": "Kaynak seç...",
-      "interviewDate": "Mülakat Tarihi"
+      "interviewDate": "Mülakat Tarihi",
+      "tags": "Etiketler"
     },
     "drawer": {
       "title": "Başvuru Detayı",
@@ -160,13 +165,19 @@
       "added": "Başvuru eklendi",
       "saved": "Değişiklikler kaydedildi",
       "statusUpdated": "Durum güncellendi",
-      "deleted": "Başvuru silindi"
+      "deleted": "Başvuru silindi",
+      "bulkStatusUpdated": "{{count}} başvurunun durumu güncellendi",
+      "bulkDeleted": "{{count}} başvuru silindi",
+      "importSuccess": "{{count}} başvuru içe aktarıldı"
     },
     "errors": {
       "loadFailed": "Başvurular yüklenemedi.",
       "addFailed": "Başvuru eklenemedi.",
       "editFailed": "Değişiklikler kaydedilemedi.",
-      "deleteFailed": "Başvuru silinemedi."
+      "deleteFailed": "Başvuru silinemedi.",
+      "bulkUpdateFailed": "Başvurular güncellenemedi.",
+      "bulkDeleteFailed": "Başvurular silinemedi.",
+      "importFailed": "Dosya içe aktarılamadı."
     },
     "nav": {
       "dashboard": "Dashboard",
@@ -234,6 +245,24 @@
       "passwordChangeFailed": "Şifre değiştirilemedi"
     }
   },
+    "bulk": {
+      "selected": "{{count}} seçildi",
+      "updateStatus": "Durumu Güncelle",
+      "deleteSelected": "Seçilenleri Sil",
+      "confirmDelete": "{{count}} başvuruyu sil? Bu işlem geri alınamaz."
+    },
+    "import": {
+      "title": "Başvuru İçe Aktar",
+      "selectFile": "CSV veya Excel dosyası seçin",
+      "preview": "Önizleme",
+      "mapColumns": "Kolon Eşleştirme",
+      "import": "İçe Aktar",
+      "close": "Kapat",
+      "results": "İçe Aktarma Sonuçları",
+      "created": "{{count}} oluşturuldu",
+      "errors": "{{count}} hata"
+    }
+  },
   "detail": {
     "title": "Başvuru Detayı",
     "backToDashboard": "Dashboard'a Dön",
@@ -244,7 +273,10 @@
     "notes": "Notlar",
     "stage": "Aşama",
     "edit": "Düzenle",
-    "delete": "Sil"
+    "delete": "Sil",
+    "contacts": "Kişiler",
+    "interviews": "Mülakat Aşamaları",
+    "attachments": "Ekler"
   },
   "calendar": {
     "title": "Takvim"

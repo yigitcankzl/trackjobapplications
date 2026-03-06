@@ -6,6 +6,7 @@ import { STATUS_COLORS } from '../../constants/applicationStatus'
 import { EditIcon, TrashIcon } from '../icons'
 import { getAvatarColor } from '../../lib/avatar'
 import { formatShort } from '../../lib/dates'
+import TagBadge from './TagBadge'
 
 function needsFollowUp(app: JobApplication): boolean {
   if (app.status !== 'applied' && app.status !== 'interview') return false
@@ -81,6 +82,12 @@ function KanbanCard({ app, onView, onEdit, onDelete, onDragStart, onDragEnd, isD
 
       {app.notes && (
         <p className="text-xs text-gray-400 italic mb-3 truncate">{app.notes}</p>
+      )}
+
+      {app.tags && app.tags.length > 0 && (
+        <div className="flex flex-wrap gap-1 mb-2">
+          {app.tags.map(tag => <TagBadge key={tag.id} tag={tag} />)}
+        </div>
       )}
 
       <p className="text-xs text-gray-400">{formatShort(app.applied_date)}</p>

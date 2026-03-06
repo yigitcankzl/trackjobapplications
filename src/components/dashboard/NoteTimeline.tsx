@@ -18,7 +18,7 @@ export default function NoteTimeline({ applicationId }: Props) {
 
   useEffect(() => {
     getNotes(applicationId).then(setNotes).catch(() => addToast(t('dashboard.notes.loadFailed'), 'error'))
-  }, [applicationId])
+  }, [applicationId, addToast, t])
 
   async function handleAdd(e: React.FormEvent) {
     e.preventDefault()

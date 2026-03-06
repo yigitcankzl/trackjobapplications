@@ -1,7 +1,8 @@
 import { useRef, useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ApplicationStatus, JobApplication } from '../../types'
+import { ApplicationSource, ApplicationStatus, JobApplication } from '../../types'
 import { STATUS_KEYS } from '../../constants/applicationStatus'
+import { SOURCE_KEYS } from '../../constants/applicationSource'
 import { useEscapeKey } from '../../hooks/useEscapeKey'
 import { useFocusTrap } from '../../hooks/useFocusTrap'
 import { CloseIcon } from '../icons'
@@ -13,6 +14,7 @@ interface FormData {
   status: ApplicationStatus
   applied_date: string
   url: string
+  source: string
   notes: string
 }
 
@@ -30,6 +32,7 @@ function getInitialForm(): FormData {
     status: 'applied',
     applied_date: new Date().toISOString().split('T')[0],
     url: '',
+    source: '',
     notes: '',
   }
 }
@@ -41,6 +44,7 @@ function toFormData(app: JobApplication): FormData {
     status: app.status,
     applied_date: app.applied_date,
     url: app.url ?? '',
+    source: app.source ?? '',
     notes: app.notes,
   }
 }
@@ -80,6 +84,7 @@ export default function AddApplicationModal({ open, onClose, onSubmit, initialDa
       status: form.status,
       applied_date: form.applied_date,
       url: form.url.trim() || undefined,
+      source: (form.source as ApplicationSource) || undefined,
       notes: form.notes.trim(),
     })
     onClose()
@@ -182,15 +187,30 @@ export default function AddApplicationModal({ open, onClose, onSubmit, initialDa
               </div>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">{t('dashboard.form.jobUrl')}</label>
-              <input
-                type="url"
-                placeholder={t('dashboard.form.jobUrlPlaceholder')}
-                value={form.url}
-                onChange={e => setForm(f => ({ ...f, url: e.target.value }))}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900 transition-colors placeholder:text-gray-300 dark:bg-gray-800 dark:text-gray-100"
-              />
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">{t('dashboard.form.jobUrl')}</label>
+                <input
+                  type="url"
+                  placeholder={t('dashboard.form.jobUrlPlaceholder')}
+                  value={form.url}
+                  onChange={e => setForm(f => ({ ...f, url: e.target.value }))}
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900 transition-colors placeholder:text-gray-300 dark:bg-gray-800 dark:text-gray-100"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">{t('dashboard.form.source')}</label>
+                <select
+                  value={form.source}
+                  onChange={e => setForm(f => ({ ...f, source: e.target.value }))}
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900 transition-colors bg-white dark:bg-gray-800 dark:text-gray-100"
+                >
+                  <option value="">{t('dashboard.form.selectSource')}</option>
+                  {SOURCE_KEYS.map(src => (
+                    <option key={src} value={src}>{t(`source.${src}`)}</option>
+                  ))}
+                </select>
+              </div>
             </div>
 
             <div>

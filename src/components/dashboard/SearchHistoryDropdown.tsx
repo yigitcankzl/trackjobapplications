@@ -30,6 +30,7 @@ export default function SearchHistoryDropdown({ history, onSelect, onRemove, onC
       {history.map(query => (
         <div
           key={query}
+          onMouseDown={e => e.preventDefault()}
           className="flex items-center justify-between px-3 py-1.5 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
         >
           <button

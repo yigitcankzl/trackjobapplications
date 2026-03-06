@@ -13,6 +13,10 @@ import { useToast } from '../context/ToastContext'
 import { getAvatarColor } from '../lib/avatar'
 import { formatLong, formatMedium } from '../lib/dates'
 import { JobApplication } from '../types'
+import TagBadge from '../components/dashboard/TagBadge'
+import ContactList from '../components/detail/ContactList'
+import InterviewTimeline from '../components/detail/InterviewTimeline'
+import AttachmentList from '../components/detail/AttachmentList'
 import { ArrowLeftIcon, EditIcon, TrashIcon, CalendarIcon, ClockIcon, LinkIcon } from '../components/icons'
 
 export default function ApplicationDetailPage() {
@@ -98,9 +102,10 @@ export default function ApplicationDetailPage() {
             <div className="flex-1 min-w-0">
               <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">{app.company}</h2>
               <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{app.position}</p>
-              <div className="mt-2 flex items-center gap-2">
+              <div className="mt-2 flex flex-wrap items-center gap-2">
                 <StatusBadge status={app.status} />
                 {app.source && <SourceBadge source={app.source} />}
+                {app.tags?.map(tag => <TagBadge key={tag.id} tag={tag} />)}
               </div>
             </div>
             <div className="flex items-center gap-2 flex-shrink-0">
@@ -187,6 +192,21 @@ export default function ApplicationDetailPage() {
         {/* Note timeline */}
         <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6">
           <NoteTimeline applicationId={app.id} />
+        </div>
+
+        {/* Contacts */}
+        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6">
+          <ContactList applicationId={app.id} />
+        </div>
+
+        {/* Interview Stages */}
+        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6">
+          <InterviewTimeline applicationId={app.id} />
+        </div>
+
+        {/* Attachments */}
+        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6">
+          <AttachmentList applicationId={app.id} />
         </div>
 
         {/* Stage */}

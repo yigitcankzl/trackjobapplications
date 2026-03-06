@@ -16,6 +16,9 @@ interface Props {
   onView: (app: JobApplication) => void
   onEdit: (app: JobApplication) => void
   onDelete: (app: JobApplication) => void
+  selectedIds?: Set<number>
+  onToggleSelect?: (id: number) => void
+  onToggleSelectAll?: () => void
 }
 
 function EmptyState() {
@@ -31,7 +34,8 @@ function EmptyState() {
   )
 }
 
-export default function ApplicationsTable({ applications, onView, onEdit, onDelete }: Props) {
+export default function ApplicationsTable({ applications, onView, onEdit, onDelete, selectedIds, onToggleSelect, onToggleSelectAll }: Props) {
+  const hasBulk = !!(selectedIds && onToggleSelect && onToggleSelectAll)
   const { t } = useTranslation()
   const navigate = useNavigate()
 
@@ -48,6 +52,16 @@ export default function ApplicationsTable({ applications, onView, onEdit, onDele
       <table className="w-full">
         <thead>
           <tr className="border-b border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/50">
+            {hasBulk && (
+              <th className="w-10 px-3 py-3.5">
+                <input
+                  type="checkbox"
+                  checked={applications.length > 0 && selectedIds.size === applications.length}
+                  onChange={onToggleSelectAll}
+                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                />
+              </th>
+            )}
             <th className="text-left text-xs font-semibold text-gray-400 uppercase tracking-wide px-6 py-3.5">{t('dashboard.table.company')}</th>
             <th className="text-left text-xs font-semibold text-gray-400 uppercase tracking-wide px-6 py-3.5">{t('dashboard.table.status')}</th>
             <th className="text-left text-xs font-semibold text-gray-400 uppercase tracking-wide px-6 py-3.5">{t('dashboard.table.applied')}</th>
@@ -57,6 +71,17 @@ export default function ApplicationsTable({ applications, onView, onEdit, onDele
         <tbody className="divide-y divide-gray-50 dark:divide-gray-800">
           {applications.map(app => (
             <tr key={app.id} onClick={() => navigate(`/applications/${app.id}`)} className="group hover:bg-blue-50/30 dark:hover:bg-blue-900/20 transition-colors duration-150 cursor-pointer">
+              {hasBulk && (
+                <td className="px-3 py-4">
+                  <input
+                    type="checkbox"
+                    checked={selectedIds.has(app.id)}
+                    onChange={e => { e.stopPropagation(); onToggleSelect(app.id) }}
+                    onClick={e => e.stopPropagation()}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                </td>
+              )}
               {/* Company + Position + Notes */}
               <td className="px-6 py-4">
                 <div className="flex items-center gap-3.5">

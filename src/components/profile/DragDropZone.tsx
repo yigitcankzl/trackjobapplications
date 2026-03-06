@@ -17,6 +17,7 @@ export default function DragDropZone({ onFileDrop, accept, label, children }: Pr
 
   const handleDragLeave = useCallback((e: React.DragEvent) => {
     e.preventDefault()
+    if (e.currentTarget.contains(e.relatedTarget as Node)) return
     setIsDragOver(false)
   }, [])
 

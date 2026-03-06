@@ -31,6 +31,7 @@ class Application(models.Model):
     applied_date = models.DateField()
     url = models.URLField(blank=True, default="")
     source = models.CharField(max_length=20, choices=SOURCE_CHOICES, blank=True, default="")
+    interview_date = models.DateTimeField(null=True, blank=True)
     notes = models.TextField(blank=True, default="")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

@@ -23,6 +23,7 @@ class ApplicationSerializer(serializers.ModelSerializer):
             "applied_date",
             "url",
             "source",
+            "interview_date",
             "notes",
             "created_at",
             "updated_at",

@@ -27,7 +27,10 @@ export default function ApplicationDetailPage() {
   const [deleteOpen, setDeleteOpen] = useState(false)
 
   useEffect(() => {
-    if (!id) return
+    if (!id || isNaN(Number(id))) {
+      navigate('/dashboard')
+      return
+    }
     setLoading(true)
     getApplication(Number(id))
       .then(setApp)

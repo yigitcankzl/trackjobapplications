@@ -49,7 +49,8 @@ export default function AnalyticsPage() {
   const byWeek = useMemo(() => {
     const weekMap: Record<string, number> = {}
     for (const app of apps) {
-      const d = new Date(app.applied_date)
+      const [y, m, day] = app.applied_date.split('-').map(Number)
+      const d = new Date(y, m - 1, day)
       const day = d.getDay()
       const diff = d.getDate() - day + (day === 0 ? -6 : 1)
       const monday = new Date(d)
@@ -148,7 +149,7 @@ export default function AnalyticsPage() {
                   const heightPct = Math.round(count / maxVal * 100)
                   const label = timeView === 'monthly'
                     ? formatMonthYear(key)
-                    : new Date(key).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+                    : (() => { const [wy, wm, wd] = key.split('-').map(Number); return new Date(wy, wm - 1, wd).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) })()
                   return (
                     <div key={key} className="flex-1 flex flex-col items-center gap-1.5 min-w-0">
                       <span className="text-xs font-bold text-gray-700 dark:text-gray-300">{count}</span>

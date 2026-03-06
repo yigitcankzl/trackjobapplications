@@ -153,7 +153,8 @@
       "add": "Add",
       "empty": "No notes yet.",
       "addFailed": "Failed to add note.",
-      "deleteFailed": "Failed to delete note."
+      "deleteFailed": "Failed to delete note.",
+      "loadFailed": "Failed to load notes."
     },
     "toast": {
       "added": "Application added",

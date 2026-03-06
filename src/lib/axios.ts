@@ -31,7 +31,7 @@ api.interceptors.response.use(
                 { refresh },
               )
               .then(({ data }) => {
-                saveTokens({ access: data.access, refresh })
+                saveTokens({ access: data.access, refresh: data.refresh ?? refresh })
                 return data.access as string
               })
               .finally(() => { refreshPromise = null })

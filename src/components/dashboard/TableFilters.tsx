@@ -1,6 +1,9 @@
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SortKey, StatusFilter } from '../../types'
 import { SearchIcon, CloseIcon, ChevronUpIcon } from '../icons'
+import { useSearchHistory } from '../../hooks/useSearchHistory'
+import SearchHistoryDropdown from './SearchHistoryDropdown'
 
 interface Props {
   search: string
@@ -22,6 +25,8 @@ export default function TableFilters({
   onSortChange,
 }: Props) {
   const { t } = useTranslation()
+  const { history, addSearch, removeSearch, clearAll } = useSearchHistory()
+  const [searchFocused, setSearchFocused] = useState(false)
 
   const STATUS_CHIPS: { value: StatusFilter; label: string }[] = [
     { value: 'all', label: t('dashboard.status.all') },
@@ -52,6 +57,13 @@ export default function TableFilters({
             placeholder={t('dashboard.filters.searchPlaceholder')}
             value={search}
             onChange={e => onSearchChange(e.target.value)}
+            onFocus={() => setSearchFocused(true)}
+            onBlur={() => setSearchFocused(false)}
+            onKeyDown={e => {
+              if (e.key === 'Enter' && search.trim()) {
+                addSearch(search)
+              }
+            }}
             className="w-full pl-9 pr-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900 transition-colors placeholder:text-gray-300 bg-white dark:bg-gray-900 dark:text-gray-100"
           />
           {search && (
@@ -63,6 +75,13 @@ export default function TableFilters({
               <CloseIcon />
             </button>
           )}
+          <SearchHistoryDropdown
+            history={history}
+            onSelect={query => { onSearchChange(query); setSearchFocused(false) }}
+            onRemove={removeSearch}
+            onClearAll={clearAll}
+            visible={searchFocused && !search}
+          />
         </div>
 
         {/* Sort */}

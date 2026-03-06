@@ -102,7 +102,8 @@ export default function DashboardPage() {
     if (!deleteTarget) return
     try {
       await deleteApplication(deleteTarget.id)
-      loadPage(page)
+      const maxPage = Math.ceil((totalCount - 1) / PAGE_SIZE) || 1
+      loadPage(Math.min(page, maxPage))
       setDeleteTarget(null)
       addToast(t('dashboard.toast.deleted'))
     } catch {

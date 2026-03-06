@@ -2,7 +2,9 @@ from django_filters.rest_framework import DjangoFilterBackend
 import csv
 import io
 import json
+import logging
 
+from django.db import transaction
 from rest_framework import permissions, serializers as drf_serializers, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter, SearchFilter
@@ -10,6 +12,13 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 from rest_framework.response import Response
+from rest_framework.throttling import ScopedRateThrottle
+
+logger = logging.getLogger(__name__)
+
+MAX_IMPORT_ROWS = 1000
+MAX_PAGE_SIZE_ALL = 500
+ALLOWED_IMPORT_FIELDS = {"company", "position", "status", "applied_date", "url", "source", "interview_date", "notes"}
 
 from .filters import ApplicationFilter
 from .models import Application, ApplicationAttachment, ApplicationContact, ApplicationNote, InterviewStage, Tag
@@ -28,7 +37,7 @@ class ApplicationPagination(PageNumberPagination):
 
     def paginate_queryset(self, queryset, request, view=None):
         if request.query_params.get("page_size") == "all":
-            return None
+            self.page_size = min(queryset.count(), MAX_PAGE_SIZE_ALL)
         return super().paginate_queryset(queryset, request, view)
 
 
@@ -57,7 +66,8 @@ class ApplicationViewSet(viewsets.ModelViewSet):
         valid_statuses = [c[0] for c in Application.STATUS_CHOICES]
         if new_status not in valid_statuses:
             return Response({"error": f"Invalid status. Choose from: {valid_statuses}"}, status=status.HTTP_400_BAD_REQUEST)
-        updated = self.get_queryset().filter(id__in=ids).update(status=new_status)
+        with transaction.atomic():
+            updated = self.get_queryset().filter(id__in=ids).update(status=new_status)
         return Response({"updated": updated})
 
     @action(detail=False, methods=["post"], url_path="bulk-delete")
@@ -65,7 +75,8 @@ class ApplicationViewSet(viewsets.ModelViewSet):
         ids = request.data.get("ids", [])
         if not ids or not isinstance(ids, list) or len(ids) > 100:
             return Response({"error": "Provide 1-100 ids."}, status=status.HTTP_400_BAD_REQUEST)
-        deleted, _ = self.get_queryset().filter(id__in=ids).delete()
+        with transaction.atomic():
+            deleted, _ = self.get_queryset().filter(id__in=ids).delete()
         return Response({"deleted": deleted})
 
     @action(detail=False, methods=["post"], url_path="import", parser_classes=[MultiPartParser])
@@ -82,6 +93,15 @@ class ApplicationViewSet(viewsets.ModelViewSet):
             except json.JSONDecodeError:
                 pass
 
+        # Validate mapping values against allowed fields
+        if column_mapping:
+            invalid = set(column_mapping.values()) - ALLOWED_IMPORT_FIELDS
+            if invalid:
+                return Response(
+                    {"error": f"Invalid mapping targets: {', '.join(invalid)}"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
         name = file.name.lower()
         try:
             if name.endswith(".csv"):
@@ -90,19 +110,27 @@ class ApplicationViewSet(viewsets.ModelViewSet):
                 rows = self._parse_excel(file)
             else:
                 return Response({"error": "Unsupported format. Use .csv or .xlsx"}, status=status.HTTP_400_BAD_REQUEST)
-        except Exception as e:
-            return Response({"error": f"Failed to parse file: {e}"}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception:
+            logger.exception("Failed to parse import file: %s", file.name)
+            return Response({"error": "Failed to parse file. Please check the format."}, status=status.HTTP_400_BAD_REQUEST)
+
+        if len(rows) > MAX_IMPORT_ROWS:
+            return Response(
+                {"error": f"Too many rows. Maximum is {MAX_IMPORT_ROWS}."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         created_count = 0
         errors = []
-        for i, row in enumerate(rows):
-            mapped = {column_mapping.get(k, k): v for k, v in row.items()} if column_mapping else row
-            serializer = ApplicationSerializer(data=mapped)
-            if serializer.is_valid():
-                serializer.save(user=request.user)
-                created_count += 1
-            else:
-                errors.append({"row": i + 1, "errors": serializer.errors})
+        with transaction.atomic():
+            for i, row in enumerate(rows):
+                mapped = {column_mapping.get(k, k): v for k, v in row.items()} if column_mapping else row
+                serializer = ApplicationSerializer(data=mapped, context={"request": request})
+                if serializer.is_valid():
+                    serializer.save(user=request.user)
+                    created_count += 1
+                else:
+                    errors.append({"row": i + 1, "errors": serializer.errors})
 
         return Response({"created": created_count, "errors": errors})
 
@@ -178,7 +206,7 @@ class ApplicationContactViewSet(_NestedApplicationMixin, viewsets.ModelViewSet):
     pagination_class = None
 
     def get_queryset(self):
-        return ApplicationContact.objects.filter(
+        return ApplicationContact.objects.select_related("application").filter(
             application__pk=self.kwargs["application_pk"],
             application__user=self.request.user,
         )
@@ -193,7 +221,7 @@ class InterviewStageViewSet(_NestedApplicationMixin, viewsets.ModelViewSet):
     pagination_class = None
 
     def get_queryset(self):
-        return InterviewStage.objects.filter(
+        return InterviewStage.objects.select_related("application").filter(
             application__pk=self.kwargs["application_pk"],
             application__user=self.request.user,
         )
@@ -210,7 +238,7 @@ class ApplicationAttachmentViewSet(_NestedApplicationMixin, viewsets.ModelViewSe
     http_method_names = ["get", "post", "delete"]
 
     def get_queryset(self):
-        return ApplicationAttachment.objects.filter(
+        return ApplicationAttachment.objects.select_related("application").filter(
             application__pk=self.kwargs["application_pk"],
             application__user=self.request.user,
         )

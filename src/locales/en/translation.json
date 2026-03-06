@@ -98,7 +98,9 @@
       "sort": "Sort:",
       "sortDate": "Date",
       "sortCompany": "Company",
-      "sortStatus": "Status"
+      "sortStatus": "Status",
+      "recentSearches": "Recent searches",
+      "clearAll": "Clear all"
     },
     "form": {
       "company": "Company",

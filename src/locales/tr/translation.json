@@ -98,7 +98,9 @@
       "sort": "Sırala:",
       "sortDate": "Tarih",
       "sortCompany": "Şirket",
-      "sortStatus": "Durum"
+      "sortStatus": "Durum",
+      "recentSearches": "Son aramalar",
+      "clearAll": "Tümünü temizle"
     },
     "form": {
       "company": "Şirket",

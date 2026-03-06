@@ -32,6 +32,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(auto_now_add=True, verbose_name="Date Joined")
     avatar = models.ImageField(upload_to="avatars/", blank=True, null=True)
     resume = models.FileField(upload_to="resumes/", blank=True, null=True)
+    notification_email = models.EmailField(blank=True, default="")
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 

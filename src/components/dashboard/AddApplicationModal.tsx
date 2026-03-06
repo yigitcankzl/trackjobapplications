@@ -87,7 +87,7 @@ export default function AddApplicationModal({ open, onClose, onSubmit, initialDa
       status: form.status,
       applied_date: form.applied_date,
       url: form.url.trim() || undefined,
-      source: (form.source as ApplicationSource) || undefined,
+      source: form.source ? (form.source as ApplicationSource) : undefined,
       interview_date: form.interview_date || null,
       notes: form.notes.trim(),
     })

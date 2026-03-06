@@ -2,6 +2,7 @@ from rest_framework import generics, permissions, status
 from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
 
 from .serializers import ChangePasswordSerializer, LogoutSerializer, RegisterSerializer, UserSerializer
 
@@ -50,4 +51,7 @@ class ChangePasswordView(APIView):
         serializer.is_valid(raise_exception=True)
         request.user.set_password(serializer.validated_data["new_password"])
         request.user.save()
+        # Blacklist all outstanding refresh tokens for this user
+        for token in OutstandingToken.objects.filter(user=request.user):
+            BlacklistedToken.objects.get_or_create(token=token)
         return Response({"detail": "Password updated."}, status=status.HTTP_200_OK)

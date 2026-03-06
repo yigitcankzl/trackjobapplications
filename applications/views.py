@@ -1,13 +1,24 @@
 from rest_framework import permissions, viewsets
 from rest_framework.generics import get_object_or_404
+from rest_framework.pagination import PageNumberPagination
 
 from .models import Application, ApplicationNote
 from .serializers import ApplicationSerializer, ApplicationNoteSerializer
 
 
+class ApplicationPagination(PageNumberPagination):
+    page_size = 20
+
+    def paginate_queryset(self, queryset, request, view=None):
+        if request.query_params.get("page_size") == "all":
+            return None
+        return super().paginate_queryset(queryset, request, view)
+
+
 class ApplicationViewSet(viewsets.ModelViewSet):
     serializer_class = ApplicationSerializer
     permission_classes = [permissions.IsAuthenticated]
+    pagination_class = ApplicationPagination
 
     def get_queryset(self):
         return self.request.user.applications.prefetch_related("note_entries").all()

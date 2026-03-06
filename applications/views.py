@@ -30,6 +30,7 @@ class ApplicationViewSet(viewsets.ModelViewSet):
 class ApplicationNoteViewSet(viewsets.ModelViewSet):
     serializer_class = ApplicationNoteSerializer
     permission_classes = [permissions.IsAuthenticated]
+    pagination_class = None
     http_method_names = ["get", "post", "delete"]
 
     def _get_application(self):

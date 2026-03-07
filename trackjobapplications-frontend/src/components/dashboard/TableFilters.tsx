@@ -52,6 +52,7 @@ export default function TableFilters({
 
   const STATUS_CHIPS: { value: StatusFilter; label: string }[] = [
     { value: 'all', label: t('dashboard.status.all') },
+    { value: 'to_apply', label: t('dashboard.status.to_apply') },
     { value: 'applied', label: t('dashboard.status.applied') },
     { value: 'interview', label: t('dashboard.status.interview') },
     { value: 'offer', label: t('dashboard.status.offer') },

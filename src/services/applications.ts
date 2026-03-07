@@ -17,8 +17,8 @@ export async function getApplications(page = 1, filters: ApplicationFilters = {}
 }
 
 export async function getAllApplications(): Promise<JobApplication[]> {
-  const { data } = await api.get<JobApplication[]>('/applications/', { params: { page_size: 'all' } })
-  return data
+  const { data } = await api.get<PaginatedResponse<JobApplication>>('/applications/', { params: { page_size: 'all' } })
+  return data.results
 }
 
 export async function getApplication(id: number): Promise<JobApplication> {

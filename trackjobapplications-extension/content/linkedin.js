@@ -13,7 +13,23 @@ function extractLinkedInJob() {
     document.querySelector('.job-details-jobs-unified-top-card__company-name')?.textContent?.trim() ||
     '';
 
-  const url = window.location.href.split('?')[0];
+  // Try to get the specific job URL from the page
+  // LinkedIn uses currentJobId param or /jobs/view/ID/ paths
+  let url = window.location.href;
+  const jobIdMatch = url.match(/currentJobId=(\d+)/) || url.match(/\/jobs\/view\/(\d+)/);
+  if (jobIdMatch) {
+    url = `https://www.linkedin.com/jobs/view/${jobIdMatch[1]}/`;
+  } else {
+    // Fallback: try to find job link in the detail panel
+    const jobLink = document.querySelector('a[href*="/jobs/view/"]');
+    if (jobLink) {
+      const href = jobLink.getAttribute('href');
+      const idMatch = href.match(/\/jobs\/view\/(\d+)/);
+      if (idMatch) {
+        url = `https://www.linkedin.com/jobs/view/${idMatch[1]}/`;
+      }
+    }
+  }
 
   return { company, position, url, source: 'linkedin' };
 }

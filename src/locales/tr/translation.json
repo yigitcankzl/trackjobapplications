@@ -186,7 +186,8 @@
       "signOut": "Çıkış Yap",
       "profile": "Profil",
       "darkMode": "Karanlık Mod",
-      "lightMode": "Aydınlık Mod"
+      "lightMode": "Aydınlık Mod",
+      "coverLetters": "Ön Yazılar"
     },
     "viewTable": "Tablo görünümü",
     "viewKanban": "Kanban görünümü",
@@ -276,6 +277,42 @@
     "contacts": "Kişiler",
     "interviews": "Mülakat Aşamaları",
     "attachments": "Ekler"
+  },
+  "coverLetters": {
+    "title": "Ön Yazılar",
+    "newTemplate": "Yeni Şablon",
+    "editTemplate": "Şablonu Düzenle",
+    "createTemplate": "Şablon Oluştur",
+    "loading": "Şablonlar yükleniyor...",
+    "previewNote": "{company}, {position}, {date} gibi yer tutucular gerçek değerlerle değiştirilecektir.",
+    "empty": {
+      "title": "Henüz ön yazı şablonu yok",
+      "subtitle": "Hızlı ön yazı oluşturmak için yer tutuculu yeniden kullanılabilir şablonlar oluşturun."
+    },
+    "form": {
+      "name": "Şablon Adı",
+      "namePlaceholder": "ör. Genel Ön Yazı",
+      "content": "İçerik",
+      "contentPlaceholder": "Sayın {company} İnsan Kaynakları Yetkilisi,\n\n{position} pozisyonu için başvurumu iletmek istiyorum...",
+      "cancel": "İptal",
+      "save": "Kaydet"
+    },
+    "deleteConfirm": {
+      "title": "Şablonu Sil",
+      "message": "\"{{name}}\" silinsin mi? Bu işlem geri alınamaz.",
+      "confirm": "Sil"
+    },
+    "toast": {
+      "created": "Şablon oluşturuldu",
+      "updated": "Şablon güncellendi",
+      "deleted": "Şablon silindi"
+    },
+    "errors": {
+      "loadFailed": "Şablonlar yüklenemedi.",
+      "saveFailed": "Şablon kaydedilemedi.",
+      "deleteFailed": "Şablon silinemedi.",
+      "required": "Ad ve içerik gereklidir."
+    }
   },
   "calendar": {
     "title": "Takvim"

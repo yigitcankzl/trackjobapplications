@@ -9,6 +9,7 @@ function extractFromEmail(e) {
     senderEmail: '',
     notes: '',
     messageId: '',
+    url: '',
   };
 
   if (!e || !e.gmail) return data;
@@ -33,6 +34,20 @@ function extractFromEmail(e) {
 
   // Build notes
   data.notes = 'From email: ' + data.subject + '\nSender: ' + message.getFrom();
+
+  // Try to extract a job URL from the email body
+  var body = message.getPlainBody() || '';
+  var urlMatch = body.match(/https?:\/\/[^\s<>"]+(?:job|career|position|apply|opening)[^\s<>"]*/i);
+  if (!urlMatch) {
+    var allUrls = body.match(/https?:\/\/[^\s<>"]+/g) || [];
+    for (var j = 0; j < allUrls.length; j++) {
+      if (!allUrls[j].match(/google\.com|gmail\.com|unsubscribe|mailto/i)) {
+        urlMatch = [allUrls[j]];
+        break;
+      }
+    }
+  }
+  data.url = urlMatch ? urlMatch[0] : '';
 
   return data;
 }

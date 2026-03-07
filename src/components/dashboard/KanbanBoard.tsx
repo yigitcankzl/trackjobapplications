@@ -17,6 +17,7 @@ interface Props {
   applications: JobApplication[]
   onEdit: (app: JobApplication) => void
   onDelete: (app: JobApplication) => void
+  onTogglePin?: (id: number) => void
   onStatusChange: (id: number, newStatus: ApplicationStatus) => void
 }
 

@@ -2,7 +2,7 @@ import re
 
 from rest_framework import serializers
 
-from .models import Application, ApplicationAttachment, ApplicationContact, ApplicationNote, InterviewStage, Tag
+from .models import Application, ApplicationAttachment, ApplicationContact, ApplicationNote, CoverLetterTemplate, InterviewStage, Tag
 
 HEX_COLOR_RE = re.compile(r"^#[0-9a-fA-F]{6}$")
 
@@ -77,6 +77,13 @@ class ApplicationNoteSerializer(serializers.ModelSerializer):
         model = ApplicationNote
         fields = ("id", "content", "created_at")
         read_only_fields = ("id", "created_at")
+
+
+class CoverLetterTemplateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CoverLetterTemplate
+        fields = ("id", "name", "content", "created_at", "updated_at")
+        read_only_fields = ("id", "created_at", "updated_at")
 
 
 class ApplicationSerializer(serializers.ModelSerializer):

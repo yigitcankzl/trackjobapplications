@@ -21,12 +21,13 @@ MAX_PAGE_SIZE_ALL = 500
 ALLOWED_IMPORT_FIELDS = {"company", "position", "status", "applied_date", "url", "source", "interview_date", "notes"}
 
 from .filters import ApplicationFilter
-from .models import Application, ApplicationAttachment, ApplicationContact, ApplicationNote, InterviewStage, Tag
+from .models import Application, ApplicationAttachment, ApplicationContact, ApplicationNote, CoverLetterTemplate, InterviewStage, Tag
 from .serializers import (
     ApplicationAttachmentSerializer,
     ApplicationContactSerializer,
     ApplicationNoteSerializer,
     ApplicationSerializer,
+    CoverLetterTemplateSerializer,
     InterviewStageSerializer,
     TagSerializer,
 )
@@ -177,6 +178,18 @@ class ApplicationViewSet(viewsets.ModelViewSet):
         for row in rows_iter:
             result.append({h: (str(v) if v is not None else "") for h, v in zip(headers, row)})
         return result
+
+
+class CoverLetterTemplateViewSet(viewsets.ModelViewSet):
+    serializer_class = CoverLetterTemplateSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    pagination_class = None
+
+    def get_queryset(self):
+        return self.request.user.cover_letter_templates.all()
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 
 class TagViewSet(viewsets.ModelViewSet):

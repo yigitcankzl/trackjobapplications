@@ -1,0 +1,139 @@
+import { useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+import DashboardLayout from '../components/layout/DashboardLayout'
+import Header from '../components/dashboard/Header'
+import { getAllApplications } from '../services/applications'
+import { useToast } from '../context/ToastContext'
+import { JobApplication } from '../types'
+import { getAvatarColor } from '../lib/avatar'
+
+const WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+
+function getDaysInMonth(year: number, month: number) {
+  return new Date(year, month + 1, 0).getDate()
+}
+
+function getFirstDayOfWeek(year: number, month: number) {
+  const day = new Date(year, month, 1).getDay()
+  return day === 0 ? 6 : day - 1
+}
+
+export default function CalendarPage() {
+  const { t } = useTranslation()
+  const navigate = useNavigate()
+  const { addToast } = useToast()
+  const [apps, setApps] = useState<JobApplication[]>([])
+
+  const now = new Date()
+  const [year, setYear] = useState(now.getFullYear())
+  const [month, setMonth] = useState(now.getMonth())
+
+  useEffect(() => {
+    getAllApplications()
+      .then(setApps)
+      .catch(() => addToast(t('dashboard.errors.loadFailed'), 'error'))
+  }, [addToast, t])
+
+  const interviewApps = useMemo(() => {
+    return apps.filter(a => a.interview_date)
+  }, [apps])
+
+  const dayMap = useMemo(() => {
+    const map: Record<number, JobApplication[]> = {}
+    for (const app of interviewApps) {
+      const d = new Date(app.interview_date!)
+      if (d.getFullYear() === year && d.getMonth() === month) {
+        const dayNum = d.getDate()
+        if (!map[dayNum]) map[dayNum] = []
+        map[dayNum].push(app)
+      }
+    }
+    return map
+  }, [interviewApps, year, month])
+
+  const daysInMonth = getDaysInMonth(year, month)
+  const firstDay = getFirstDayOfWeek(year, month)
+  const today = now.getFullYear() === year && now.getMonth() === month ? now.getDate() : -1
+
+  function prevMonth() {
+    if (month === 0) { setYear(y => y - 1); setMonth(11) }
+    else setMonth(m => m - 1)
+  }
+
+  function nextMonth() {
+    if (month === 11) { setYear(y => y + 1); setMonth(0) }
+    else setMonth(m => m + 1)
+  }
+
+  const monthLabel = new Date(year, month).toLocaleDateString(undefined, { month: 'long', year: 'numeric' })
+
+  return (
+    <DashboardLayout>
+      <Header title={t('calendar.title')} />
+
+      <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm p-6">
+        {/* Month navigation */}
+        <div className="flex items-center justify-between mb-6">
+          <button
+            onClick={prevMonth}
+            className="px-3 py-1.5 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+          >
+            &larr;
+          </button>
+          <h2 className="text-base font-semibold text-gray-800 dark:text-gray-200 capitalize">{monthLabel}</h2>
+          <button
+            onClick={nextMonth}
+            className="px-3 py-1.5 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+          >
+            &rarr;
+          </button>
+        </div>
+
+        {/* Weekday headers */}
+        <div className="grid grid-cols-7 mb-2">
+          {WEEKDAYS.map(d => (
+            <div key={d} className="text-center text-xs font-semibold text-gray-400 uppercase tracking-wide py-2">
+              {d}
+            </div>
+          ))}
+        </div>
+
+        {/* Days grid */}
+        <div className="grid grid-cols-7 gap-px bg-gray-100 dark:bg-gray-800 rounded-xl overflow-hidden">
+          {Array.from({ length: firstDay }).map((_, i) => (
+            <div key={`empty-${i}`} className="bg-white dark:bg-gray-900 min-h-24" />
+          ))}
+          {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(day => {
+            const isToday = day === today
+            const dayApps = dayMap[day] || []
+            return (
+              <div
+                key={day}
+                className={`bg-white dark:bg-gray-900 min-h-24 p-1.5 ${isToday ? 'ring-2 ring-inset ring-blue-500' : ''}`}
+              >
+                <span className={`text-xs font-medium ${isToday ? 'text-blue-600 font-bold' : 'text-gray-500 dark:text-gray-400'}`}>
+                  {day}
+                </span>
+                <div className="mt-1 space-y-0.5">
+                  {dayApps.map(app => (
+                    <button
+                      key={app.id}
+                      onClick={() => navigate(`/applications/${app.id}`)}
+                      className="w-full flex items-center gap-1 px-1 py-0.5 rounded text-left hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors"
+                    >
+                      <div className={`w-4 h-4 rounded flex items-center justify-center text-[8px] font-bold flex-shrink-0 ${getAvatarColor(app.company)}`}>
+                        {app.company[0].toUpperCase()}
+                      </div>
+                      <span className="text-xs text-gray-700 dark:text-gray-300 truncate">{app.company}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+    </DashboardLayout>
+  )
+}

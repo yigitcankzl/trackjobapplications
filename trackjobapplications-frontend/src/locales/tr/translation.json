@@ -1,0 +1,346 @@
+{
+  "nav": {
+    "signIn": "Giriş Yap",
+    "getStarted": "Hemen Başla"
+  },
+  "welcome": {
+    "badge": "Tamamen ücretsiz — kredi kartı gerekmez",
+    "headline": "İş başvurularını",
+    "headlineHighlight": "tek yerden yönet",
+    "subtitle": "Her başvuruyu kaydet, sürecini takip et ve bir sonraki adımı asla kaçırma.",
+    "cta": "Ücretsiz dene",
+    "features": {
+      "track": {
+        "title": "Başvurularını kaydet",
+        "description": "Başvurduğun her pozisyonu şirket adı, rol ve güncel durumuyla listele."
+      },
+      "visualize": {
+        "title": "Süreci takip et",
+        "description": "Hangi aşamada olduğunu bir bakışta gör — beklemede, mülakat, teklif ya da ret."
+      },
+      "followup": {
+        "title": "Geri dönüşü kaçırma",
+        "description": "Not ve tarih ekle, sırada ne yapman gerektiğini her zaman bil."
+      }
+    }
+  },
+  "auth": {
+    "signIn": {
+      "title": "Giriş Yap",
+      "subtitle": "Hoş geldin! Devam etmek için giriş yap.",
+      "email": "E-posta adresi",
+      "password": "Şifre",
+      "forgotPassword": "Şifreni mi unuttun?",
+      "submit": "GİRİŞ YAP",
+      "or": "veya",
+      "noAccount": "Hesabın yok mu?",
+      "switchToSignUp": "Kayıt Ol"
+    },
+    "signUp": {
+      "title": "Hesap Oluştur",
+      "subtitle": "Hemen kaydol, başvurularını takip etmeye başla.",
+      "firstName": "Ad",
+      "lastName": "Soyad",
+      "email": "E-posta adresi",
+      "password": "Şifre",
+      "confirmPassword": "Şifre tekrarı",
+      "submit": "KAYIT OL",
+      "or": "veya",
+      "hasAccount": "Zaten hesabın var mı?",
+      "switchToSignIn": "Giriş Yap"
+    },
+    "errors": {
+      "invalidCredentials": "Geçersiz e-posta veya şifre.",
+      "registrationFailed": "Kayıt başarısız. Lütfen tekrar deneyin.",
+      "passwordMismatch": "Şifreler eşleşmiyor."
+    },
+    "overlay": {
+      "signInPanel": {
+        "description": "Hesabın var mı? Giriş yap, kaldığın yerden devam et.",
+        "button": "GİRİŞ YAP"
+      },
+      "signUpPanel": {
+        "description": "Henüz hesabın yok mu? Ücretsiz kaydol, iş aramanı düzenli tut.",
+        "button": "KAYIT OL"
+      }
+    }
+  },
+  "dashboard": {
+    "title": "Başvurular",
+    "addApplication": "Başvuru Ekle",
+    "editApplication": "Başvuruyu Düzenle",
+    "exportCsv": "CSV İndir",
+    "exportPdf": "PDF İndir",
+    "stats": {
+      "total": "Toplam",
+      "applied": "Başvuruldu",
+      "interview": "Mülakat",
+      "offer": "Teklif",
+      "rejected": "Reddedildi",
+      "active": "Aktif"
+    },
+    "status": {
+      "applied": "Başvuruldu",
+      "interview": "Mülakat",
+      "offer": "Teklif",
+      "rejected": "Reddedildi",
+      "withdrawn": "Geri Çekildi",
+      "all": "Tümü"
+    },
+    "table": {
+      "company": "Şirket",
+      "status": "Durum",
+      "applied": "Başvuru Tarihi",
+      "emptyTitle": "Henüz başvuru yok",
+      "emptySubtitle": "İlk iş başvurunu ekleyerek başla."
+    },
+    "filters": {
+      "searchPlaceholder": "Şirket veya pozisyon ara...",
+      "sort": "Sırala:",
+      "sortDate": "Tarih",
+      "sortCompany": "Şirket",
+      "sortStatus": "Durum",
+      "recentSearches": "Son aramalar",
+      "clearAll": "Tümünü temizle",
+      "source": "Kaynak",
+      "allSources": "Tüm Kaynaklar",
+      "dateAfter": "Başlangıç",
+      "dateBefore": "Bitiş"
+    },
+    "form": {
+      "company": "Şirket",
+      "companyPlaceholder": "örn. Stripe",
+      "position": "Pozisyon",
+      "positionPlaceholder": "örn. Kıdemli Frontend Mühendisi",
+      "status": "Durum",
+      "appliedDate": "Başvuru Tarihi",
+      "jobUrl": "İş İlanı URL",
+      "jobUrlPlaceholder": "https://sirket.com/ilan/...",
+      "notes": "Notlar",
+      "notesPlaceholder": "Mülakat notları, sorular, bağlantılar...",
+      "cancel": "Vazgeç",
+      "saveApplication": "Başvuruyu Kaydet",
+      "saveChanges": "Değişiklikleri Kaydet",
+      "companyRequired": "Şirket zorunludur",
+      "positionRequired": "Pozisyon zorunludur",
+      "dateRequired": "Tarih zorunludur",
+      "source": "Kaynak",
+      "selectSource": "Kaynak seç...",
+      "interviewDate": "Mülakat Tarihi",
+      "tags": "Etiketler"
+    },
+    "drawer": {
+      "title": "Başvuru Detayı",
+      "applied": "Başvuru Tarihi",
+      "lastUpdated": "Son Güncelleme",
+      "interviewDate": "Mülakat Tarihi",
+      "jobPosting": "İş İlanı",
+      "notes": "Notlar",
+      "stage": "Aşama",
+      "edit": "Düzenle",
+      "delete": "Sil"
+    },
+    "confirm": {
+      "deleteTitle": "Başvuruyu sil",
+      "deleteDescription": "{{company}} — {{position}} başvurusunu sil? Bu işlem geri alınamaz.",
+      "delete": "Sil",
+      "cancel": "Vazgeç"
+    },
+    "kanban": {
+      "noApplications": "Başvuru yok"
+    },
+    "reminders": {
+      "title": "{{count}} başvuru takip gerektiyor",
+      "daysAgo": "{{days}} gün önce"
+    },
+    "notes": {
+      "title": "Notlar",
+      "placeholder": "Not ekle...",
+      "add": "Ekle",
+      "empty": "Henüz not yok.",
+      "addFailed": "Not eklenemedi.",
+      "deleteFailed": "Not silinemedi.",
+      "loadFailed": "Notlar yüklenemedi."
+    },
+    "toast": {
+      "added": "Başvuru eklendi",
+      "saved": "Değişiklikler kaydedildi",
+      "statusUpdated": "Durum güncellendi",
+      "deleted": "Başvuru silindi",
+      "bulkStatusUpdated": "{{count}} başvurunun durumu güncellendi",
+      "bulkDeleted": "{{count}} başvuru silindi",
+      "importSuccess": "{{count}} başvuru içe aktarıldı"
+    },
+    "errors": {
+      "loadFailed": "Başvurular yüklenemedi.",
+      "addFailed": "Başvuru eklenemedi.",
+      "editFailed": "Değişiklikler kaydedilemedi.",
+      "deleteFailed": "Başvuru silinemedi.",
+      "bulkUpdateFailed": "Başvurular güncellenemedi.",
+      "bulkDeleteFailed": "Başvurular silinemedi.",
+      "importFailed": "Dosya içe aktarılamadı.",
+      "exportPdfFailed": "PDF dışa aktarılamadı."
+    },
+    "nav": {
+      "dashboard": "Dashboard",
+      "calendar": "Takvim",
+      "analytics": "Analitik",
+      "signOut": "Çıkış Yap",
+      "profile": "Profil",
+      "darkMode": "Karanlık Mod",
+      "lightMode": "Aydınlık Mod",
+      "coverLetters": "Ön Yazılar"
+    },
+    "viewTable": "Tablo görünümü",
+    "viewKanban": "Kanban görünümü",
+    "aria": {
+      "edit": "Başvuruyu düzenle",
+      "delete": "Başvuruyu sil",
+      "togglePassword": "Şifre görünürlüğünü değiştir",
+      "changeLanguage": "Dil değiştir"
+    },
+    "bulk": {
+      "selected": "{{count}} seçildi",
+      "updateStatus": "Durumu Güncelle",
+      "deleteSelected": "Seçilenleri Sil",
+      "confirmDelete": "{{count}} başvuruyu sil? Bu işlem geri alınamaz."
+    },
+    "import": {
+      "title": "Başvuru İçe Aktar",
+      "selectFile": "CSV veya Excel dosyası seçin",
+      "preview": "Önizleme",
+      "mapColumns": "Kolon Eşleştirme",
+      "import": "İçe Aktar",
+      "close": "Kapat",
+      "results": "İçe Aktarma Sonuçları",
+      "created": "{{count}} oluşturuldu",
+      "errors": "{{count}} hata"
+    }
+  },
+  "analytics": {
+    "title": "Analitik",
+    "totalApplications": "Toplam Başvuru",
+    "interviewRate": "Mülakat Oranı",
+    "offerRate": "Teklif Oranı",
+    "active": "Aktif",
+    "statusDistribution": "Durum Dağılımı",
+    "applicationsPerMonth": "Aylık Başvurular",
+    "noData": "Henüz veri yok",
+    "pipeline": "Başvuru Hattı",
+    "conversion": "% dönüşüm",
+    "weekly": "Haftalık",
+    "monthly": "Aylık",
+    "applicationsOverTime": "Zaman İçinde Başvurular",
+    "sourceDistribution": "Kaynak Dağılımı"
+  },
+  "source": {
+    "linkedin": "LinkedIn",
+    "indeed": "Indeed",
+    "glassdoor": "Glassdoor",
+    "referral": "Referans",
+    "company_website": "Şirket Sitesi",
+    "other": "Diğer"
+  },
+  "profile": {
+    "title": "Profil",
+    "firstName": "Ad",
+    "lastName": "Soyad",
+    "saveProfile": "Profili Kaydet",
+    "profileSaved": "Profil kaydedildi",
+    "changePassword": "Şifre Değiştir",
+    "oldPassword": "Mevcut Şifre",
+    "newPassword": "Yeni Şifre",
+    "confirmNewPassword": "Yeni Şifre Tekrarı",
+    "passwordChanged": "Şifre başarıyla değiştirildi",
+    "notificationEmail": "Bildirim E-postası",
+    "notificationEmailHint": "Boş bırakırsanız giriş e-postanız kullanılır",
+    "resume": "Özgeçmiş / CV",
+    "uploadResume": "Özgeçmiş Yükle",
+    "downloadResume": "Özgeçmişi İndir",
+    "dropAvatar": "Fotoğrafı buraya bırak",
+    "dropResume": "Dosyayı buraya bırak",
+    "notifications": {
+      "title": "E-posta Bildirimleri",
+      "description": "Mülakat hatırlatmalarını e-posta ile al",
+      "reminderTime": "Mülakatımdan önce hatırlat",
+      "enabled": "E-posta bildirimleri açıldı",
+      "disabled": "E-posta bildirimleri kapatıldı",
+      "saved": "Bildirim tercihleri kaydedildi",
+      "saveFailed": "Bildirim tercihleri kaydedilemedi",
+      "hours": {
+        "1": "1 saat",
+        "6": "6 saat",
+        "24": "24 saat",
+        "48": "48 saat"
+      }
+    },
+    "errors": {
+      "passwordMismatch": "Şifreler eşleşmiyor",
+      "saveFailed": "Profil kaydedilemedi",
+      "passwordChangeFailed": "Şifre değiştirilemedi"
+    }
+  },
+  "detail": {
+    "title": "Başvuru Detayı",
+    "backToDashboard": "Dashboard'a Dön",
+    "applied": "Başvuru Tarihi",
+    "lastUpdated": "Son Güncelleme",
+    "interviewDate": "Mülakat Tarihi",
+    "jobPosting": "İş İlanı",
+    "notes": "Notlar",
+    "stage": "Aşama",
+    "edit": "Düzenle",
+    "delete": "Sil",
+    "contacts": "Kişiler",
+    "interviews": "Mülakat Aşamaları",
+    "attachments": "Ekler",
+    "addToCalendar": "Takvime Ekle"
+  },
+  "coverLetters": {
+    "title": "Ön Yazılar",
+    "newTemplate": "Yeni Şablon",
+    "editTemplate": "Şablonu Düzenle",
+    "createTemplate": "Şablon Oluştur",
+    "loading": "Şablonlar yükleniyor...",
+    "previewNote": "{company}, {position}, {date} gibi yer tutucular gerçek değerlerle değiştirilecektir.",
+    "empty": {
+      "title": "Henüz ön yazı şablonu yok",
+      "subtitle": "Hızlı ön yazı oluşturmak için yer tutuculu yeniden kullanılabilir şablonlar oluşturun."
+    },
+    "form": {
+      "name": "Şablon Adı",
+      "namePlaceholder": "ör. Genel Ön Yazı",
+      "content": "İçerik",
+      "contentPlaceholder": "Sayın {company} İnsan Kaynakları Yetkilisi,\n\n{position} pozisyonu için başvurumu iletmek istiyorum...",
+      "cancel": "İptal",
+      "save": "Kaydet"
+    },
+    "deleteConfirm": {
+      "title": "Şablonu Sil",
+      "message": "\"{{name}}\" silinsin mi? Bu işlem geri alınamaz.",
+      "confirm": "Sil"
+    },
+    "toast": {
+      "created": "Şablon oluşturuldu",
+      "updated": "Şablon güncellendi",
+      "deleted": "Şablon silindi"
+    },
+    "errors": {
+      "loadFailed": "Şablonlar yüklenemedi.",
+      "saveFailed": "Şablon kaydedilemedi.",
+      "deleteFailed": "Şablon silinemedi.",
+      "required": "Ad ve içerik gereklidir."
+    }
+  },
+  "calendar": {
+    "title": "Takvim"
+  },
+  "pagination": {
+    "prev": "Önceki",
+    "next": "Sonraki"
+  },
+  "footer": {
+    "rights": "Tüm hakları saklıdır.",
+    "copyright": "© {{year}} TrackJobs. Tüm hakları saklıdır."
+  }
+}

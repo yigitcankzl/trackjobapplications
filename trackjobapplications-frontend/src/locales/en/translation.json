@@ -1,0 +1,346 @@
+{
+  "nav": {
+    "signIn": "Sign In",
+    "getStarted": "Get Started"
+  },
+  "welcome": {
+    "badge": "Free to use — no credit card required",
+    "headline": "Take control of your",
+    "headlineHighlight": "job search",
+    "subtitle": "Track every application, follow up on time, and land your next job — all in one place.",
+    "cta": "Start tracking for free",
+    "features": {
+      "track": {
+        "title": "Track applications",
+        "description": "Log every job you apply to with company, role, and current status."
+      },
+      "visualize": {
+        "title": "Visualize progress",
+        "description": "See where you stand — applied, interviewing, offer, or rejected."
+      },
+      "followup": {
+        "title": "Never miss a follow-up",
+        "description": "Add notes and dates so you always know what to do next."
+      }
+    }
+  },
+  "auth": {
+    "signIn": {
+      "title": "Sign In",
+      "subtitle": "Welcome back! Please enter your details.",
+      "email": "Email address",
+      "password": "Password",
+      "forgotPassword": "Forgot password?",
+      "submit": "SIGN IN",
+      "or": "or",
+      "noAccount": "Don't have an account?",
+      "switchToSignUp": "Sign Up"
+    },
+    "signUp": {
+      "title": "Create Account",
+      "subtitle": "Start tracking your job applications today.",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "email": "Email address",
+      "password": "Password",
+      "confirmPassword": "Confirm password",
+      "submit": "SIGN UP",
+      "or": "or",
+      "hasAccount": "Already have an account?",
+      "switchToSignIn": "Sign In"
+    },
+    "errors": {
+      "invalidCredentials": "Invalid email or password.",
+      "registrationFailed": "Registration failed. Please try again.",
+      "passwordMismatch": "Passwords do not match."
+    },
+    "overlay": {
+      "signInPanel": {
+        "description": "Already have an account? Sign in and continue where you left off.",
+        "button": "SIGN IN"
+      },
+      "signUpPanel": {
+        "description": "New here? Create an account and take control of your job search.",
+        "button": "SIGN UP"
+      }
+    }
+  },
+  "dashboard": {
+    "title": "Applications",
+    "addApplication": "Add Application",
+    "editApplication": "Edit Application",
+    "exportCsv": "Export CSV",
+    "exportPdf": "Export PDF",
+    "stats": {
+      "total": "Total",
+      "applied": "Applied",
+      "interview": "Interview",
+      "offer": "Offer",
+      "rejected": "Rejected",
+      "active": "Active"
+    },
+    "status": {
+      "applied": "Applied",
+      "interview": "Interview",
+      "offer": "Offer",
+      "rejected": "Rejected",
+      "withdrawn": "Withdrawn",
+      "all": "All"
+    },
+    "table": {
+      "company": "Company",
+      "status": "Status",
+      "applied": "Applied",
+      "emptyTitle": "No applications yet",
+      "emptySubtitle": "Add your first job application to get started."
+    },
+    "filters": {
+      "searchPlaceholder": "Search company or position...",
+      "sort": "Sort:",
+      "sortDate": "Date",
+      "sortCompany": "Company",
+      "sortStatus": "Status",
+      "recentSearches": "Recent searches",
+      "clearAll": "Clear all",
+      "source": "Source",
+      "allSources": "All Sources",
+      "dateAfter": "From",
+      "dateBefore": "To"
+    },
+    "form": {
+      "company": "Company",
+      "companyPlaceholder": "e.g. Stripe",
+      "position": "Position",
+      "positionPlaceholder": "e.g. Senior Frontend Engineer",
+      "status": "Status",
+      "appliedDate": "Applied Date",
+      "jobUrl": "Job URL",
+      "jobUrlPlaceholder": "https://company.com/jobs/...",
+      "notes": "Notes",
+      "notesPlaceholder": "Interview notes, questions, links...",
+      "cancel": "Cancel",
+      "saveApplication": "Save Application",
+      "saveChanges": "Save Changes",
+      "companyRequired": "Company is required",
+      "positionRequired": "Position is required",
+      "dateRequired": "Date is required",
+      "source": "Source",
+      "selectSource": "Select source...",
+      "interviewDate": "Interview Date",
+      "tags": "Tags"
+    },
+    "drawer": {
+      "title": "Application Detail",
+      "applied": "Applied",
+      "lastUpdated": "Last Updated",
+      "interviewDate": "Interview Date",
+      "jobPosting": "Job Posting",
+      "notes": "Notes",
+      "stage": "Stage",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "confirm": {
+      "deleteTitle": "Delete application",
+      "deleteDescription": "Remove {{company}} — {{position}}? This cannot be undone.",
+      "delete": "Delete",
+      "cancel": "Cancel"
+    },
+    "kanban": {
+      "noApplications": "No applications"
+    },
+    "reminders": {
+      "title": "{{count}} application(s) need follow-up",
+      "daysAgo": "{{days}}d ago"
+    },
+    "notes": {
+      "title": "Notes",
+      "placeholder": "Add a note...",
+      "add": "Add",
+      "empty": "No notes yet.",
+      "addFailed": "Failed to add note.",
+      "deleteFailed": "Failed to delete note.",
+      "loadFailed": "Failed to load notes."
+    },
+    "toast": {
+      "added": "Application added",
+      "saved": "Changes saved",
+      "statusUpdated": "Status updated",
+      "deleted": "Application deleted",
+      "bulkStatusUpdated": "Status updated for {{count}} applications",
+      "bulkDeleted": "{{count}} applications deleted",
+      "importSuccess": "Imported {{count}} applications"
+    },
+    "errors": {
+      "loadFailed": "Failed to load applications.",
+      "addFailed": "Failed to add application.",
+      "editFailed": "Failed to save changes.",
+      "deleteFailed": "Failed to delete application.",
+      "bulkUpdateFailed": "Failed to update applications.",
+      "bulkDeleteFailed": "Failed to delete applications.",
+      "importFailed": "Failed to import file.",
+      "exportPdfFailed": "Failed to export PDF."
+    },
+    "nav": {
+      "dashboard": "Dashboard",
+      "calendar": "Calendar",
+      "analytics": "Analytics",
+      "signOut": "Sign Out",
+      "profile": "Profile",
+      "darkMode": "Dark Mode",
+      "lightMode": "Light Mode",
+      "coverLetters": "Cover Letters"
+    },
+    "viewTable": "Table view",
+    "viewKanban": "Kanban view",
+    "aria": {
+      "edit": "Edit application",
+      "delete": "Delete application",
+      "togglePassword": "Toggle password visibility",
+      "changeLanguage": "Change language"
+    },
+    "bulk": {
+      "selected": "{{count}} selected",
+      "updateStatus": "Update Status",
+      "deleteSelected": "Delete Selected",
+      "confirmDelete": "Delete {{count}} applications? This cannot be undone."
+    },
+    "import": {
+      "title": "Import Applications",
+      "selectFile": "Select CSV or Excel file",
+      "preview": "Preview",
+      "mapColumns": "Map Columns",
+      "import": "Import",
+      "close": "Close",
+      "results": "Import Results",
+      "created": "{{count}} created",
+      "errors": "{{count}} errors"
+    }
+  },
+  "analytics": {
+    "title": "Analytics",
+    "totalApplications": "Total Applications",
+    "interviewRate": "Interview Rate",
+    "offerRate": "Offer Rate",
+    "active": "Active",
+    "statusDistribution": "Status Distribution",
+    "applicationsPerMonth": "Applications per Month",
+    "noData": "No data yet",
+    "pipeline": "Application Pipeline",
+    "conversion": "% conversion",
+    "weekly": "Weekly",
+    "monthly": "Monthly",
+    "applicationsOverTime": "Applications Over Time",
+    "sourceDistribution": "Source Distribution"
+  },
+  "source": {
+    "linkedin": "LinkedIn",
+    "indeed": "Indeed",
+    "glassdoor": "Glassdoor",
+    "referral": "Referral",
+    "company_website": "Company Website",
+    "other": "Other"
+  },
+  "profile": {
+    "title": "Profile",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "saveProfile": "Save Profile",
+    "profileSaved": "Profile saved",
+    "changePassword": "Change Password",
+    "oldPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmNewPassword": "Confirm New Password",
+    "passwordChanged": "Password changed successfully",
+    "notificationEmail": "Notification Email",
+    "notificationEmailHint": "Leave blank to use your login email for notifications",
+    "resume": "Resume / CV",
+    "uploadResume": "Upload Resume",
+    "downloadResume": "Download Resume",
+    "dropAvatar": "Drop image here",
+    "dropResume": "Drop file here",
+    "notifications": {
+      "title": "Email Notifications",
+      "description": "Get interview reminders via email",
+      "reminderTime": "Remind me before interview",
+      "enabled": "Email notifications enabled",
+      "disabled": "Email notifications disabled",
+      "saved": "Notification preferences saved",
+      "saveFailed": "Failed to save notification preferences",
+      "hours": {
+        "1": "1 hour",
+        "6": "6 hours",
+        "24": "24 hours",
+        "48": "48 hours"
+      }
+    },
+    "errors": {
+      "passwordMismatch": "Passwords do not match",
+      "saveFailed": "Failed to save profile",
+      "passwordChangeFailed": "Failed to change password"
+    }
+  },
+  "detail": {
+    "title": "Application Detail",
+    "backToDashboard": "Back to Dashboard",
+    "applied": "Applied",
+    "lastUpdated": "Last Updated",
+    "interviewDate": "Interview Date",
+    "jobPosting": "Job Posting",
+    "notes": "Notes",
+    "stage": "Stage",
+    "edit": "Edit",
+    "delete": "Delete",
+    "contacts": "Contacts",
+    "interviews": "Interview Stages",
+    "attachments": "Attachments",
+    "addToCalendar": "Add to Calendar"
+  },
+  "coverLetters": {
+    "title": "Cover Letters",
+    "newTemplate": "New Template",
+    "editTemplate": "Edit Template",
+    "createTemplate": "Create Template",
+    "loading": "Loading templates...",
+    "previewNote": "Placeholders like {company}, {position}, {date} will be replaced with actual values.",
+    "empty": {
+      "title": "No cover letter templates",
+      "subtitle": "Create reusable templates with placeholders for quick cover letter generation."
+    },
+    "form": {
+      "name": "Template Name",
+      "namePlaceholder": "e.g. General Cover Letter",
+      "content": "Content",
+      "contentPlaceholder": "Dear Hiring Manager at {company},\n\nI am writing to express my interest in the {position} role...",
+      "cancel": "Cancel",
+      "save": "Save"
+    },
+    "deleteConfirm": {
+      "title": "Delete Template",
+      "message": "Delete \"{{name}}\"? This cannot be undone.",
+      "confirm": "Delete"
+    },
+    "toast": {
+      "created": "Template created",
+      "updated": "Template updated",
+      "deleted": "Template deleted"
+    },
+    "errors": {
+      "loadFailed": "Failed to load templates.",
+      "saveFailed": "Failed to save template.",
+      "deleteFailed": "Failed to delete template.",
+      "required": "Name and content are required."
+    }
+  },
+  "calendar": {
+    "title": "Calendar"
+  },
+  "pagination": {
+    "prev": "Previous",
+    "next": "Next"
+  },
+  "footer": {
+    "rights": "All rights reserved.",
+    "copyright": "© {{year}} TrackJobs. All rights reserved."
+  }
+}

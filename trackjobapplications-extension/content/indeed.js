@@ -26,16 +26,15 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 });
 
-// --- Inject Save Button ---
+// --- Inject Two Buttons (To Apply + Applied) ---
 
-const BUTTON_ID = 'tja-save-btn';
+const CONTAINER_ID = 'tja-btn-container';
 
-function createSaveButton() {
+function createActionButton(label, color, hoverColor, status) {
   const btn = document.createElement('button');
-  btn.id = BUTTON_ID;
-  btn.textContent = 'Save Application';
+  btn.textContent = label;
   btn.style.cssText = `
-    background: #10b981;
+    background: ${color};
     color: #fff;
     border: none;
     border-radius: 6px;
@@ -43,17 +42,12 @@ function createSaveButton() {
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
-    margin-left: 10px;
     transition: background 0.15s;
     vertical-align: middle;
   `;
 
-  btn.addEventListener('mouseenter', () => {
-    if (!btn.disabled) btn.style.background = '#059669';
-  });
-  btn.addEventListener('mouseleave', () => {
-    if (!btn.disabled) btn.style.background = '#10b981';
-  });
+  btn.addEventListener('mouseenter', () => { if (!btn.disabled) btn.style.background = hoverColor; });
+  btn.addEventListener('mouseleave', () => { if (!btn.disabled) btn.style.background = color; });
 
   btn.addEventListener('click', async () => {
     const data = extractIndeedJob();
@@ -63,9 +57,9 @@ function createSaveButton() {
       return;
     }
 
-    btn.disabled = true;
+    const container = document.getElementById(CONTAINER_ID);
+    container.querySelectorAll('button').forEach(b => { b.disabled = true; });
     btn.textContent = 'Saving...';
-    btn.style.background = '#6ee7b7';
 
     const today = new Date().toISOString().split('T')[0];
     const result = await chrome.runtime.sendMessage({
@@ -75,19 +69,19 @@ function createSaveButton() {
       url: data.url,
       source: data.source,
       applied_date: today,
+      status: status,
     });
 
     if (result.success) {
-      btn.textContent = 'Saved!';
-      btn.style.background = '#10b981';
+      btn.textContent = status === 'to_apply' ? 'Saved!' : 'Applied!';
+      btn.style.background = color;
     } else {
       btn.textContent = result.error || 'Error';
       btn.style.background = '#ef4444';
-      btn.style.color = '#fff';
       setTimeout(() => {
-        btn.disabled = false;
-        btn.textContent = 'Save Application';
-        btn.style.background = '#10b981';
+        container.querySelectorAll('button').forEach(b => { b.disabled = false; });
+        btn.textContent = label;
+        btn.style.background = color;
       }, 3000);
     }
   });
@@ -96,7 +90,7 @@ function createSaveButton() {
 }
 
 function injectButton() {
-  if (document.getElementById(BUTTON_ID)) return;
+  if (document.getElementById(CONTAINER_ID)) return;
 
   const titleEl =
     document.querySelector('.jobsearch-JobInfoHeader-title') ||
@@ -104,8 +98,12 @@ function injectButton() {
     document.querySelector('h1');
 
   if (titleEl) {
-    const btn = createSaveButton();
-    titleEl.parentElement.appendChild(btn);
+    const container = document.createElement('span');
+    container.id = CONTAINER_ID;
+    container.style.cssText = 'display: inline-flex; gap: 6px; margin-left: 10px; vertical-align: middle;';
+    container.appendChild(createActionButton('To Apply', '#6366f1', '#4f46e5', 'to_apply'));
+    container.appendChild(createActionButton('Applied', '#3b82f6', '#2563eb', 'applied'));
+    titleEl.parentElement.appendChild(container);
   }
 }
 

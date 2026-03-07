@@ -2,9 +2,12 @@ import { useEffect, useState } from 'react'
 import { InterviewStage, InterviewStageType } from '../../types'
 import { getInterviews, createInterview, updateInterview, deleteInterview } from '../../services/interviews'
 import { useToast } from '../../context/ToastContext'
+import { buildGoogleCalendarUrl } from '../../lib/calendar'
 
 interface Props {
   applicationId: number
+  company?: string
+  position?: string
 }
 
 const STAGE_LABELS: Record<InterviewStageType, string> = {
@@ -19,7 +22,7 @@ const STAGE_LABELS: Record<InterviewStageType, string> = {
 
 const STAGE_TYPES = Object.keys(STAGE_LABELS) as InterviewStageType[]
 
-export default function InterviewTimeline({ applicationId }: Props) {
+export default function InterviewTimeline({ applicationId, company, position }: Props) {
   const { addToast } = useToast()
   const [stages, setStages] = useState<InterviewStage[]>([])
   const [showAdd, setShowAdd] = useState(false)
@@ -126,7 +129,25 @@ export default function InterviewTimeline({ applicationId }: Props) {
                   </p>
                   {stage.notes && <p className="text-xs text-gray-400 mt-1">{stage.notes}</p>}
                 </div>
-                <button onClick={() => handleDelete(stage.id)} className="text-xs text-red-400 hover:text-red-600">&times;</button>
+                <div className="flex items-center gap-1.5">
+                  <a
+                    href={buildGoogleCalendarUrl({
+                      title: `${STAGE_LABELS[stage.stage_type]}${company ? ` — ${company}` : ''}${position ? ` (${position})` : ''}`,
+                      start: stage.scheduled_at,
+                      description: stage.notes,
+                    })}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={e => e.stopPropagation()}
+                    className="text-xs text-blue-500 hover:text-blue-700"
+                    title="Add to Google Calendar"
+                  >
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                  </a>
+                  <button onClick={() => handleDelete(stage.id)} className="text-xs text-red-400 hover:text-red-600">&times;</button>
+                </div>
               </div>
             </div>
           ))}

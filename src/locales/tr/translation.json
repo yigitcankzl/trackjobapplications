@@ -70,6 +70,7 @@
     "addApplication": "Başvuru Ekle",
     "editApplication": "Başvuruyu Düzenle",
     "exportCsv": "CSV İndir",
+    "exportPdf": "PDF İndir",
     "stats": {
       "total": "Toplam",
       "applied": "Başvuruldu",
@@ -177,7 +178,8 @@
       "deleteFailed": "Başvuru silinemedi.",
       "bulkUpdateFailed": "Başvurular güncellenemedi.",
       "bulkDeleteFailed": "Başvurular silinemedi.",
-      "importFailed": "Dosya içe aktarılamadı."
+      "importFailed": "Dosya içe aktarılamadı.",
+      "exportPdfFailed": "PDF dışa aktarılamadı."
     },
     "nav": {
       "dashboard": "Dashboard",

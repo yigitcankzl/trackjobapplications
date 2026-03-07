@@ -70,6 +70,7 @@
     "addApplication": "Add Application",
     "editApplication": "Edit Application",
     "exportCsv": "Export CSV",
+    "exportPdf": "Export PDF",
     "stats": {
       "total": "Total",
       "applied": "Applied",
@@ -177,7 +178,8 @@
       "deleteFailed": "Failed to delete application.",
       "bulkUpdateFailed": "Failed to update applications.",
       "bulkDeleteFailed": "Failed to delete applications.",
-      "importFailed": "Failed to import file."
+      "importFailed": "Failed to import file.",
+      "exportPdfFailed": "Failed to export PDF."
     },
     "nav": {
       "dashboard": "Dashboard",

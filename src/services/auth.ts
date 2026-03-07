@@ -1,5 +1,5 @@
 import api from '../lib/axios'
-import { AuthTokens, User } from '../types'
+import { AuthTokens, NotificationPreference, User } from '../types'
 
 const TOKEN_KEYS = {
   access: 'access_token',
@@ -70,6 +70,18 @@ export async function fetchMe(): Promise<User> {
 
 export async function updateProfile(formData: FormData): Promise<User> {
   const { data } = await api.patch<User>('/auth/me/', formData)
+  return data
+}
+
+export async function fetchNotificationPreferences(): Promise<NotificationPreference> {
+  const { data } = await api.get<NotificationPreference>('/auth/me/notifications/')
+  return data
+}
+
+export async function updateNotificationPreferences(
+  prefs: Partial<NotificationPreference>,
+): Promise<NotificationPreference> {
+  const { data } = await api.patch<NotificationPreference>('/auth/me/notifications/', prefs)
   return data
 }
 

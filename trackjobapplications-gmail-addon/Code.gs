@@ -106,17 +106,17 @@ function onTrackJob(e) {
   var payload = {
     company: company,
     position: position,
-    url: '',
+    url: params.url || '',
     source: 'other',
     applied_date: today,
-    status: 'applied',
+    status: params.status || 'to_apply',
     notes: notes,
   };
 
   var result = apiFetch('/applications/', 'post', payload);
 
   if (result.code === 201 || result.code === 200) {
-    var card = buildSuccessCard(company, position);
+    var card = buildSuccessCard(company, position, params.url || '');
     return CardService.newActionResponseBuilder()
       .setNavigation(CardService.newNavigation().updateCard(card))
       .setNotification(CardService.newNotification().setText('Application saved!'))

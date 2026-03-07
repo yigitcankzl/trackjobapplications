@@ -73,6 +73,17 @@ export async function getStats(): Promise<AppStats> {
   return data
 }
 
+// Export PDF
+export async function exportPdf(): Promise<void> {
+  const { data } = await api.get('/applications/export-pdf/', { responseType: 'blob' })
+  const url = URL.createObjectURL(data)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = 'applications.pdf'
+  a.click()
+  URL.revokeObjectURL(url)
+}
+
 // Bulk actions
 export async function bulkUpdateStatus(ids: number[], status: string): Promise<{ updated: number }> {
   const { data } = await api.post('/applications/bulk-update-status/', { ids, status })

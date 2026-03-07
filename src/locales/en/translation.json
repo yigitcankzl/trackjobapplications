@@ -195,6 +195,23 @@
       "delete": "Delete application",
       "togglePassword": "Toggle password visibility",
       "changeLanguage": "Change language"
+    },
+    "bulk": {
+      "selected": "{{count}} selected",
+      "updateStatus": "Update Status",
+      "deleteSelected": "Delete Selected",
+      "confirmDelete": "Delete {{count}} applications? This cannot be undone."
+    },
+    "import": {
+      "title": "Import Applications",
+      "selectFile": "Select CSV or Excel file",
+      "preview": "Preview",
+      "mapColumns": "Map Columns",
+      "import": "Import",
+      "close": "Close",
+      "results": "Import Results",
+      "created": "{{count}} created",
+      "errors": "{{count}} errors"
     }
   },
   "analytics": {
@@ -243,24 +260,6 @@
       "passwordMismatch": "Passwords do not match",
       "saveFailed": "Failed to save profile",
       "passwordChangeFailed": "Failed to change password"
-    }
-  },
-    "bulk": {
-      "selected": "{{count}} selected",
-      "updateStatus": "Update Status",
-      "deleteSelected": "Delete Selected",
-      "confirmDelete": "Delete {{count}} applications? This cannot be undone."
-    },
-    "import": {
-      "title": "Import Applications",
-      "selectFile": "Select CSV or Excel file",
-      "preview": "Preview",
-      "mapColumns": "Map Columns",
-      "import": "Import",
-      "close": "Close",
-      "results": "Import Results",
-      "created": "{{count}} created",
-      "errors": "{{count}} errors"
     }
   },
   "detail": {

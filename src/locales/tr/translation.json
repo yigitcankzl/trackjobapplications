@@ -195,6 +195,23 @@
       "delete": "Başvuruyu sil",
       "togglePassword": "Şifre görünürlüğünü değiştir",
       "changeLanguage": "Dil değiştir"
+    },
+    "bulk": {
+      "selected": "{{count}} seçildi",
+      "updateStatus": "Durumu Güncelle",
+      "deleteSelected": "Seçilenleri Sil",
+      "confirmDelete": "{{count}} başvuruyu sil? Bu işlem geri alınamaz."
+    },
+    "import": {
+      "title": "Başvuru İçe Aktar",
+      "selectFile": "CSV veya Excel dosyası seçin",
+      "preview": "Önizleme",
+      "mapColumns": "Kolon Eşleştirme",
+      "import": "İçe Aktar",
+      "close": "Kapat",
+      "results": "İçe Aktarma Sonuçları",
+      "created": "{{count}} oluşturuldu",
+      "errors": "{{count}} hata"
     }
   },
   "analytics": {
@@ -243,24 +260,6 @@
       "passwordMismatch": "Şifreler eşleşmiyor",
       "saveFailed": "Profil kaydedilemedi",
       "passwordChangeFailed": "Şifre değiştirilemedi"
-    }
-  },
-    "bulk": {
-      "selected": "{{count}} seçildi",
-      "updateStatus": "Durumu Güncelle",
-      "deleteSelected": "Seçilenleri Sil",
-      "confirmDelete": "{{count}} başvuruyu sil? Bu işlem geri alınamaz."
-    },
-    "import": {
-      "title": "Başvuru İçe Aktar",
-      "selectFile": "CSV veya Excel dosyası seçin",
-      "preview": "Önizleme",
-      "mapColumns": "Kolon Eşleştirme",
-      "import": "İçe Aktar",
-      "close": "Kapat",
-      "results": "İçe Aktarma Sonuçları",
-      "created": "{{count}} oluşturuldu",
-      "errors": "{{count}} hata"
     }
   },
   "detail": {

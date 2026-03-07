@@ -18,6 +18,7 @@ import ContactList from '../components/detail/ContactList'
 import InterviewTimeline from '../components/detail/InterviewTimeline'
 import AttachmentList from '../components/detail/AttachmentList'
 import { ArrowLeftIcon, EditIcon, TrashIcon, CalendarIcon, ClockIcon, LinkIcon } from '../components/icons'
+import { buildGoogleCalendarUrl } from '../lib/calendar'
 
 export default function ApplicationDetailPage() {
   const { t } = useTranslation()
@@ -154,9 +155,22 @@ export default function ApplicationDetailPage() {
               <div className="w-8 h-8 rounded-lg bg-purple-50 dark:bg-purple-900/30 flex items-center justify-center flex-shrink-0 mt-0.5">
                 <CalendarIcon />
               </div>
-              <div>
+              <div className="flex-1">
                 <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-0.5">{t('detail.interviewDate')}</p>
-                <p className="text-sm text-gray-800 dark:text-gray-200">{formatLong(app.interview_date)}</p>
+                <div className="flex items-center gap-2">
+                  <p className="text-sm text-gray-800 dark:text-gray-200">{formatLong(app.interview_date)}</p>
+                  <a
+                    href={buildGoogleCalendarUrl({
+                      title: `Interview — ${app.company} (${app.position})`,
+                      start: app.interview_date!,
+                    })}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 transition-colors"
+                  >
+                    {t('detail.addToCalendar')}
+                  </a>
+                </div>
               </div>
             </div>
           )}
@@ -201,7 +215,7 @@ export default function ApplicationDetailPage() {
 
         {/* Interview Stages */}
         <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6">
-          <InterviewTimeline applicationId={app.id} />
+          <InterviewTimeline applicationId={app.id} company={app.company} position={app.position} />
         </div>
 
         {/* Attachments */}

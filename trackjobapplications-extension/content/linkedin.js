@@ -109,12 +109,25 @@ function injectButton() {
   }
 }
 
+// Track current URL to detect SPA navigation
+let lastUrl = window.location.href;
+
+function resetButtonIfNavigated() {
+  const currentUrl = window.location.href;
+  if (currentUrl !== lastUrl) {
+    lastUrl = currentUrl;
+    const existing = document.getElementById(BUTTON_ID);
+    if (existing) existing.remove();
+  }
+  injectButton();
+}
+
 // Initial inject
 injectButton();
 
 // Re-inject on SPA navigation (LinkedIn is a SPA)
 const observer = new MutationObserver(() => {
-  injectButton();
+  resetButtonIfNavigated();
 });
 
 observer.observe(document.body, { childList: true, subtree: true });

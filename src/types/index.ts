@@ -84,6 +84,7 @@ export interface JobApplication {
   source?: ApplicationSource | ''
   interview_date?: string | null
   tags?: Tag[]
+  is_pinned: boolean
   notes: string
   created_at: string
   updated_at: string

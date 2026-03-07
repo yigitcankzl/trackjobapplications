@@ -54,6 +54,25 @@ export async function deleteNote(applicationId: number, noteId: number): Promise
   await api.delete(`/applications/${applicationId}/notes/${noteId}/`)
 }
 
+export async function togglePin(id: number): Promise<{ is_pinned: boolean }> {
+  const { data } = await api.post(`/applications/${id}/toggle-pin/`)
+  return data
+}
+
+export interface AppStats {
+  total: number
+  applied: number
+  interview: number
+  offer: number
+  rejected: number
+  withdrawn: number
+}
+
+export async function getStats(): Promise<AppStats> {
+  const { data } = await api.get<AppStats>('/applications/stats/')
+  return data
+}
+
 // Bulk actions
 export async function bulkUpdateStatus(ids: number[], status: string): Promise<{ updated: number }> {
   const { data } = await api.post('/applications/bulk-update-status/', { ids, status })

@@ -127,6 +127,21 @@ export default function DashboardPage() {
     }
   }
 
+  async function handleApply(app: JobApplication) {
+    if (!app.url) return
+    window.open(app.url, '_blank', 'noopener')
+    if (app.status === 'to_apply') {
+      try {
+        const updated = await updateApplication(app.id, { status: 'applied' })
+        setApps(prev => prev.map(a => (a.id === app.id ? updated : a)))
+        loadStats()
+        addToast(t('dashboard.toast.statusUpdated'))
+      } catch {
+        addToast(t('dashboard.errors.editFailed'), 'error')
+      }
+    }
+  }
+
   async function handleDelete() {
     if (!deleteTarget) return
     try {
@@ -227,10 +242,11 @@ export default function DashboardPage() {
 
       <ReminderBanner reminders={reminders} />
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
         {order.map((key, idx) => {
-          const config: Record<string, { label: string; value: string | number; color: 'text-gray-900' | 'text-blue-600' | 'text-amber-600' | 'text-emerald-600' | 'text-red-500' }> = {
+          const config: Record<string, { label: string; value: string | number; color: 'text-gray-900' | 'text-indigo-600' | 'text-blue-600' | 'text-amber-600' | 'text-emerald-600' | 'text-red-500' }> = {
             total: { label: t('dashboard.stats.total'), value: stats.total, color: 'text-gray-900' },
+            to_apply: { label: t('dashboard.stats.to_apply'), value: stats.to_apply ?? 0, color: 'text-indigo-600' },
             applied: { label: t('dashboard.stats.applied'), value: stats.applied, color: 'text-blue-600' },
             interview: { label: t('dashboard.stats.interview'), value: stats.interview, color: 'text-amber-600' },
             offer: { label: t('dashboard.stats.offer'), value: stats.offer, color: 'text-emerald-600' },
@@ -282,6 +298,7 @@ export default function DashboardPage() {
           onEdit={setEditTarget}
           onDelete={setDeleteTarget}
           onTogglePin={handleTogglePin}
+          onApply={handleApply}
         />
       ) : (
         <KanbanBoard

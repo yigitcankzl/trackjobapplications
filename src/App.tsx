@@ -11,6 +11,7 @@ import AnalyticsPage from './pages/AnalyticsPage'
 import ProfilePage from './pages/ProfilePage'
 import ApplicationDetailPage from './pages/ApplicationDetailPage'
 import CalendarPage from './pages/CalendarPage'
+import CoverLettersPage from './pages/CoverLettersPage'
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
               <Route path="/dashboard" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />
               <Route path="/applications/:id" element={<PrivateRoute><ApplicationDetailPage /></PrivateRoute>} />
               <Route path="/calendar" element={<PrivateRoute><CalendarPage /></PrivateRoute>} />
+              <Route path="/cover-letters" element={<PrivateRoute><CoverLettersPage /></PrivateRoute>} />
               <Route path="/analytics" element={<PrivateRoute><AnalyticsPage /></PrivateRoute>} />
               <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
               <Route path="*" element={<Navigate to="/" replace />} />

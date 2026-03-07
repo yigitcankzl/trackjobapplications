@@ -17,7 +17,7 @@ import Pagination from '../components/ui/Pagination'
 import Button from '../components/ui/Button'
 import { PlusIcon, TableIcon, KanbanIcon, DownloadIcon } from '../components/icons'
 import { exportApplicationsCsv } from '../lib/exportCsv'
-import { getApplications, createApplication, updateApplication, deleteApplication, bulkUpdateStatus, bulkDelete, togglePin, getStats, AppStats } from '../services/applications'
+import { getApplications, createApplication, updateApplication, deleteApplication, bulkUpdateStatus, bulkDelete, togglePin, getStats, exportPdf, AppStats } from '../services/applications'
 import { ApplicationFilters, ApplicationStatus, JobApplication, ViewMode } from '../types'
 import { useToast } from '../context/ToastContext'
 import { useApplicationFilters } from '../hooks/useApplicationFilters'
@@ -209,6 +209,10 @@ export default function DashboardPage() {
             <Button variant="secondary" onClick={() => exportApplicationsCsv(apps)}>
               <DownloadIcon />
               {t('dashboard.exportCsv')}
+            </Button>
+            <Button variant="secondary" onClick={() => exportPdf().catch(() => addToast(t('dashboard.errors.exportPdfFailed'), 'error'))}>
+              <DownloadIcon />
+              {t('dashboard.exportPdf')}
             </Button>
             <Button onClick={() => setAddOpen(true)}>
               <PlusIcon />

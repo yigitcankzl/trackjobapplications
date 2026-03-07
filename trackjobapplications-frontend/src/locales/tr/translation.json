@@ -73,6 +73,7 @@
     "exportPdf": "PDF İndir",
     "stats": {
       "total": "Toplam",
+      "to_apply": "Başvurulacak",
       "applied": "Başvuruldu",
       "interview": "Mülakat",
       "offer": "Teklif",
@@ -80,6 +81,7 @@
       "active": "Aktif"
     },
     "status": {
+      "to_apply": "Başvurulacak",
       "applied": "Başvuruldu",
       "interview": "Mülakat",
       "offer": "Teklif",
@@ -196,6 +198,8 @@
     "aria": {
       "edit": "Başvuruyu düzenle",
       "delete": "Başvuruyu sil",
+      "apply": "Başvur — iş ilanını aç",
+      "noUrl": "URL yok",
       "togglePassword": "Şifre görünürlüğünü değiştir",
       "changeLanguage": "Dil değiştir"
     },

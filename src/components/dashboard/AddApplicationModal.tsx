@@ -56,10 +56,26 @@ function toFormData(app: JobApplication): FormData {
   }
 }
 
+function formEquals(a: FormData, b: FormData): boolean {
+  return (
+    a.company === b.company &&
+    a.position === b.position &&
+    a.status === b.status &&
+    a.applied_date === b.applied_date &&
+    a.url === b.url &&
+    a.source === b.source &&
+    a.interview_date === b.interview_date &&
+    a.notes === b.notes &&
+    a.tag_ids.length === b.tag_ids.length &&
+    a.tag_ids.every((id, i) => id === b.tag_ids[i])
+  )
+}
+
 export default function AddApplicationModal({ open, onClose, onSubmit, initialData }: Props) {
   const { t } = useTranslation()
   const isEdit = !!initialData
   const [form, setForm] = useState<FormData>(getInitialForm)
+  const [initialForm, setInitialForm] = useState<FormData>(getInitialForm)
   const [errors, setErrors] = useState<Partial<FormData>>({})
   const firstInputRef = useRef<HTMLInputElement>(null)
   const focusTrapRef = useFocusTrap(open, firstInputRef)
@@ -68,10 +84,14 @@ export default function AddApplicationModal({ open, onClose, onSubmit, initialDa
 
   useEffect(() => {
     if (open) {
-      setForm(initialData ? toFormData(initialData) : getInitialForm())
+      const f = initialData ? toFormData(initialData) : getInitialForm()
+      setForm(f)
+      setInitialForm(f)
       setErrors({})
     }
   }, [open, initialData])
+
+  const isDirty = !formEquals(form, initialForm)
 
   function validate(): boolean {
     const next: Partial<FormData> = {}
@@ -253,7 +273,7 @@ export default function AddApplicationModal({ open, onClose, onSubmit, initialDa
             <Button type="button" variant="secondary" onClick={onClose}>
               {t('dashboard.form.cancel')}
             </Button>
-            <Button type="submit" variant="primary">
+            <Button type="submit" variant="primary" disabled={isEdit && !isDirty}>
               {isEdit ? t('dashboard.form.saveChanges') : t('dashboard.form.saveApplication')}
             </Button>
           </div>

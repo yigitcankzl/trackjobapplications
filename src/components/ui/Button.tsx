@@ -13,11 +13,12 @@ const VARIANT_CLASSES: Record<Variant, string> = {
   danger: 'text-white bg-red-500 hover:bg-red-600',
 }
 
-export default function Button({ variant = 'primary', className = '', children, ...props }: Props) {
+export default function Button({ variant = 'primary', className = '', children, disabled, ...props }: Props) {
   return (
     <button
       {...props}
-      className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${VARIANT_CLASSES[variant]} ${className}`}
+      disabled={disabled}
+      className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${VARIANT_CLASSES[variant]} ${disabled ? 'opacity-50 cursor-not-allowed' : ''} ${className}`}
     >
       {children}
     </button>

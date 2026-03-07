@@ -167,10 +167,14 @@ function checkAndInject() {
 injectButton();
 setTimeout(injectButton, 500);
 setTimeout(injectButton, 1000);
+setTimeout(injectButton, 2000);
+setTimeout(injectButton, 4000);
 
-// Re-inject on SPA navigation
+// Re-inject on SPA navigation (debounced to avoid excessive calls)
+let debounceTimer = null;
 const observer = new MutationObserver(() => {
-  checkAndInject();
+  if (debounceTimer) clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(checkAndInject, 200);
 });
 
 observer.observe(document.body, { childList: true, subtree: true });

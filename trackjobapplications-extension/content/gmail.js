@@ -166,8 +166,10 @@ function checkAndInject() {
   injectButton();
 }
 
-// Initial inject
-setTimeout(injectButton, 1500);
+// Initial inject - try multiple times as Gmail loads content dynamically
+injectButton();
+setTimeout(injectButton, 500);
+setTimeout(injectButton, 1000);
 
 // Re-inject on SPA navigation
 const observer = new MutationObserver(() => {

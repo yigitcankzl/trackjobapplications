@@ -8,6 +8,11 @@ export interface User {
   notification_email?: string
 }
 
+export interface NotificationPreference {
+  email_notifications_enabled: boolean
+  interview_reminder_hours: number
+}
+
 export interface AuthTokens {
   access: string
   refresh: string

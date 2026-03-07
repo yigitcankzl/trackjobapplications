@@ -71,7 +71,7 @@ async function loadJobData() {
   if (!tab) return showNoJob();
 
   const url = tab.url || '';
-  const isSupported = url.includes('linkedin.com/jobs') || url.includes('indeed.com');
+  const isSupported = url.includes('linkedin.com/jobs') || url.includes('indeed.com') || url.includes('mail.google.com');
 
   if (!isSupported) return showNoJob();
 
@@ -93,7 +93,8 @@ function showJobInfo(data) {
   document.getElementById('no-job').hidden = true;
   document.getElementById('job-company').textContent = data.company;
   document.getElementById('job-position').textContent = data.position;
-  document.getElementById('job-source').textContent = data.source === 'linkedin' ? 'LinkedIn' : 'Indeed';
+  const sourceNames = { linkedin: 'LinkedIn', indeed: 'Indeed', other: 'Email' };
+  document.getElementById('job-source').textContent = sourceNames[data.source] || data.source;
 }
 
 function showNoJob() {

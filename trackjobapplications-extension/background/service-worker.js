@@ -99,16 +99,18 @@ async function handleMessage(message) {
       }
 
       case 'ADD_APPLICATION': {
+        const payload = {
+          company: message.company,
+          position: message.position,
+          url: message.url,
+          source: message.source,
+          applied_date: message.applied_date,
+          status: 'applied',
+        };
+        if (message.notes) payload.notes = message.notes;
         const res = await apiFetch('/applications/', {
           method: 'POST',
-          body: JSON.stringify({
-            company: message.company,
-            position: message.position,
-            url: message.url,
-            source: message.source,
-            applied_date: message.applied_date,
-            status: 'applied',
-          }),
+          body: JSON.stringify(payload),
         });
         if (!res.ok) {
           const err = await res.json().catch(() => ({}));

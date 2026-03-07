@@ -11,7 +11,8 @@
     "http://localhost:8000/*",
     "https://www.linkedin.com/*",
     "https://www.indeed.com/*",
-    "https://*.indeed.com/*"
+    "https://*.indeed.com/*",
+    "https://mail.google.com/*"
   ],
   "action": {
     "default_popup": "popup/popup.html",
@@ -35,6 +36,11 @@
         "https://*.indeed.com/jobs*"
       ],
       "js": ["content/indeed.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://mail.google.com/*"],
+      "js": ["content/gmail.js"],
       "run_at": "document_idle"
     }
   ],

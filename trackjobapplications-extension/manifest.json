@@ -1,0 +1,49 @@
+{
+  "manifest_version": 3,
+  "name": "TrackJobApplications",
+  "version": "1.0.0",
+  "description": "Add job applications from LinkedIn and Indeed with one click.",
+  "permissions": [
+    "storage",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "http://localhost:8000/*",
+    "https://www.linkedin.com/*",
+    "https://www.indeed.com/*",
+    "https://*.indeed.com/*"
+  ],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.linkedin.com/jobs/*"],
+      "js": ["content/linkedin.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://www.indeed.com/viewjob*",
+        "https://www.indeed.com/jobs*",
+        "https://*.indeed.com/viewjob*",
+        "https://*.indeed.com/jobs*"
+      ],
+      "js": ["content/indeed.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "background": {
+    "service_worker": "background/service-worker.js"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

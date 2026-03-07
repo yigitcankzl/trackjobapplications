@@ -4,7 +4,8 @@ import DashboardLayout from '../components/layout/DashboardLayout'
 import Header from '../components/dashboard/Header'
 import { useAuth } from '../context/AuthContext'
 import { useToast } from '../context/ToastContext'
-import { updateProfile, changePassword } from '../services/auth'
+import { updateProfile, changePassword, fetchNotificationPreferences, updateNotificationPreferences } from '../services/auth'
+import type { NotificationPreference } from '../types'
 import { getAvatarColor } from '../lib/avatar'
 import { CameraIcon, UploadIcon, DownloadIcon } from '../components/icons'
 import DragDropZone from '../components/profile/DragDropZone'
@@ -29,6 +30,49 @@ export default function ProfilePage() {
       setNotificationEmail(user.notification_email ?? '')
     }
   }, [user])
+
+  const [notifPrefs, setNotifPrefs] = useState<NotificationPreference>({
+    email_notifications_enabled: false,
+    interview_reminder_hours: 24,
+  })
+  const [savingNotif, setSavingNotif] = useState(false)
+
+  useEffect(() => {
+    fetchNotificationPreferences().then(setNotifPrefs).catch(() => {})
+  }, [])
+
+  async function handleToggleNotifications() {
+    setSavingNotif(true)
+    try {
+      const updated = await updateNotificationPreferences({
+        email_notifications_enabled: !notifPrefs.email_notifications_enabled,
+      })
+      setNotifPrefs(updated)
+      addToast(
+        updated.email_notifications_enabled
+          ? t('profile.notifications.enabled')
+          : t('profile.notifications.disabled'),
+        'success',
+      )
+    } catch {
+      addToast(t('profile.notifications.saveFailed'), 'error')
+    } finally {
+      setSavingNotif(false)
+    }
+  }
+
+  async function handleReminderHoursChange(hours: number) {
+    setSavingNotif(true)
+    try {
+      const updated = await updateNotificationPreferences({ interview_reminder_hours: hours })
+      setNotifPrefs(updated)
+      addToast(t('profile.notifications.saved'), 'success')
+    } catch {
+      addToast(t('profile.notifications.saveFailed'), 'error')
+    } finally {
+      setSavingNotif(false)
+    }
+  }
 
   const [oldPassword, setOldPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
@@ -206,6 +250,55 @@ export default function ProfilePage() {
             {saving ? '...' : t('profile.saveProfile')}
           </button>
         </form>
+
+        {/* Email Notifications */}
+        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6 space-y-5">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-100">{t('profile.notifications.title')}</h2>
+              <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">{t('profile.notifications.description')}</p>
+            </div>
+            <button
+              type="button"
+              onClick={handleToggleNotifications}
+              disabled={savingNotif}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500/20 ${
+                notifPrefs.email_notifications_enabled ? 'bg-blue-600' : 'bg-gray-300 dark:bg-gray-600'
+              }`}
+            >
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                  notifPrefs.email_notifications_enabled ? 'translate-x-6' : 'translate-x-1'
+                }`}
+              />
+            </button>
+          </div>
+
+          {notifPrefs.email_notifications_enabled && (
+            <div>
+              <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">
+                {t('profile.notifications.reminderTime')}
+              </label>
+              <div className="flex gap-2">
+                {[1, 6, 24, 48].map((hours) => (
+                  <button
+                    key={hours}
+                    type="button"
+                    disabled={savingNotif}
+                    onClick={() => handleReminderHoursChange(hours)}
+                    className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${
+                      notifPrefs.interview_reminder_hours === hours
+                        ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300'
+                        : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+                    }`}
+                  >
+                    {t(`profile.notifications.hours.${hours}`)}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
 
         {/* Change Password */}
         <form onSubmit={handleChangePassword} className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6 space-y-4">

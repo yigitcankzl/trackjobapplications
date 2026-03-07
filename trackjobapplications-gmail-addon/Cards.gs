@@ -67,19 +67,37 @@ function buildJobCard(emailData) {
       .setMultiline(true)
   );
 
+  var actionParams = {
+    subject: emailData.subject || '',
+    senderEmail: emailData.senderEmail || '',
+    messageId: emailData.messageId || '',
+    url: emailData.url || '',
+  };
+
+  // Two buttons: Save (To Apply) and Mark as Applied
   infoSection.addWidget(
-    CardService.newTextButton()
-      .setText('Track Job')
-      .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
-      .setBackgroundColor('#3b82f6')
-      .setOnClickAction(
-        CardService.newAction()
-          .setFunctionName('onTrackJob')
-          .setParameters({
-            subject: emailData.subject || '',
-            senderEmail: emailData.senderEmail || '',
-            messageId: emailData.messageId || '',
-          })
+    CardService.newButtonSet()
+      .addButton(
+        CardService.newTextButton()
+          .setText('Save (To Apply)')
+          .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+          .setBackgroundColor('#6366f1')
+          .setOnClickAction(
+            CardService.newAction()
+              .setFunctionName('onTrackJob')
+              .setParameters(Object.assign({}, actionParams, { status: 'to_apply' }))
+          )
+      )
+      .addButton(
+        CardService.newTextButton()
+          .setText('Mark as Applied')
+          .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+          .setBackgroundColor('#3b82f6')
+          .setOnClickAction(
+            CardService.newAction()
+              .setFunctionName('onTrackJob')
+              .setParameters(Object.assign({}, actionParams, { status: 'applied' }))
+          )
       )
   );
 
@@ -98,7 +116,7 @@ function buildJobCard(emailData) {
   return card.build();
 }
 
-function buildSuccessCard(company, position) {
+function buildSuccessCard(company, position, url) {
   var card = CardService.newCardBuilder();
   card.setHeader(
     CardService.newCardHeader()
@@ -112,6 +130,16 @@ function buildSuccessCard(company, position) {
       .setText('Application has been added to your dashboard.')
       .setWrapText(true)
   );
+
+  if (url) {
+    section.addWidget(
+      CardService.newTextButton()
+        .setText('Apply Now')
+        .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+        .setBackgroundColor('#10b981')
+        .setOpenLink(CardService.newOpenLink().setUrl(url))
+    );
+  }
 
   card.addSection(section);
   return card.build();

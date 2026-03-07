@@ -102,14 +102,19 @@ function showNoJob() {
   document.getElementById('no-job').hidden = false;
 }
 
-// --- Add Application ---
+// --- Add Application (two buttons) ---
 
-document.getElementById('add-btn').addEventListener('click', async () => {
+async function addApplication(status) {
   if (!currentJobData) return;
 
-  const btn = document.getElementById('add-btn');
-  btn.disabled = true;
-  btn.textContent = 'Adding...';
+  const saveBtn = document.getElementById('save-btn');
+  const applyBtn = document.getElementById('apply-btn');
+  saveBtn.disabled = true;
+  applyBtn.disabled = true;
+
+  const activeBtn = status === 'to_apply' ? saveBtn : applyBtn;
+  const originalText = activeBtn.textContent;
+  activeBtn.textContent = 'Saving...';
 
   const today = new Date().toISOString().split('T')[0];
 
@@ -120,17 +125,23 @@ document.getElementById('add-btn').addEventListener('click', async () => {
     url: currentJobData.url,
     source: currentJobData.source,
     applied_date: today,
+    status: status,
   });
 
   if (result.success) {
-    showFeedback('Application added!', 'success');
-    btn.textContent = 'Added';
+    const label = status === 'to_apply' ? 'Saved!' : 'Applied!';
+    showFeedback(label, 'success');
+    activeBtn.textContent = label;
   } else {
     showFeedback(result.error, 'error');
-    btn.disabled = false;
-    btn.textContent = 'Add Application';
+    saveBtn.disabled = false;
+    applyBtn.disabled = false;
+    activeBtn.textContent = originalText;
   }
-});
+}
+
+document.getElementById('save-btn').addEventListener('click', () => addApplication('to_apply'));
+document.getElementById('apply-btn').addEventListener('click', () => addApplication('applied'));
 
 function showFeedback(message, type) {
   const el = document.getElementById('feedback');

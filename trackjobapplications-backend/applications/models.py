@@ -4,6 +4,7 @@ from django.db import models
 
 class Application(models.Model):
     STATUS_CHOICES = [
+        ("to_apply", "To Apply"),
         ("applied", "Applied"),
         ("interview", "Interview"),
         ("offer", "Offer"),
@@ -27,7 +28,7 @@ class Application(models.Model):
     )
     company = models.CharField(max_length=200)
     position = models.CharField(max_length=200)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="applied")
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="to_apply")
     applied_date = models.DateField()
     url = models.URLField(blank=True, default="")
     source = models.CharField(max_length=20, choices=SOURCE_CHOICES, blank=True, default="")

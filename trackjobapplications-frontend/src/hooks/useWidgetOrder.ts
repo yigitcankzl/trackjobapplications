@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef } from 'react'
 
 const STORAGE_KEY = 'tj_widget_order'
-const DEFAULT_ORDER = ['total', 'applied', 'interview', 'offer', 'rejected']
+const DEFAULT_ORDER = ['total', 'to_apply', 'applied', 'interview', 'offer', 'rejected']
 
 function loadOrder(): string[] {
   try {

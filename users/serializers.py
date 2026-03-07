@@ -64,6 +64,14 @@ class ChangePasswordSerializer(serializers.Serializer):
         return attrs
 
 
+class NotificationPreferenceSerializer(serializers.ModelSerializer):
+    class Meta:
+        from users.models import NotificationPreference
+
+        model = NotificationPreference
+        fields = ("email_notifications_enabled", "interview_reminder_hours")
+
+
 class LogoutSerializer(serializers.Serializer):
     refresh = serializers.CharField()
 

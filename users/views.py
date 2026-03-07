@@ -6,7 +6,15 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from .serializers import ChangePasswordSerializer, LogoutSerializer, RegisterSerializer, UserSerializer
+from users.models import NotificationPreference
+
+from .serializers import (
+    ChangePasswordSerializer,
+    LogoutSerializer,
+    NotificationPreferenceSerializer,
+    RegisterSerializer,
+    UserSerializer,
+)
 
 
 class ThrottledTokenObtainPairView(TokenObtainPairView):
@@ -50,6 +58,16 @@ class MeView(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         return self.request.user
+
+
+class NotificationPreferenceView(generics.RetrieveUpdateAPIView):
+    serializer_class = NotificationPreferenceSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    http_method_names = ["get", "patch", "head", "options"]
+
+    def get_object(self):
+        prefs, _ = NotificationPreference.objects.get_or_create(user=self.request.user)
+        return prefs
 
 
 class ChangePasswordView(APIView):

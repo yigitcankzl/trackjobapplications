@@ -44,6 +44,12 @@ export default function DashboardPage() {
 
   const filtersRef = useRef<ApplicationFilters>({})
 
+  const [stats, setStats] = useState<AppStats>({ total: 0, applied: 0, interview: 0, offer: 0, rejected: 0, withdrawn: 0 })
+
+  const loadStats = useCallback(() => {
+    getStats().then(setStats).catch(() => {})
+  }, [])
+
   const loadPage = useCallback((p: number, filters?: ApplicationFilters) => {
     const f = filters ?? filtersRef.current
     filtersRef.current = f
@@ -78,12 +84,6 @@ export default function DashboardPage() {
   const { upcoming: interviewReminders, dismissAll: dismissInterviewReminders } = useInterviewReminders(apps)
 
   const totalPages = Math.ceil(totalCount / PAGE_SIZE)
-
-  const [stats, setStats] = useState<AppStats>({ total: 0, applied: 0, interview: 0, offer: 0, rejected: 0, withdrawn: 0 })
-
-  const loadStats = useCallback(() => {
-    getStats().then(setStats).catch(() => {})
-  }, [])
 
   useEffect(() => { loadStats() }, [loadStats])
 

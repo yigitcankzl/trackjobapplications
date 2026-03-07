@@ -21,7 +21,7 @@ interface Props {
   onStatusChange: (id: number, newStatus: ApplicationStatus) => void
 }
 
-const COLUMNS: ApplicationStatus[] = ['applied', 'interview', 'offer', 'rejected', 'withdrawn']
+const COLUMNS: ApplicationStatus[] = ['to_apply', 'applied', 'interview', 'offer', 'rejected', 'withdrawn']
 
 interface CardProps {
   app: JobApplication

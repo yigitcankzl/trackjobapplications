@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import DashboardLayout from '../components/layout/DashboardLayout'
 import Header from '../components/dashboard/Header'
@@ -17,7 +17,7 @@ import Pagination from '../components/ui/Pagination'
 import Button from '../components/ui/Button'
 import { PlusIcon, TableIcon, KanbanIcon, DownloadIcon } from '../components/icons'
 import { exportApplicationsCsv } from '../lib/exportCsv'
-import { getApplications, createApplication, updateApplication, deleteApplication, bulkUpdateStatus, bulkDelete } from '../services/applications'
+import { getApplications, createApplication, updateApplication, deleteApplication, bulkUpdateStatus, bulkDelete, togglePin, getStats, AppStats } from '../services/applications'
 import { ApplicationFilters, ApplicationStatus, JobApplication, ViewMode } from '../types'
 import { useToast } from '../context/ToastContext'
 import { useApplicationFilters } from '../hooks/useApplicationFilters'
@@ -57,7 +57,8 @@ export default function DashboardPage() {
       })
       .catch(() => addToast(t('dashboard.errors.loadFailed'), 'error'))
       .finally(() => setLoading(false))
-  }, [addToast, t])
+    loadStats()
+  }, [addToast, t, loadStats])
 
   const handleFiltersChange = useCallback((filters: ApplicationFilters) => {
     loadPage(1, filters)
@@ -78,13 +79,13 @@ export default function DashboardPage() {
 
   const totalPages = Math.ceil(totalCount / PAGE_SIZE)
 
-  const stats = useMemo(() => ({
-    total: totalCount,
-    applied: apps.filter(a => a.status === 'applied').length,
-    interview: apps.filter(a => a.status === 'interview').length,
-    offer: apps.filter(a => a.status === 'offer').length,
-    rejected: apps.filter(a => a.status === 'rejected').length,
-  }), [apps, totalCount])
+  const [stats, setStats] = useState<AppStats>({ total: 0, applied: 0, interview: 0, offer: 0, rejected: 0, withdrawn: 0 })
+
+  const loadStats = useCallback(() => {
+    getStats().then(setStats).catch(() => {})
+  }, [])
+
+  useEffect(() => { loadStats() }, [loadStats])
 
   async function handleAdd(data: Omit<JobApplication, 'id' | 'created_at' | 'updated_at'>) {
     try {
@@ -112,6 +113,15 @@ export default function DashboardPage() {
       const updated = await updateApplication(id, { status: newStatus })
       setApps(prev => prev.map(a => (a.id === id ? updated : a)))
       addToast(t('dashboard.toast.statusUpdated'))
+    } catch {
+      addToast(t('dashboard.errors.editFailed'), 'error')
+    }
+  }
+
+  async function handleTogglePin(id: number) {
+    try {
+      const { is_pinned } = await togglePin(id)
+      setApps(prev => prev.map(a => (a.id === id ? { ...a, is_pinned } : a)))
     } catch {
       addToast(t('dashboard.errors.editFailed'), 'error')
     }
@@ -264,12 +274,14 @@ export default function DashboardPage() {
           onToggleSelectAll={toggleSelectAll}
           onEdit={setEditTarget}
           onDelete={setDeleteTarget}
+          onTogglePin={handleTogglePin}
         />
       ) : (
         <KanbanBoard
           applications={apps}
           onEdit={setEditTarget}
           onDelete={setDeleteTarget}
+          onTogglePin={handleTogglePin}
           onStatusChange={handleStatusChange}
         />
       )}

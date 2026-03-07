@@ -73,6 +73,7 @@
     "exportPdf": "Export PDF",
     "stats": {
       "total": "Total",
+      "to_apply": "To Apply",
       "applied": "Applied",
       "interview": "Interview",
       "offer": "Offer",
@@ -80,6 +81,7 @@
       "active": "Active"
     },
     "status": {
+      "to_apply": "To Apply",
       "applied": "Applied",
       "interview": "Interview",
       "offer": "Offer",
@@ -196,6 +198,8 @@
     "aria": {
       "edit": "Edit application",
       "delete": "Delete application",
+      "apply": "Apply — open job posting",
+      "noUrl": "No URL available",
       "togglePassword": "Toggle password visibility",
       "changeLanguage": "Change language"
     },

@@ -276,7 +276,8 @@
     "delete": "Delete",
     "contacts": "Contacts",
     "interviews": "Interview Stages",
-    "attachments": "Attachments"
+    "attachments": "Attachments",
+    "addToCalendar": "Add to Calendar"
   },
   "coverLetters": {
     "title": "Cover Letters",

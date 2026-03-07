@@ -276,7 +276,8 @@
     "delete": "Sil",
     "contacts": "Kişiler",
     "interviews": "Mülakat Aşamaları",
-    "attachments": "Ekler"
+    "attachments": "Ekler",
+    "addToCalendar": "Takvime Ekle"
   },
   "coverLetters": {
     "title": "Ön Yazılar",

@@ -61,6 +61,7 @@ export async function togglePin(id: number): Promise<{ is_pinned: boolean }> {
 
 export interface AppStats {
   total: number
+  to_apply: number
   applied: number
   interview: number
   offer: number

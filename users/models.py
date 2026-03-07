@@ -56,3 +56,26 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+
+
+class NotificationPreference(models.Model):
+    REMINDER_HOUR_CHOICES = [
+        (1, "1 hour before"),
+        (6, "6 hours before"),
+        (24, "24 hours before"),
+        (48, "48 hours before"),
+    ]
+
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name="notification_preferences",
+    )
+    email_notifications_enabled = models.BooleanField(default=False)
+    interview_reminder_hours = models.PositiveIntegerField(
+        default=24,
+        choices=REMINDER_HOUR_CHOICES,
+    )
+
+    def __str__(self):
+        return f"NotificationPreference for {self.user}"

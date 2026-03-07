@@ -105,7 +105,7 @@ async function handleMessage(message) {
           url: message.url,
           source: message.source,
           applied_date: message.applied_date,
-          status: 'applied',
+          status: message.status || 'to_apply',
         };
         if (message.notes) payload.notes = message.notes;
         const res = await apiFetch('/applications/', {

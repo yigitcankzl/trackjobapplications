@@ -47,7 +47,7 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -144,15 +144,13 @@ CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND", "redis://localho
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_BEAT_SCHEDULE = {
-    "check-stale-applications": {
-        "task": "applications.tasks.check_stale_applications",
-        "schedule": crontab(hour=9, minute=0),
-    },
     "interview-reminders": {
         "task": "applications.tasks.send_interview_reminders",
-        "schedule": crontab(hour=8, minute=0),
+        "schedule": crontab(minute=0),
     },
 }
+
+FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://localhost:3003")
 
 # Email
 EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend")

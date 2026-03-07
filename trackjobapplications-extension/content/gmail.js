@@ -76,12 +76,13 @@ function extractEmailData() {
   return { company, position, subject, senderName, senderEmail, body };
 }
 
-function createTrackButton(data) {
+const CONTAINER_ID = 'tja-gmail-btn-container';
+
+function createGmailActionButton(label, color, hoverColor, status, data) {
   const btn = document.createElement('button');
-  btn.id = BUTTON_ID;
-  btn.textContent = 'Track Job';
+  btn.textContent = label;
   btn.style.cssText = `
-    background: #3b82f6;
+    background: ${color};
     color: #fff;
     border: none;
     border-radius: 6px;
@@ -89,22 +90,17 @@ function createTrackButton(data) {
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
-    margin-left: 10px;
     transition: background 0.15s;
     vertical-align: middle;
   `;
 
-  btn.addEventListener('mouseenter', () => {
-    if (!btn.disabled) btn.style.background = '#2563eb';
-  });
-  btn.addEventListener('mouseleave', () => {
-    if (!btn.disabled) btn.style.background = '#3b82f6';
-  });
+  btn.addEventListener('mouseenter', () => { if (!btn.disabled) btn.style.background = hoverColor; });
+  btn.addEventListener('mouseleave', () => { if (!btn.disabled) btn.style.background = color; });
 
   btn.addEventListener('click', async () => {
-    btn.disabled = true;
+    const container = document.getElementById(CONTAINER_ID);
+    container.querySelectorAll('button').forEach(b => { b.disabled = true; });
     btn.textContent = 'Saving...';
-    btn.style.background = '#93c5fd';
 
     const today = new Date().toISOString().split('T')[0];
     const notes = `From email: ${data.subject}\nSender: ${data.senderName} <${data.senderEmail}>`;
@@ -117,18 +113,19 @@ function createTrackButton(data) {
       source: 'other',
       applied_date: today,
       notes: notes,
+      status: status,
     });
 
     if (result.success) {
-      btn.textContent = 'Tracked!';
-      btn.style.background = '#10b981';
+      btn.textContent = status === 'to_apply' ? 'Saved!' : 'Applied!';
+      btn.style.background = color;
     } else {
       btn.textContent = result.error || 'Error';
       btn.style.background = '#ef4444';
       setTimeout(() => {
-        btn.disabled = false;
-        btn.textContent = 'Track Job';
-        btn.style.background = '#3b82f6';
+        container.querySelectorAll('button').forEach(b => { b.disabled = false; });
+        btn.textContent = label;
+        btn.style.background = color;
       }, 3000);
     }
   });
@@ -137,7 +134,7 @@ function createTrackButton(data) {
 }
 
 function injectButton() {
-  if (document.getElementById(BUTTON_ID)) return;
+  if (document.getElementById(CONTAINER_ID)) return;
 
   const subjectEl = document.querySelector('h2[data-thread-perm-id]') ||
     document.querySelector('h2.hP');
@@ -146,8 +143,12 @@ function injectButton() {
   const data = extractEmailData();
   if (!data.subject) return;
 
-  const btn = createTrackButton(data);
-  subjectEl.parentElement.appendChild(btn);
+  const container = document.createElement('span');
+  container.id = CONTAINER_ID;
+  container.style.cssText = 'display: inline-flex; gap: 6px; margin-left: 10px; vertical-align: middle;';
+  container.appendChild(createGmailActionButton('To Apply', '#6366f1', '#4f46e5', 'to_apply', data));
+  container.appendChild(createGmailActionButton('Applied', '#3b82f6', '#2563eb', 'applied', data));
+  subjectEl.parentElement.appendChild(container);
 }
 
 // Track URL changes for Gmail SPA navigation
@@ -157,7 +158,7 @@ function checkAndInject() {
   const currentUrl = window.location.href;
   if (currentUrl !== lastUrl) {
     lastUrl = currentUrl;
-    const existing = document.getElementById(BUTTON_ID);
+    const existing = document.getElementById(CONTAINER_ID);
     if (existing) existing.remove();
   }
   injectButton();

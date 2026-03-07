@@ -259,6 +259,21 @@
     "downloadResume": "Özgeçmişi İndir",
     "dropAvatar": "Fotoğrafı buraya bırak",
     "dropResume": "Dosyayı buraya bırak",
+    "notifications": {
+      "title": "E-posta Bildirimleri",
+      "description": "Mülakat hatırlatmalarını e-posta ile al",
+      "reminderTime": "Mülakatımdan önce hatırlat",
+      "enabled": "E-posta bildirimleri açıldı",
+      "disabled": "E-posta bildirimleri kapatıldı",
+      "saved": "Bildirim tercihleri kaydedildi",
+      "saveFailed": "Bildirim tercihleri kaydedilemedi",
+      "hours": {
+        "1": "1 saat",
+        "6": "6 saat",
+        "24": "24 saat",
+        "48": "48 saat"
+      }
+    },
     "errors": {
       "passwordMismatch": "Şifreler eşleşmiyor",
       "saveFailed": "Profil kaydedilemedi",

@@ -259,6 +259,21 @@
     "downloadResume": "Download Resume",
     "dropAvatar": "Drop image here",
     "dropResume": "Drop file here",
+    "notifications": {
+      "title": "Email Notifications",
+      "description": "Get interview reminders via email",
+      "reminderTime": "Remind me before interview",
+      "enabled": "Email notifications enabled",
+      "disabled": "Email notifications disabled",
+      "saved": "Notification preferences saved",
+      "saveFailed": "Failed to save notification preferences",
+      "hours": {
+        "1": "1 hour",
+        "6": "6 hours",
+        "24": "24 hours",
+        "48": "48 hours"
+      }
+    },
     "errors": {
       "passwordMismatch": "Passwords do not match",
       "saveFailed": "Failed to save profile",

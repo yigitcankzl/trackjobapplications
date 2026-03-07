@@ -72,7 +72,7 @@ class ApplicationViewSet(viewsets.ModelViewSet):
         qs = self.request.user.applications.all()
         total = qs.count()
         status_counts = qs.values("status").annotate(count=Count("id"))
-        result = {"total": total, "applied": 0, "interview": 0, "offer": 0, "rejected": 0, "withdrawn": 0}
+        result = {"total": total, "to_apply": 0, "applied": 0, "interview": 0, "offer": 0, "rejected": 0, "withdrawn": 0}
         for entry in status_counts:
             result[entry["status"]] = entry["count"]
         return Response(result)

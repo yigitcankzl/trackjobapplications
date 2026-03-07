@@ -113,19 +113,39 @@ button {
   color: #111827;
 }
 
-#add-btn {
-  width: 100%;
+.btn-group {
+  display: flex;
+  gap: 8px;
   margin-top: 10px;
-  background: #10b981;
+}
+
+.btn-save {
+  flex: 1;
+  background: #6366f1;
   color: #fff;
 }
 
-#add-btn:hover {
-  background: #059669;
+.btn-save:hover {
+  background: #4f46e5;
 }
 
-#add-btn:disabled {
-  background: #6ee7b7;
+.btn-save:disabled {
+  background: #a5b4fc;
+  cursor: not-allowed;
+}
+
+.btn-apply {
+  flex: 1;
+  background: #3b82f6;
+  color: #fff;
+}
+
+.btn-apply:hover {
+  background: #2563eb;
+}
+
+.btn-apply:disabled {
+  background: #93c5fd;
   cursor: not-allowed;
 }
 

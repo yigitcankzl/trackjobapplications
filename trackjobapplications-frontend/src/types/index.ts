@@ -19,6 +19,7 @@ export interface AuthTokens {
 }
 
 export type ApplicationStatus =
+  | 'to_apply'
   | 'applied'
   | 'interview'
   | 'offer'

@@ -15,7 +15,7 @@ import ImportModal from '../components/dashboard/ImportModal'
 import InterviewReminderPopup from '../components/dashboard/InterviewReminderPopup'
 import Pagination from '../components/ui/Pagination'
 import Button from '../components/ui/Button'
-import { PlusIcon, TableIcon, KanbanIcon, DownloadIcon } from '../components/icons'
+import { PlusIcon, TableIcon, KanbanIcon, DownloadIcon, RefreshIcon } from '../components/icons'
 import { exportApplicationsCsv } from '../lib/exportCsv'
 import { getApplications, createApplication, updateApplication, deleteApplication, bulkUpdateStatus, bulkDelete, togglePin, getStats, exportPdf, AppStats } from '../services/applications'
 import { ApplicationFilters, ApplicationStatus, JobApplication, ViewMode } from '../types'
@@ -203,6 +203,9 @@ export default function DashboardPage() {
               </button>
             </div>
 
+            <Button variant="secondary" onClick={() => loadPage(page)}>
+              <RefreshIcon />
+            </Button>
             <Button variant="secondary" onClick={() => setImportOpen(true)}>
               Import
             </Button>

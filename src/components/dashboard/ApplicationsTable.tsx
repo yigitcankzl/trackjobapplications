@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { JobApplication } from '../../types'
@@ -15,6 +16,7 @@ interface Props {
   applications: JobApplication[]
   onEdit: (app: JobApplication) => void
   onDelete: (app: JobApplication) => void
+  onTogglePin?: (id: number) => void
   selectedIds?: number[]
   onToggleSelect?: (id: number) => void
   onToggleSelectAll?: () => void
@@ -33,10 +35,11 @@ function EmptyState() {
   )
 }
 
-export default function ApplicationsTable({ applications, onEdit, onDelete, selectedIds, onToggleSelect, onToggleSelectAll }: Props) {
+export default function ApplicationsTable({ applications, onEdit, onDelete, onTogglePin, selectedIds, onToggleSelect, onToggleSelectAll }: Props) {
   const hasBulk = !!(selectedIds && onToggleSelect && onToggleSelectAll)
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const sorted = useMemo(() => [...applications].sort((a, b) => Number(b.is_pinned) - Number(a.is_pinned)), [applications])
 
   if (applications.length === 0) {
     return (
@@ -68,7 +71,7 @@ export default function ApplicationsTable({ applications, onEdit, onDelete, sele
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-50 dark:divide-gray-800">
-          {applications.map(app => (
+          {sorted.map(app => (
             <tr key={app.id} onClick={() => navigate(`/applications/${app.id}`)} className="group hover:bg-blue-50/30 dark:hover:bg-blue-900/20 transition-colors duration-150 cursor-pointer">
               {hasBulk && (
                 <td className="px-3 py-4">
@@ -112,17 +115,26 @@ export default function ApplicationsTable({ applications, onEdit, onDelete, sele
 
               {/* Actions — only visible on row hover */}
               <td className="px-6 py-4">
-                <div className="flex items-center gap-1 justify-end opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+                <div className="flex items-center gap-1 justify-end">
+                  {onTogglePin && (
+                    <button
+                      onClick={e => { e.stopPropagation(); onTogglePin(app.id) }}
+                      className={`p-1.5 rounded-lg transition-colors ${app.is_pinned ? 'text-amber-500' : 'text-gray-400 opacity-0 group-hover:opacity-100 hover:text-amber-500 hover:bg-amber-50'}`}
+                      aria-label="Pin"
+                    >
+                      <svg className="w-4 h-4" viewBox="0 0 24 24" fill={app.is_pinned ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6z" /></svg>
+                    </button>
+                  )}
                   <button
                     onClick={e => { e.stopPropagation(); onEdit(app) }}
-                    className="p-1.5 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-100 transition-colors"
+                    className="p-1.5 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-100 transition-colors opacity-0 group-hover:opacity-100"
                     aria-label={t('dashboard.aria.edit')}
                   >
                     <EditIcon />
                   </button>
                   <button
                     onClick={e => { e.stopPropagation(); onDelete(app) }}
-                    className="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+                    className="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors opacity-0 group-hover:opacity-100"
                     aria-label={t('dashboard.aria.delete')}
                   >
                     <TrashIcon />

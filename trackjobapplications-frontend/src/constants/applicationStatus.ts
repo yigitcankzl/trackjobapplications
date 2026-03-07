@@ -2,6 +2,7 @@ import { ApplicationStatus } from '../types'
 
 /** Solid fill color for progress bars, dots, chart bars */
 export const STATUS_COLORS: Record<ApplicationStatus, string> = {
+  to_apply: 'bg-indigo-500',
   applied: 'bg-blue-500',
   interview: 'bg-amber-400',
   offer: 'bg-emerald-500',
@@ -11,6 +12,7 @@ export const STATUS_COLORS: Record<ApplicationStatus, string> = {
 
 /** Text color per status */
 export const STATUS_TEXT: Record<ApplicationStatus, string> = {
+  to_apply: 'text-indigo-600',
   applied: 'text-blue-600',
   interview: 'text-amber-600',
   offer: 'text-emerald-600',
@@ -20,6 +22,7 @@ export const STATUS_TEXT: Record<ApplicationStatus, string> = {
 
 /** Light background color per status */
 export const STATUS_BG: Record<ApplicationStatus, string> = {
+  to_apply: 'bg-indigo-50',
   applied: 'bg-blue-50',
   interview: 'bg-amber-50',
   offer: 'bg-emerald-50',
@@ -28,6 +31,7 @@ export const STATUS_BG: Record<ApplicationStatus, string> = {
 }
 
 export const STATUS_CONFIG: Record<ApplicationStatus, { className: string }> = {
+  to_apply: { className: 'bg-indigo-50 text-indigo-700 ring-1 ring-indigo-200' },
   applied: { className: 'bg-blue-50 text-blue-700 ring-1 ring-blue-200' },
   interview: { className: 'bg-amber-50 text-amber-700 ring-1 ring-amber-200' },
   offer: { className: 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200' },

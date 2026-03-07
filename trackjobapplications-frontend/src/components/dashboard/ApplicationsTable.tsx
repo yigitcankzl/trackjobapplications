@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { JobApplication } from '../../types'
 import StatusBadge from './StatusBadge'
-import { EditIcon, TrashIcon, ClipboardIcon } from '../icons'
+import { EditIcon, TrashIcon, ClipboardIcon, ExternalLinkIcon } from '../icons'
 import { getAvatarColor } from '../../lib/avatar'
 import { formatMedium } from '../../lib/dates'
 
@@ -17,6 +17,7 @@ interface Props {
   onEdit: (app: JobApplication) => void
   onDelete: (app: JobApplication) => void
   onTogglePin?: (id: number) => void
+  onApply?: (app: JobApplication) => void
   selectedIds?: number[]
   onToggleSelect?: (id: number) => void
   onToggleSelectAll?: () => void
@@ -35,7 +36,7 @@ function EmptyState() {
   )
 }
 
-export default function ApplicationsTable({ applications, onEdit, onDelete, onTogglePin, selectedIds, onToggleSelect, onToggleSelectAll }: Props) {
+export default function ApplicationsTable({ applications, onEdit, onDelete, onTogglePin, onApply, selectedIds, onToggleSelect, onToggleSelectAll }: Props) {
   const hasBulk = !!(selectedIds && onToggleSelect && onToggleSelectAll)
   const { t } = useTranslation()
   const navigate = useNavigate()
@@ -123,6 +124,21 @@ export default function ApplicationsTable({ applications, onEdit, onDelete, onTo
                       aria-label="Pin"
                     >
                       <svg className="w-4 h-4" viewBox="0 0 24 24" fill={app.is_pinned ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6z" /></svg>
+                    </button>
+                  )}
+                  {onApply && (
+                    <button
+                      onClick={e => { e.stopPropagation(); onApply(app) }}
+                      disabled={!app.url}
+                      className={`p-1.5 rounded-lg transition-colors ${
+                        app.url
+                          ? 'text-gray-400 opacity-0 group-hover:opacity-100 hover:text-emerald-600 hover:bg-emerald-50'
+                          : 'text-gray-200 cursor-not-allowed opacity-0 group-hover:opacity-100'
+                      }`}
+                      aria-label={app.url ? t('dashboard.aria.apply') : t('dashboard.aria.noUrl')}
+                      title={app.url ? t('dashboard.aria.apply') : t('dashboard.aria.noUrl')}
+                    >
+                      <ExternalLinkIcon />
                     </button>
                   )}
                   <button

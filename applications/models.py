@@ -120,6 +120,7 @@ class InterviewStage(models.Model):
     scheduled_at = models.DateTimeField()
     notes = models.TextField(blank=True, default="")
     completed = models.BooleanField(default=False)
+    reminder_sent = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

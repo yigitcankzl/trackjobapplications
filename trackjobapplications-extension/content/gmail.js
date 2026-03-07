@@ -146,9 +146,6 @@ function injectButton() {
   const data = extractEmailData();
   if (!data.subject) return;
 
-  // Only show button for job-related emails
-  if (!isJobRelatedEmail(data.subject, data.body)) return;
-
   const btn = createTrackButton(data);
   subjectEl.parentElement.appendChild(btn);
 }

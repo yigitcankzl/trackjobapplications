@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}TrackJobs{% endblock %}</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f3f4f6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f3f4f6; padding: 32px 0;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%;">
+          <!-- Header -->
+          <tr>
+            <td style="background-color: #2563eb; padding: 24px 32px; border-radius: 12px 12px 0 0;">
+              <h1 style="margin: 0; color: #ffffff; font-size: 22px; font-weight: 700; letter-spacing: -0.5px;">TrackJobs</h1>
+            </td>
+          </tr>
+          <!-- Content -->
+          <tr>
+            <td style="background-color: #ffffff; padding: 32px;">
+              {% block content %}{% endblock %}
+            </td>
+          </tr>
+          <!-- Footer -->
+          <tr>
+            <td style="background-color: #f9fafb; padding: 20px 32px; border-radius: 0 0 12px 12px; border-top: 1px solid #e5e7eb;">
+              <p style="margin: 0; color: #9ca3af; font-size: 13px; text-align: center;">
+                This is an automated notification from TrackJobs.
+                <br>
+                <a href="{{ frontend_url }}" style="color: #2563eb; text-decoration: none;">Open TrackJobs</a>
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

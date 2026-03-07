@@ -33,6 +33,7 @@ class Application(models.Model):
     source = models.CharField(max_length=20, choices=SOURCE_CHOICES, blank=True, default="")
     interview_date = models.DateTimeField(null=True, blank=True)
     tags = models.ManyToManyField("Tag", blank=True, related_name="applications")
+    is_pinned = models.BooleanField(default=False)
     notes = models.TextField(blank=True, default="")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

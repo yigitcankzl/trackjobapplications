@@ -103,6 +103,7 @@ class ApplicationSerializer(serializers.ModelSerializer):
             "url",
             "source",
             "interview_date",
+            "is_pinned",
             "notes",
             "created_at",
             "updated_at",
@@ -111,3 +112,18 @@ class ApplicationSerializer(serializers.ModelSerializer):
             "tag_ids",
         )
         read_only_fields = ("id", "created_at", "updated_at")
+
+    def validate(self, attrs):
+        request = self.context.get("request")
+        if request and request.user.is_authenticated:
+            company = attrs.get("company", getattr(self.instance, "company", None))
+            position = attrs.get("position", getattr(self.instance, "position", None))
+            if company and position:
+                qs = Application.objects.filter(user=request.user, company__iexact=company, position__iexact=position)
+                if self.instance:
+                    qs = qs.exclude(pk=self.instance.pk)
+                if qs.exists():
+                    raise serializers.ValidationError(
+                        {"company": f"You already have an application for {company} — {position}."}
+                    )
+        return attrs

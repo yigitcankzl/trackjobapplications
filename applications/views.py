@@ -57,6 +57,25 @@ class ApplicationViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
+    @action(detail=True, methods=["post"], url_path="toggle-pin")
+    def toggle_pin(self, request, pk=None):
+        app = self.get_object()
+        app.is_pinned = not app.is_pinned
+        app.save(update_fields=["is_pinned"])
+        return Response({"is_pinned": app.is_pinned})
+
+    @action(detail=False, methods=["get"], url_path="stats")
+    def stats(self, request):
+        from django.db.models import Count, Q
+
+        qs = self.request.user.applications.all()
+        total = qs.count()
+        status_counts = qs.values("status").annotate(count=Count("id"))
+        result = {"total": total, "applied": 0, "interview": 0, "offer": 0, "rejected": 0, "withdrawn": 0}
+        for entry in status_counts:
+            result[entry["status"]] = entry["count"]
+        return Response(result)
+
     @action(detail=False, methods=["post"], url_path="bulk-update-status")
     def bulk_update_status(self, request):
         ids = request.data.get("ids", [])

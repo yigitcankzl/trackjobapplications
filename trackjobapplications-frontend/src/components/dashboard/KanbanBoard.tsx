@@ -102,7 +102,7 @@ export default function KanbanBoard({ applications, onEdit, onDelete, onStatusCh
 
   const grouped = useMemo(() => {
     const map: Record<ApplicationStatus, JobApplication[]> = {
-      applied: [], interview: [], offer: [], rejected: [], withdrawn: [],
+      to_apply: [], applied: [], interview: [], offer: [], rejected: [], withdrawn: [],
     }
     for (const app of applications) {
       map[app.status].push(app)

@@ -66,7 +66,10 @@ class ApplicationViewSet(viewsets.ModelViewSet):
     ordering = ["-applied_date"]
 
     def get_queryset(self):
-        return self.request.user.applications.prefetch_related("note_entries", "tags").all()
+        qs = self.request.user.applications.all()
+        if self.action == "list":
+            return qs.prefetch_related("tags")
+        return qs.prefetch_related("note_entries", "tags")
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)

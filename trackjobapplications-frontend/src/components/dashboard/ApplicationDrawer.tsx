@@ -101,19 +101,6 @@ export default function ApplicationDrawer({ app, onClose, onEdit, onDelete }: Pr
                   </div>
                 </div>
 
-                {app.interview_date && (
-                  <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-purple-50 dark:bg-purple-900/30 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <CalendarIcon />
-                    </div>
-                    <div>
-                      <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-0.5">
-                        {t('dashboard.drawer.interviewDate')}
-                      </p>
-                      <p className="text-sm text-gray-800 dark:text-gray-200">{formatLong(app.interview_date)}</p>
-                    </div>
-                  </div>
-                )}
 
                 {app.url && (
                   <div className="flex items-start gap-3">

@@ -12,6 +12,7 @@ import { getApplication, updateApplication, deleteApplication } from '../service
 import { useToast } from '../context/ToastContext'
 import { getAvatarColor } from '../lib/avatar'
 import { formatLong, formatMedium } from '../lib/dates'
+import { isSafeUrl } from '../lib/url'
 import { JobApplication } from '../types'
 import TagBadge from '../components/dashboard/TagBadge'
 import ContactList from '../components/detail/ContactList'
@@ -150,7 +151,7 @@ export default function ApplicationDetailPage() {
           </div>
 
 
-          {app.url && (
+          {app.url && isSafeUrl(app.url) && (
             <div className="flex items-start gap-3">
               <div className="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center flex-shrink-0 mt-0.5">
                 <LinkIcon />

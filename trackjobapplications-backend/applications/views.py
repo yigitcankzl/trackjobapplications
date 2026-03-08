@@ -260,7 +260,9 @@ class ApplicationViewSet(viewsets.ModelViewSet):
             rows_iter = ws.iter_rows(values_only=True)
             headers = [str(h or "").strip() for h in next(rows_iter)]
             result = []
-            for row in rows_iter:
+            for i, row in enumerate(rows_iter):
+                if i >= MAX_IMPORT_ROWS:
+                    break
                 result.append({h: _sanitize_cell(str(v) if v is not None else "") for h, v in zip(headers, row)})
             return result
         finally:

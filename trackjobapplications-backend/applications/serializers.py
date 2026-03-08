@@ -80,6 +80,8 @@ class ApplicationNoteSerializer(serializers.ModelSerializer):
 
 
 class CoverLetterTemplateSerializer(serializers.ModelSerializer):
+    content = serializers.CharField(max_length=50000)
+
     class Meta:
         model = CoverLetterTemplate
         fields = ("id", "name", "content", "created_at", "updated_at")
@@ -109,7 +111,6 @@ class ApplicationSerializer(serializers.ModelSerializer):
             "applied_date",
             "url",
             "source",
-            "interview_date",
             "is_pinned",
             "notes",
             "created_at",

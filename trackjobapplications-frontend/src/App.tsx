@@ -1,17 +1,19 @@
+import { lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { ThemeProvider } from './context/ThemeContext'
 import { ToastProvider } from './context/ToastContext'
 import { AuthProvider } from './context/AuthContext'
 import ErrorBoundary from './components/ErrorBoundary'
 import PrivateRoute from './components/auth/PrivateRoute'
-import WelcomePage from './pages/WelcomePage'
-import LoginPage from './pages/LoginPage'
-import DashboardPage from './pages/DashboardPage'
-import AnalyticsPage from './pages/AnalyticsPage'
-import ProfilePage from './pages/ProfilePage'
-import ApplicationDetailPage from './pages/ApplicationDetailPage'
-import CalendarPage from './pages/CalendarPage'
-import CoverLettersPage from './pages/CoverLettersPage'
+
+const WelcomePage = lazy(() => import('./pages/WelcomePage'))
+const LoginPage = lazy(() => import('./pages/LoginPage'))
+const DashboardPage = lazy(() => import('./pages/DashboardPage'))
+const AnalyticsPage = lazy(() => import('./pages/AnalyticsPage'))
+const ProfilePage = lazy(() => import('./pages/ProfilePage'))
+const ApplicationDetailPage = lazy(() => import('./pages/ApplicationDetailPage'))
+const CalendarPage = lazy(() => import('./pages/CalendarPage'))
+const CoverLettersPage = lazy(() => import('./pages/CoverLettersPage'))
 
 export default function App() {
   return (
@@ -20,6 +22,7 @@ export default function App() {
       <ToastProvider>
         <BrowserRouter>
           <AuthProvider>
+            <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" /></div>}>
             <Routes>
               <Route path="/" element={<WelcomePage />} />
               <Route path="/login" element={<LoginPage />} />
@@ -31,6 +34,7 @@ export default function App() {
               <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
+            </Suspense>
           </AuthProvider>
         </BrowserRouter>
       </ToastProvider>

@@ -6,9 +6,13 @@ from celery.schedules import crontab
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get(
-    "SECRET_KEY", "django-insecure-dev-only-key-do-not-use-in-production"
-)
+SECRET_KEY = os.environ.get("SECRET_KEY")
+if not SECRET_KEY:
+    if os.environ.get("DEBUG", "False") == "True":
+        SECRET_KEY = "django-insecure-dev-only-key-do-not-use-in-production"
+    else:
+        from django.core.exceptions import ImproperlyConfigured
+        raise ImproperlyConfigured("SECRET_KEY environment variable is required in production")
 
 DEBUG = os.environ.get("DEBUG", "False") == "True"
 

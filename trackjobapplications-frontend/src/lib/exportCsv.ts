@@ -24,9 +24,15 @@ export function exportApplicationsCsv(apps: JobApplication[]) {
   URL.revokeObjectURL(url)
 }
 
+const FORMULA_PREFIXES = ['=', '+', '-', '@', '\t', '\r']
+
 function escape(value: string): string {
-  if (value.includes(',') || value.includes('"') || value.includes('\n')) {
-    return `"${value.replace(/"/g, '""')}"`
+  let safe = value
+  if (safe && FORMULA_PREFIXES.includes(safe[0])) {
+    safe = `'${safe}`
   }
-  return value
+  if (safe.includes(',') || safe.includes('"') || safe.includes('\n')) {
+    return `"${safe.replace(/"/g, '""')}"`
+  }
+  return safe
 }

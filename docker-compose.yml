@@ -15,6 +15,9 @@ services:
 
   redis:
     image: redis:7-alpine
+    command: redis-server --maxmemory 128mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis_data:/data
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
@@ -46,7 +49,7 @@ services:
     build:
       context: ./trackjobapplications-backend
       dockerfile: Dockerfile
-    command: celery -A config worker -l info
+    command: celery -A config worker -l info --concurrency=4 --prefetch-multiplier=1
     volumes:
       - ./trackjobapplications-backend:/app
     env_file:
@@ -56,8 +59,8 @@ services:
       CELERY_BROKER_URL: redis://redis:6379/0
       CELERY_RESULT_BACKEND: redis://redis:6379/0
     depends_on:
-      backend:
-        condition: service_started
+      db:
+        condition: service_healthy
       redis:
         condition: service_healthy
 
@@ -75,8 +78,8 @@ services:
       CELERY_BROKER_URL: redis://redis:6379/0
       CELERY_RESULT_BACKEND: redis://redis:6379/0
     depends_on:
-      backend:
-        condition: service_started
+      db:
+        condition: service_healthy
       redis:
         condition: service_healthy
 
@@ -97,3 +100,4 @@ services:
 
 volumes:
   postgres_data:
+  redis_data:

@@ -307,8 +307,13 @@ class ApplicationNoteViewSet(viewsets.ModelViewSet):
             application__user=self.request.user,
         )
 
+    MAX_NOTES_PER_APPLICATION = 50
+
     def perform_create(self, serializer):
         application = self._get_application()
+        if application.note_entries.count() >= self.MAX_NOTES_PER_APPLICATION:
+            from rest_framework.exceptions import ValidationError
+            raise ValidationError({"detail": f"Maximum {self.MAX_NOTES_PER_APPLICATION} notes per application."})
         serializer.save(application=application)
 
 
@@ -327,6 +332,7 @@ class ApplicationContactViewSet(_NestedApplicationMixin, viewsets.ModelViewSet):
     serializer_class = ApplicationContactSerializer
     permission_classes = [permissions.IsAuthenticated]
     pagination_class = None
+    MAX_CONTACTS_PER_APPLICATION = 20
 
     def get_queryset(self):
         return ApplicationContact.objects.select_related("application").filter(
@@ -335,13 +341,18 @@ class ApplicationContactViewSet(_NestedApplicationMixin, viewsets.ModelViewSet):
         )
 
     def perform_create(self, serializer):
-        serializer.save(application=self._get_application())
+        app = self._get_application()
+        if app.contacts.count() >= self.MAX_CONTACTS_PER_APPLICATION:
+            from rest_framework.exceptions import ValidationError
+            raise ValidationError({"detail": f"Maximum {self.MAX_CONTACTS_PER_APPLICATION} contacts per application."})
+        serializer.save(application=app)
 
 
 class InterviewStageViewSet(_NestedApplicationMixin, viewsets.ModelViewSet):
     serializer_class = InterviewStageSerializer
     permission_classes = [permissions.IsAuthenticated]
     pagination_class = None
+    MAX_INTERVIEWS_PER_APPLICATION = 20
 
     def get_queryset(self):
         return InterviewStage.objects.select_related("application").filter(
@@ -350,7 +361,11 @@ class InterviewStageViewSet(_NestedApplicationMixin, viewsets.ModelViewSet):
         )
 
     def perform_create(self, serializer):
-        serializer.save(application=self._get_application())
+        app = self._get_application()
+        if app.interview_stages.count() >= self.MAX_INTERVIEWS_PER_APPLICATION:
+            from rest_framework.exceptions import ValidationError
+            raise ValidationError({"detail": f"Maximum {self.MAX_INTERVIEWS_PER_APPLICATION} interview stages per application."})
+        serializer.save(application=app)
 
 
 class ApplicationAttachmentViewSet(_NestedApplicationMixin, viewsets.ModelViewSet):
@@ -359,6 +374,7 @@ class ApplicationAttachmentViewSet(_NestedApplicationMixin, viewsets.ModelViewSe
     parser_classes = [MultiPartParser, FormParser, JSONParser]
     pagination_class = None
     http_method_names = ["get", "post", "delete"]
+    MAX_ATTACHMENTS_PER_APPLICATION = 10
 
     def get_queryset(self):
         return ApplicationAttachment.objects.select_related("application").filter(
@@ -367,4 +383,8 @@ class ApplicationAttachmentViewSet(_NestedApplicationMixin, viewsets.ModelViewSe
         )
 
     def perform_create(self, serializer):
-        serializer.save(application=self._get_application())
+        app = self._get_application()
+        if app.attachments.count() >= self.MAX_ATTACHMENTS_PER_APPLICATION:
+            from rest_framework.exceptions import ValidationError
+            raise ValidationError({"detail": f"Maximum {self.MAX_ATTACHMENTS_PER_APPLICATION} attachments per application."})
+        serializer.save(application=app)

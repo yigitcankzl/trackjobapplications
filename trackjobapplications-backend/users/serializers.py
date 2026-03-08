@@ -123,6 +123,9 @@ class LogoutSerializer(serializers.Serializer):
             self.token = RefreshToken(attrs["refresh"])
         except TokenError:
             raise serializers.ValidationError({"refresh": "Token is invalid or expired."})
+        request = self.context.get("request")
+        if request and request.user.id != self.token.get("user_id"):
+            raise serializers.ValidationError({"refresh": "Token is invalid or expired."})
         return attrs
 
     def save(self):

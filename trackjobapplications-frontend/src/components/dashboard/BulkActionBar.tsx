@@ -10,7 +10,7 @@ interface Props {
   onClear: () => void
 }
 
-const STATUS_KEYS: ApplicationStatus[] = ['applied', 'interview', 'offer', 'rejected', 'withdrawn']
+const STATUS_KEYS: ApplicationStatus[] = ['to_apply', 'applied', 'interview', 'offer', 'rejected', 'withdrawn']
 
 export default function BulkActionBar({ selectedCount, onUpdateStatus, onDelete, onClear }: Props) {
   const { t } = useTranslation()

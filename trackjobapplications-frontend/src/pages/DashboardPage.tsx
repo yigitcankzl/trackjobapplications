@@ -44,7 +44,7 @@ export default function DashboardPage() {
 
   const filtersRef = useRef<ApplicationFilters>({})
 
-  const [stats, setStats] = useState<AppStats>({ total: 0, applied: 0, interview: 0, offer: 0, rejected: 0, withdrawn: 0 })
+  const [stats, setStats] = useState<AppStats>({ total: 0, to_apply: 0, applied: 0, interview: 0, offer: 0, rejected: 0, withdrawn: 0 })
 
   const loadStats = useCallback(() => {
     getStats().then(setStats).catch(() => {})

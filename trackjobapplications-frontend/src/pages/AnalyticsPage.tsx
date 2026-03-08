@@ -11,7 +11,7 @@ import { SOURCE_CONFIG, SOURCE_KEYS } from '../constants/applicationSource'
 import { formatMonthYear } from '../lib/dates'
 import { ChevronRightIcon } from '../components/icons'
 
-const STATUSES: ApplicationStatus[] = ['applied', 'interview', 'offer', 'rejected', 'withdrawn']
+const STATUSES: ApplicationStatus[] = ['to_apply', 'applied', 'interview', 'offer', 'rejected', 'withdrawn']
 
 export default function AnalyticsPage() {
   const { t } = useTranslation()
@@ -25,7 +25,7 @@ export default function AnalyticsPage() {
   }, [addToast, t])
 
   const counts: Record<ApplicationStatus, number> = {
-    applied: 0, interview: 0, offer: 0, rejected: 0, withdrawn: 0,
+    to_apply: 0, applied: 0, interview: 0, offer: 0, rejected: 0, withdrawn: 0,
   }
   for (const app of apps) {
     counts[app.status] += 1

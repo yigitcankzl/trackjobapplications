@@ -85,7 +85,7 @@ export default function DashboardPage() {
 
   const totalPages = Math.ceil(totalCount / PAGE_SIZE)
 
-  useEffect(() => { loadStats() }, [loadStats])
+  // Stats are loaded via loadPage() which is called on mount by useApplicationFilters
 
   async function handleAdd(data: Omit<JobApplication, 'id' | 'created_at' | 'updated_at'>) {
     try {

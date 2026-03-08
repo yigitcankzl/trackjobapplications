@@ -20,11 +20,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate()
 
   useEffect(() => {
+    let active = true
     if (auth.isAuthenticated()) {
-      auth.fetchMe().then(setUser).catch(() => auth.clearTokens()).finally(() => setLoading(false))
+      auth.fetchMe()
+        .then(me => { if (active) setUser(me) })
+        .catch(() => auth.clearTokens())
+        .finally(() => { if (active) setLoading(false) })
     } else {
       setLoading(false)
     }
+    return () => { active = false }
   }, [])
 
   useEffect(() => {

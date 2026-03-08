@@ -8,4 +8,4 @@ def create_notification_preferences(sender, instance, created, **kwargs):
     if created:
         from users.models import NotificationPreference
 
-        NotificationPreference.objects.create(user=instance)
+        NotificationPreference.objects.get_or_create(user=instance)

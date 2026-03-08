@@ -1,5 +1,12 @@
+import uuid
+
 from django.conf import settings
 from django.db import models
+
+
+def attachment_upload_path(instance, filename):
+    ext = filename.rsplit(".", 1)[-1] if "." in filename else ""
+    return f"attachments/{uuid.uuid4().hex}.{ext}"
 
 
 class Application(models.Model):
@@ -32,7 +39,6 @@ class Application(models.Model):
     applied_date = models.DateField()
     url = models.URLField(blank=True, default="")
     source = models.CharField(max_length=20, choices=SOURCE_CHOICES, blank=True, default="")
-    interview_date = models.DateTimeField(null=True, blank=True)
     tags = models.ManyToManyField("Tag", blank=True, related_name="applications")
     is_pinned = models.BooleanField(default=False)
     notes = models.TextField(blank=True, default="")
@@ -43,6 +49,7 @@ class Application(models.Model):
         ordering = ["-applied_date"]
         indexes = [
             models.Index(fields=["status", "updated_at"]),
+            models.Index(fields=["-applied_date"]),
         ]
 
     def __str__(self):
@@ -98,7 +105,9 @@ class ApplicationContact(models.Model):
         ordering = ["-created_at"]
 
     def __str__(self):
-        return f"{self.name} ({self.role})"
+        if self.role:
+            return f"{self.name} ({self.role})"
+        return self.name
 
 
 class InterviewStage(models.Model):
@@ -156,7 +165,7 @@ class ApplicationAttachment(models.Model):
         on_delete=models.CASCADE,
         related_name="attachments",
     )
-    file = models.FileField(upload_to="attachments/")
+    file = models.FileField(upload_to=attachment_upload_path)
     name = models.CharField(max_length=255)
     uploaded_at = models.DateTimeField(auto_now_add=True)
 

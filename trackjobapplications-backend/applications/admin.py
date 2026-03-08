@@ -32,6 +32,7 @@ class ApplicationAdmin(admin.ModelAdmin):
     list_display = ("company", "position", "status", "user", "applied_date")
     list_filter = ("status", "source")
     search_fields = ("company", "position")
+    list_select_related = ("user",)
     inlines = [ApplicationNoteInline, ApplicationContactInline, InterviewStageInline, ApplicationAttachmentInline]
 
 

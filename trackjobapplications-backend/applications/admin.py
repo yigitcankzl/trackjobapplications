@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Application, ApplicationAttachment, ApplicationContact, ApplicationNote, InterviewStage, Tag
+from .models import Application, ApplicationAttachment, ApplicationContact, ApplicationNote, CoverLetterTemplate, InterviewStage, Tag
 
 
 class ApplicationNoteInline(admin.TabularInline):
@@ -40,3 +40,10 @@ class TagAdmin(admin.ModelAdmin):
     list_display = ("name", "color", "user")
     list_filter = ("user",)
     search_fields = ("name",)
+
+
+@admin.register(CoverLetterTemplate)
+class CoverLetterTemplateAdmin(admin.ModelAdmin):
+    list_display = ("title", "user", "created_at")
+    list_filter = ("user",)
+    search_fields = ("title",)

@@ -19,9 +19,11 @@ export default function AnalyticsPage() {
   const [apps, setApps] = useState<JobApplication[]>([])
 
   useEffect(() => {
+    let active = true
     getAllApplications()
-      .then(setApps)
-      .catch(() => addToast(t('dashboard.errors.loadFailed'), 'error'))
+      .then(data => { if (active) setApps(data) })
+      .catch(() => { if (active) addToast(t('dashboard.errors.loadFailed'), 'error') })
+    return () => { active = false }
   }, [addToast, t])
 
   const counts: Record<ApplicationStatus, number> = {

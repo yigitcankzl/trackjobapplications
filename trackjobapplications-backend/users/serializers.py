@@ -34,9 +34,32 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ("id", "email", "first_name", "last_name", "date_joined", "is_staff", "avatar", "resume", "notification_email")
         read_only_fields = ("id", "email", "date_joined", "is_staff")
 
+    AVATAR_ALLOWED_EXTENSIONS = (".jpg", ".jpeg", ".png", ".webp")
+    AVATAR_MAGIC_BYTES = {
+        b"\x89PNG": {".png"},
+        b"\xff\xd8\xff": {".jpg", ".jpeg"},
+        b"RIFF": {".webp"},
+    }
+
     def validate_avatar(self, value):
-        if value and value.size > 5 * 1024 * 1024:
+        if not value:
+            return value
+        if value.size > 5 * 1024 * 1024:
             raise serializers.ValidationError("Avatar file size must be under 5 MB.")
+        ext = value.name.rsplit(".", 1)[-1].lower() if "." in value.name else ""
+        if f".{ext}" not in self.AVATAR_ALLOWED_EXTENSIONS:
+            raise serializers.ValidationError(
+                f"Allowed avatar types: {', '.join(self.AVATAR_ALLOWED_EXTENSIONS)}"
+            )
+        header = value.read(8)
+        value.seek(0)
+        matched = False
+        for magic, exts in self.AVATAR_MAGIC_BYTES.items():
+            if header.startswith(magic) and f".{ext}" in exts:
+                matched = True
+                break
+        if not matched:
+            raise serializers.ValidationError("File content does not match its extension.")
         return value
 
     def validate_resume(self, value):
@@ -78,8 +101,8 @@ class LogoutSerializer(serializers.Serializer):
     def validate(self, attrs):
         try:
             self.token = RefreshToken(attrs["refresh"])
-        except TokenError as e:
-            raise serializers.ValidationError(str(e))
+        except TokenError:
+            raise serializers.ValidationError({"refresh": "Token is invalid or expired."})
         return attrs
 
     def save(self):

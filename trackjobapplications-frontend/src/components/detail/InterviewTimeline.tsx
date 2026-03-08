@@ -30,7 +30,7 @@ export default function InterviewTimeline({ applicationId, company, position }: 
 
   useEffect(() => {
     getInterviews(applicationId).then(setStages).catch(() => addToast('Failed to load interviews', 'error'))
-  }, [applicationId])
+  }, [applicationId, addToast])
 
   async function handleAdd() {
     if (!form.scheduled_at) return

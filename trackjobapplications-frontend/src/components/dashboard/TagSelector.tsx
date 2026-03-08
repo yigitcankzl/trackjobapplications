@@ -22,7 +22,7 @@ export default function TagSelector({ selectedIds, onChange }: Props) {
 
   useEffect(() => {
     getTags().then(setTags).catch(() => addToast('Failed to load tags', 'error'))
-  }, [])
+  }, [addToast])
 
   function toggle(id: number) {
     onChange(

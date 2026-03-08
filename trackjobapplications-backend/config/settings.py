@@ -232,5 +232,10 @@ LOGGING = {
             "level": "INFO",
             "propagate": False,
         },
+        "users": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": False,
+        },
     },
 }

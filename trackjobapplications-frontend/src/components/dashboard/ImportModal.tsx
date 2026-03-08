@@ -20,7 +20,7 @@ export default function ImportModal({ open, onClose, onSuccess }: Props) {
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<{ created: number; errors: Array<{ row: number; errors: Record<string, string[]> }> } | null>(null)
 
-  useEscapeKey(onClose)
+  useEscapeKey(onClose, open)
 
   const FIELDS = ['company', 'position', 'status', 'applied_date', 'url', 'source', 'notes']
 
@@ -32,7 +32,18 @@ export default function ImportModal({ open, onClose, onSuccess }: Props) {
     reader.onload = (e) => {
       const text = e.target?.result as string
       const lines = text.split('\n').filter(l => l.trim())
-      const parsed = lines.slice(0, 6).map(l => l.split(',').map(c => c.trim().replace(/^"|"$/g, '')))
+      const parsed = lines.slice(0, 6).map(l => {
+        const cells: string[] = []
+        let current = ''
+        let inQuotes = false
+        for (const ch of l) {
+          if (ch === '"') { inQuotes = !inQuotes; continue }
+          if (ch === ',' && !inQuotes) { cells.push(current.trim()); current = ''; continue }
+          current += ch
+        }
+        cells.push(current.trim())
+        return cells
+      })
       if (parsed.length > 0) {
         setHeaders(parsed[0])
         setPreview(parsed.slice(1))

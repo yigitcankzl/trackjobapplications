@@ -57,7 +57,7 @@ export default function CoverLettersPage() {
     try {
       if (editing) {
         const updated = await updateTemplate(editing.id, form)
-        setTemplates(prev => prev.map(t => t.id === updated.id ? updated : t))
+        setTemplates(prev => prev.map(tpl => tpl.id === updated.id ? updated : tpl))
         addToast(t('coverLetters.toast.updated'), 'success')
       } else {
         const created = await createTemplate(form)
@@ -74,7 +74,7 @@ export default function CoverLettersPage() {
     if (!deleting) return
     try {
       await deleteTemplate(deleting.id)
-      setTemplates(prev => prev.filter(t => t.id !== deleting.id))
+      setTemplates(prev => prev.filter(tpl => tpl.id !== deleting.id))
       addToast(t('coverLetters.toast.deleted'), 'success')
       setDeleting(null)
       if (editing?.id === deleting.id) closeForm()

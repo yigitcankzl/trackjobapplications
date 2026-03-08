@@ -100,6 +100,10 @@ class ChangePasswordView(APIView):
         request.user.set_password(serializer.validated_data["new_password"])
         request.user.save()
         # Blacklist all outstanding refresh tokens for this user
-        for token in OutstandingToken.objects.filter(user=request.user):
-            BlacklistedToken.objects.get_or_create(token=token)
+        tokens = OutstandingToken.objects.filter(user=request.user)
+        existing = set(BlacklistedToken.objects.filter(token__in=tokens).values_list("token_id", flat=True))
+        BlacklistedToken.objects.bulk_create(
+            [BlacklistedToken(token=t) for t in tokens if t.id not in existing],
+            ignore_conflicts=True,
+        )
         return Response({"detail": "Password updated."}, status=status.HTTP_200_OK)

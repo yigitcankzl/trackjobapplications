@@ -46,11 +46,13 @@ from .serializers import (
 
 class ApplicationPagination(PageNumberPagination):
     page_size = 20
+    page_size_query_param = "page_size"
+    max_page_size = MAX_PAGE_SIZE_ALL
 
-    def paginate_queryset(self, queryset, request, view=None):
+    def get_page_size(self, request):
         if request.query_params.get("page_size") == "all":
-            self.page_size = MAX_PAGE_SIZE_ALL
-        return super().paginate_queryset(queryset, request, view)
+            return self.max_page_size
+        return super().get_page_size(request)
 
 
 class ApplicationViewSet(viewsets.ModelViewSet):

@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
-from .models import User
+from .models import NotificationPreference, User
 
 
 @admin.register(User)
@@ -42,3 +42,9 @@ class UserAdmin(BaseUserAdmin):
         ),
     )
     search_fields = ("email", "first_name", "last_name")
+
+
+@admin.register(NotificationPreference)
+class NotificationPreferenceAdmin(admin.ModelAdmin):
+    list_display = ("user", "email_notifications_enabled", "interview_reminder_hours")
+    list_filter = ("email_notifications_enabled",)

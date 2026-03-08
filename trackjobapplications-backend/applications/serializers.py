@@ -119,7 +119,7 @@ class ApplicationSerializer(serializers.ModelSerializer):
             "tags",
             "tag_ids",
         )
-        read_only_fields = ("id", "created_at", "updated_at")
+        read_only_fields = ("id", "created_at", "updated_at", "is_pinned")
 
     def validate(self, attrs):
         request = self.context.get("request")

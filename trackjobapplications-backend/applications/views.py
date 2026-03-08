@@ -14,11 +14,22 @@ from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 from rest_framework.response import Response
 from rest_framework.throttling import ScopedRateThrottle
 
+from django.utils import timezone as tz
+
 logger = logging.getLogger(__name__)
 
 MAX_IMPORT_ROWS = 1000
+MAX_IMPORT_FILE_SIZE = 5 * 1024 * 1024  # 5 MB
 MAX_PAGE_SIZE_ALL = 500
-ALLOWED_IMPORT_FIELDS = {"company", "position", "status", "applied_date", "url", "source", "interview_date", "notes"}
+ALLOWED_IMPORT_FIELDS = {"company", "position", "status", "applied_date", "url", "source", "notes"}
+FORMULA_PREFIXES = ("=", "+", "-", "@", "\t", "\r")
+
+
+def _sanitize_cell(value):
+    """Prefix formula-like cell values to prevent CSV injection."""
+    if isinstance(value, str) and value and value[0] in FORMULA_PREFIXES:
+        return f"'{value}"
+    return value
 
 from .filters import ApplicationFilter
 from .models import Application, ApplicationAttachment, ApplicationContact, ApplicationNote, CoverLetterTemplate, InterviewStage, Tag
@@ -38,7 +49,7 @@ class ApplicationPagination(PageNumberPagination):
 
     def paginate_queryset(self, queryset, request, view=None):
         if request.query_params.get("page_size") == "all":
-            self.page_size = min(queryset.count(), MAX_PAGE_SIZE_ALL)
+            self.page_size = MAX_PAGE_SIZE_ALL
         return super().paginate_queryset(queryset, request, view)
 
 
@@ -147,7 +158,9 @@ class ApplicationViewSet(viewsets.ModelViewSet):
         if new_status not in valid_statuses:
             return Response({"error": f"Invalid status. Choose from: {valid_statuses}"}, status=status.HTTP_400_BAD_REQUEST)
         with transaction.atomic():
-            updated = self.get_queryset().filter(id__in=ids).update(status=new_status)
+            updated = self.get_queryset().filter(id__in=ids).update(
+                status=new_status, updated_at=tz.now()
+            )
         return Response({"updated": updated})
 
     @action(detail=False, methods=["post"], url_path="bulk-delete")
@@ -171,6 +184,11 @@ class ApplicationViewSet(viewsets.ModelViewSet):
         file = request.FILES.get("file")
         if not file:
             return Response({"error": "No file provided."}, status=status.HTTP_400_BAD_REQUEST)
+        if file.size > MAX_IMPORT_FILE_SIZE:
+            return Response(
+                {"error": f"File too large. Maximum is {MAX_IMPORT_FILE_SIZE // (1024 * 1024)} MB."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         column_mapping = {}
         raw_mapping = request.data.get("column_mapping", "{}")
@@ -178,7 +196,10 @@ class ApplicationViewSet(viewsets.ModelViewSet):
             try:
                 column_mapping = json.loads(raw_mapping)
             except json.JSONDecodeError:
-                pass
+                return Response(
+                    {"error": "Invalid column_mapping JSON."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
         # Validate mapping values against allowed fields
         if column_mapping:
@@ -225,7 +246,7 @@ class ApplicationViewSet(viewsets.ModelViewSet):
     def _parse_csv(file):
         decoded = file.read().decode("utf-8-sig")
         reader = csv.DictReader(io.StringIO(decoded))
-        return list(reader)
+        return [{k: _sanitize_cell(v) for k, v in row.items()} for row in reader]
 
     @staticmethod
     def _parse_excel(file):
@@ -236,7 +257,7 @@ class ApplicationViewSet(viewsets.ModelViewSet):
         headers = [str(h or "").strip() for h in next(rows_iter)]
         result = []
         for row in rows_iter:
-            result.append({h: (str(v) if v is not None else "") for h, v in zip(headers, row)})
+            result.append({h: _sanitize_cell(str(v) if v is not None else "") for h, v in zip(headers, row)})
         return result
 
 

@@ -30,7 +30,7 @@ services:
       dockerfile: Dockerfile
     command: python manage.py runserver 0.0.0.0:8000
     ports:
-      - "8000:8000"
+      - "127.0.0.1:8000:8000"
     volumes:
       - ./trackjobapplications-backend:/app
     env_file:
@@ -89,7 +89,7 @@ services:
       dockerfile: Dockerfile
       target: dev
     ports:
-      - "3003:3000"
+      - "127.0.0.1:3003:3000"
     volumes:
       - ./trackjobapplications-frontend:/app
       - /app/node_modules

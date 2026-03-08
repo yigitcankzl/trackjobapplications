@@ -36,14 +36,18 @@ export default function ApplicationDetailPage() {
       navigate('/dashboard')
       return
     }
+    let active = true
     setLoading(true)
     getApplication(Number(id))
-      .then(setApp)
+      .then(data => { if (active) setApp(data) })
       .catch(() => {
-        addToast(t('dashboard.errors.loadFailed'), 'error')
-        navigate('/dashboard')
+        if (active) {
+          addToast(t('dashboard.errors.loadFailed'), 'error')
+          navigate('/dashboard')
+        }
       })
-      .finally(() => setLoading(false))
+      .finally(() => { if (active) setLoading(false) })
+    return () => { active = false }
   }, [id, addToast, t, navigate])
 
   async function handleEdit(data: Omit<JobApplication, 'id' | 'created_at' | 'updated_at'>) {

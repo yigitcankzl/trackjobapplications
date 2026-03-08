@@ -1,12 +1,16 @@
+import logging
+
 from rest_framework import generics, permissions, status
 from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 from rest_framework.response import Response
 from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.views import APIView
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
-from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from users.models import NotificationPreference
+
+logger = logging.getLogger(__name__)
 
 from .serializers import (
     ChangePasswordSerializer,
@@ -20,6 +24,21 @@ from .serializers import (
 class ThrottledTokenObtainPairView(TokenObtainPairView):
     throttle_classes = [ScopedRateThrottle]
     throttle_scope = "login"
+
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        if response.status_code != 200:
+            logger.warning(
+                "Failed login attempt for email=%s from IP=%s",
+                request.data.get("email", ""),
+                request.META.get("REMOTE_ADDR", ""),
+            )
+        return response
+
+
+class ThrottledTokenRefreshView(TokenRefreshView):
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "token_refresh"
 
 
 class RegisterView(generics.CreateAPIView):

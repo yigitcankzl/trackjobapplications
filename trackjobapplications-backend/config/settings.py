@@ -120,6 +120,7 @@ REST_FRAMEWORK = {
         "register": "5/hour",
         "login": "10/minute",
         "import": "5/minute",
+        "token_refresh": "30/minute",
     },
 }
 

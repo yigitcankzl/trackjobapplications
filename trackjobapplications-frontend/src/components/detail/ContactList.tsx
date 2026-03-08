@@ -14,7 +14,11 @@ export default function ContactList({ applicationId }: Props) {
   const [form, setForm] = useState({ name: '', email: '', phone: '', role: '' })
 
   useEffect(() => {
-    getContacts(applicationId).then(setContacts).catch(() => addToast('Failed to load contacts', 'error'))
+    let active = true
+    getContacts(applicationId)
+      .then(data => { if (active) setContacts(data) })
+      .catch(() => { if (active) addToast('Failed to load contacts', 'error') })
+    return () => { active = false }
   }, [applicationId, addToast])
 
   async function handleAdd() {

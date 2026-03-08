@@ -19,13 +19,21 @@ export function isAuthenticated(): boolean {
 }
 
 export function saveTokens(tokens: AuthTokens): void {
-  localStorage.setItem(TOKEN_KEYS.access, tokens.access)
-  localStorage.setItem(TOKEN_KEYS.refresh, tokens.refresh)
+  try {
+    localStorage.setItem(TOKEN_KEYS.access, tokens.access)
+    localStorage.setItem(TOKEN_KEYS.refresh, tokens.refresh)
+  } catch {
+    // Safari private browsing or quota exceeded
+  }
 }
 
 export function clearTokens(): void {
-  localStorage.removeItem(TOKEN_KEYS.access)
-  localStorage.removeItem(TOKEN_KEYS.refresh)
+  try {
+    localStorage.removeItem(TOKEN_KEYS.access)
+    localStorage.removeItem(TOKEN_KEYS.refresh)
+  } catch {
+    // Safari private browsing
+  }
 }
 
 export async function login(email: string, password: string): Promise<AuthTokens> {

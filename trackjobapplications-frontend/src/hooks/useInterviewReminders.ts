@@ -38,7 +38,7 @@ export function useInterviewReminders(apps: JobApplication[]) {
     const keys = upcoming.map(r => `${r.application.id}-${r.stage.id}`)
     const next = new Set([...dismissed, ...keys])
     setDismissed(next)
-    localStorage.setItem(DISMISSED_KEY, JSON.stringify([...next]))
+    try { localStorage.setItem(DISMISSED_KEY, JSON.stringify([...next])) } catch { /* quota */ }
   }
 
   // Request browser notification permission on mount

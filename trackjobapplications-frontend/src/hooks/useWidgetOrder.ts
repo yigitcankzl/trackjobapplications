@@ -42,7 +42,7 @@ export function useWidgetOrder() {
     dragIdxRef.current = null
     setDragIdx(null)
     setOrder(prev => {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(prev))
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(prev)) } catch { /* quota */ }
       return prev
     })
   }, [])

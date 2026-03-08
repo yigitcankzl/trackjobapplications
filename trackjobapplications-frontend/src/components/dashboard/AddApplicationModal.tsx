@@ -24,7 +24,7 @@ interface FormData {
 interface Props {
   open: boolean
   onClose: () => void
-  onSubmit: (data: Omit<JobApplication, 'id' | 'created_at' | 'updated_at'> & { tag_ids?: number[] }) => void
+  onSubmit: (data: Omit<JobApplication, 'id' | 'created_at' | 'updated_at'> & { tag_ids?: number[] }) => void | Promise<void>
   initialData?: JobApplication
 }
 
@@ -102,21 +102,25 @@ export default function AddApplicationModal({ open, onClose, onSubmit, initialDa
     return Object.keys(next).length === 0
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!validate()) return
-    onSubmit({
-      company: form.company.trim(),
-      position: form.position.trim(),
-      status: form.status,
-      applied_date: form.applied_date,
-      url: form.url.trim() || undefined,
-      source: form.source ? (form.source as ApplicationSource) : undefined,
-      interview_date: form.interview_date || null,
-      notes: form.notes.trim(),
-      tag_ids: form.tag_ids,
-    })
-    onClose()
+    try {
+      await onSubmit({
+        company: form.company.trim(),
+        position: form.position.trim(),
+        status: form.status,
+        applied_date: form.applied_date,
+        url: form.url.trim() || undefined,
+        source: form.source ? (form.source as ApplicationSource) : undefined,
+        interview_date: form.interview_date || null,
+        notes: form.notes.trim(),
+        tag_ids: form.tag_ids,
+      })
+      onClose()
+    } catch {
+      // error handled by caller
+    }
   }
 
   if (!open) return null

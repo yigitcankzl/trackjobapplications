@@ -6,11 +6,7 @@ import StatusBadge from './StatusBadge'
 import { EditIcon, TrashIcon, ClipboardIcon, ExternalLinkIcon } from '../icons'
 import { getAvatarColor } from '../../lib/avatar'
 import { formatMedium } from '../../lib/dates'
-
-function needsFollowUp(app: JobApplication): boolean {
-  if (app.status !== 'applied' && app.status !== 'interview') return false
-  return (Date.now() - new Date(app.updated_at).getTime()) / (1000 * 60 * 60 * 24) >= 3
-}
+import { needsFollowUp } from '../../lib/followUp'
 
 interface Props {
   applications: JobApplication[]

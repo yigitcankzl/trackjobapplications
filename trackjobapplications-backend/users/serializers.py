@@ -62,12 +62,32 @@ class UserSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("File content does not match its extension.")
         return value
 
+    RESUME_ALLOWED_EXTENSIONS = (".pdf", ".doc", ".docx")
+    RESUME_MAGIC_BYTES = {
+        b"%PDF": {".pdf"},
+        b"\xd0\xcf\x11\xe0": {".doc", ".docx"},
+        b"PK": {".docx"},
+    }
+
     def validate_resume(self, value):
-        if value and value.size > 10 * 1024 * 1024:
+        if not value:
+            return value
+        if value.size > 10 * 1024 * 1024:
             raise serializers.ValidationError("Resume file size must be under 10 MB.")
-        allowed = (".pdf", ".doc", ".docx")
-        if value and not value.name.lower().endswith(allowed):
-            raise serializers.ValidationError("Resume must be a PDF, DOC, or DOCX file.")
+        ext = value.name.rsplit(".", 1)[-1].lower() if "." in value.name else ""
+        if f".{ext}" not in self.RESUME_ALLOWED_EXTENSIONS:
+            raise serializers.ValidationError(
+                f"Allowed resume types: {', '.join(self.RESUME_ALLOWED_EXTENSIONS)}"
+            )
+        header = value.read(8)
+        value.seek(0)
+        matched = False
+        for magic, exts in self.RESUME_MAGIC_BYTES.items():
+            if header.startswith(magic) and f".{ext}" in exts:
+                matched = True
+                break
+        if not matched:
+            raise serializers.ValidationError("File content does not match its extension.")
         return value
 
 

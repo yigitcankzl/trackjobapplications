@@ -78,14 +78,12 @@ class ApplicationViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=["get"], url_path="stats")
     def stats(self, request):
-        from django.db.models import Count, Q
+        from django.db.models import Count
 
-        qs = self.request.user.applications.all()
-        total = qs.count()
-        status_counts = qs.values("status").annotate(count=Count("id"))
-        result = {"total": total, "to_apply": 0, "applied": 0, "interview": 0, "offer": 0, "rejected": 0, "withdrawn": 0}
-        for entry in status_counts:
+        result = {"total": 0, "to_apply": 0, "applied": 0, "interview": 0, "offer": 0, "rejected": 0, "withdrawn": 0}
+        for entry in self.request.user.applications.values("status").annotate(count=Count("id")):
             result[entry["status"]] = entry["count"]
+            result["total"] += entry["count"]
         return Response(result)
 
     @action(detail=False, methods=["get"], url_path="export-pdf")

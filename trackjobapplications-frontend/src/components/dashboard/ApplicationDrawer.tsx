@@ -9,6 +9,7 @@ import NoteTimeline from './NoteTimeline'
 import { EditIcon, TrashIcon, CloseIcon, CalendarIcon, ClockIcon, LinkIcon } from '../icons'
 import { getAvatarColor } from '../../lib/avatar'
 import { formatLong, formatMedium } from '../../lib/dates'
+import { isSafeUrl } from '../../lib/url'
 
 interface Props {
   app: JobApplication | null
@@ -102,7 +103,7 @@ export default function ApplicationDrawer({ app, onClose, onEdit, onDelete }: Pr
                 </div>
 
 
-                {app.url && (
+                {app.url && isSafeUrl(app.url) && (
                   <div className="flex items-start gap-3">
                     <div className="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center flex-shrink-0 mt-0.5">
                       <LinkIcon />

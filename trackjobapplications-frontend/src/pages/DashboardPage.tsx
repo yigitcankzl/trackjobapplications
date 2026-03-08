@@ -113,6 +113,7 @@ export default function DashboardPage() {
     try {
       const updated = await updateApplication(id, { status: newStatus })
       setApps(prev => prev.map(a => (a.id === id ? updated : a)))
+      loadStats()
       addToast(t('dashboard.toast.statusUpdated'))
     } catch {
       addToast(t('dashboard.errors.editFailed'), 'error')

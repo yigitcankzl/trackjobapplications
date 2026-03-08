@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useState, ReactNode, useRef } from 'react'
+import { createContext, useCallback, useContext, useEffect, useState, ReactNode, useRef } from 'react'
 
 type ToastType = 'success' | 'error' | 'info'
 
@@ -72,6 +72,11 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       timers.current.delete(id)
     }
     setToasts(prev => prev.filter(t => t.id !== id))
+  }, [])
+
+  useEffect(() => {
+    const t = timers.current
+    return () => { t.forEach(clearTimeout) }
   }, [])
 
   const addToast = useCallback((message: string, type: ToastType = 'success') => {

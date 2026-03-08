@@ -174,3 +174,9 @@ class ApplicationAttachment(models.Model):
 
     def __str__(self):
         return self.name
+
+    def delete(self, *args, **kwargs):
+        file_to_delete = self.file
+        super().delete(*args, **kwargs)
+        if file_to_delete:
+            file_to_delete.delete(save=False)

@@ -30,27 +30,24 @@ export default function CalendarPage() {
   const [month, setMonth] = useState(now.getMonth())
 
   useEffect(() => {
+    let active = true
     getAllApplications()
-      .then(setApps)
-      .catch(() => addToast(t('dashboard.errors.loadFailed'), 'error'))
+      .then(data => { if (active) setApps(data) })
+      .catch(() => { if (active) addToast(t('dashboard.errors.loadFailed'), 'error') })
+    return () => { active = false }
   }, [addToast, t])
-
-  const interviewApps = useMemo(() => {
-    return apps.filter(a => a.interview_date)
-  }, [apps])
 
   const dayMap = useMemo(() => {
     const map: Record<number, JobApplication[]> = {}
-    for (const app of interviewApps) {
-      const d = new Date(app.interview_date!)
-      if (d.getFullYear() === year && d.getMonth() === month) {
-        const dayNum = d.getDate()
-        if (!map[dayNum]) map[dayNum] = []
-        map[dayNum].push(app)
+    for (const app of apps) {
+      const [y, m, d] = app.applied_date.split('-').map(Number)
+      if (y === year && m - 1 === month) {
+        if (!map[d]) map[d] = []
+        map[d].push(app)
       }
     }
     return map
-  }, [interviewApps, year, month])
+  }, [apps, year, month])
 
   const daysInMonth = getDaysInMonth(year, month)
   const firstDay = getFirstDayOfWeek(year, month)
@@ -123,7 +120,7 @@ export default function CalendarPage() {
                       className="w-full flex items-center gap-1 px-1 py-0.5 rounded text-left hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors"
                     >
                       <div className={`w-4 h-4 rounded flex items-center justify-center text-[8px] font-bold flex-shrink-0 ${getAvatarColor(app.company)}`}>
-                        {app.company[0].toUpperCase()}
+                        {(app.company[0] || '?').toUpperCase()}
                       </div>
                       <span className="text-xs text-gray-700 dark:text-gray-300 truncate">{app.company}</span>
                     </button>

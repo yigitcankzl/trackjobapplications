@@ -17,6 +17,7 @@ import Pagination from '../components/ui/Pagination'
 import Button from '../components/ui/Button'
 import { PlusIcon, TableIcon, KanbanIcon, DownloadIcon, RefreshIcon } from '../components/icons'
 import { exportApplicationsCsv } from '../lib/exportCsv'
+import { isSafeUrl } from '../lib/url'
 import { getApplications, createApplication, updateApplication, deleteApplication, bulkUpdateStatus, bulkDelete, togglePin, getStats, exportPdf, AppStats } from '../services/applications'
 import { ApplicationFilters, ApplicationStatus, JobApplication, ViewMode } from '../types'
 import { useToast } from '../context/ToastContext'
@@ -128,7 +129,7 @@ export default function DashboardPage() {
   }
 
   async function handleApply(app: JobApplication) {
-    if (!app.url) return
+    if (!app.url || !isSafeUrl(app.url)) return
     window.open(app.url, '_blank', 'noopener')
     if (app.status === 'to_apply') {
       try {

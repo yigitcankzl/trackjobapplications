@@ -51,11 +51,15 @@ class UserSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 f"Allowed avatar types: {', '.join(self.AVATAR_ALLOWED_EXTENSIONS)}"
             )
-        header = value.read(8)
+        header = value.read(12)
         value.seek(0)
         matched = False
         for magic, exts in self.AVATAR_MAGIC_BYTES.items():
             if header.startswith(magic) and f".{ext}" in exts:
+                if magic == b"RIFF":
+                    # WebP files: RIFF....WEBP (bytes 8-11 must be "WEBP")
+                    if header[8:12] != b"WEBP":
+                        continue
                 matched = True
                 break
         if not matched:

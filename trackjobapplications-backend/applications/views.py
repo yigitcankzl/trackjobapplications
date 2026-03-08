@@ -5,7 +5,7 @@ import json
 import logging
 
 from django.db import transaction
-from rest_framework import permissions, serializers as drf_serializers, status, viewsets
+from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import get_object_or_404
@@ -252,13 +252,16 @@ class ApplicationViewSet(viewsets.ModelViewSet):
     def _parse_excel(file):
         import openpyxl
         wb = openpyxl.load_workbook(file, read_only=True)
-        ws = wb.active
-        rows_iter = ws.iter_rows(values_only=True)
-        headers = [str(h or "").strip() for h in next(rows_iter)]
-        result = []
-        for row in rows_iter:
-            result.append({h: _sanitize_cell(str(v) if v is not None else "") for h, v in zip(headers, row)})
-        return result
+        try:
+            ws = wb.active
+            rows_iter = ws.iter_rows(values_only=True)
+            headers = [str(h or "").strip() for h in next(rows_iter)]
+            result = []
+            for row in rows_iter:
+                result.append({h: _sanitize_cell(str(v) if v is not None else "") for h, v in zip(headers, row)})
+            return result
+        finally:
+            wb.close()
 
 
 class CoverLetterTemplateViewSet(viewsets.ModelViewSet):

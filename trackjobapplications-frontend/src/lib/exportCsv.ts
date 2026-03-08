@@ -4,12 +4,12 @@ export function exportApplicationsCsv(apps: JobApplication[]) {
   const headers = ['Company', 'Position', 'Status', 'Applied Date', 'URL', 'Notes']
 
   const rows = apps.map(app => [
-    escape(app.company),
-    escape(app.position),
-    escape(app.status),
+    sanitizeCsvValue(app.company),
+    sanitizeCsvValue(app.position),
+    sanitizeCsvValue(app.status),
     app.applied_date,
-    escape(app.url ?? ''),
-    escape(app.notes),
+    sanitizeCsvValue(app.url ?? ''),
+    sanitizeCsvValue(app.notes),
   ])
 
   const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n')
@@ -26,7 +26,7 @@ export function exportApplicationsCsv(apps: JobApplication[]) {
 
 const FORMULA_PREFIXES = ['=', '+', '-', '@', '\t', '\r']
 
-function escape(value: string): string {
+function sanitizeCsvValue(value: string): string {
   let safe = value
   if (safe && FORMULA_PREFIXES.includes(safe[0])) {
     safe = `'${safe}`

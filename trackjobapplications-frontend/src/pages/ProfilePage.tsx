@@ -89,6 +89,7 @@ export default function ProfilePage() {
     const file = e.target.files?.[0]
     if (!file) return
     setAvatarFile(file)
+    if (avatarPreview) URL.revokeObjectURL(avatarPreview)
     setAvatarPreview(URL.createObjectURL(file))
   }
 
@@ -144,7 +145,7 @@ export default function ProfilePage() {
         <form onSubmit={handleSaveProfile} className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6 space-y-6">
           {/* Avatar */}
           <DragDropZone
-            onFileDrop={file => { setAvatarFile(file); setAvatarPreview(URL.createObjectURL(file)) }}
+            onFileDrop={file => { setAvatarFile(file); if (avatarPreview) URL.revokeObjectURL(avatarPreview); setAvatarPreview(URL.createObjectURL(file)) }}
             accept="image/*"
             label={t('profile.dropAvatar')}
           >

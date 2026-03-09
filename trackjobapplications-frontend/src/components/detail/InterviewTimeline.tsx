@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { InterviewStage, InterviewStageType } from '../../types'
 import { getInterviews, createInterview, updateInterview, deleteInterview } from '../../services/interviews'
 import { useToast } from '../../context/ToastContext'
@@ -28,6 +28,11 @@ export default function InterviewTimeline({ applicationId, company, position }: 
   const [loading, setLoading] = useState(true)
   const [showAdd, setShowAdd] = useState(false)
   const [form, setForm] = useState({ stage_type: 'phone_screen' as InterviewStageType, scheduled_at: '', notes: '' })
+  const mountedRef = useRef(true)
+
+  useEffect(() => {
+    return () => { mountedRef.current = false }
+  }, [])
 
   useEffect(() => {
     let active = true
@@ -42,10 +47,12 @@ export default function InterviewTimeline({ applicationId, company, position }: 
     if (!form.scheduled_at) return
     try {
       const s = await createInterview(applicationId, { ...form, completed: false })
+      if (!mountedRef.current) return
       setStages(prev => [...prev, s].sort((a, b) => a.scheduled_at.localeCompare(b.scheduled_at)))
       setForm({ stage_type: 'phone_screen', scheduled_at: '', notes: '' })
       setShowAdd(false)
     } catch {
+      if (!mountedRef.current) return
       addToast('Failed to add interview', 'error')
     }
   }
@@ -53,8 +60,10 @@ export default function InterviewTimeline({ applicationId, company, position }: 
   async function toggleComplete(stage: InterviewStage) {
     try {
       const updated = await updateInterview(applicationId, stage.id, { completed: !stage.completed })
+      if (!mountedRef.current) return
       setStages(prev => prev.map(s => s.id === stage.id ? updated : s))
     } catch {
+      if (!mountedRef.current) return
       addToast('Failed to update', 'error')
     }
   }
@@ -62,8 +71,10 @@ export default function InterviewTimeline({ applicationId, company, position }: 
   async function handleDelete(id: number) {
     try {
       await deleteInterview(applicationId, id)
+      if (!mountedRef.current) return
       setStages(prev => prev.filter(s => s.id !== id))
     } catch {
+      if (!mountedRef.current) return
       addToast('Failed to delete', 'error')
     }
   }

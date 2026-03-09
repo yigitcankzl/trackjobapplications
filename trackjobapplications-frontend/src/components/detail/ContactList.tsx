@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ApplicationContact } from '../../types'
 import { getContacts, createContact, deleteContact } from '../../services/contacts'
 import { useToast } from '../../context/ToastContext'
@@ -13,6 +13,11 @@ export default function ContactList({ applicationId }: Props) {
   const [loading, setLoading] = useState(true)
   const [showAdd, setShowAdd] = useState(false)
   const [form, setForm] = useState({ name: '', email: '', phone: '', role: '' })
+  const mountedRef = useRef(true)
+
+  useEffect(() => {
+    return () => { mountedRef.current = false }
+  }, [])
 
   useEffect(() => {
     let active = true
@@ -27,10 +32,12 @@ export default function ContactList({ applicationId }: Props) {
     if (!form.name.trim()) return
     try {
       const c = await createContact(applicationId, form)
+      if (!mountedRef.current) return
       setContacts(prev => [c, ...prev])
       setForm({ name: '', email: '', phone: '', role: '' })
       setShowAdd(false)
     } catch {
+      if (!mountedRef.current) return
       addToast('Failed to add contact', 'error')
     }
   }
@@ -38,8 +45,10 @@ export default function ContactList({ applicationId }: Props) {
   async function handleDelete(id: number) {
     try {
       await deleteContact(applicationId, id)
+      if (!mountedRef.current) return
       setContacts(prev => prev.filter(c => c.id !== id))
     } catch {
+      if (!mountedRef.current) return
       addToast('Failed to delete contact', 'error')
     }
   }

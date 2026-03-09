@@ -52,6 +52,12 @@ class Application(models.Model):
             models.Index(fields=["-applied_date"]),
             models.Index(fields=["user", "-applied_date"]),
         ]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "company", "position"],
+                name="unique_user_company_position",
+            ),
+        ]
 
     def __str__(self):
         return f"{self.company} — {self.position}"

@@ -91,7 +91,13 @@ class ApplicationViewSet(viewsets.ModelViewSet):
             result["total"] += entry["count"]
         return Response(result)
 
-    @action(detail=False, methods=["get"], url_path="export-pdf")
+    @action(
+        detail=False,
+        methods=["get"],
+        url_path="export-pdf",
+        throttle_classes=[ScopedRateThrottle],
+        throttle_scope="export",
+    )
     def export_pdf(self, request):
         from django.http import HttpResponse
 
@@ -181,9 +187,9 @@ class ApplicationViewSet(viewsets.ModelViewSet):
         url_path="import",
         parser_classes=[MultiPartParser],
         throttle_classes=[ScopedRateThrottle],
+        throttle_scope="import",
     )
     def import_applications(self, request):
-        self.throttle_scope = "import"
         file = request.FILES.get("file")
         if not file:
             return Response({"error": "No file provided."}, status=status.HTTP_400_BAD_REQUEST)

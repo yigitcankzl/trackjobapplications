@@ -1,5 +1,9 @@
 import logging
 
+from django.contrib.auth import get_user_model
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.encoding import force_str
+from django.utils.http import urlsafe_base64_decode
 from rest_framework import generics, permissions, status
 from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 from rest_framework.response import Response
@@ -11,6 +15,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from users.models import NotificationPreference
 
 logger = logging.getLogger(__name__)
+User = get_user_model()
 
 from .serializers import (
     ChangePasswordSerializer,
@@ -51,6 +56,7 @@ class RegisterView(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
+        user.send_verification_email()
         return Response(
             UserSerializer(user).data,
             status=status.HTTP_201_CREATED,
@@ -122,3 +128,110 @@ class ChangePasswordView(APIView):
             ignore_conflicts=True,
         )
         return Response({"detail": "Password updated."}, status=status.HTTP_200_OK)
+
+
+class VerifyEmailView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        uid = request.data.get("uid", "")
+        token = request.data.get("token", "")
+        try:
+            user_id = force_str(urlsafe_base64_decode(uid))
+            user = User.objects.get(pk=user_id)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            return Response({"detail": "Invalid verification link."}, status=status.HTTP_400_BAD_REQUEST)
+
+        if not default_token_generator.check_token(user, token):
+            return Response({"detail": "Invalid or expired verification link."}, status=status.HTTP_400_BAD_REQUEST)
+
+        user.is_email_verified = True
+        user.save(update_fields=["is_email_verified"])
+        return Response({"detail": "Email verified successfully."}, status=status.HTTP_200_OK)
+
+
+class ResendVerificationView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "register"
+
+    def post(self, request):
+        if request.user.is_email_verified:
+            return Response({"detail": "Email already verified."}, status=status.HTTP_200_OK)
+        request.user.send_verification_email()
+        return Response({"detail": "Verification email sent."}, status=status.HTTP_200_OK)
+
+
+class PasswordResetRequestView(APIView):
+    permission_classes = [permissions.AllowAny]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "register"
+
+    def post(self, request):
+        email = request.data.get("email", "").lower().strip()
+        # Always return success to prevent email enumeration
+        try:
+            user = User.objects.get(email__iexact=email)
+            from django.conf import settings
+            from django.utils.encoding import force_bytes
+            from django.utils.http import urlsafe_base64_encode
+
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            token = default_token_generator.make_token(user)
+            reset_url = f"{settings.FRONTEND_URL}/reset-password?uid={uid}&token={token}"
+            from django.core.mail import send_mail
+
+            send_mail(
+                subject="Reset your TrackJobs password",
+                message=f"Click the link to reset your password: {reset_url}",
+                from_email=None,
+                recipient_list=[user.email],
+                fail_silently=True,
+            )
+        except User.DoesNotExist:
+            pass
+        return Response(
+            {"detail": "If an account exists with this email, a reset link has been sent."},
+            status=status.HTTP_200_OK,
+        )
+
+
+class PasswordResetConfirmView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        uid = request.data.get("uid", "")
+        token = request.data.get("token", "")
+        new_password = request.data.get("new_password", "")
+        new_password2 = request.data.get("new_password2", "")
+
+        if not new_password or new_password != new_password2:
+            return Response({"detail": "Passwords do not match."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user_id = force_str(urlsafe_base64_decode(uid))
+            user = User.objects.get(pk=user_id)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            return Response({"detail": "Invalid reset link."}, status=status.HTTP_400_BAD_REQUEST)
+
+        if not default_token_generator.check_token(user, token):
+            return Response({"detail": "Invalid or expired reset link."}, status=status.HTTP_400_BAD_REQUEST)
+
+        from django.contrib.auth.password_validation import validate_password
+        from django.core.exceptions import ValidationError
+
+        try:
+            validate_password(new_password, user)
+        except ValidationError as e:
+            return Response({"detail": e.messages}, status=status.HTTP_400_BAD_REQUEST)
+
+        user.set_password(new_password)
+        user.save()
+        # Blacklist all existing tokens
+        tokens = OutstandingToken.objects.filter(user=user)
+        existing = set(BlacklistedToken.objects.filter(token__in=tokens).values_list("token_id", flat=True))
+        BlacklistedToken.objects.bulk_create(
+            [BlacklistedToken(token=t) for t in tokens if t.id not in existing],
+            ignore_conflicts=True,
+        )
+        return Response({"detail": "Password has been reset successfully."}, status=status.HTTP_200_OK)

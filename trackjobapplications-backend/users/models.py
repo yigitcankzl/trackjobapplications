@@ -1,12 +1,18 @@
 import os
 import uuid
 
+from django.conf import settings
 from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,
     PermissionsMixin,
 )
+from django.contrib.auth.tokens import default_token_generator
+from django.core.mail import send_mail
 from django.db import models
+from django.template.loader import render_to_string
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
 
 
 def avatar_upload_path(instance, filename):
@@ -48,6 +54,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     notification_email = models.EmailField(blank=True, default="")
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    is_email_verified = models.BooleanField(default=False)
 
     objects = UserManager()
 
@@ -56,6 +63,18 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+
+    def send_verification_email(self):
+        uid = urlsafe_base64_encode(force_bytes(self.pk))
+        token = default_token_generator.make_token(self)
+        verify_url = f"{settings.FRONTEND_URL}/verify-email?uid={uid}&token={token}"
+        send_mail(
+            subject="Verify your TrackJobs email",
+            message=f"Click the link to verify your email: {verify_url}",
+            from_email=None,
+            recipient_list=[self.email],
+            fail_silently=True,
+        )
 
 
 class NotificationPreference(models.Model):

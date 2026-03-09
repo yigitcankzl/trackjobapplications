@@ -50,3 +50,31 @@ class CoverLetterTemplateAdmin(admin.ModelAdmin):
     list_filter = ("user",)
     search_fields = ("name",)
     list_select_related = ("user",)
+
+
+@admin.register(ApplicationNote)
+class ApplicationNoteAdmin(admin.ModelAdmin):
+    list_display = ("application", "created_at")
+    list_select_related = ("application",)
+    search_fields = ("content",)
+
+
+@admin.register(ApplicationContact)
+class ApplicationContactAdmin(admin.ModelAdmin):
+    list_display = ("name", "email", "role", "application")
+    list_select_related = ("application",)
+    search_fields = ("name", "email")
+
+
+@admin.register(InterviewStage)
+class InterviewStageAdmin(admin.ModelAdmin):
+    list_display = ("application", "stage_type", "scheduled_at", "completed", "reminder_sent")
+    list_filter = ("stage_type", "completed", "reminder_sent")
+    list_select_related = ("application",)
+
+
+@admin.register(ApplicationAttachment)
+class ApplicationAttachmentAdmin(admin.ModelAdmin):
+    list_display = ("name", "application", "uploaded_at")
+    list_select_related = ("application",)
+    search_fields = ("name",)

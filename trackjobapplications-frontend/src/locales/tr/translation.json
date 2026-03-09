@@ -364,6 +364,20 @@
       "uploadFailed": "Dosya yüklenemedi",
       "deleteFailed": "Dosya silinemedi"
     },
+    "emails": {
+      "title": "Bağlı E-postalar",
+      "empty": "Henüz bağlı e-posta yok.",
+      "loadFailed": "E-postalar yüklenemedi",
+      "deleteFailed": "E-posta silinemedi",
+      "delete": "Sil",
+      "types": {
+        "rejection": "Red",
+        "interview_invite": "Mülakat Daveti",
+        "offer": "Teklif",
+        "follow_up": "Takip",
+        "general": "Genel"
+      }
+    },
     "tags": {
       "new": "+ Yeni",
       "namePlaceholder": "Etiket adı",

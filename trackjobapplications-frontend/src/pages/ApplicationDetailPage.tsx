@@ -18,6 +18,7 @@ import TagBadge from '../components/dashboard/TagBadge'
 import ContactList from '../components/detail/ContactList'
 import InterviewTimeline from '../components/detail/InterviewTimeline'
 import AttachmentList from '../components/detail/AttachmentList'
+import EmailTimeline from '../components/detail/EmailTimeline'
 import LoadingSpinner from '../components/ui/LoadingSpinner'
 import { ArrowLeftIcon, EditIcon, TrashIcon, CalendarIcon, ClockIcon, LinkIcon } from '../components/icons'
 
@@ -202,6 +203,11 @@ export default function ApplicationDetailPage() {
         {/* Attachments */}
         <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6">
           <AttachmentList applicationId={app.id} />
+        </div>
+
+        {/* Linked Emails */}
+        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6">
+          <EmailTimeline applicationId={app.id} />
         </div>
 
         {/* Stage */}

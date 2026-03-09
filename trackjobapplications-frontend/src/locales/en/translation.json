@@ -364,6 +364,20 @@
       "uploadFailed": "Failed to upload file",
       "deleteFailed": "Failed to delete file"
     },
+    "emails": {
+      "title": "Linked Emails",
+      "empty": "No linked emails yet.",
+      "loadFailed": "Failed to load emails",
+      "deleteFailed": "Failed to delete email",
+      "delete": "Delete",
+      "types": {
+        "rejection": "Rejection",
+        "interview_invite": "Interview Invite",
+        "offer": "Offer",
+        "follow_up": "Follow-up",
+        "general": "General"
+      }
+    },
     "tags": {
       "new": "+ New",
       "namePlaceholder": "Tag name",

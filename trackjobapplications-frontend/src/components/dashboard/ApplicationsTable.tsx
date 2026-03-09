@@ -85,7 +85,7 @@ export default function ApplicationsTable({ applications, onEdit, onDelete, onTo
               <td className="px-6 py-4">
                 <div className="flex items-center gap-3.5">
                   <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold flex-shrink-0 ${getAvatarColor(app.company)}`}>
-                    {app.company[0].toUpperCase()}
+                    {(app.company[0] ?? '?').toUpperCase()}
                   </div>
                   <div className="min-w-0">
                     <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 leading-tight flex items-center gap-1.5">

@@ -102,7 +102,7 @@ export default function ApplicationDetailPage() {
         <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6">
           <div className="flex items-start gap-4">
             <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-bold flex-shrink-0 ${getAvatarColor(app.company)}`}>
-              {app.company[0].toUpperCase()}
+              {(app.company[0] ?? '?').toUpperCase()}
             </div>
             <div className="flex-1 min-w-0">
               <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">{app.company}</h2>

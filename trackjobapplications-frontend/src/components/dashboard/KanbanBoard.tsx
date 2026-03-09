@@ -46,7 +46,7 @@ function KanbanCard({ app, onEdit, onDelete, onDragStart, onDragEnd, isDragging 
       <div className="flex items-start justify-between gap-2 mb-3">
         <div className="flex items-center gap-2.5 min-w-0">
           <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold flex-shrink-0 ${getAvatarColor(app.company)}`}>
-            {app.company[0].toUpperCase()}
+            {(app.company[0] ?? '?').toUpperCase()}
           </div>
           <div className="min-w-0">
             <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 leading-tight truncate flex items-center gap-1.5">

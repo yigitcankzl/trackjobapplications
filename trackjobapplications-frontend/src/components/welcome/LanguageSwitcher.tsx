@@ -26,6 +26,8 @@ export default function LanguageSwitcher() {
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen(!open)}
+        aria-expanded={open}
+        aria-haspopup="menu"
         className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-150"
         aria-label={t('dashboard.aria.changeLanguage')}
       >
@@ -43,12 +45,13 @@ export default function LanguageSwitcher() {
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-1.5 w-40 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 py-1 z-50">
+        <div role="menu" className="absolute right-0 mt-1.5 w-40 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 py-1 z-50">
           {LANGUAGES.map(({ code, label, flag }) => {
             const isActive = current.code === code
             return (
               <button
                 key={code}
+                role="menuitem"
                 onClick={() => { i18n.changeLanguage(code); setOpen(false) }}
                 className={`w-full flex items-center gap-2.5 px-3 py-2 text-sm transition-colors ${
                   isActive

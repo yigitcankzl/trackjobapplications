@@ -47,9 +47,19 @@ function extractFromEmail(e) {
       }
     }
   }
-  data.url = urlMatch ? urlMatch[0] : '';
+  data.url = urlMatch ? sanitizeUrl(urlMatch[0]) : '';
 
   return data;
+}
+
+function sanitizeUrl(url) {
+  // Only allow http/https, strip trailing punctuation, limit length
+  if (!url || !url.match(/^https?:\/\//i)) return '';
+  url = url.replace(/[)}\].,;:!?'"]+$/, ''); // strip trailing punctuation
+  if (url.length > 2048) return '';
+  // Block known dangerous schemes embedded in redirects
+  if (url.match(/javascript:|data:|vbscript:/i)) return '';
+  return url;
 }
 
 function extractEmail(fromHeader) {

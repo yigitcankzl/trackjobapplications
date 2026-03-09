@@ -3,6 +3,7 @@ from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
+from users.models import NotificationPreference
 
 User = get_user_model()
 
@@ -123,16 +124,12 @@ class ChangePasswordSerializer(serializers.Serializer):
 
 
 class NotificationPreferenceSerializer(serializers.ModelSerializer):
-    from users.models import NotificationPreference
-
     interview_reminder_hours = serializers.ChoiceField(
         choices=NotificationPreference.REMINDER_HOUR_CHOICES,
         required=False,
     )
 
     class Meta:
-        from users.models import NotificationPreference
-
         model = NotificationPreference
         fields = ("email_notifications_enabled", "interview_reminder_hours")
 

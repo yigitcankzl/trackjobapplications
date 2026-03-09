@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { JobApplication } from '../types'
 import type { UpcomingInterview } from '../components/dashboard/InterviewReminderPopup'
 
@@ -48,15 +48,21 @@ export function useInterviewReminders(apps: JobApplication[]) {
     }
   }, [])
 
+  // Track which interviews we've already notified about
+  const notifiedRef = useRef<Set<string>>(new Set())
+
   // Show browser notification for upcoming interviews
   useEffect(() => {
-    if (upcoming.length > 0 && 'Notification' in window && Notification.permission === 'granted') {
-      const r = upcoming[0]
+    if (!('Notification' in window) || Notification.permission !== 'granted') return
+    for (const r of upcoming) {
+      const key = `${r.application.id}-${r.stage.id}`
+      if (notifiedRef.current.has(key)) continue
+      notifiedRef.current.add(key)
       new Notification(`Interview coming up: ${r.application.company}`, {
         body: `${r.stage.stage_type} at ${new Date(r.stage.scheduled_at).toLocaleTimeString()}`,
       })
     }
-  }, [upcoming.length]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [upcoming])
 
   return { upcoming, dismissAll }
 }

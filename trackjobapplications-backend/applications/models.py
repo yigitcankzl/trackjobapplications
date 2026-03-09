@@ -50,6 +50,7 @@ class Application(models.Model):
         indexes = [
             models.Index(fields=["status", "updated_at"]),
             models.Index(fields=["-applied_date"]),
+            models.Index(fields=["user", "-applied_date"]),
         ]
 
     def __str__(self):
@@ -135,6 +136,9 @@ class InterviewStage(models.Model):
 
     class Meta:
         ordering = ["scheduled_at"]
+        indexes = [
+            models.Index(fields=["reminder_sent", "completed", "scheduled_at"]),
+        ]
 
     def __str__(self):
         return f"{self.get_stage_type_display()} - {self.application}"

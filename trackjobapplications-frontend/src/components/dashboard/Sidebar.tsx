@@ -44,7 +44,7 @@ export default function Sidebar({ mobileOpen, onMobileClose }: Props) {
           <button
             onClick={onMobileClose}
             className="lg:hidden p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-            aria-label="Close menu"
+            aria-label={t('dashboard.aria.closeMenu')}
           >
             <CloseIcon />
           </button>

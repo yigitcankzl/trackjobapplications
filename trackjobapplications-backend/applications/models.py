@@ -183,4 +183,5 @@ class ApplicationAttachment(models.Model):
         file_to_delete = self.file
         super().delete(*args, **kwargs)
         if file_to_delete:
-            file_to_delete.delete(save=False)
+            from django.db import transaction
+            transaction.on_commit(lambda: file_to_delete.delete(save=False))

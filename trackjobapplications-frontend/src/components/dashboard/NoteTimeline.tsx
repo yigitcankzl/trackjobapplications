@@ -13,6 +13,7 @@ export default function NoteTimeline({ applicationId }: Props) {
   const { t } = useTranslation()
   const { addToast } = useToast()
   const [notes, setNotes] = useState<ApplicationNote[]>([])
+  const [loading, setLoading] = useState(true)
   const [content, setContent] = useState('')
   const [submitting, setSubmitting] = useState(false)
 
@@ -21,6 +22,7 @@ export default function NoteTimeline({ applicationId }: Props) {
     getNotes(applicationId)
       .then(data => { if (active) setNotes(data) })
       .catch(() => { if (active) addToast(t('dashboard.notes.loadFailed'), 'error') })
+      .finally(() => { if (active) setLoading(false) })
     return () => { active = false }
   }, [applicationId, addToast, t])
 
@@ -79,7 +81,9 @@ export default function NoteTimeline({ applicationId }: Props) {
       </form>
 
       {/* Timeline */}
-      {notes.length === 0 ? (
+      {loading ? (
+        <div className="flex justify-center py-4"><div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" /></div>
+      ) : notes.length === 0 ? (
         <p className="text-xs text-gray-400 dark:text-gray-500 italic">{t('dashboard.notes.empty')}</p>
       ) : (
         <div className="space-y-3">

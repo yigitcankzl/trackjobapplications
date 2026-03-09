@@ -25,6 +25,7 @@ const STAGE_TYPES = Object.keys(STAGE_LABELS) as InterviewStageType[]
 export default function InterviewTimeline({ applicationId, company, position }: Props) {
   const { addToast } = useToast()
   const [stages, setStages] = useState<InterviewStage[]>([])
+  const [loading, setLoading] = useState(true)
   const [showAdd, setShowAdd] = useState(false)
   const [form, setForm] = useState({ stage_type: 'phone_screen' as InterviewStageType, scheduled_at: '', notes: '' })
 
@@ -33,6 +34,7 @@ export default function InterviewTimeline({ applicationId, company, position }: 
     getInterviews(applicationId)
       .then(data => { if (active) setStages(data) })
       .catch(() => { if (active) addToast('Failed to load interviews', 'error') })
+      .finally(() => { if (active) setLoading(false) })
     return () => { active = false }
   }, [applicationId, addToast])
 
@@ -101,7 +103,9 @@ export default function InterviewTimeline({ applicationId, company, position }: 
         </div>
       )}
 
-      {stages.length === 0 && !showAdd ? (
+      {loading ? (
+        <div className="flex justify-center py-4"><div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" /></div>
+      ) : stages.length === 0 && !showAdd ? (
         <p className="text-xs text-gray-400">No interview stages yet.</p>
       ) : (
         <div className="relative pl-4">

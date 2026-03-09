@@ -10,6 +10,7 @@ interface Props {
 export default function AttachmentList({ applicationId }: Props) {
   const { addToast } = useToast()
   const [attachments, setAttachments] = useState<ApplicationAttachment[]>([])
+  const [loading, setLoading] = useState(true)
   const [uploading, setUploading] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
 
@@ -18,6 +19,7 @@ export default function AttachmentList({ applicationId }: Props) {
     getAttachments(applicationId)
       .then(data => { if (active) setAttachments(data) })
       .catch(() => { if (active) addToast('Failed to load attachments', 'error') })
+      .finally(() => { if (active) setLoading(false) })
     return () => { active = false }
   }, [applicationId, addToast])
 
@@ -83,7 +85,9 @@ export default function AttachmentList({ applicationId }: Props) {
         />
       </div>
 
-      {attachments.length > 0 && (
+      {loading ? (
+        <div className="flex justify-center py-4"><div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" /></div>
+      ) : attachments.length > 0 && (
         <div className="space-y-1.5">
           {attachments.map(att => (
             <div key={att.id} className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-800 rounded-lg">

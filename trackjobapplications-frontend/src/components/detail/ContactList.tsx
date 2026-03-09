@@ -10,6 +10,7 @@ interface Props {
 export default function ContactList({ applicationId }: Props) {
   const { addToast } = useToast()
   const [contacts, setContacts] = useState<ApplicationContact[]>([])
+  const [loading, setLoading] = useState(true)
   const [showAdd, setShowAdd] = useState(false)
   const [form, setForm] = useState({ name: '', email: '', phone: '', role: '' })
 
@@ -18,6 +19,7 @@ export default function ContactList({ applicationId }: Props) {
     getContacts(applicationId)
       .then(data => { if (active) setContacts(data) })
       .catch(() => { if (active) addToast('Failed to load contacts', 'error') })
+      .finally(() => { if (active) setLoading(false) })
     return () => { active = false }
   }, [applicationId, addToast])
 
@@ -64,7 +66,9 @@ export default function ContactList({ applicationId }: Props) {
         </div>
       )}
 
-      {contacts.length === 0 && !showAdd ? (
+      {loading ? (
+        <div className="flex justify-center py-4"><div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" /></div>
+      ) : contacts.length === 0 && !showAdd ? (
         <p className="text-xs text-gray-400">No contacts yet.</p>
       ) : (
         <div className="space-y-2">

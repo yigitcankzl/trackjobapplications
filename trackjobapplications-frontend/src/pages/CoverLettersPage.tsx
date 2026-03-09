@@ -141,10 +141,13 @@ export default function CoverLettersPage() {
               {templates.map(tpl => (
                 <div
                   key={tpl.id}
+                  role="button"
+                  tabIndex={0}
                   onClick={() => { setPreview(tpl); setCreating(false); setEditing(null) }}
+                  onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setPreview(tpl); setCreating(false); setEditing(null) } }}
                   className={`group bg-white dark:bg-gray-900 rounded-xl border shadow-sm p-4 cursor-pointer transition-all duration-200 ${
                     preview?.id === tpl.id || editing?.id === tpl.id
-                      ? 'border-blue-200 dark:border-blue-800 ring-1 ring-blue-100'
+                      ? 'border-blue-200 dark:border-blue-800 ring-1 ring-blue-100 dark:ring-blue-900'
                       : 'border-gray-100 dark:border-gray-800 hover:shadow-md hover:border-blue-100'
                   }`}
                 >
@@ -263,8 +266,8 @@ export default function CoverLettersPage() {
       {/* Delete confirmation modal */}
       {deleting && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40" onClick={dismissDelete}>
-          <div role="dialog" aria-modal="true" className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl p-6 w-full max-w-sm mx-4" onClick={e => e.stopPropagation()}>
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2">{t('coverLetters.deleteConfirm.title')}</h3>
+          <div role="dialog" aria-modal="true" aria-labelledby="delete-tpl-title" className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl p-6 w-full max-w-sm mx-4" onClick={e => e.stopPropagation()}>
+            <h3 id="delete-tpl-title" className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2">{t('coverLetters.deleteConfirm.title')}</h3>
             <p className="text-xs text-gray-500 mb-4">{t('coverLetters.deleteConfirm.message', { name: deleting.name })}</p>
             <div className="flex justify-end gap-2">
               <Button variant="secondary" onClick={() => setDeleting(null)}>{t('coverLetters.form.cancel')}</Button>

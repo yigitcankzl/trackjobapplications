@@ -37,7 +37,10 @@ function KanbanCard({ app, onEdit, onDelete, onDragStart, onDragEnd, isDragging 
       onDragStart={() => onDragStart(app.id)}
       onDragEnd={onDragEnd}
       onClick={() => navigate(`/applications/${app.id}`)}
-      className={`group bg-white dark:bg-gray-900 rounded-xl border shadow-sm p-4 transition-all duration-200 cursor-pointer ${
+      onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate(`/applications/${app.id}`) } }}
+      tabIndex={0}
+      role="link"
+      className={`group bg-white dark:bg-gray-900 rounded-xl border shadow-sm p-4 transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500/30 ${
         isDragging
           ? 'opacity-40 scale-95 border-blue-200'
           : 'border-gray-100 dark:border-gray-800 hover:shadow-md hover:border-blue-100 dark:hover:border-blue-800'

@@ -69,7 +69,7 @@ export default function ApplicationsTable({ applications, onEdit, onDelete, onTo
         </thead>
         <tbody className="divide-y divide-gray-50 dark:divide-gray-800">
           {sorted.map(app => (
-            <tr key={app.id} onClick={() => navigate(`/applications/${app.id}`)} className="group hover:bg-blue-50/30 dark:hover:bg-blue-900/20 transition-colors duration-150 cursor-pointer">
+            <tr key={app.id} onClick={() => navigate(`/applications/${app.id}`)} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate(`/applications/${app.id}`) } }} tabIndex={0} role="link" className="group hover:bg-blue-50/30 dark:hover:bg-blue-900/20 transition-colors duration-150 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:ring-inset">
               {hasBulk && (
                 <td className="px-3 py-4">
                   <input

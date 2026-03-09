@@ -38,7 +38,9 @@ export default function ProfilePage() {
   const [savingNotif, setSavingNotif] = useState(false)
 
   useEffect(() => {
-    fetchNotificationPreferences().then(setNotifPrefs).catch(() => {})
+    fetchNotificationPreferences().then(setNotifPrefs).catch(() => {
+      addToast(t('profile.notifications.saveFailed'), 'error')
+    })
   }, [])
 
   async function handleToggleNotifications() {

@@ -9,11 +9,16 @@
   ],
   "host_permissions": [
     "http://localhost:8000/*",
-    "https://www.linkedin.com/*",
-    "https://www.indeed.com/*",
-    "https://*.indeed.com/*",
+    "https://www.linkedin.com/jobs/*",
+    "https://www.indeed.com/viewjob*",
+    "https://www.indeed.com/jobs*",
+    "https://*.indeed.com/viewjob*",
+    "https://*.indeed.com/jobs*",
     "https://mail.google.com/*"
   ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'none'"
+  },
   "action": {
     "default_popup": "popup/popup.html",
     "default_icon": {

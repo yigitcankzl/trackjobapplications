@@ -11,10 +11,12 @@ def health_check(request):
 
 urlpatterns = [
     path("api/health/", health_check),
-    path("admin/", admin.site.urls),
     path("api/v1/auth/", include("users.urls")),
     path("api/v1/applications/", include("applications.urls")),
 ]
+
+if settings.DEBUG:
+    urlpatterns += [path("admin/", admin.site.urls)]
 
 if settings.DEBUG:
     from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView

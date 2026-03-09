@@ -10,4 +10,4 @@ MAX_INTERVIEWS_PER_APPLICATION = 20
 MAX_ATTACHMENTS_PER_APPLICATION = 10
 
 ALLOWED_IMPORT_FIELDS = {"company", "position", "status", "applied_date", "url", "source", "notes"}
-FORMULA_PREFIXES = ("=", "+", "-", "@", "\t", "\r")
+FORMULA_PREFIXES = ("=", "+", "-", "@", "\t", "\r", "|")

@@ -41,7 +41,7 @@ export default function ProfilePage() {
     fetchNotificationPreferences().then(setNotifPrefs).catch(() => {
       addToast(t('profile.notifications.saveFailed'), 'error')
     })
-  }, [])
+  }, [addToast, t])
 
   async function handleToggleNotifications() {
     setSavingNotif(true)
@@ -161,7 +161,7 @@ export default function ProfilePage() {
             <div className="flex items-center gap-5 p-1">
               <div className="relative">
                 {avatarSrc ? (
-                  <img src={avatarSrc} alt="" className="w-20 h-20 rounded-full object-cover" />
+                  <img src={avatarSrc} alt={t('profile.avatarAlt')} className="w-20 h-20 rounded-full object-cover" />
                 ) : (
                   <div className={`w-20 h-20 rounded-full flex items-center justify-center text-2xl font-bold ${colorClass}`}>
                     {initials}

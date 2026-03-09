@@ -36,8 +36,12 @@ export default function ImportModal({ open, onClose, onSuccess }: Props) {
         const cells: string[] = []
         let current = ''
         let inQuotes = false
-        for (const ch of l) {
-          if (ch === '"') { inQuotes = !inQuotes; continue }
+        for (let ci = 0; ci < l.length; ci++) {
+          const ch = l[ci]
+          if (ch === '"') {
+            if (inQuotes && l[ci + 1] === '"') { current += '"'; ci++; continue }
+            inQuotes = !inQuotes; continue
+          }
           if (ch === ',' && !inQuotes) { cells.push(current.trim()); current = ''; continue }
           current += ch
         }

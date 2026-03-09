@@ -298,7 +298,59 @@
     "contacts": "Kişiler",
     "interviews": "Mülakat Aşamaları",
     "attachments": "Ekler",
-    "addToCalendar": "Takvime Ekle"
+    "addToCalendar": "Takvime Ekle",
+    "add": "+ Ekle",
+    "cancel": "İptal",
+    "interviewStages": {
+      "title": "Mülakat Aşamaları",
+      "addStage": "Aşama Ekle",
+      "empty": "Henüz mülakat aşaması yok.",
+      "notesPlaceholder": "Notlar (isteğe bağlı)",
+      "done": "Tamamlandı",
+      "pending": "Beklemede",
+      "loadFailed": "Mülakatlar yüklenemedi",
+      "addFailed": "Mülakat eklenemedi",
+      "updateFailed": "Güncellenemedi",
+      "deleteFailed": "Silinemedi",
+      "addToCalendar": "Google Takvim'e Ekle",
+      "stageTypes": {
+        "phone_screen": "Telefon Görüşmesi",
+        "technical": "Teknik",
+        "behavioral": "Davranışsal",
+        "onsite": "Yerinde",
+        "take_home": "Ev Ödevi",
+        "final": "Final Turu",
+        "other": "Diğer"
+      }
+    },
+    "contactList": {
+      "title": "Kişiler",
+      "addContact": "Kişi Ekle",
+      "empty": "Henüz kişi yok.",
+      "namePlaceholder": "Ad *",
+      "rolePlaceholder": "Rol",
+      "emailPlaceholder": "E-posta",
+      "phonePlaceholder": "Telefon",
+      "loadFailed": "Kişiler yüklenemedi",
+      "addFailed": "Kişi eklenemedi",
+      "deleteFailed": "Kişi silinemedi"
+    },
+    "attachmentList": {
+      "title": "Ekler",
+      "uploading": "Yükleniyor...",
+      "dropOrClick": "Dosyaları buraya bırakın veya tıklayın",
+      "formats": "PDF, DOC, PNG, JPG, TXT (maks. 10MB)",
+      "loadFailed": "Ekler yüklenemedi",
+      "uploadFailed": "Dosya yüklenemedi",
+      "deleteFailed": "Dosya silinemedi"
+    },
+    "tags": {
+      "new": "+ Yeni",
+      "namePlaceholder": "Etiket adı",
+      "add": "Ekle",
+      "loadFailed": "Etiketler yüklenemedi",
+      "createFailed": "Etiket oluşturulamadı"
+    }
   },
   "coverLetters": {
     "title": "Ön Yazılar",

@@ -298,7 +298,59 @@
     "contacts": "Contacts",
     "interviews": "Interview Stages",
     "attachments": "Attachments",
-    "addToCalendar": "Add to Calendar"
+    "addToCalendar": "Add to Calendar",
+    "add": "+ Add",
+    "cancel": "Cancel",
+    "interviewStages": {
+      "title": "Interview Stages",
+      "addStage": "Add Stage",
+      "empty": "No interview stages yet.",
+      "notesPlaceholder": "Notes (optional)",
+      "done": "Done",
+      "pending": "Pending",
+      "loadFailed": "Failed to load interviews",
+      "addFailed": "Failed to add interview",
+      "updateFailed": "Failed to update",
+      "deleteFailed": "Failed to delete",
+      "addToCalendar": "Add to Google Calendar",
+      "stageTypes": {
+        "phone_screen": "Phone Screen",
+        "technical": "Technical",
+        "behavioral": "Behavioral",
+        "onsite": "On-site",
+        "take_home": "Take-home",
+        "final": "Final Round",
+        "other": "Other"
+      }
+    },
+    "contactList": {
+      "title": "Contacts",
+      "addContact": "Add Contact",
+      "empty": "No contacts yet.",
+      "namePlaceholder": "Name *",
+      "rolePlaceholder": "Role",
+      "emailPlaceholder": "Email",
+      "phonePlaceholder": "Phone",
+      "loadFailed": "Failed to load contacts",
+      "addFailed": "Failed to add contact",
+      "deleteFailed": "Failed to delete contact"
+    },
+    "attachmentList": {
+      "title": "Attachments",
+      "uploading": "Uploading...",
+      "dropOrClick": "Drop files here or click to upload",
+      "formats": "PDF, DOC, PNG, JPG, TXT (max 10MB)",
+      "loadFailed": "Failed to load attachments",
+      "uploadFailed": "Failed to upload file",
+      "deleteFailed": "Failed to delete file"
+    },
+    "tags": {
+      "new": "+ New",
+      "namePlaceholder": "Tag name",
+      "add": "Add",
+      "loadFailed": "Failed to load tags",
+      "createFailed": "Failed to create tag"
+    }
   },
   "coverLetters": {
     "title": "Cover Letters",

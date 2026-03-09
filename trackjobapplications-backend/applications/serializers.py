@@ -32,6 +32,14 @@ class InterviewStageSerializer(serializers.ModelSerializer):
         fields = ("id", "stage_type", "scheduled_at", "notes", "completed", "created_at")
         read_only_fields = ("id", "created_at")
 
+    def validate(self, attrs):
+        from django.utils import timezone
+        completed = attrs.get("completed", getattr(self.instance, "completed", False))
+        scheduled_at = attrs.get("scheduled_at", getattr(self.instance, "scheduled_at", None))
+        if completed and scheduled_at and scheduled_at > timezone.now():
+            raise serializers.ValidationError({"completed": "Cannot mark a future interview as completed."})
+        return attrs
+
 
 class ApplicationAttachmentSerializer(serializers.ModelSerializer):
     class Meta:

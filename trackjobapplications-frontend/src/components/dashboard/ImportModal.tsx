@@ -29,6 +29,7 @@ export default function ImportModal({ open, onClose, onSuccess }: Props) {
     setResult(null)
 
     const reader = new FileReader()
+    reader.onerror = () => { setFile(null) }
     reader.onload = (e) => {
       const text = e.target?.result as string
       const lines = text.split('\n').filter(l => l.trim())
@@ -98,15 +99,15 @@ export default function ImportModal({ open, onClose, onSuccess }: Props) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40" role="dialog" aria-modal="true" aria-labelledby="import-modal-title">
       <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl w-full max-w-2xl mx-4 max-h-[80vh] overflow-y-auto p-6">
-        <h2 id="import-modal-title" className="text-lg font-semibold mb-4 dark:text-white">Import Applications</h2>
+        <h2 id="import-modal-title" className="text-lg font-semibold mb-4 dark:text-white">{t('import.title')}</h2>
 
         {!file ? (
           <div
             onClick={() => fileRef.current?.click()}
             className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl p-12 text-center cursor-pointer hover:border-blue-400 transition-colors"
           >
-            <p className="text-gray-500 dark:text-gray-400">Click to select a CSV or Excel file</p>
-            <p className="text-xs text-gray-400 mt-1">.csv, .xlsx supported</p>
+            <p className="text-gray-500 dark:text-gray-400">{t('import.selectFile')}</p>
+            <p className="text-xs text-gray-400 mt-1">{t('import.supportedFormats')}</p>
             <input
               ref={fileRef}
               type="file"
@@ -118,9 +119,9 @@ export default function ImportModal({ open, onClose, onSuccess }: Props) {
         ) : result ? (
           <div className="space-y-3">
             <p className="text-sm dark:text-gray-200">
-              <span className="font-medium text-emerald-600">{result.created}</span> application(s) imported.
+              <span className="font-medium text-emerald-600">{result.created}</span> {t('import.imported')}
               {result.errors.length > 0 && (
-                <span className="ml-2 text-red-500">{result.errors.length} error(s).</span>
+                <span className="ml-2 text-red-500">{result.errors.length} {t('import.errors')}</span>
               )}
             </p>
             {result.errors.length > 0 && (
@@ -133,7 +134,7 @@ export default function ImportModal({ open, onClose, onSuccess }: Props) {
               </div>
             )}
             <div className="flex justify-end">
-              <Button onClick={handleClose}>Close</Button>
+              <Button onClick={handleClose}>{t('import.close')}</Button>
             </div>
           </div>
         ) : (
@@ -145,7 +146,7 @@ export default function ImportModal({ open, onClose, onSuccess }: Props) {
             {headers.length > 0 && (
               <>
                 <div className="space-y-2">
-                  <p className="text-sm font-medium dark:text-gray-200">Column Mapping</p>
+                  <p className="text-sm font-medium dark:text-gray-200">{t('import.columnMapping')}</p>
                   <div className="grid grid-cols-2 gap-2">
                     {headers.map(h => (
                       <div key={h} className="flex items-center gap-2">
@@ -192,9 +193,9 @@ export default function ImportModal({ open, onClose, onSuccess }: Props) {
             )}
 
             <div className="flex justify-end gap-2">
-              <Button variant="secondary" onClick={handleClose}>Cancel</Button>
+              <Button variant="secondary" onClick={handleClose}>{t('import.cancel')}</Button>
               <Button onClick={handleImport} disabled={loading}>
-                {loading ? 'Importing...' : 'Import'}
+                {loading ? t('import.importing') : t('import.import')}
               </Button>
             </div>
           </div>

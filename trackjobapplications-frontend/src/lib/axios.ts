@@ -14,6 +14,7 @@ api.interceptors.request.use((config) => {
 })
 
 let refreshPromise: Promise<string> | null = null
+let refreshTimer: ReturnType<typeof setTimeout> | null = null
 
 api.interceptors.response.use(
   (response) => response,
@@ -25,6 +26,7 @@ api.interceptors.response.use(
       if (refresh) {
         try {
           if (!refreshPromise) {
+            if (refreshTimer) clearTimeout(refreshTimer)
             refreshPromise = axios
               .post(
                 `${import.meta.env.VITE_API_URL || 'http://localhost:8000/api'}/auth/token/refresh/`,
@@ -32,9 +34,14 @@ api.interceptors.response.use(
               )
               .then(({ data }) => {
                 saveTokens({ access: data.access, refresh: data.refresh ?? refresh })
+                // Keep promise alive briefly so concurrent 401s reuse the same result
+                refreshTimer = setTimeout(() => { refreshPromise = null }, 500)
                 return data.access as string
               })
-              .finally(() => { refreshPromise = null })
+              .catch((err) => {
+                refreshPromise = null
+                throw err
+              })
           }
           const newAccess = await refreshPromise
           original.headers.Authorization = `Bearer ${newAccess}`

@@ -62,7 +62,7 @@ export default function ApplicationDrawer({ app, onClose, onEdit, onDelete }: Pr
               {/* Company + Position hero */}
               <div className="flex items-start gap-4">
                 <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-xl font-bold flex-shrink-0 ${getAvatarColor(app.company)}`}>
-                  {app.company[0].toUpperCase()}
+                  {(app.company[0] ?? '?').toUpperCase()}
                 </div>
                 <div className="min-w-0 pt-1">
                   <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 leading-tight">{app.company}</h2>

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import DashboardLayout from '../components/layout/DashboardLayout'
 import Header from '../components/dashboard/Header'
@@ -21,13 +21,13 @@ export default function CoverLettersPage() {
   const [preview, setPreview] = useState<CoverLetterTemplate | null>(null)
   const [deleting, setDeleting] = useState<CoverLetterTemplate | null>(null)
 
-  const load = useCallback(() => {
+  useEffect(() => {
+    let active = true
     getTemplates()
-      .then(data => { setTemplates(data); setLoading(false) })
-      .catch(() => { addToast(t('coverLetters.errors.loadFailed'), 'error'); setLoading(false) })
+      .then(data => { if (active) { setTemplates(data); setLoading(false) } })
+      .catch(() => { if (active) { addToast(t('coverLetters.errors.loadFailed'), 'error'); setLoading(false) } })
+    return () => { active = false }
   }, [addToast, t])
-
-  useEffect(() => { load() }, [load])
 
   function openCreate() {
     setForm({ name: '', content: '' })

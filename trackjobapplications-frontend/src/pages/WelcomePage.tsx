@@ -97,7 +97,7 @@ export default function WelcomePage() {
 
       {/* Footer */}
       <footer className="text-center py-5 text-xs text-gray-400 dark:text-gray-500">
-        © {new Date().getFullYear()} TrackJobs. {t('footer.rights')}
+        {t('footer.copyright', { year: new Date().getFullYear() })}
       </footer>
     </div>
   )

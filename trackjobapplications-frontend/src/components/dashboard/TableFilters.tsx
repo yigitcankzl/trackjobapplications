@@ -21,15 +21,7 @@ interface Props {
   onSortChange: (key: SortKey) => void
 }
 
-const SOURCE_OPTIONS: { value: ApplicationSource | ''; label: string }[] = [
-  { value: '', label: 'All Sources' },
-  { value: 'linkedin', label: 'LinkedIn' },
-  { value: 'indeed', label: 'Indeed' },
-  { value: 'glassdoor', label: 'Glassdoor' },
-  { value: 'referral', label: 'Referral' },
-  { value: 'company_website', label: 'Company Website' },
-  { value: 'other', label: 'Other' },
-]
+const SOURCE_KEYS: (ApplicationSource | '')[] = ['', 'linkedin', 'indeed', 'glassdoor', 'referral', 'company_website', 'other']
 
 export default function TableFilters({
   search,
@@ -113,8 +105,8 @@ export default function TableFilters({
           onChange={e => onSourceFilterChange(e.target.value as ApplicationSource | '')}
           className="px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-sm bg-white dark:bg-gray-900 dark:text-gray-100 outline-none focus:border-blue-400"
         >
-          {SOURCE_OPTIONS.map(opt => (
-            <option key={opt.value} value={opt.value}>{opt.label}</option>
+          {SOURCE_KEYS.map(key => (
+            <option key={key} value={key}>{key === '' ? t('dashboard.filters.allSources') : t(`source.${key}`)}</option>
           ))}
         </select>
 

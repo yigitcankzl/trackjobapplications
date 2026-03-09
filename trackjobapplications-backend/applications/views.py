@@ -189,7 +189,7 @@ class ApplicationViewSet(viewsets.ModelViewSet):
             updated = self.get_queryset().filter(id__in=ids).update(
                 status=new_status, updated_at=tz.now()
             )
-        return Response({"updated": updated})
+        return Response({"updated": updated, "skipped": len(ids) - updated})
 
     @action(detail=False, methods=["post"], url_path="bulk-delete")
     def bulk_delete(self, request):
@@ -198,7 +198,7 @@ class ApplicationViewSet(viewsets.ModelViewSet):
             return Response({"error": "Provide 1-100 ids."}, status=status.HTTP_400_BAD_REQUEST)
         with transaction.atomic():
             deleted, _ = self.get_queryset().filter(id__in=ids).delete()
-        return Response({"deleted": deleted})
+        return Response({"deleted": deleted, "skipped": len(ids) - deleted})
 
     @action(
         detail=False,

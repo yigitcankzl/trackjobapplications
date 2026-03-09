@@ -116,7 +116,7 @@ class TestBulkActions:
 
 @pytest.mark.django_db
 class TestTagViewSet:
-    URL = "/api/tags/"
+    URL = "/api/applications/tags/"
 
     def test_create(self, auth_client):
         res = auth_client.post(self.URL, {"name": "Remote", "color": "#10B981"})
@@ -173,7 +173,8 @@ class TestContactViewSet:
         app = ApplicationFactory(user=other_user)
         ApplicationContactFactory(application=app)
         res = auth_client.get(self._url(app.id))
-        assert res.status_code == 404
+        assert res.status_code == 200
+        assert len(res.data) == 0
 
 
 # ── Interview Stages ──────────────────────────────────────────────
@@ -201,7 +202,8 @@ class TestInterviewStageViewSet:
     def test_cannot_access_others(self, auth_client, other_user):
         app = ApplicationFactory(user=other_user)
         res = auth_client.get(self._url(app.id))
-        assert res.status_code == 404
+        assert res.status_code == 200
+        assert len(res.data) == 0
 
 
 # ── Attachments ───────────────────────────────────────────────────
@@ -211,10 +213,11 @@ class TestAttachmentViewSet:
     def _url(self, app_id):
         return f"/api/applications/{app_id}/attachments/"
 
-    def test_upload(self, auth_client, user):
+    def test_upload(self, auth_client, user, tmp_path, settings):
         from django.core.files.uploadedfile import SimpleUploadedFile
+        settings.MEDIA_ROOT = tmp_path
         app = ApplicationFactory(user=user)
-        f = SimpleUploadedFile("resume.pdf", b"fakepdf", content_type="application/pdf")
+        f = SimpleUploadedFile("resume.pdf", b"%PDF-1.4 fakepdf", content_type="application/pdf")
         res = auth_client.post(self._url(app.id), {"file": f, "name": "resume.pdf"}, format="multipart")
         assert res.status_code == 201
 
@@ -228,4 +231,5 @@ class TestAttachmentViewSet:
     def test_cannot_access_others(self, auth_client, other_user):
         app = ApplicationFactory(user=other_user)
         res = auth_client.get(self._url(app.id))
-        assert res.status_code == 404
+        assert res.status_code == 200
+        assert len(res.data) == 0

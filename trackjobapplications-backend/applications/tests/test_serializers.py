@@ -43,6 +43,7 @@ class TestApplicationSerializer:
         assert "company" in s.errors
 
     def test_tag_ids_write(self, user):
+        from rest_framework.test import APIRequestFactory
         tag = TagFactory(user=user)
         data = {
             "company": "Acme",
@@ -50,7 +51,10 @@ class TestApplicationSerializer:
             "applied_date": "2024-06-01",
             "tag_ids": [tag.id],
         }
-        s = ApplicationSerializer(data=data)
+        factory = APIRequestFactory()
+        request = factory.post("/")
+        request.user = user
+        s = ApplicationSerializer(data=data, context={"request": request})
         assert s.is_valid(), s.errors
 
     def test_invalid_status(self):
@@ -96,7 +100,7 @@ class TestInterviewStageSerializer:
 @pytest.mark.django_db
 class TestApplicationAttachmentSerializer:
     def test_valid_pdf(self):
-        f = SimpleUploadedFile("resume.pdf", b"fakecontent", content_type="application/pdf")
+        f = SimpleUploadedFile("resume.pdf", b"%PDF-1.4 fakecontent", content_type="application/pdf")
         s = ApplicationAttachmentSerializer(data={"file": f, "name": "resume.pdf"})
         assert s.is_valid(), s.errors
 

@@ -95,3 +95,103 @@ class TestChangePasswordView:
         }
         res = auth_client.post(self.URL, data)
         assert res.status_code == 400
+
+
+@pytest.mark.django_db
+class TestLogoutView:
+    URL = "/api/auth/logout/"
+
+    def test_logout_success(self, user):
+        client = APIClient()
+        login_res = client.post("/api/auth/login/", {"email": user.email, "password": "testpass123"})
+        assert login_res.status_code == 200
+        refresh = login_res.data["refresh"]
+        client.credentials(HTTP_AUTHORIZATION=f"Bearer {login_res.data['access']}")
+        res = client.post(self.URL, {"refresh": refresh})
+        assert res.status_code == 200
+
+    def test_logout_unauthenticated(self, anon_client):
+        res = anon_client.post(self.URL, {"refresh": "fake"})
+        assert res.status_code == 401
+
+
+@pytest.mark.django_db
+class TestLogoutAllView:
+    URL = "/api/auth/logout/all/"
+
+    def test_logout_all(self, auth_client):
+        res = auth_client.post(self.URL)
+        assert res.status_code == 200
+
+
+@pytest.mark.django_db
+class TestVerifyEmailView:
+    URL = "/api/auth/verify-email/"
+
+    def test_verify_success(self, anon_client, user):
+        from django.contrib.auth.tokens import default_token_generator
+        from django.utils.encoding import force_bytes
+        from django.utils.http import urlsafe_base64_encode
+
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        token = default_token_generator.make_token(user)
+        res = anon_client.post(self.URL, {"uid": uid, "token": token})
+        assert res.status_code == 200
+        user.refresh_from_db()
+        assert user.is_email_verified is True
+
+    def test_verify_invalid_token(self, anon_client, user):
+        from django.utils.encoding import force_bytes
+        from django.utils.http import urlsafe_base64_encode
+
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        res = anon_client.post(self.URL, {"uid": uid, "token": "invalid"})
+        assert res.status_code == 400
+
+    def test_verify_invalid_uid(self, anon_client):
+        res = anon_client.post(self.URL, {"uid": "invalid", "token": "fake"})
+        assert res.status_code == 400
+
+
+@pytest.mark.django_db
+class TestPasswordResetFlow:
+    def test_request_reset(self, anon_client, user):
+        res = anon_client.post("/api/auth/password-reset/", {"email": user.email})
+        assert res.status_code == 200
+
+    def test_request_reset_nonexistent_email(self, anon_client):
+        res = anon_client.post("/api/auth/password-reset/", {"email": "nobody@x.com"})
+        # Should still return 200 to prevent enumeration
+        assert res.status_code == 200
+
+    def test_confirm_reset(self, anon_client, user):
+        from django.contrib.auth.tokens import default_token_generator
+        from django.utils.encoding import force_bytes
+        from django.utils.http import urlsafe_base64_encode
+
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        token = default_token_generator.make_token(user)
+        res = anon_client.post("/api/auth/password-reset/confirm/", {
+            "uid": uid,
+            "token": token,
+            "new_password": "BrandNewPass789!",
+            "new_password2": "BrandNewPass789!",
+        })
+        assert res.status_code == 200
+        user.refresh_from_db()
+        assert user.check_password("BrandNewPass789!")
+
+    def test_confirm_reset_mismatch(self, anon_client, user):
+        from django.contrib.auth.tokens import default_token_generator
+        from django.utils.encoding import force_bytes
+        from django.utils.http import urlsafe_base64_encode
+
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        token = default_token_generator.make_token(user)
+        res = anon_client.post("/api/auth/password-reset/confirm/", {
+            "uid": uid,
+            "token": token,
+            "new_password": "Pass1!",
+            "new_password2": "Pass2!",
+        })
+        assert res.status_code == 400

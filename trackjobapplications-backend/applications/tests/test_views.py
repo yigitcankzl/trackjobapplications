@@ -228,8 +228,110 @@ class TestAttachmentViewSet:
         res = auth_client.post(self._url(app.id), {"file": f, "name": "malware.exe"}, format="multipart")
         assert res.status_code == 400
 
-    def test_cannot_access_others(self, auth_client, other_user):
+    def test_cannot_access_others_attachments(self, auth_client, other_user):
         app = ApplicationFactory(user=other_user)
         res = auth_client.get(self._url(app.id))
         assert res.status_code == 200
         assert len(res.data) == 0
+
+
+# ── Stats ────────────────────────────────────────────────────────
+
+@pytest.mark.django_db
+class TestStats:
+    URL = "/api/applications/stats/"
+
+    def test_stats_returns_counts(self, auth_client, user):
+        ApplicationFactory(user=user, status="applied")
+        ApplicationFactory(user=user, status="applied")
+        ApplicationFactory(user=user, status="interview")
+        res = auth_client.get(self.URL)
+        assert res.status_code == 200
+        assert res.data["total"] == 3
+        assert res.data["applied"] == 2
+        assert res.data["interview"] == 1
+        assert res.data["rejected"] == 0
+
+    def test_stats_empty(self, auth_client):
+        res = auth_client.get(self.URL)
+        assert res.status_code == 200
+        assert res.data["total"] == 0
+
+    def test_stats_excludes_other_users(self, auth_client, user, other_user):
+        ApplicationFactory(user=user, status="applied")
+        ApplicationFactory(user=other_user, status="offer")
+        res = auth_client.get(self.URL)
+        assert res.data["total"] == 1
+        assert res.data["offer"] == 0
+
+
+# ── Toggle Pin ───────────────────────────────────────────────────
+
+@pytest.mark.django_db
+class TestTogglePin:
+    def test_toggle_pin_on(self, auth_client, user):
+        app = ApplicationFactory(user=user, is_pinned=False)
+        res = auth_client.post(f"/api/applications/{app.id}/toggle-pin/")
+        assert res.status_code == 200
+        assert res.data["is_pinned"] is True
+
+    def test_toggle_pin_off(self, auth_client, user):
+        app = ApplicationFactory(user=user, is_pinned=True)
+        res = auth_client.post(f"/api/applications/{app.id}/toggle-pin/")
+        assert res.status_code == 200
+        assert res.data["is_pinned"] is False
+
+    def test_toggle_pin_others_denied(self, auth_client, other_user):
+        app = ApplicationFactory(user=other_user)
+        res = auth_client.post(f"/api/applications/{app.id}/toggle-pin/")
+        assert res.status_code == 404
+
+
+# ── Export PDF ───────────────────────────────────────────────────
+
+@pytest.mark.django_db
+class TestExportPdf:
+    def test_export_pdf(self, auth_client, user):
+        ApplicationFactory(user=user, company="TestCo", position="Dev")
+        res = auth_client.get("/api/applications/export-pdf/")
+        assert res.status_code == 200
+        assert res["Content-Type"] == "application/pdf"
+        assert b"%PDF" in res.content
+
+    def test_export_pdf_empty(self, auth_client):
+        res = auth_client.get("/api/applications/export-pdf/")
+        assert res.status_code == 200
+        assert b"%PDF" in res.content
+
+
+# ── Cover Letter Templates ───────────────────────────────────────
+
+@pytest.mark.django_db
+class TestCoverLetterTemplateViewSet:
+    URL = "/api/applications/cover-letters/"
+
+    def test_create(self, auth_client):
+        res = auth_client.post(self.URL, {"name": "General", "content": "Dear {company}..."})
+        assert res.status_code == 201
+        assert res.data["name"] == "General"
+
+    def test_list_own(self, auth_client, user, other_user):
+        from applications.models import CoverLetterTemplate
+        CoverLetterTemplate.objects.create(user=user, name="Mine", content="...")
+        CoverLetterTemplate.objects.create(user=other_user, name="Theirs", content="...")
+        res = auth_client.get(self.URL)
+        assert len(res.data) == 1
+        assert res.data[0]["name"] == "Mine"
+
+    def test_update(self, auth_client, user):
+        from applications.models import CoverLetterTemplate
+        tpl = CoverLetterTemplate.objects.create(user=user, name="Old", content="old content")
+        res = auth_client.patch(f"{self.URL}{tpl.id}/", {"name": "New"})
+        assert res.status_code == 200
+        assert res.data["name"] == "New"
+
+    def test_delete(self, auth_client, user):
+        from applications.models import CoverLetterTemplate
+        tpl = CoverLetterTemplate.objects.create(user=user, name="ToDelete", content="...")
+        res = auth_client.delete(f"{self.URL}{tpl.id}/")
+        assert res.status_code == 204

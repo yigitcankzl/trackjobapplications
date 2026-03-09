@@ -250,8 +250,14 @@ class ApplicationViewSet(viewsets.ModelViewSet):
                 mapped = {column_mapping.get(k, k): v for k, v in row.items()} if column_mapping else row
                 serializer = ApplicationSerializer(data=mapped, context={"request": request})
                 if serializer.is_valid():
-                    serializer.save(user=request.user)
-                    created_count += 1
+                    sid = transaction.savepoint()
+                    try:
+                        serializer.save(user=request.user)
+                        transaction.savepoint_commit(sid)
+                        created_count += 1
+                    except Exception:
+                        transaction.savepoint_rollback(sid)
+                        errors.append({"row": i + 1, "errors": {"detail": "Failed to save row."}})
                 else:
                     errors.append({"row": i + 1, "errors": serializer.errors})
 

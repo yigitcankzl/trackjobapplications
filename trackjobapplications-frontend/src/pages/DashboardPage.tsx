@@ -49,7 +49,7 @@ export default function DashboardPage() {
 
   const loadStats = useCallback(() => {
     getStats().then(setStats).catch(() => addToast(t('dashboard.errors.loadFailed'), 'error'))
-  }, [])
+  }, [addToast, t])
 
   const requestIdRef = useRef(0)
 

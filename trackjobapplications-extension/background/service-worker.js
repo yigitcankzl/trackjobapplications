@@ -1,4 +1,10 @@
-const API_BASE = 'http://localhost:8000/api';
+// Default API URL — override via extension options or chrome.storage
+const DEFAULT_API_BASE = 'http://localhost:8000/api';
+
+async function getApiBase() {
+  const { api_base } = await chrome.storage.local.get('api_base');
+  return api_base || DEFAULT_API_BASE;
+}
 
 // --- Token Storage ---
 
@@ -18,10 +24,11 @@ async function clearTokens() {
 // --- Authenticated Fetch with Auto-Refresh ---
 
 async function apiFetch(path, options = {}) {
+  const apiBase = await getApiBase();
   let { access, refresh } = await getTokens();
   if (!access) throw new Error('Not authenticated');
 
-  let response = await fetch(`${API_BASE}${path}`, {
+  let response = await fetch(`${apiBase}${path}`, {
     ...options,
     headers: {
       'Content-Type': 'application/json',
@@ -31,7 +38,7 @@ async function apiFetch(path, options = {}) {
   });
 
   if (response.status === 401 && refresh) {
-    const refreshRes = await fetch(`${API_BASE}/auth/token/refresh/`, {
+    const refreshRes = await fetch(`${apiBase}/auth/token/refresh/`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ refresh }),
@@ -40,7 +47,7 @@ async function apiFetch(path, options = {}) {
     if (refreshRes.ok) {
       const data = await refreshRes.json();
       await saveTokens(data.access, data.refresh ?? refresh);
-      response = await fetch(`${API_BASE}${path}`, {
+      response = await fetch(`${apiBase}${path}`, {
         ...options,
         headers: {
           'Content-Type': 'application/json',
@@ -59,7 +66,7 @@ async function apiFetch(path, options = {}) {
 
 // --- Message Handler ---
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   handleMessage(message).then(sendResponse);
   return true; // keep channel open for async response
 });
@@ -68,7 +75,8 @@ async function handleMessage(message) {
   try {
     switch (message.type) {
       case 'LOGIN': {
-        const res = await fetch(`${API_BASE}/auth/login/`, {
+        const apiBase = await getApiBase();
+        const res = await fetch(`${apiBase}/auth/login/`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: message.email, password: message.password }),

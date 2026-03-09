@@ -18,6 +18,7 @@ import TagBadge from '../components/dashboard/TagBadge'
 import ContactList from '../components/detail/ContactList'
 import InterviewTimeline from '../components/detail/InterviewTimeline'
 import AttachmentList from '../components/detail/AttachmentList'
+import LoadingSpinner from '../components/ui/LoadingSpinner'
 import { ArrowLeftIcon, EditIcon, TrashIcon, CalendarIcon, ClockIcon, LinkIcon } from '../components/icons'
 
 export default function ApplicationDetailPage() {
@@ -76,7 +77,7 @@ export default function ApplicationDetailPage() {
     return (
       <DashboardLayout>
         <div className="flex items-center justify-center py-24">
-          <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+          <LoadingSpinner />
         </div>
       </DashboardLayout>
     )

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { ApplicationContact } from '../../types'
 import { getContacts, createContact, deleteContact } from '../../services/contacts'
 import { useToast } from '../../context/ToastContext'
+import LoadingSpinner from '../ui/LoadingSpinner'
 
 interface Props {
   applicationId: number
@@ -78,7 +79,7 @@ export default function ContactList({ applicationId }: Props) {
       )}
 
       {loading ? (
-        <div className="flex justify-center py-4"><div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" /></div>
+        <LoadingSpinner size="sm" centered />
       ) : contacts.length === 0 && !showAdd ? (
         <p className="text-xs text-gray-400">{t('detail.contactList.empty')}</p>
       ) : (

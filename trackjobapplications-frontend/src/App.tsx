@@ -5,6 +5,7 @@ import { ToastProvider } from './context/ToastContext'
 import { AuthProvider } from './context/AuthContext'
 import ErrorBoundary from './components/ErrorBoundary'
 import PrivateRoute from './components/auth/PrivateRoute'
+import LoadingSpinner from './components/ui/LoadingSpinner'
 
 const WelcomePage = lazy(() => import('./pages/WelcomePage'))
 const LoginPage = lazy(() => import('./pages/LoginPage'))
@@ -22,7 +23,7 @@ export default function App() {
       <ToastProvider>
         <BrowserRouter>
           <AuthProvider>
-            <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" /></div>}>
+            <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><LoadingSpinner /></div>}>
             <Routes>
               <Route path="/" element={<WelcomePage />} />
               <Route path="/login" element={<LoginPage />} />

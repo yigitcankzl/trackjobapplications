@@ -4,6 +4,7 @@ import { ApplicationNote } from '../../types'
 import { getNotes, createNote, deleteNote } from '../../services/applications'
 import { TrashIcon } from '../icons'
 import { useToast } from '../../context/ToastContext'
+import LoadingSpinner from '../ui/LoadingSpinner'
 
 interface Props {
   applicationId: number
@@ -91,7 +92,7 @@ export default function NoteTimeline({ applicationId }: Props) {
 
       {/* Timeline */}
       {loading ? (
-        <div className="flex justify-center py-4"><div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" /></div>
+        <LoadingSpinner size="sm" centered />
       ) : notes.length === 0 ? (
         <p className="text-xs text-gray-400 dark:text-gray-500 italic">{t('dashboard.notes.empty')}</p>
       ) : (

@@ -15,6 +15,7 @@ import ImportModal from '../components/dashboard/ImportModal'
 import InterviewReminderPopup from '../components/dashboard/InterviewReminderPopup'
 import Pagination from '../components/ui/Pagination'
 import Button from '../components/ui/Button'
+import LoadingSpinner from '../components/ui/LoadingSpinner'
 import { PlusIcon, TableIcon, KanbanIcon, DownloadIcon, RefreshIcon } from '../components/icons'
 import { exportApplicationsCsv } from '../lib/exportCsv'
 import { isSafeUrl } from '../lib/url'
@@ -294,7 +295,7 @@ export default function DashboardPage() {
 
       {loading ? (
         <div className="flex items-center justify-center py-24">
-          <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+          <LoadingSpinner />
         </div>
       ) : view === 'table' ? (
         <ApplicationsTable

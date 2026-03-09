@@ -4,6 +4,7 @@ import { ApplicationAttachment } from '../../types'
 import { getAttachments, uploadAttachment, deleteAttachment } from '../../services/attachments'
 import { useToast } from '../../context/ToastContext'
 import { isSafeUrl } from '../../lib/url'
+import LoadingSpinner from '../ui/LoadingSpinner'
 
 interface Props {
   applicationId: number
@@ -98,7 +99,7 @@ export default function AttachmentList({ applicationId }: Props) {
       </div>
 
       {loading ? (
-        <div className="flex justify-center py-4"><div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" /></div>
+        <LoadingSpinner size="sm" centered />
       ) : attachments.length > 0 && (
         <div className="space-y-1.5">
           {attachments.map(att => (

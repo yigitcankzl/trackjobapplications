@@ -209,6 +209,64 @@ class EmailLog(models.Model):
         return f"{self.get_email_type_display()}: {self.subject[:50]}"
 
 
+class OfferDetail(models.Model):
+    REMOTE_CHOICES = [
+        ("onsite", "On-site"),
+        ("hybrid", "Hybrid"),
+        ("remote", "Remote"),
+    ]
+
+    COMPANY_SIZE_CHOICES = [
+        ("startup", "Startup (1-50)"),
+        ("small", "Small (51-200)"),
+        ("medium", "Medium (201-1000)"),
+        ("large", "Large (1001-5000)"),
+        ("enterprise", "Enterprise (5000+)"),
+    ]
+
+    CURRENCY_CHOICES = [
+        ("USD", "USD"),
+        ("EUR", "EUR"),
+        ("GBP", "GBP"),
+        ("TRY", "TRY"),
+        ("CAD", "CAD"),
+        ("AUD", "AUD"),
+        ("JPY", "JPY"),
+        ("INR", "INR"),
+        ("OTHER", "Other"),
+    ]
+
+    application = models.OneToOneField(
+        Application,
+        on_delete=models.CASCADE,
+        related_name="offer_detail",
+    )
+    salary = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
+    currency = models.CharField(max_length=5, choices=CURRENCY_CHOICES, default="USD")
+    salary_period = models.CharField(
+        max_length=10,
+        choices=[("yearly", "Yearly"), ("monthly", "Monthly"), ("hourly", "Hourly")],
+        default="yearly",
+    )
+    signing_bonus = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
+    annual_bonus = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
+    equity = models.CharField(max_length=200, blank=True, default="")
+    benefits = models.TextField(blank=True, default="")
+    location = models.CharField(max_length=200, blank=True, default="")
+    remote_policy = models.CharField(max_length=10, choices=REMOTE_CHOICES, blank=True, default="")
+    company_size = models.CharField(max_length=15, choices=COMPANY_SIZE_CHOICES, blank=True, default="")
+    start_date = models.DateField(null=True, blank=True)
+    deadline = models.DateField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"Offer for {self.application}"
+
+
 class ApplicationAttachment(models.Model):
     application = models.ForeignKey(
         Application,

@@ -228,7 +228,7 @@ export default function DashboardPage() {
               <RefreshIcon />
             </Button>
             <Button variant="secondary" onClick={() => setImportOpen(true)}>
-              Import
+              <span className="hidden sm:inline">{t('import.import')}</span>
             </Button>
             <Button variant="secondary" onClick={() => exportApplicationsCsv(apps)}>
               <DownloadIcon />

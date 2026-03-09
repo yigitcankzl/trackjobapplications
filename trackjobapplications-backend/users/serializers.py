@@ -99,11 +99,7 @@ class UserSerializer(serializers.ModelSerializer):
     def validate_notification_email(self, value):
         if not value:
             return value
-        user = self.context["request"].user
-        value = value.lower().strip()
-        if value != user.email:
-            raise serializers.ValidationError("Notification email must match your account email.")
-        return value
+        return value.lower().strip()
 
     def validate_resume(self, value):
         return _validate_file_upload(

@@ -288,11 +288,8 @@ class TagViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
 
-class ApplicationNoteViewSet(viewsets.ModelViewSet):
-    serializer_class = ApplicationNoteSerializer
-    permission_classes = [permissions.IsAuthenticated]
-    pagination_class = None
-    http_method_names = ["get", "post", "delete"]
+class _NestedApplicationMixin:
+    """Shared logic for nested viewsets under /applications/{pk}/..."""
 
     def _get_application(self):
         return get_object_or_404(
@@ -300,6 +297,13 @@ class ApplicationNoteViewSet(viewsets.ModelViewSet):
             pk=self.kwargs["application_pk"],
             user=self.request.user,
         )
+
+
+class ApplicationNoteViewSet(_NestedApplicationMixin, viewsets.ModelViewSet):
+    serializer_class = ApplicationNoteSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    pagination_class = None
+    http_method_names = ["get", "post", "delete"]
 
     def get_queryset(self):
         return ApplicationNote.objects.filter(
@@ -316,17 +320,6 @@ class ApplicationNoteViewSet(viewsets.ModelViewSet):
             if application.note_entries.count() >= MAX_NOTES_PER_APPLICATION:
                 raise ValidationError({"detail": f"Maximum {MAX_NOTES_PER_APPLICATION} notes per application."})
             serializer.save(application=application)
-
-
-class _NestedApplicationMixin:
-    """Shared logic for nested viewsets under /applications/{pk}/..."""
-
-    def _get_application(self):
-        return get_object_or_404(
-            Application,
-            pk=self.kwargs["application_pk"],
-            user=self.request.user,
-        )
 
 
 class ApplicationContactViewSet(_NestedApplicationMixin, viewsets.ModelViewSet):

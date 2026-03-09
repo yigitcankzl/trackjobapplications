@@ -204,7 +204,7 @@ export default function DashboardPage() {
       <Header
         title={t('dashboard.title')}
         action={
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <div className="flex items-center bg-gray-100 dark:bg-gray-800 rounded-xl p-1 gap-0.5">
               <button
                 onClick={() => setView('table')}
@@ -232,15 +232,15 @@ export default function DashboardPage() {
             </Button>
             <Button variant="secondary" onClick={() => exportApplicationsCsv(apps)}>
               <DownloadIcon />
-              {t('dashboard.exportCsv')}
+              <span className="hidden sm:inline">{t('dashboard.exportCsv')}</span>
             </Button>
             <Button variant="secondary" onClick={() => exportPdf().catch(() => addToast(t('dashboard.errors.exportPdfFailed'), 'error'))}>
               <DownloadIcon />
-              {t('dashboard.exportPdf')}
+              <span className="hidden sm:inline">{t('dashboard.exportPdf')}</span>
             </Button>
             <Button onClick={() => setAddOpen(true)}>
               <PlusIcon />
-              {t('dashboard.addApplication')}
+              <span className="hidden sm:inline">{t('dashboard.addApplication')}</span>
             </Button>
           </div>
         }

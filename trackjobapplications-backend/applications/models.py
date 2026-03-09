@@ -42,6 +42,8 @@ class Application(models.Model):
     tags = models.ManyToManyField("Tag", blank=True, related_name="applications")
     is_pinned = models.BooleanField(default=False)
     notes = models.TextField(blank=True, default="")
+    job_posting_content = models.TextField(blank=True, default="")
+    email_thread_id = models.CharField(max_length=255, blank=True, default="")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -167,6 +169,44 @@ class CoverLetterTemplate(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class EmailLog(models.Model):
+    EMAIL_TYPE_CHOICES = [
+        ("rejection", "Rejection"),
+        ("interview_invite", "Interview Invitation"),
+        ("offer", "Offer"),
+        ("follow_up", "Follow-up"),
+        ("general", "General"),
+    ]
+
+    application = models.ForeignKey(
+        Application,
+        on_delete=models.CASCADE,
+        related_name="email_logs",
+    )
+    message_id = models.CharField(max_length=255)
+    thread_id = models.CharField(max_length=255, blank=True, default="")
+    subject = models.CharField(max_length=500)
+    sender_email = models.EmailField()
+    sender_name = models.CharField(max_length=200, blank=True, default="")
+    email_type = models.CharField(max_length=20, choices=EMAIL_TYPE_CHOICES, default="general")
+    snippet = models.TextField(blank=True, default="")
+    suggested_status = models.CharField(max_length=20, blank=True, default="")
+    received_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-received_at"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["application", "message_id"],
+                name="unique_application_email",
+            ),
+        ]
+
+    def __str__(self):
+        return f"{self.get_email_type_display()}: {self.subject[:50]}"
 
 
 class ApplicationAttachment(models.Model):

@@ -8,6 +8,7 @@ MAX_NOTES_PER_APPLICATION = 50
 MAX_CONTACTS_PER_APPLICATION = 20
 MAX_INTERVIEWS_PER_APPLICATION = 20
 MAX_ATTACHMENTS_PER_APPLICATION = 10
+MAX_EMAILS_PER_APPLICATION = 100
 
 ALLOWED_IMPORT_FIELDS = {"company", "position", "status", "applied_date", "url", "source", "notes"}
 FORMULA_PREFIXES = ("=", "+", "-", "@", "\t", "\r", "|")

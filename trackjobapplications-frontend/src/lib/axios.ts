@@ -2,7 +2,7 @@ import axios from 'axios'
 import { getAccessToken, getRefreshToken, saveTokens, clearTokens } from '../services/auth'
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000/api',
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1',
 })
 
 api.interceptors.request.use((config) => {
@@ -29,7 +29,7 @@ api.interceptors.response.use(
             if (refreshTimer) clearTimeout(refreshTimer)
             refreshPromise = axios
               .post(
-                `${import.meta.env.VITE_API_URL || 'http://localhost:8000/api'}/auth/token/refresh/`,
+                `${import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1'}/auth/token/refresh/`,
                 { refresh },
               )
               .then(({ data }) => {

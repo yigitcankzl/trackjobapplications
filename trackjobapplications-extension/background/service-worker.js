@@ -1,5 +1,5 @@
 // Default API URL — override via extension options or chrome.storage
-const DEFAULT_API_BASE = 'http://localhost:8000/api';
+const DEFAULT_API_BASE = 'http://localhost:8000/api/v1';
 
 async function getApiBase() {
   const { api_base } = await chrome.storage.local.get('api_base');

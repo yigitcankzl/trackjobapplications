@@ -12,11 +12,8 @@ def health_check(request):
 urlpatterns = [
     path("api/health/", health_check),
     path("admin/", admin.site.urls),
-    # v1 API routes (also available at /api/ for backwards compatibility)
     path("api/v1/auth/", include("users.urls")),
     path("api/v1/applications/", include("applications.urls")),
-    path("api/auth/", include("users.urls")),
-    path("api/applications/", include("applications.urls")),
 ]
 
 if settings.DEBUG:

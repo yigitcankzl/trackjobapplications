@@ -16,6 +16,20 @@ from rest_framework.throttling import SimpleRateThrottle
 
 from django.utils import timezone as tz
 
+from .constants import (
+    ALLOWED_IMPORT_FIELDS,
+    FORMULA_PREFIXES,
+    MAX_ATTACHMENTS_PER_APPLICATION,
+    MAX_CONTACTS_PER_APPLICATION,
+    MAX_IMPORT_FILE_SIZE,
+    MAX_IMPORT_ROWS,
+    MAX_INTERVIEWS_PER_APPLICATION,
+    MAX_NOTES_PER_APPLICATION,
+    MAX_PAGE_SIZE_ALL,
+    MAX_TAGS_PER_USER,
+    MAX_TEMPLATES_PER_USER,
+)
+
 
 class ExportThrottle(SimpleRateThrottle):
     scope = "export"
@@ -31,12 +45,6 @@ class ImportThrottle(SimpleRateThrottle):
         return self.cache_format % {"scope": self.scope, "ident": request.user.pk}
 
 logger = logging.getLogger(__name__)
-
-MAX_IMPORT_ROWS = 1000
-MAX_IMPORT_FILE_SIZE = 5 * 1024 * 1024  # 5 MB
-MAX_PAGE_SIZE_ALL = 500
-ALLOWED_IMPORT_FIELDS = {"company", "position", "status", "applied_date", "url", "source", "notes"}
-FORMULA_PREFIXES = ("=", "+", "-", "@", "\t", "\r")
 
 
 def _sanitize_cell(value):
@@ -254,15 +262,14 @@ class CoverLetterTemplateViewSet(viewsets.ModelViewSet):
     serializer_class = CoverLetterTemplateSerializer
     permission_classes = [permissions.IsAuthenticated]
     pagination_class = None
-    MAX_TEMPLATES_PER_USER = 50
 
     def get_queryset(self):
         return self.request.user.cover_letter_templates.all()
 
     def perform_create(self, serializer):
         from rest_framework.exceptions import ValidationError
-        if self.request.user.cover_letter_templates.count() >= self.MAX_TEMPLATES_PER_USER:
-            raise ValidationError({"detail": f"Maximum {self.MAX_TEMPLATES_PER_USER} cover letter templates per user."})
+        if self.request.user.cover_letter_templates.count() >= MAX_TEMPLATES_PER_USER:
+            raise ValidationError({"detail": f"Maximum {MAX_TEMPLATES_PER_USER} cover letter templates per user."})
         serializer.save(user=self.request.user)
 
 
@@ -270,15 +277,14 @@ class TagViewSet(viewsets.ModelViewSet):
     serializer_class = TagSerializer
     permission_classes = [permissions.IsAuthenticated]
     pagination_class = None
-    MAX_TAGS_PER_USER = 200
 
     def get_queryset(self):
         return self.request.user.tags.all()
 
     def perform_create(self, serializer):
         from rest_framework.exceptions import ValidationError
-        if self.request.user.tags.count() >= self.MAX_TAGS_PER_USER:
-            raise ValidationError({"detail": f"Maximum {self.MAX_TAGS_PER_USER} tags per user."})
+        if self.request.user.tags.count() >= MAX_TAGS_PER_USER:
+            raise ValidationError({"detail": f"Maximum {MAX_TAGS_PER_USER} tags per user."})
         serializer.save(user=self.request.user)
 
 
@@ -301,16 +307,14 @@ class ApplicationNoteViewSet(viewsets.ModelViewSet):
             application__user=self.request.user,
         )
 
-    MAX_NOTES_PER_APPLICATION = 50
-
     def perform_create(self, serializer):
         from rest_framework.exceptions import ValidationError
         with transaction.atomic():
             application = Application.objects.select_for_update().get(
                 pk=self.kwargs["application_pk"], user=self.request.user,
             )
-            if application.note_entries.count() >= self.MAX_NOTES_PER_APPLICATION:
-                raise ValidationError({"detail": f"Maximum {self.MAX_NOTES_PER_APPLICATION} notes per application."})
+            if application.note_entries.count() >= MAX_NOTES_PER_APPLICATION:
+                raise ValidationError({"detail": f"Maximum {MAX_NOTES_PER_APPLICATION} notes per application."})
             serializer.save(application=application)
 
 
@@ -329,7 +333,6 @@ class ApplicationContactViewSet(_NestedApplicationMixin, viewsets.ModelViewSet):
     serializer_class = ApplicationContactSerializer
     permission_classes = [permissions.IsAuthenticated]
     pagination_class = None
-    MAX_CONTACTS_PER_APPLICATION = 20
 
     def get_queryset(self):
         return ApplicationContact.objects.select_related("application").filter(
@@ -343,8 +346,8 @@ class ApplicationContactViewSet(_NestedApplicationMixin, viewsets.ModelViewSet):
             app = Application.objects.select_for_update().get(
                 pk=self.kwargs["application_pk"], user=self.request.user,
             )
-            if app.contacts.count() >= self.MAX_CONTACTS_PER_APPLICATION:
-                raise ValidationError({"detail": f"Maximum {self.MAX_CONTACTS_PER_APPLICATION} contacts per application."})
+            if app.contacts.count() >= MAX_CONTACTS_PER_APPLICATION:
+                raise ValidationError({"detail": f"Maximum {MAX_CONTACTS_PER_APPLICATION} contacts per application."})
             serializer.save(application=app)
 
 
@@ -352,7 +355,6 @@ class InterviewStageViewSet(_NestedApplicationMixin, viewsets.ModelViewSet):
     serializer_class = InterviewStageSerializer
     permission_classes = [permissions.IsAuthenticated]
     pagination_class = None
-    MAX_INTERVIEWS_PER_APPLICATION = 20
 
     def get_queryset(self):
         return InterviewStage.objects.select_related("application").filter(
@@ -366,8 +368,8 @@ class InterviewStageViewSet(_NestedApplicationMixin, viewsets.ModelViewSet):
             app = Application.objects.select_for_update().get(
                 pk=self.kwargs["application_pk"], user=self.request.user,
             )
-            if app.interview_stages.count() >= self.MAX_INTERVIEWS_PER_APPLICATION:
-                raise ValidationError({"detail": f"Maximum {self.MAX_INTERVIEWS_PER_APPLICATION} interview stages per application."})
+            if app.interview_stages.count() >= MAX_INTERVIEWS_PER_APPLICATION:
+                raise ValidationError({"detail": f"Maximum {MAX_INTERVIEWS_PER_APPLICATION} interview stages per application."})
             serializer.save(application=app)
 
 
@@ -377,7 +379,6 @@ class ApplicationAttachmentViewSet(_NestedApplicationMixin, viewsets.ModelViewSe
     parser_classes = [MultiPartParser, FormParser, JSONParser]
     pagination_class = None
     http_method_names = ["get", "post", "delete"]
-    MAX_ATTACHMENTS_PER_APPLICATION = 10
 
     def get_queryset(self):
         return ApplicationAttachment.objects.select_related("application").filter(
@@ -391,6 +392,6 @@ class ApplicationAttachmentViewSet(_NestedApplicationMixin, viewsets.ModelViewSe
             app = Application.objects.select_for_update().get(
                 pk=self.kwargs["application_pk"], user=self.request.user,
             )
-            if app.attachments.count() >= self.MAX_ATTACHMENTS_PER_APPLICATION:
-                raise ValidationError({"detail": f"Maximum {self.MAX_ATTACHMENTS_PER_APPLICATION} attachments per application."})
+            if app.attachments.count() >= MAX_ATTACHMENTS_PER_APPLICATION:
+                raise ValidationError({"detail": f"Maximum {MAX_ATTACHMENTS_PER_APPLICATION} attachments per application."})
             serializer.save(application=app)

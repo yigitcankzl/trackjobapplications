@@ -2,10 +2,12 @@ import StatCard from './StatCard'
 
 type StatCardColor =
   | 'text-gray-900'
+  | 'text-indigo-600'
   | 'text-blue-600'
   | 'text-amber-600'
   | 'text-emerald-600'
   | 'text-red-500'
+  | 'text-orange-500'
 
 interface Props {
   label: string

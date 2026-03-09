@@ -17,7 +17,6 @@ build/
 staticfiles/
 media/
 *.log
-migrations
 
 # Docker
 .dockerignore

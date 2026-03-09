@@ -336,8 +336,22 @@
       "required": "Ad ve içerik gereklidir."
     }
   },
+  "import": {
+    "title": "Başvuruları İçe Aktar",
+    "selectFile": "CSV veya Excel dosyası seçmek için tıklayın",
+    "supportedFormats": ".csv, .xlsx desteklenir",
+    "imported": "başvuru içe aktarıldı.",
+    "errors": "hata.",
+    "close": "Kapat",
+    "columnMapping": "Sütun Eşleme",
+    "cancel": "İptal",
+    "importing": "İçe aktarılıyor...",
+    "import": "İçe Aktar"
+  },
   "calendar": {
-    "title": "Takvim"
+    "title": "Takvim",
+    "prevMonth": "Önceki ay",
+    "nextMonth": "Sonraki ay"
   },
   "pagination": {
     "prev": "Önceki",

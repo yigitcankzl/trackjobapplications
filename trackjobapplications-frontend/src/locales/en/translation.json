@@ -336,8 +336,22 @@
       "required": "Name and content are required."
     }
   },
+  "import": {
+    "title": "Import Applications",
+    "selectFile": "Click to select a CSV or Excel file",
+    "supportedFormats": ".csv, .xlsx supported",
+    "imported": "application(s) imported.",
+    "errors": "error(s).",
+    "close": "Close",
+    "columnMapping": "Column Mapping",
+    "cancel": "Cancel",
+    "importing": "Importing...",
+    "import": "Import"
+  },
   "calendar": {
-    "title": "Calendar"
+    "title": "Calendar",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month"
   },
   "pagination": {
     "prev": "Previous",

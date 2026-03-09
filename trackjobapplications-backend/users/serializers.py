@@ -8,6 +8,33 @@ from users.models import NotificationPreference
 User = get_user_model()
 
 
+def _validate_file_upload(value, *, max_size, allowed_extensions, magic_bytes, label):
+    """Validate an uploaded file's size, extension, and magic bytes."""
+    if not value:
+        return value
+    if value.size > max_size:
+        raise serializers.ValidationError(
+            f"{label} file size must be under {max_size // (1024 * 1024)} MB."
+        )
+    ext = value.name.rsplit(".", 1)[-1].lower() if "." in value.name else ""
+    if f".{ext}" not in allowed_extensions:
+        raise serializers.ValidationError(
+            f"Allowed {label.lower()} types: {', '.join(allowed_extensions)}"
+        )
+    header = value.read(12)
+    value.seek(0)
+    matched = False
+    for magic, exts in magic_bytes.items():
+        if header.startswith(magic) and f".{ext}" in exts:
+            if magic == b"RIFF" and header[8:12] != b"WEBP":
+                continue
+            matched = True
+            break
+    if not matched:
+        raise serializers.ValidationError("File content does not match its extension.")
+    return value
+
+
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
         write_only=True, required=True, validators=[validate_password]
@@ -54,29 +81,13 @@ class UserSerializer(serializers.ModelSerializer):
     }
 
     def validate_avatar(self, value):
-        if not value:
-            return value
-        if value.size > 5 * 1024 * 1024:
-            raise serializers.ValidationError("Avatar file size must be under 5 MB.")
-        ext = value.name.rsplit(".", 1)[-1].lower() if "." in value.name else ""
-        if f".{ext}" not in self.AVATAR_ALLOWED_EXTENSIONS:
-            raise serializers.ValidationError(
-                f"Allowed avatar types: {', '.join(self.AVATAR_ALLOWED_EXTENSIONS)}"
-            )
-        header = value.read(12)
-        value.seek(0)
-        matched = False
-        for magic, exts in self.AVATAR_MAGIC_BYTES.items():
-            if header.startswith(magic) and f".{ext}" in exts:
-                if magic == b"RIFF":
-                    # WebP files: RIFF....WEBP (bytes 8-11 must be "WEBP")
-                    if header[8:12] != b"WEBP":
-                        continue
-                matched = True
-                break
-        if not matched:
-            raise serializers.ValidationError("File content does not match its extension.")
-        return value
+        return _validate_file_upload(
+            value,
+            max_size=5 * 1024 * 1024,
+            allowed_extensions=self.AVATAR_ALLOWED_EXTENSIONS,
+            magic_bytes=self.AVATAR_MAGIC_BYTES,
+            label="Avatar",
+        )
 
     RESUME_ALLOWED_EXTENSIONS = (".pdf", ".doc", ".docx")
     RESUME_MAGIC_BYTES = {
@@ -95,25 +106,13 @@ class UserSerializer(serializers.ModelSerializer):
         return value
 
     def validate_resume(self, value):
-        if not value:
-            return value
-        if value.size > 10 * 1024 * 1024:
-            raise serializers.ValidationError("Resume file size must be under 10 MB.")
-        ext = value.name.rsplit(".", 1)[-1].lower() if "." in value.name else ""
-        if f".{ext}" not in self.RESUME_ALLOWED_EXTENSIONS:
-            raise serializers.ValidationError(
-                f"Allowed resume types: {', '.join(self.RESUME_ALLOWED_EXTENSIONS)}"
-            )
-        header = value.read(8)
-        value.seek(0)
-        matched = False
-        for magic, exts in self.RESUME_MAGIC_BYTES.items():
-            if header.startswith(magic) and f".{ext}" in exts:
-                matched = True
-                break
-        if not matched:
-            raise serializers.ValidationError("File content does not match its extension.")
-        return value
+        return _validate_file_upload(
+            value,
+            max_size=10 * 1024 * 1024,
+            allowed_extensions=self.RESUME_ALLOWED_EXTENSIONS,
+            magic_bytes=self.RESUME_MAGIC_BYTES,
+            label="Resume",
+        )
 
 
 class ChangePasswordSerializer(serializers.Serializer):

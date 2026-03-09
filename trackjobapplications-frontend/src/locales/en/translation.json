@@ -202,7 +202,12 @@
       "apply": "Apply — open job posting",
       "noUrl": "No URL available",
       "togglePassword": "Toggle password visibility",
-      "changeLanguage": "Change language"
+      "changeLanguage": "Change language",
+      "openMenu": "Open menu",
+      "closeMenu": "Close menu",
+      "close": "Close",
+      "clearSearch": "Clear search",
+      "pin": "Pin"
     },
     "bulk": {
       "selected": "{{count}} selected",

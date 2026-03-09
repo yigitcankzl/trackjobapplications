@@ -202,7 +202,12 @@
       "apply": "Başvur — iş ilanını aç",
       "noUrl": "URL yok",
       "togglePassword": "Şifre görünürlüğünü değiştir",
-      "changeLanguage": "Dil değiştir"
+      "changeLanguage": "Dil değiştir",
+      "openMenu": "Menüyü aç",
+      "closeMenu": "Menüyü kapat",
+      "close": "Kapat",
+      "clearSearch": "Aramayı temizle",
+      "pin": "Sabitle"
     },
     "bulk": {
       "selected": "{{count}} seçildi",

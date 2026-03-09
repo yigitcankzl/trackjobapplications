@@ -24,7 +24,7 @@ export default function TagSelector({ selectedIds, onChange }: Props) {
     let active = true
     getTags()
       .then(data => { if (active) setTags(data) })
-      .catch(() => { if (active) addToast('Failed to load tags', 'error') })
+      .catch(() => { if (active) addToast(t('detail.tags.loadFailed'), 'error') })
     return () => { active = false }
   }, [addToast])
 
@@ -45,7 +45,7 @@ export default function TagSelector({ selectedIds, onChange }: Props) {
       setNewName('')
       setShowCreate(false)
     } catch {
-      addToast('Failed to create tag', 'error')
+      addToast(t('detail.tags.createFailed'), 'error')
     }
   }
 
@@ -72,7 +72,7 @@ export default function TagSelector({ selectedIds, onChange }: Props) {
           onClick={() => setShowCreate(!showCreate)}
           className="px-2 py-0.5 rounded-full text-xs font-medium border border-dashed border-gray-300 dark:border-gray-600 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
         >
-          + New
+          {t('detail.tags.new')}
         </button>
       </div>
       {showCreate && (
@@ -81,7 +81,7 @@ export default function TagSelector({ selectedIds, onChange }: Props) {
             type="text"
             value={newName}
             onChange={e => setNewName(e.target.value)}
-            placeholder="Tag name"
+            placeholder={t('detail.tags.namePlaceholder')}
             className="px-2 py-1 text-xs rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 dark:text-gray-100 outline-none"
             onKeyDown={e => e.key === 'Enter' && handleCreate()}
           />
@@ -97,7 +97,7 @@ export default function TagSelector({ selectedIds, onChange }: Props) {
             ))}
           </div>
           <button type="button" onClick={handleCreate} className="text-xs text-blue-600 hover:text-blue-700 font-medium">
-            Add
+            {t('detail.tags.add')}
           </button>
         </div>
       )}

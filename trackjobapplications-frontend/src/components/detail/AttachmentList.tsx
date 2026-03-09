@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ApplicationAttachment } from '../../types'
 import { getAttachments, uploadAttachment, deleteAttachment } from '../../services/attachments'
 import { useToast } from '../../context/ToastContext'
@@ -9,41 +10,51 @@ interface Props {
 }
 
 export default function AttachmentList({ applicationId }: Props) {
+  const { t } = useTranslation()
   const { addToast } = useToast()
   const [attachments, setAttachments] = useState<ApplicationAttachment[]>([])
   const [loading, setLoading] = useState(true)
   const [uploading, setUploading] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
+  const mountedRef = useRef(true)
+
+  useEffect(() => {
+    return () => { mountedRef.current = false }
+  }, [])
 
   useEffect(() => {
     let active = true
     getAttachments(applicationId)
       .then(data => { if (active) setAttachments(data) })
-      .catch(() => { if (active) addToast('Failed to load attachments', 'error') })
+      .catch(() => { if (active) addToast(t('detail.attachmentList.loadFailed'), 'error') })
       .finally(() => { if (active) setLoading(false) })
     return () => { active = false }
-  }, [applicationId, addToast])
+  }, [applicationId, addToast, t])
 
   async function handleUpload(files: FileList) {
     setUploading(true)
     try {
       for (const file of Array.from(files)) {
         const att = await uploadAttachment(applicationId, file)
+        if (!mountedRef.current) return
         setAttachments(prev => [att, ...prev])
       }
     } catch {
-      addToast('Failed to upload file', 'error')
+      if (!mountedRef.current) return
+      addToast(t('detail.attachmentList.uploadFailed'), 'error')
     } finally {
-      setUploading(false)
+      if (mountedRef.current) setUploading(false)
     }
   }
 
   async function handleDelete(id: number) {
     try {
       await deleteAttachment(applicationId, id)
+      if (!mountedRef.current) return
       setAttachments(prev => prev.filter(a => a.id !== id))
     } catch {
-      addToast('Failed to delete file', 'error')
+      if (!mountedRef.current) return
+      addToast(t('detail.attachmentList.deleteFailed'), 'error')
     }
   }
 
@@ -63,7 +74,7 @@ export default function AttachmentList({ applicationId }: Props) {
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-200">Attachments</h3>
+        <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-200">{t('detail.attachmentList.title')}</h3>
       </div>
 
       <div
@@ -73,9 +84,9 @@ export default function AttachmentList({ applicationId }: Props) {
         className="border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-lg p-4 text-center cursor-pointer hover:border-blue-400 transition-colors"
       >
         <p className="text-xs text-gray-400">
-          {uploading ? 'Uploading...' : 'Drop files here or click to upload'}
+          {uploading ? t('detail.attachmentList.uploading') : t('detail.attachmentList.dropOrClick')}
         </p>
-        <p className="text-xs text-gray-300 mt-0.5">PDF, DOC, PNG, JPG, TXT (max 10MB)</p>
+        <p className="text-xs text-gray-300 mt-0.5">{t('detail.attachmentList.formats')}</p>
         <input
           ref={fileRef}
           type="file"

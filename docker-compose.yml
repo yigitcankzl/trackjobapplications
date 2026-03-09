@@ -109,7 +109,7 @@ services:
       - ./trackjobapplications-frontend:/app
       - /app/node_modules
     environment:
-      VITE_API_URL: http://localhost:8000/api
+      VITE_API_URL: http://localhost:8000/api/v1
     depends_on:
       - backend
 

@@ -1,13 +1,26 @@
 import { useTranslation } from 'react-i18next'
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useLocation } from 'react-router-dom'
+import { useEffect } from 'react'
 import { useAuth } from '../../context/AuthContext'
 import { useTheme } from '../../context/ThemeContext'
-import { HomeIcon, BarChartIcon, CalendarIcon, DocumentIcon, SignOutIcon, BriefcaseIcon, ProfileIcon, SunIcon, MoonIcon } from '../icons'
+import { HomeIcon, BarChartIcon, CalendarIcon, DocumentIcon, SignOutIcon, BriefcaseIcon, ProfileIcon, SunIcon, MoonIcon, CloseIcon } from '../icons'
 
-export default function Sidebar() {
+interface Props {
+  mobileOpen?: boolean
+  onMobileClose?: () => void
+}
+
+export default function Sidebar({ mobileOpen, onMobileClose }: Props) {
   const { t } = useTranslation()
   const { user, logout } = useAuth()
   const { theme, toggleTheme } = useTheme()
+  const location = useLocation()
+
+  // Close mobile sidebar on navigation
+  useEffect(() => {
+    if (mobileOpen && onMobileClose) onMobileClose()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.pathname])
 
   const NAV_ITEMS = [
     { label: t('dashboard.nav.dashboard'), to: '/dashboard', icon: <HomeIcon /> },
@@ -17,18 +30,26 @@ export default function Sidebar() {
     { label: t('dashboard.nav.profile'), to: '/profile', icon: <ProfileIcon /> },
   ]
 
-  return (
-    <aside className="w-60 min-h-screen bg-white dark:bg-gray-900 border-r border-gray-100 dark:border-gray-800 flex flex-col">
+  const sidebarContent = (
+    <>
       {/* Logo */}
-      <Link
-        to="/"
-        className="flex items-center gap-2.5 px-6 py-5"
-      >
-        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-blue-500 flex items-center justify-center shadow-sm">
-          <BriefcaseIcon />
-        </div>
-        <span className="text-base font-bold text-gray-800 dark:text-gray-100 tracking-tight">TrackJobs</span>
-      </Link>
+      <div className="flex items-center justify-between px-6 py-5">
+        <Link to="/" className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-blue-500 flex items-center justify-center shadow-sm">
+            <BriefcaseIcon />
+          </div>
+          <span className="text-base font-bold text-gray-800 dark:text-gray-100 tracking-tight">TrackJobs</span>
+        </Link>
+        {onMobileClose && (
+          <button
+            onClick={onMobileClose}
+            className="lg:hidden p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            aria-label="Close menu"
+          >
+            <CloseIcon />
+          </button>
+        )}
+      </div>
 
       {/* Nav */}
       <nav className="flex-1 px-3 py-2 space-y-0.5">
@@ -73,6 +94,25 @@ export default function Sidebar() {
           {t('dashboard.nav.signOut')}
         </button>
       </div>
-    </aside>
+    </>
+  )
+
+  return (
+    <>
+      {/* Desktop sidebar */}
+      <aside className="hidden lg:flex w-60 min-h-screen bg-white dark:bg-gray-900 border-r border-gray-100 dark:border-gray-800 flex-col">
+        {sidebarContent}
+      </aside>
+
+      {/* Mobile sidebar overlay */}
+      {mobileOpen && (
+        <div className="fixed inset-0 z-40 lg:hidden">
+          <div className="absolute inset-0 bg-black/40" onClick={onMobileClose} aria-hidden="true" />
+          <aside className="relative w-72 max-w-[80vw] h-full bg-white dark:bg-gray-900 flex flex-col shadow-xl animate-slide-in">
+            {sidebarContent}
+          </aside>
+        </div>
+      )}
+    </>
   )
 }

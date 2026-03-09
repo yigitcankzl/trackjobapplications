@@ -182,7 +182,7 @@ export default function ProfilePage() {
           </DragDropZone>
 
           {/* Name fields */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">{t('profile.firstName')}</label>
               <input
@@ -322,7 +322,7 @@ export default function ProfilePage() {
               required
             />
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">{t('profile.newPassword')}</label>
               <input

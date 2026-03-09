@@ -16,6 +16,17 @@ class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ("email", "first_name", "last_name", "password", "password2")
+        extra_kwargs = {
+            "email": {
+                "validators": [],  # Remove default unique validator to prevent email enumeration
+            },
+        }
+
+    def validate_email(self, value):
+        value = value.lower().strip()
+        if User.objects.filter(email__iexact=value).exists():
+            raise serializers.ValidationError("Unable to register with this email address.")
+        return value
 
     def validate(self, attrs):
         if attrs["password"] != attrs["password2"]:

@@ -72,13 +72,14 @@ export default function CoverLettersPage() {
 
   async function handleDelete() {
     if (!deleting) return
+    const target = deleting
     try {
-      await deleteTemplate(deleting.id)
-      setTemplates(prev => prev.filter(tpl => tpl.id !== deleting.id))
+      await deleteTemplate(target.id)
+      setTemplates(prev => prev.filter(tpl => tpl.id !== target.id))
       addToast(t('coverLetters.toast.deleted'), 'success')
       setDeleting(null)
-      if (editing?.id === deleting.id) closeForm()
-      if (preview?.id === deleting.id) setPreview(null)
+      if (editing?.id === target.id) closeForm()
+      if (preview?.id === target.id) setPreview(null)
     } catch {
       addToast(t('coverLetters.errors.deleteFailed'), 'error')
     }

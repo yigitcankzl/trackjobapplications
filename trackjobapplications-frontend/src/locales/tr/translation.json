@@ -354,6 +354,7 @@
       "new": "+ Yeni",
       "namePlaceholder": "Etiket adı",
       "add": "Ekle",
+      "removeTag": "{{name}} etiketini kaldır",
       "loadFailed": "Etiketler yüklenemedi",
       "createFailed": "Etiket oluşturulamadı"
     }

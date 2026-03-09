@@ -354,6 +354,7 @@
       "new": "+ New",
       "namePlaceholder": "Tag name",
       "add": "Add",
+      "removeTag": "Remove {{name}}",
       "loadFailed": "Failed to load tags",
       "createFailed": "Failed to create tag"
     }

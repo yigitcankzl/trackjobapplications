@@ -1,9 +1,13 @@
 import logging
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.tokens import default_token_generator
-from django.utils.encoding import force_str
-from django.utils.http import urlsafe_base64_decode
+from django.core.exceptions import ValidationError
+from django.core.mail import send_mail
+from django.utils.encoding import force_bytes, force_str
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from rest_framework import generics, permissions, status
 from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 from rest_framework.response import Response
@@ -16,6 +20,18 @@ from users.models import NotificationPreference
 
 logger = logging.getLogger(__name__)
 User = get_user_model()
+
+
+def _blacklist_all_tokens(user):
+    """Blacklist all outstanding refresh tokens for a user."""
+    tokens = OutstandingToken.objects.filter(user=user)
+    existing = set(
+        BlacklistedToken.objects.filter(token__in=tokens).values_list("token_id", flat=True)
+    )
+    BlacklistedToken.objects.bulk_create(
+        [BlacklistedToken(token=t) for t in tokens if t.id not in existing],
+        ignore_conflicts=True,
+    )
 
 from .serializers import (
     ChangePasswordSerializer,
@@ -99,14 +115,7 @@ class LogoutAllView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
-        tokens = OutstandingToken.objects.filter(user=request.user)
-        existing = set(
-            BlacklistedToken.objects.filter(token__in=tokens).values_list("token_id", flat=True)
-        )
-        BlacklistedToken.objects.bulk_create(
-            [BlacklistedToken(token=t) for t in tokens if t.id not in existing],
-            ignore_conflicts=True,
-        )
+        _blacklist_all_tokens(request.user)
         return Response({"detail": "All sessions logged out."}, status=status.HTTP_200_OK)
 
 
@@ -120,13 +129,7 @@ class ChangePasswordView(APIView):
         serializer.is_valid(raise_exception=True)
         request.user.set_password(serializer.validated_data["new_password"])
         request.user.save()
-        # Blacklist all outstanding refresh tokens for this user
-        tokens = OutstandingToken.objects.filter(user=request.user)
-        existing = set(BlacklistedToken.objects.filter(token__in=tokens).values_list("token_id", flat=True))
-        BlacklistedToken.objects.bulk_create(
-            [BlacklistedToken(token=t) for t in tokens if t.id not in existing],
-            ignore_conflicts=True,
-        )
+        _blacklist_all_tokens(request.user)
         return Response({"detail": "Password updated."}, status=status.HTTP_200_OK)
 
 
@@ -172,15 +175,9 @@ class PasswordResetRequestView(APIView):
         # Always return success to prevent email enumeration
         try:
             user = User.objects.get(email__iexact=email)
-            from django.conf import settings
-            from django.utils.encoding import force_bytes
-            from django.utils.http import urlsafe_base64_encode
-
             uid = urlsafe_base64_encode(force_bytes(user.pk))
             token = default_token_generator.make_token(user)
             reset_url = f"{settings.FRONTEND_URL}/reset-password?uid={uid}&token={token}"
-            from django.core.mail import send_mail
-
             send_mail(
                 subject="Reset your TrackJobs password",
                 message=f"Click the link to reset your password: {reset_url}",
@@ -217,9 +214,6 @@ class PasswordResetConfirmView(APIView):
         if not default_token_generator.check_token(user, token):
             return Response({"detail": "Invalid or expired reset link."}, status=status.HTTP_400_BAD_REQUEST)
 
-        from django.contrib.auth.password_validation import validate_password
-        from django.core.exceptions import ValidationError
-
         try:
             validate_password(new_password, user)
         except ValidationError as e:
@@ -227,11 +221,5 @@ class PasswordResetConfirmView(APIView):
 
         user.set_password(new_password)
         user.save()
-        # Blacklist all existing tokens
-        tokens = OutstandingToken.objects.filter(user=user)
-        existing = set(BlacklistedToken.objects.filter(token__in=tokens).values_list("token_id", flat=True))
-        BlacklistedToken.objects.bulk_create(
-            [BlacklistedToken(token=t) for t in tokens if t.id not in existing],
-            ignore_conflicts=True,
-        )
+        _blacklist_all_tokens(user)
         return Response({"detail": "Password has been reset successfully."}, status=status.HTTP_200_OK)

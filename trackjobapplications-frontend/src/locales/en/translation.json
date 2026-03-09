@@ -78,6 +78,7 @@
       "interview": "Interview",
       "offer": "Offer",
       "rejected": "Rejected",
+      "withdrawn": "Withdrawn",
       "active": "Active"
     },
     "status": {

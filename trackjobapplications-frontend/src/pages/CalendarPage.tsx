@@ -74,6 +74,7 @@ export default function CalendarPage() {
         <div className="flex items-center justify-between mb-6">
           <button
             onClick={prevMonth}
+            aria-label={t('calendar.prevMonth')}
             className="px-3 py-1.5 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
           >
             &larr;
@@ -81,6 +82,7 @@ export default function CalendarPage() {
           <h2 className="text-base font-semibold text-gray-800 dark:text-gray-200 capitalize">{monthLabel}</h2>
           <button
             onClick={nextMonth}
+            aria-label={t('calendar.nextMonth')}
             className="px-3 py-1.5 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
           >
             &rarr;

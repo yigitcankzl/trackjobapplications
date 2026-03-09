@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import DashboardLayout from '../components/layout/DashboardLayout'
 import Header from '../components/dashboard/Header'
@@ -94,6 +94,17 @@ export default function CoverLettersPage() {
   function insertPlaceholder(placeholder: string) {
     setForm(prev => ({ ...prev, content: prev.content + placeholder }))
   }
+
+  const dismissDelete = useCallback(() => setDeleting(null), [])
+
+  useEffect(() => {
+    if (!deleting) return
+    function onKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') setDeleting(null)
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [deleting])
 
   const isFormOpen = creating || !!editing
 
@@ -251,8 +262,8 @@ export default function CoverLettersPage() {
 
       {/* Delete confirmation modal */}
       {deleting && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl p-6 w-full max-w-sm mx-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40" onClick={dismissDelete}>
+          <div role="dialog" aria-modal="true" className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl p-6 w-full max-w-sm mx-4" onClick={e => e.stopPropagation()}>
             <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2">{t('coverLetters.deleteConfirm.title')}</h3>
             <p className="text-xs text-gray-500 mb-4">{t('coverLetters.deleteConfirm.message', { name: deleting.name })}</p>
             <div className="flex justify-end gap-2">

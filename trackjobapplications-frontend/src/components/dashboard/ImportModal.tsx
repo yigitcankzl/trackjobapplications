@@ -79,7 +79,7 @@ export default function ImportModal({ open, onClose, onSuccess }: Props) {
       setResult(res)
       if (res.created > 0) onSuccess()
     } catch {
-      setResult({ created: 0, errors: [{ row: 0, errors: { file: ['Import failed'] } }] })
+      setResult({ created: 0, errors: [{ row: 0, errors: { file: [t('dashboard.errors.importFailed')] } }] })
     } finally {
       setLoading(false)
     }
@@ -128,7 +128,7 @@ export default function ImportModal({ open, onClose, onSuccess }: Props) {
               <div className="max-h-40 overflow-y-auto text-xs bg-red-50 dark:bg-red-900/20 rounded-lg p-3 space-y-1">
                 {result.errors.slice(0, 10).map((err, i) => (
                   <p key={i} className="text-red-600 dark:text-red-400">
-                    Row {err.row}: {JSON.stringify(err.errors)}
+                    {t('import.row', { row: err.row })}: {JSON.stringify(err.errors)}
                   </p>
                 ))}
               </div>
@@ -140,7 +140,7 @@ export default function ImportModal({ open, onClose, onSuccess }: Props) {
         ) : (
           <div className="space-y-4">
             <p className="text-sm text-gray-600 dark:text-gray-300">
-              File: <span className="font-medium">{file.name}</span>
+              {t('import.file')} <span className="font-medium">{file.name}</span>
             </p>
 
             {headers.length > 0 && (
@@ -156,7 +156,7 @@ export default function ImportModal({ open, onClose, onSuccess }: Props) {
                           onChange={e => setMapping(prev => ({ ...prev, [h]: e.target.value }))}
                           className="flex-1 px-2 py-1 text-xs rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 dark:text-gray-100"
                         >
-                          <option value="">-- skip --</option>
+                          <option value="">{t('import.skip')}</option>
                           {FIELDS.map(f => (
                             <option key={f} value={f}>{f}</option>
                           ))}
@@ -168,7 +168,7 @@ export default function ImportModal({ open, onClose, onSuccess }: Props) {
 
                 {preview.length > 0 && (
                   <div className="overflow-x-auto">
-                    <p className="text-xs text-gray-400 mb-1">Preview (first {preview.length} rows)</p>
+                    <p className="text-xs text-gray-400 mb-1">{t('import.preview', { count: preview.length })}</p>
                     <table className="text-xs w-full border-collapse">
                       <thead>
                         <tr>

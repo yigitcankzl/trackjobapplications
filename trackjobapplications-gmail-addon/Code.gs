@@ -116,6 +116,11 @@ function onTrackJob(e) {
   var result = apiFetch('/applications/', 'post', payload);
 
   if (result.code === 201 || result.code === 200) {
+    // Link the email to the newly created application
+    var appId = result.data.id;
+    if (appId && params.messageId) {
+      _linkEmailToApplication(appId, params);
+    }
     var card = buildSuccessCard(company, position, params.url || '');
     return CardService.newActionResponseBuilder()
       .setNavigation(CardService.newNavigation().updateCard(card))
@@ -135,4 +140,102 @@ function onTrackJob(e) {
   return CardService.newActionResponseBuilder()
     .setNotification(CardService.newNotification().setText(errorMsg))
     .build();
+}
+
+function onLinkEmail(e) {
+  var params = e.parameters || {};
+  var appId = params.applicationId;
+
+  if (!appId) {
+    return CardService.newActionResponseBuilder()
+      .setNotification(CardService.newNotification().setText('No application selected'))
+      .build();
+  }
+
+  _linkEmailToApplication(parseInt(appId, 10), params);
+
+  var statusMsg = 'Email linked';
+  if (params.suggestedStatus) {
+    statusMsg += ' (suggested: ' + params.suggestedStatus + ')';
+  }
+
+  var card = buildEmailLinkedCard(params.suggestedStatus, parseInt(appId, 10));
+  return CardService.newActionResponseBuilder()
+    .setNavigation(CardService.newNavigation().updateCard(card))
+    .setNotification(CardService.newNotification().setText(statusMsg))
+    .build();
+}
+
+function onApplySuggestedStatus(e) {
+  var params = e.parameters || {};
+  var appId = parseInt(params.applicationId, 10);
+  var newStatus = params.suggestedStatus;
+
+  if (!appId || !newStatus) {
+    return CardService.newActionResponseBuilder()
+      .setNotification(CardService.newNotification().setText('Missing parameters'))
+      .build();
+  }
+
+  var result = apiFetch('/applications/' + appId + '/', 'patch', { status: newStatus });
+
+  if (result.code === 200) {
+    return CardService.newActionResponseBuilder()
+      .setNotification(CardService.newNotification().setText('Status updated to: ' + newStatus))
+      .build();
+  }
+
+  return CardService.newActionResponseBuilder()
+    .setNotification(CardService.newNotification().setText('Failed to update status'))
+    .build();
+}
+
+function onSearchApplications(e) {
+  var params = e.parameters || {};
+  var company = params.subject || '';
+
+  // Search for matching applications
+  var searchQuery = '';
+  if (company) {
+    // Extract company from email data for better matching
+    var senderEmail = params.senderEmail || '';
+    var domain = senderEmail.split('@')[1] || '';
+    if (domain && !domain.match(/gmail|yahoo|hotmail|outlook/i)) {
+      searchQuery = domain.split('.')[0];
+    }
+  }
+
+  var endpoint = '/applications/?page_size=10';
+  if (searchQuery) {
+    endpoint += '&search=' + encodeURIComponent(searchQuery);
+  }
+
+  var result = apiFetch(endpoint, 'get');
+
+  if (result.code === 200 && result.data && result.data.results) {
+    var card = buildSearchResultsCard(result.data.results, params);
+    return CardService.newActionResponseBuilder()
+      .setNavigation(CardService.newNavigation().pushCard(card))
+      .build();
+  }
+
+  return CardService.newActionResponseBuilder()
+    .setNotification(CardService.newNotification().setText('Failed to load applications'))
+    .build();
+}
+
+function _linkEmailToApplication(appId, params) {
+  var emailPayload = {
+    message_id: params.messageId || '',
+    thread_id: params.threadId || '',
+    subject: params.subject || '',
+    sender_email: params.senderEmail || 'unknown@email.com',
+    sender_name: params.senderName || '',
+    email_type: params.emailType || 'general',
+    snippet: params.snippet || '',
+    suggested_status: params.suggestedStatus || '',
+    received_at: params.receivedAt || new Date().toISOString(),
+  };
+
+  apiFetch('/applications/' + appId + '/emails/', 'post', emailPayload);
 }

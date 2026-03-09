@@ -41,6 +41,29 @@ function buildJobCard(emailData) {
       .setSubtitle('Save this to your dashboard')
   );
 
+  // Email type detection banner
+  if (emailData.emailType && emailData.emailType !== 'general') {
+    var typeSection = CardService.newCardSection();
+    var typeLabels = {
+      'rejection': '🔴 Rejection Email Detected',
+      'interview_invite': '🟢 Interview Invitation Detected',
+      'offer': '🎉 Job Offer Detected',
+    };
+    typeSection.addWidget(
+      CardService.newDecoratedText()
+        .setText(typeLabels[emailData.emailType] || emailData.emailType)
+        .setWrapText(true)
+    );
+    if (emailData.suggestedStatus) {
+      typeSection.addWidget(
+        CardService.newDecoratedText()
+          .setText('Suggested status: ' + emailData.suggestedStatus)
+          .setWrapText(true)
+      );
+    }
+    card.addSection(typeSection);
+  }
+
   // Email info section
   var infoSection = CardService.newCardSection();
   infoSection.setHeader('Extracted Info');
@@ -70,8 +93,14 @@ function buildJobCard(emailData) {
   var actionParams = {
     subject: emailData.subject || '',
     senderEmail: emailData.senderEmail || '',
+    senderName: emailData.senderName || '',
     messageId: emailData.messageId || '',
+    threadId: emailData.threadId || '',
     url: emailData.url || '',
+    snippet: (emailData.snippet || '').substring(0, 200),
+    emailType: emailData.emailType || 'general',
+    suggestedStatus: emailData.suggestedStatus || '',
+    receivedAt: emailData.receivedAt || '',
   };
 
   // Two buttons: Save (To Apply) and Mark as Applied
@@ -102,6 +131,26 @@ function buildJobCard(emailData) {
   );
 
   card.addSection(infoSection);
+
+  // Link to existing application section
+  var linkSection = CardService.newCardSection();
+  linkSection.setHeader('Link to Existing Application');
+  linkSection.addWidget(
+    CardService.newDecoratedText()
+      .setText('Have an existing application? Search and link this email to it.')
+      .setWrapText(true)
+  );
+  linkSection.addWidget(
+    CardService.newTextButton()
+      .setText('Search & Link')
+      .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
+      .setOnClickAction(
+        CardService.newAction()
+          .setFunctionName('onSearchApplications')
+          .setParameters(actionParams)
+      )
+  );
+  card.addSection(linkSection);
 
   // Logout button
   var footerSection = CardService.newCardSection();
@@ -138,6 +187,90 @@ function buildSuccessCard(company, position, url) {
         .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
         .setBackgroundColor('#10b981')
         .setOpenLink(CardService.newOpenLink().setUrl(url))
+    );
+  }
+
+  card.addSection(section);
+  return card.build();
+}
+
+function buildSearchResultsCard(applications, emailParams) {
+  var card = CardService.newCardBuilder();
+  card.setHeader(
+    CardService.newCardHeader()
+      .setTitle('Select Application')
+      .setSubtitle('Link this email to an application')
+  );
+
+  if (!applications || applications.length === 0) {
+    var emptySection = CardService.newCardSection();
+    emptySection.addWidget(
+      CardService.newDecoratedText()
+        .setText('No applications found. Create a new one instead.')
+        .setWrapText(true)
+    );
+    card.addSection(emptySection);
+    return card.build();
+  }
+
+  var section = CardService.newCardSection();
+  var count = Math.min(applications.length, 10);
+  for (var i = 0; i < count; i++) {
+    var app = applications[i];
+    var linkParams = Object.assign({}, emailParams, {
+      applicationId: String(app.id),
+    });
+    section.addWidget(
+      CardService.newDecoratedText()
+        .setText(app.company + ' — ' + app.position)
+        .setBottomLabel(app.status + ' | ' + app.applied_date)
+        .setWrapText(true)
+        .setOnClickAction(
+          CardService.newAction()
+            .setFunctionName('onLinkEmail')
+            .setParameters(linkParams)
+        )
+    );
+  }
+
+  card.addSection(section);
+  return card.build();
+}
+
+function buildEmailLinkedCard(suggestedStatus, applicationId) {
+  var card = CardService.newCardBuilder();
+  card.setHeader(
+    CardService.newCardHeader()
+      .setTitle('Email Linked!')
+      .setSubtitle('Email has been linked to the application')
+  );
+
+  var section = CardService.newCardSection();
+  section.addWidget(
+    CardService.newDecoratedText()
+      .setText('This email is now linked to your application.')
+      .setWrapText(true)
+  );
+
+  if (suggestedStatus) {
+    section.addWidget(
+      CardService.newDecoratedText()
+        .setText('Suggested status update: ' + suggestedStatus)
+        .setWrapText(true)
+    );
+    section.addWidget(
+      CardService.newTextButton()
+        .setText('Apply Status: ' + suggestedStatus)
+        .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+        .setBackgroundColor('#10b981')
+        .setOnClickAction(
+          CardService.newAction()
+            .setFunctionName('onApplySuggestedStatus')
+            .setParameters({
+              applicationId: String(applicationId),
+              suggestedStatus: suggestedStatus,
+            })
+        )
     );
   }
 

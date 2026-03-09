@@ -9,7 +9,12 @@ function extractFromEmail(e) {
     senderEmail: '',
     notes: '',
     messageId: '',
+    threadId: '',
     url: '',
+    snippet: '',
+    emailType: 'general',
+    suggestedStatus: '',
+    receivedAt: '',
   };
 
   if (!e || !e.gmail) return data;
@@ -25,6 +30,8 @@ function extractFromEmail(e) {
   data.subject = message.getSubject() || '';
   data.senderEmail = extractEmail(message.getFrom());
   data.senderName = extractName(message.getFrom());
+  data.threadId = message.getThread().getId();
+  data.receivedAt = message.getDate().toISOString();
 
   // Extract company from sender
   data.company = guessCompany(data.senderName, data.senderEmail);
@@ -37,6 +44,13 @@ function extractFromEmail(e) {
 
   // Try to extract a job URL from the email body
   var body = message.getPlainBody() || '';
+  data.snippet = body.substring(0, 500);
+
+  // Classify email type
+  var classification = classifyEmail(data.subject, data.snippet);
+  data.emailType = classification.type;
+  data.suggestedStatus = classification.suggestedStatus;
+
   var urlMatch = body.match(/https?:\/\/[^\s<>"]+(?:job|career|position|apply|opening)[^\s<>"]*/i);
   if (!urlMatch) {
     var allUrls = body.match(/https?:\/\/[^\s<>"]+/g) || [];
@@ -96,6 +110,20 @@ function guessCompany(name, email) {
 
   return name || '';
 }
+
+function classifyEmail(subject, body) {
+  var text = (subject + ' ' + body).toLowerCase();
+
+  var offerWords = /pleased to offer|offer (letter|of employment)|extend.{0,20}offer|congratulations.{0,30}(offer|position)|job offer|welcome aboard/i;
+  var rejectWords = /unfortunately|regret to inform|not (been )?selected|decided not to|moved forward with other|position has been filled|not a (good )?match|will not be moving forward|unable to offer|rejected|rejection/i;
+  var interviewWords = /schedule.{0,20}interview|interview invitation|invite you.{0,20}interview|like to (meet|speak|chat)|phone screen|technical interview|next (step|round|stage)|would you be available/i;
+
+  if (offerWords.test(text)) return { type: 'offer', suggestedStatus: 'offer' };
+  if (rejectWords.test(text)) return { type: 'rejection', suggestedStatus: 'rejected' };
+  if (interviewWords.test(text)) return { type: 'interview_invite', suggestedStatus: 'interview' };
+  return { type: 'general', suggestedStatus: '' };
+}
+
 
 function guessPosition(subject) {
   var patterns = [

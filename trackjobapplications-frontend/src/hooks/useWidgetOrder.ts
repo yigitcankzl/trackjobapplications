@@ -8,7 +8,11 @@ function loadOrder(): string[] {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (raw) {
       const parsed = JSON.parse(raw) as string[]
-      if (Array.isArray(parsed) && parsed.length === DEFAULT_ORDER.length) return parsed
+      if (
+        Array.isArray(parsed) &&
+        parsed.length === DEFAULT_ORDER.length &&
+        parsed.every(k => DEFAULT_ORDER.includes(k))
+      ) return parsed
     }
   } catch { /* ignore */ }
   return DEFAULT_ORDER

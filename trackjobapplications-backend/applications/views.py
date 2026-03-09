@@ -12,9 +12,23 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 from rest_framework.response import Response
-from rest_framework.throttling import ScopedRateThrottle
+from rest_framework.throttling import SimpleRateThrottle
 
 from django.utils import timezone as tz
+
+
+class ExportThrottle(SimpleRateThrottle):
+    scope = "export"
+
+    def get_cache_key(self, request, view):
+        return self.cache_format % {"scope": self.scope, "ident": request.user.pk}
+
+
+class ImportThrottle(SimpleRateThrottle):
+    scope = "import"
+
+    def get_cache_key(self, request, view):
+        return self.cache_format % {"scope": self.scope, "ident": request.user.pk}
 
 logger = logging.getLogger(__name__)
 
@@ -97,8 +111,7 @@ class ApplicationViewSet(viewsets.ModelViewSet):
         detail=False,
         methods=["get"],
         url_path="export-pdf",
-        throttle_classes=[ScopedRateThrottle],
-        throttle_scope="export",
+        throttle_classes=[ExportThrottle],
     )
     def export_pdf(self, request):
         from django.http import HttpResponse
@@ -192,8 +205,7 @@ class ApplicationViewSet(viewsets.ModelViewSet):
         methods=["post"],
         url_path="import",
         parser_classes=[MultiPartParser],
-        throttle_classes=[ScopedRateThrottle],
-        throttle_scope="import",
+        throttle_classes=[ImportThrottle],
     )
     def import_applications(self, request):
         file = request.FILES.get("file")

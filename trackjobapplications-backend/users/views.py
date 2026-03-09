@@ -89,6 +89,21 @@ class NotificationPreferenceView(generics.RetrieveUpdateAPIView):
         return prefs
 
 
+class LogoutAllView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        tokens = OutstandingToken.objects.filter(user=request.user)
+        existing = set(
+            BlacklistedToken.objects.filter(token__in=tokens).values_list("token_id", flat=True)
+        )
+        BlacklistedToken.objects.bulk_create(
+            [BlacklistedToken(token=t) for t in tokens if t.id not in existing],
+            ignore_conflicts=True,
+        )
+        return Response({"detail": "All sessions logged out."}, status=status.HTTP_200_OK)
+
+
 class ChangePasswordView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     throttle_classes = [ScopedRateThrottle]

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { ApplicationAttachment } from '../../types'
 import { getAttachments, uploadAttachment, deleteAttachment } from '../../services/attachments'
 import { useToast } from '../../context/ToastContext'
+import { isSafeUrl } from '../../lib/url'
 
 interface Props {
   applicationId: number
@@ -93,14 +94,18 @@ export default function AttachmentList({ applicationId }: Props) {
             <div key={att.id} className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
               <div className="flex items-center gap-2 min-w-0">
                 <span>{extIcon(att.name)}</span>
-                <a
-                  href={att.file}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-blue-600 hover:underline truncate"
-                >
-                  {att.name}
-                </a>
+                {isSafeUrl(att.file) ? (
+                  <a
+                    href={att.file}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-blue-600 hover:underline truncate"
+                  >
+                    {att.name}
+                  </a>
+                ) : (
+                  <span className="text-sm text-gray-500 truncate">{att.name}</span>
+                )}
               </div>
               <button onClick={() => handleDelete(att.id)} className="text-xs text-red-400 hover:text-red-600 ml-2">&times;</button>
             </div>

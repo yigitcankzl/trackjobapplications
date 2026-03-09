@@ -21,6 +21,7 @@ from .constants import (
     FORMULA_PREFIXES,
     MAX_ATTACHMENTS_PER_APPLICATION,
     MAX_CONTACTS_PER_APPLICATION,
+    MAX_EMAILS_PER_APPLICATION,
     MAX_IMPORT_FILE_SIZE,
     MAX_IMPORT_ROWS,
     MAX_INTERVIEWS_PER_APPLICATION,
@@ -54,7 +55,7 @@ def _sanitize_cell(value):
     return value
 
 from .filters import ApplicationFilter
-from .models import Application, ApplicationAttachment, ApplicationContact, ApplicationNote, CoverLetterTemplate, InterviewStage, Tag
+from .models import Application, ApplicationAttachment, ApplicationContact, ApplicationNote, CoverLetterTemplate, EmailLog, InterviewStage, Tag
 from .pdf_utils import generate_applications_pdf
 from .serializers import (
     ApplicationAttachmentSerializer,
@@ -62,6 +63,7 @@ from .serializers import (
     ApplicationNoteSerializer,
     ApplicationSerializer,
     CoverLetterTemplateSerializer,
+    EmailLogSerializer,
     InterviewStageSerializer,
     TagSerializer,
 )
@@ -92,7 +94,7 @@ class ApplicationViewSet(viewsets.ModelViewSet):
         qs = self.request.user.applications.all()
         if self.action == "list":
             return qs.prefetch_related("tags")
-        return qs.prefetch_related("note_entries", "tags")
+        return qs.prefetch_related("note_entries", "tags", "email_logs")
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -388,3 +390,79 @@ class ApplicationAttachmentViewSet(_NestedApplicationMixin, viewsets.ModelViewSe
             if app.attachments.count() >= MAX_ATTACHMENTS_PER_APPLICATION:
                 raise ValidationError({"detail": f"Maximum {MAX_ATTACHMENTS_PER_APPLICATION} attachments per application."})
             serializer.save(application=app)
+
+
+import re
+
+_REJECTION_PATTERNS = re.compile(
+    r"(unfortunately|regret to inform|not (been )?selected|decided not to|"
+    r"moved forward with other|position has been filled|not a (good )?match|"
+    r"will not be moving forward|unable to offer|rejected|rejection)",
+    re.IGNORECASE,
+)
+_INTERVIEW_PATTERNS = re.compile(
+    r"(schedule.{0,20}interview|interview invitation|invite you.{0,20}interview|"
+    r"like to (meet|speak|chat)|phone screen|technical interview|"
+    r"next (step|round|stage)|would you be available)",
+    re.IGNORECASE,
+)
+_OFFER_PATTERNS = re.compile(
+    r"(pleased to offer|offer (letter|of employment)|extend.{0,20}offer|"
+    r"congratulations.{0,30}(offer|position)|job offer|welcome aboard)",
+    re.IGNORECASE,
+)
+
+
+def _classify_email(subject, snippet):
+    """Classify an email based on subject and snippet text."""
+    text = f"{subject} {snippet}"
+    if _OFFER_PATTERNS.search(text):
+        return "offer", "offer"
+    if _REJECTION_PATTERNS.search(text):
+        return "rejection", "rejected"
+    if _INTERVIEW_PATTERNS.search(text):
+        return "interview_invite", "interview"
+    return "general", ""
+
+
+class EmailLogViewSet(_NestedApplicationMixin, viewsets.ModelViewSet):
+    serializer_class = EmailLogSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    pagination_class = None
+    http_method_names = ["get", "post", "delete"]
+
+    def get_queryset(self):
+        return EmailLog.objects.filter(
+            application__pk=self.kwargs["application_pk"],
+            application__user=self.request.user,
+        )
+
+    def perform_create(self, serializer):
+        from rest_framework.exceptions import ValidationError
+        with transaction.atomic():
+            app = Application.objects.select_for_update().get(
+                pk=self.kwargs["application_pk"], user=self.request.user,
+            )
+            if app.email_logs.count() >= MAX_EMAILS_PER_APPLICATION:
+                raise ValidationError({"detail": f"Maximum {MAX_EMAILS_PER_APPLICATION} emails per application."})
+
+            subject = serializer.validated_data.get("subject", "")
+            snippet = serializer.validated_data.get("snippet", "")
+            email_type = serializer.validated_data.get("email_type", "")
+            suggested_status = serializer.validated_data.get("suggested_status", "")
+
+            if not email_type or email_type == "general":
+                detected_type, detected_status = _classify_email(subject, snippet)
+                email_type = detected_type
+                suggested_status = detected_status
+
+            serializer.save(
+                application=app,
+                email_type=email_type,
+                suggested_status=suggested_status,
+            )
+
+            thread_id = serializer.validated_data.get("thread_id", "")
+            if thread_id and not app.email_thread_id:
+                app.email_thread_id = thread_id
+                app.save(update_fields=["email_thread_id"])

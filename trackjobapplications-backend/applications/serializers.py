@@ -2,7 +2,7 @@ import re
 
 from rest_framework import serializers
 
-from .models import Application, ApplicationAttachment, ApplicationContact, ApplicationNote, CoverLetterTemplate, InterviewStage, Tag
+from .models import Application, ApplicationAttachment, ApplicationContact, ApplicationNote, CoverLetterTemplate, EmailLog, InterviewStage, Tag
 
 HEX_COLOR_RE = re.compile(r"^#[0-9a-fA-F]{6}$")
 
@@ -96,6 +96,17 @@ class CoverLetterTemplateSerializer(serializers.ModelSerializer):
         read_only_fields = ("id", "created_at", "updated_at")
 
 
+class EmailLogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EmailLog
+        fields = (
+            "id", "message_id", "thread_id", "subject",
+            "sender_email", "sender_name", "email_type",
+            "snippet", "suggested_status", "received_at", "created_at",
+        )
+        read_only_fields = ("id", "created_at")
+
+
 class ApplicationSerializer(serializers.ModelSerializer):
     note_entries = ApplicationNoteSerializer(many=True, read_only=True)
     tags = TagSerializer(many=True, read_only=True)
@@ -109,6 +120,8 @@ class ApplicationSerializer(serializers.ModelSerializer):
         if request and hasattr(request, "user") and request.user.is_authenticated:
             self.fields["tag_ids"].child_relation.queryset = request.user.tags.all()
 
+    email_logs = EmailLogSerializer(many=True, read_only=True)
+
     class Meta:
         model = Application
         fields = (
@@ -121,11 +134,14 @@ class ApplicationSerializer(serializers.ModelSerializer):
             "source",
             "is_pinned",
             "notes",
+            "job_posting_content",
+            "email_thread_id",
             "created_at",
             "updated_at",
             "note_entries",
             "tags",
             "tag_ids",
+            "email_logs",
         )
         read_only_fields = ("id", "created_at", "updated_at", "is_pinned")
 

@@ -138,7 +138,7 @@ export default function AddApplicationModal({ open, onClose, onSubmit, initialDa
           <button
             onClick={onClose}
             className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
-            aria-label="Close"
+            aria-label={t('dashboard.aria.close')}
           >
             <CloseIcon />
           </button>

@@ -112,6 +112,13 @@ class ChangePasswordSerializer(serializers.Serializer):
 
 
 class NotificationPreferenceSerializer(serializers.ModelSerializer):
+    from users.models import NotificationPreference
+
+    interview_reminder_hours = serializers.ChoiceField(
+        choices=NotificationPreference.REMINDER_HOUR_CHOICES,
+        required=False,
+    )
+
     class Meta:
         from users.models import NotificationPreference
 

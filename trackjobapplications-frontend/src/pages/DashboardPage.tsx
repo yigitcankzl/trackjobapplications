@@ -51,19 +51,23 @@ export default function DashboardPage() {
     getStats().then(setStats).catch(() => {})
   }, [])
 
+  const requestIdRef = useRef(0)
+
   const loadPage = useCallback((p: number, filters?: ApplicationFilters) => {
     const f = filters ?? filtersRef.current
     filtersRef.current = f
     setLoading(true)
     setSelectedIds([])
+    const reqId = ++requestIdRef.current
     getApplications(p, f)
       .then(res => {
+        if (reqId !== requestIdRef.current) return
         setApps(res.results)
         setTotalCount(res.count)
         setPage(p)
       })
-      .catch(() => addToast(t('dashboard.errors.loadFailed'), 'error'))
-      .finally(() => setLoading(false))
+      .catch(() => { if (reqId === requestIdRef.current) addToast(t('dashboard.errors.loadFailed'), 'error') })
+      .finally(() => { if (reqId === requestIdRef.current) setLoading(false) })
     loadStats()
   }, [addToast, t, loadStats])
 

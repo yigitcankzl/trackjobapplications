@@ -8,7 +8,14 @@ import { useToast } from '../context/ToastContext'
 import { JobApplication } from '../types'
 import { getAvatarColor } from '../lib/avatar'
 
-const WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+function getWeekdays(locale?: string): string[] {
+  const base = new Date(2024, 0, 1) // Monday
+  return Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(base)
+    d.setDate(base.getDate() + i)
+    return d.toLocaleDateString(locale, { weekday: 'short' })
+  })
+}
 
 function getDaysInMonth(year: number, month: number) {
   return new Date(year, month + 1, 0).getDate()
@@ -20,10 +27,11 @@ function getFirstDayOfWeek(year: number, month: number) {
 }
 
 export default function CalendarPage() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const navigate = useNavigate()
   const { addToast } = useToast()
   const [apps, setApps] = useState<JobApplication[]>([])
+  const weekdays = useMemo(() => getWeekdays(i18n.language), [i18n.language])
 
   const now = new Date()
   const [year, setYear] = useState(now.getFullYear())
@@ -91,7 +99,7 @@ export default function CalendarPage() {
 
         {/* Weekday headers */}
         <div className="grid grid-cols-7 mb-2">
-          {WEEKDAYS.map(d => (
+          {weekdays.map(d => (
             <div key={d} className="text-center text-xs font-semibold text-gray-400 uppercase tracking-wide py-2">
               {d}
             </div>

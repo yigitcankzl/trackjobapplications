@@ -1,6 +1,19 @@
 services:
   backend:
-    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 4 --timeout 120 --max-requests 1000 --max-requests-jitter 50 --access-logfile -
+    command: >-
+      gunicorn config.wsgi:application
+      --bind 0.0.0.0:8000
+      --workers 4
+      --worker-class gthread
+      --threads 2
+      --timeout 120
+      --graceful-timeout 30
+      --max-requests 1000
+      --max-requests-jitter 50
+      --limit-request-line 8190
+      --limit-request-fields 100
+      --access-logfile -
+      --error-logfile -
     restart: unless-stopped
   celery-worker:
     restart: unless-stopped

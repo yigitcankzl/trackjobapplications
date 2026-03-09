@@ -7,12 +7,15 @@ interface Props {
 interface State {
   hasError: boolean
   error: Error | null
+  retryCount: number
 }
 
-export default class ErrorBoundary extends Component<Props, State> {
-  state: State = { hasError: false, error: null }
+const MAX_RETRIES = 3
 
-  static getDerivedStateFromError(error: Error): State {
+export default class ErrorBoundary extends Component<Props, State> {
+  state: State = { hasError: false, error: null, retryCount: 0 }
+
+  static getDerivedStateFromError(error: Error): Partial<State> {
     return { hasError: true, error }
   }
 
@@ -20,19 +23,37 @@ export default class ErrorBoundary extends Component<Props, State> {
     console.error('Uncaught error:', error, info)
   }
 
+  handleRetry = () => {
+    this.setState(prev => ({ hasError: false, error: null, retryCount: prev.retryCount + 1 }))
+  }
+
+  handleReload = () => {
+    window.location.reload()
+  }
+
   render() {
     if (this.state.hasError) {
+      const canRetry = this.state.retryCount < MAX_RETRIES
       return (
         <div className="flex min-h-screen items-center justify-center bg-gray-50">
           <div className="text-center max-w-sm mx-4">
             <p className="text-lg font-semibold text-gray-800 mb-2">Something went wrong</p>
             <p className="text-sm text-gray-500 mb-4">{this.state.error?.message}</p>
-            <button
-              onClick={() => this.setState({ hasError: false, error: null })}
-              className="px-4 py-2 rounded-xl text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-colors"
-            >
-              Try again
-            </button>
+            {canRetry ? (
+              <button
+                onClick={this.handleRetry}
+                className="px-4 py-2 rounded-xl text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+              >
+                Try again
+              </button>
+            ) : (
+              <button
+                onClick={this.handleReload}
+                className="px-4 py-2 rounded-xl text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+              >
+                Reload page
+              </button>
+            )}
           </div>
         </div>
       )

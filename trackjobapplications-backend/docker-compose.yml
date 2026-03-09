@@ -15,6 +15,9 @@ services:
 
   redis:
     image: redis:7-alpine
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis_data:/data
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
@@ -47,7 +50,7 @@ services:
       context: .
       dockerfile: Dockerfile
     entrypoint: []
-    command: celery -A config worker -l info
+    command: celery -A config worker -l info --concurrency=4 --prefetch-multiplier=1
     volumes:
       - media_data:/app/media
     env_file:
@@ -86,5 +89,6 @@ services:
 
 volumes:
   postgres_data:
+  redis_data:
   media_data:
   static_data:

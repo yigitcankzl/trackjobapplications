@@ -9,8 +9,14 @@ if [ "${ROLE:-web}" = "web" ]; then
     sleep 5
   done
 
-  echo "Collecting static files..."
-  python manage.py collectstatic --noinput
+  # Skip collectstatic in dev (runserver serves static files directly)
+  case "$*" in
+    *runserver*) ;;
+    *)
+      echo "Collecting static files..."
+      python manage.py collectstatic --noinput
+      ;;
+  esac
 fi
 
 echo "Starting: $*"

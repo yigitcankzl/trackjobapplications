@@ -12,6 +12,10 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 512M
 
   redis:
     image: redis:7-alpine
@@ -23,6 +27,10 @@ services:
       interval: 5s
       timeout: 3s
       retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 256M
 
   web:
     build:
@@ -44,6 +52,10 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 512M
 
   celery-worker:
     build:
@@ -66,6 +78,10 @@ services:
         condition: service_started
       redis:
         condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 512M
 
   celery-beat:
     build:
@@ -86,6 +102,10 @@ services:
         condition: service_started
       redis:
         condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 256M
 
 volumes:
   postgres_data:

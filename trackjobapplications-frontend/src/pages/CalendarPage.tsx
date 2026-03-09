@@ -69,7 +69,7 @@ export default function CalendarPage() {
     <DashboardLayout>
       <Header title={t('calendar.title')} />
 
-      <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm p-6">
+      <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm p-3 sm:p-6">
         {/* Month navigation */}
         <div className="flex items-center justify-between mb-6">
           <button
@@ -99,7 +99,7 @@ export default function CalendarPage() {
         {/* Days grid */}
         <div className="grid grid-cols-7 gap-px bg-gray-100 dark:bg-gray-800 rounded-xl overflow-hidden">
           {Array.from({ length: firstDay }).map((_, i) => (
-            <div key={`empty-${i}`} className="bg-white dark:bg-gray-900 min-h-24" />
+            <div key={`empty-${i}`} className="bg-white dark:bg-gray-900 min-h-16 sm:min-h-24" />
           ))}
           {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(day => {
             const isToday = day === today
@@ -107,7 +107,7 @@ export default function CalendarPage() {
             return (
               <div
                 key={day}
-                className={`bg-white dark:bg-gray-900 min-h-24 p-1.5 ${isToday ? 'ring-2 ring-inset ring-blue-500' : ''}`}
+                className={`bg-white dark:bg-gray-900 min-h-16 sm:min-h-24 p-1 sm:p-1.5 ${isToday ? 'ring-2 ring-inset ring-blue-500' : ''}`}
               >
                 <span className={`text-xs font-medium ${isToday ? 'text-blue-600 font-bold' : 'text-gray-500 dark:text-gray-400'}`}>
                   {day}

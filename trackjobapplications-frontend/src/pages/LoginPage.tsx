@@ -47,7 +47,7 @@ export default function LoginPage() {
         )}
       </div>
 
-      <p className="absolute bottom-6 text-xs text-gray-400 dark:text-gray-500">
+      <p className="absolute bottom-4 left-0 right-0 text-center text-xs text-gray-400 dark:text-gray-500 hidden md:block">
         {t('footer.copyright', { year: new Date().getFullYear() })}
       </p>
     </div>

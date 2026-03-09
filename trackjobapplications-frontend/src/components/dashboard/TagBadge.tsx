@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { Tag } from '../../types'
 
 interface Props {
@@ -5,7 +6,7 @@ interface Props {
   onRemove?: () => void
 }
 
-export default function TagBadge({ tag, onRemove }: Props) {
+export default memo(function TagBadge({ tag, onRemove }: Props) {
   return (
     <span
       className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium text-white"
@@ -19,4 +20,4 @@ export default function TagBadge({ tag, onRemove }: Props) {
       )}
     </span>
   )
-}
+})

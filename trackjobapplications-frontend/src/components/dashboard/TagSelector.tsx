@@ -26,7 +26,7 @@ export default function TagSelector({ selectedIds, onChange }: Props) {
       .then(data => { if (active) setTags(data) })
       .catch(() => { if (active) addToast(t('detail.tags.loadFailed'), 'error') })
     return () => { active = false }
-  }, [addToast])
+  }, [addToast, t])
 
   function toggle(id: number) {
     onChange(

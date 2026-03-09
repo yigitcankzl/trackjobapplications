@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import StatCard from './StatCard'
 
 type StatCardColor =
@@ -20,7 +21,7 @@ interface Props {
   onDragEnd: () => void
 }
 
-export default function DraggableStatCard({
+export default memo(function DraggableStatCard({
   label, value, color, index, isDragging,
   onDragStart, onDragOver, onDragEnd,
 }: Props) {
@@ -35,4 +36,4 @@ export default function DraggableStatCard({
       <StatCard label={label} value={value} color={color} />
     </div>
   )
-}
+})

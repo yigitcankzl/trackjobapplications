@@ -80,13 +80,16 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const addToast = useCallback((message: string, type: ToastType = 'success') => {
-    const id = ++counter.current
-    setToasts(prev => [...prev, { id, message, type }])
-    const timer = setTimeout(() => {
-      timers.current.delete(id)
-      dismiss(id)
-    }, 3000)
-    timers.current.set(id, timer)
+    setToasts(prev => {
+      if (prev.some(t => t.message === message && t.type === type)) return prev
+      const id = ++counter.current
+      const timer = setTimeout(() => {
+        timers.current.delete(id)
+        dismiss(id)
+      }, 3000)
+      timers.current.set(id, timer)
+      return [...prev, { id, message, type }]
+    })
   }, [dismiss])
 
   return (

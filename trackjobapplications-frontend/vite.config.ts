@@ -11,4 +11,15 @@ export default defineConfig({
       interval: 1000,
     },
   },
+  build: {
+    sourcemap: false,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          ui: ['react-i18next', 'i18next'],
+        },
+      },
+    },
+  },
 })

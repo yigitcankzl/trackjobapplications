@@ -161,7 +161,7 @@ export default function AnalyticsPage() {
               return <div className="flex items-center justify-center h-40 text-sm text-gray-400">{t('analytics.noData')}</div>
             }
             return (
-              <div className="flex items-end gap-3 h-44">
+              <div className="flex items-end gap-2 sm:gap-3 h-44 overflow-x-auto">
                 {data.map(([key, count]) => {
                   const heightPct = Math.round(count / maxVal * 100)
                   const label = timeView === 'monthly'

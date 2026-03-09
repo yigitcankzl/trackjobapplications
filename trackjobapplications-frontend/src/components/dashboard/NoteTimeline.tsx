@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ApplicationNote } from '../../types'
 import { getNotes, createNote, deleteNote } from '../../services/applications'
@@ -16,6 +16,11 @@ export default function NoteTimeline({ applicationId }: Props) {
   const [loading, setLoading] = useState(true)
   const [content, setContent] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const mountedRef = useRef(true)
+
+  useEffect(() => {
+    return () => { mountedRef.current = false }
+  }, [])
 
   useEffect(() => {
     let active = true
@@ -32,20 +37,24 @@ export default function NoteTimeline({ applicationId }: Props) {
     setSubmitting(true)
     try {
       const note = await createNote(applicationId, content.trim())
+      if (!mountedRef.current) return
       setNotes(prev => [note, ...prev])
       setContent('')
     } catch {
+      if (!mountedRef.current) return
       addToast(t('dashboard.notes.addFailed'), 'error')
     } finally {
-      setSubmitting(false)
+      if (mountedRef.current) setSubmitting(false)
     }
   }
 
   async function handleDelete(noteId: number) {
     try {
       await deleteNote(applicationId, noteId)
+      if (!mountedRef.current) return
       setNotes(prev => prev.filter(n => n.id !== noteId))
     } catch {
+      if (!mountedRef.current) return
       addToast(t('dashboard.notes.deleteFailed'), 'error')
     }
   }

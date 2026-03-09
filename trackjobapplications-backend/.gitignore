@@ -17,6 +17,12 @@ build/
 staticfiles/
 media/
 *.log
+db.sqlite3
+
+# Test / Coverage
+.coverage
+htmlcov/
+.pytest_cache/
 
 # Docker
 .dockerignore

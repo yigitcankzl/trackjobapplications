@@ -1,4 +1,5 @@
 import { ReactNode, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import Sidebar from '../dashboard/Sidebar'
 import { MenuIcon } from '../icons'
 
@@ -7,6 +8,7 @@ interface Props {
 }
 
 export default function DashboardLayout({ children }: Props) {
+  const { t } = useTranslation()
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
@@ -18,7 +20,7 @@ export default function DashboardLayout({ children }: Props) {
           <button
             onClick={() => setSidebarOpen(true)}
             className="p-2 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-gray-800 transition-colors"
-            aria-label="Open menu"
+            aria-label={t('dashboard.aria.openMenu')}
           >
             <MenuIcon />
           </button>

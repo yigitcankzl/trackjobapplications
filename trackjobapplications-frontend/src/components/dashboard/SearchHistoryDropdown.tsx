@@ -15,7 +15,7 @@ export default function SearchHistoryDropdown({ history, onSelect, onRemove, onC
   if (!visible || history.length === 0) return null
 
   return (
-    <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 py-1 z-50">
+    <div role="listbox" className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 py-1 z-50">
       <div className="flex items-center justify-between px-3 py-1.5">
         <span className="text-xs font-medium text-gray-400 dark:text-gray-500">
           {t('dashboard.filters.recentSearches')}
@@ -30,6 +30,7 @@ export default function SearchHistoryDropdown({ history, onSelect, onRemove, onC
       {history.map(query => (
         <div
           key={query}
+          role="option"
           onMouseDown={e => e.preventDefault()}
           className="flex items-center justify-between px-3 py-1.5 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
         >

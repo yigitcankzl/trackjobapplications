@@ -93,6 +93,52 @@ export default function WelcomePage() {
             description={t('welcome.features.followup.description')}
           />
         </div>
+
+        {/* Extensions section */}
+        <div className="mt-20 max-w-3xl w-full">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">{t('welcome.extensions.title')}</h2>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mb-8">{t('welcome.extensions.subtitle')}</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {/* Chrome Extension */}
+            <div className="group bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm p-6 hover:shadow-md hover:border-blue-100 dark:hover:border-blue-800 transition-all duration-200">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center flex-shrink-0 shadow-sm">
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M9 12l2 2 4-4" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-1">{t('welcome.extensions.chrome.title')}</h3>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">{t('welcome.extensions.chrome.description')}</p>
+                  <div className="flex items-center gap-2 mt-3">
+                    <span className="px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-900/30 text-xs font-medium text-blue-600 dark:text-blue-400">LinkedIn</span>
+                    <span className="px-2 py-0.5 rounded-md bg-purple-50 dark:bg-purple-900/30 text-xs font-medium text-purple-600 dark:text-purple-400">Indeed</span>
+                    <span className="px-2 py-0.5 rounded-md bg-gray-50 dark:bg-gray-800 text-xs font-medium text-gray-500 dark:text-gray-400">Gmail</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Gmail Add-on */}
+            <div className="group bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm p-6 hover:shadow-md hover:border-red-100 dark:hover:border-red-800 transition-all duration-200">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center flex-shrink-0 shadow-sm">
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-1">{t('welcome.extensions.gmail.title')}</h3>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">{t('welcome.extensions.gmail.description')}</p>
+                  <div className="flex items-center gap-2 mt-3">
+                    <span className="px-2 py-0.5 rounded-md bg-red-50 dark:bg-red-900/30 text-xs font-medium text-red-600 dark:text-red-400">Google Workspace</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </main>
 
       {/* Footer */}

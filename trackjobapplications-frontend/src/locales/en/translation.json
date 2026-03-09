@@ -22,6 +22,18 @@
         "title": "Never miss a follow-up",
         "description": "Add notes and dates so you always know what to do next."
       }
+    },
+    "extensions": {
+      "title": "Works where you work",
+      "subtitle": "Save jobs directly from your favorite platforms — no copy-pasting needed.",
+      "chrome": {
+        "title": "Browser Extension",
+        "description": "Save jobs with one click from LinkedIn, Indeed, and other job boards directly to your dashboard."
+      },
+      "gmail": {
+        "title": "Gmail Add-on",
+        "description": "Capture job details from recruiter emails and save them to your tracker without leaving Gmail."
+      }
     }
   },
   "auth": {

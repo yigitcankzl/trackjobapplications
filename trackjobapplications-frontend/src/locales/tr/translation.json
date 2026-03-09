@@ -22,6 +22,18 @@
         "title": "Geri dönüşü kaçırma",
         "description": "Not ve tarih ekle, sırada ne yapman gerektiğini her zaman bil."
       }
+    },
+    "extensions": {
+      "title": "Bulunduğun yerde çalışır",
+      "subtitle": "Favori platformlarından işleri doğrudan kaydet — kopyala yapıştır yok.",
+      "chrome": {
+        "title": "Tarayıcı Eklentisi",
+        "description": "LinkedIn, Indeed ve diğer iş sitelerinden tek tıkla başvuruları dashboard'una kaydet."
+      },
+      "gmail": {
+        "title": "Gmail Eklentisi",
+        "description": "İşe alım e-postalarından iş detaylarını yakala ve Gmail'den çıkmadan takip listene ekle."
+      }
     }
   },
   "auth": {

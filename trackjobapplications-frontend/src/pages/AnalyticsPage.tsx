@@ -26,12 +26,15 @@ export default function AnalyticsPage() {
     return () => { active = false }
   }, [addToast, t])
 
-  const counts: Record<ApplicationStatus, number> = {
-    to_apply: 0, applied: 0, interview: 0, offer: 0, rejected: 0, withdrawn: 0,
-  }
-  for (const app of apps) {
-    counts[app.status] += 1
-  }
+  const counts = useMemo(() => {
+    const c: Record<ApplicationStatus, number> = {
+      to_apply: 0, applied: 0, interview: 0, offer: 0, rejected: 0, withdrawn: 0,
+    }
+    for (const app of apps) {
+      c[app.status] += 1
+    }
+    return c
+  }, [apps])
 
   const total = apps.length
   const interviewRate = total > 0 ? Math.round((counts.interview + counts.offer) / total * 100) : 0
@@ -40,12 +43,14 @@ export default function AnalyticsPage() {
 
   const [timeView, setTimeView] = useState<'weekly' | 'monthly'>('monthly')
 
-  const monthMap: Record<string, number> = {}
-  for (const app of apps) {
-    const key = app.applied_date.slice(0, 7)
-    monthMap[key] = (monthMap[key] ?? 0) + 1
-  }
-  const byMonth = Object.entries(monthMap).sort(([a], [b]) => a.localeCompare(b))
+  const byMonth = useMemo(() => {
+    const monthMap: Record<string, number> = {}
+    for (const app of apps) {
+      const key = app.applied_date.slice(0, 7)
+      monthMap[key] = (monthMap[key] ?? 0) + 1
+    }
+    return Object.entries(monthMap).sort(([a], [b]) => a.localeCompare(b))
+  }, [apps])
   const maxMonthCount = Math.max(...byMonth.map(([, c]) => c), 1)
 
   const byWeek = useMemo(() => {
@@ -63,6 +68,16 @@ export default function AnalyticsPage() {
     return Object.entries(weekMap).sort(([a], [b]) => a.localeCompare(b)).slice(-12)
   }, [apps])
   const maxWeekCount = Math.max(...byWeek.map(([, c]) => c), 1)
+
+  const sourceEntries = useMemo(() => {
+    const sourceCounts: Partial<Record<ApplicationSource, number>> = {}
+    for (const app of apps) {
+      if (app.source) {
+        sourceCounts[app.source] = (sourceCounts[app.source] ?? 0) + 1
+      }
+    }
+    return SOURCE_KEYS.filter(k => sourceCounts[k]).map(k => [k, sourceCounts[k]!] as const)
+  }, [apps])
 
   return (
     <DashboardLayout>
@@ -201,13 +216,7 @@ export default function AnalyticsPage() {
 
       {/* Source distribution */}
       {(() => {
-        const sourceCounts: Partial<Record<ApplicationSource, number>> = {}
-        for (const app of apps) {
-          if (app.source) {
-            sourceCounts[app.source] = (sourceCounts[app.source] ?? 0) + 1
-          }
-        }
-        const entries = SOURCE_KEYS.filter(k => sourceCounts[k]).map(k => [k, sourceCounts[k]!] as const)
+        const entries = sourceEntries
         if (entries.length === 0) return null
         const maxSrc = Math.max(...entries.map(([, c]) => c), 1)
         return (

@@ -6,7 +6,7 @@ from users.models import User
 
 @pytest.mark.django_db
 class TestRegisterView:
-    URL = "/api/users/register/"
+    URL = "/api/auth/register/"
 
     def test_register_success(self, anon_client):
         data = {
@@ -45,7 +45,7 @@ class TestRegisterView:
 
 @pytest.mark.django_db
 class TestMeView:
-    URL = "/api/users/me/"
+    URL = "/api/auth/me/"
 
     def test_get_profile(self, auth_client, user):
         res = auth_client.get(self.URL)
@@ -65,7 +65,7 @@ class TestMeView:
 
 @pytest.mark.django_db
 class TestChangePasswordView:
-    URL = "/api/users/change-password/"
+    URL = "/api/auth/change-password/"
 
     def test_success(self, auth_client, user):
         data = {

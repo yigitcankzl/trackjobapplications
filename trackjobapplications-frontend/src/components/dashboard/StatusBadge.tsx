@@ -1,8 +1,9 @@
+import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ApplicationStatus } from '../../types'
 import { STATUS_CONFIG } from '../../constants/applicationStatus'
 
-export default function StatusBadge({ status }: { status: ApplicationStatus }) {
+export default memo(function StatusBadge({ status }: { status: ApplicationStatus }) {
   const { t } = useTranslation()
   const config = STATUS_CONFIG[status]
   return (
@@ -10,4 +11,4 @@ export default function StatusBadge({ status }: { status: ApplicationStatus }) {
       {t(`dashboard.status.${status}`)}
     </span>
   )
-}
+})

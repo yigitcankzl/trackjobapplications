@@ -2,6 +2,7 @@ import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { importApplications } from '../../services/applications'
 import { useEscapeKey } from '../../hooks/useEscapeKey'
+import { useFocusTrap } from '../../hooks/useFocusTrap'
 import Button from '../ui/Button'
 
 interface Props {
@@ -20,6 +21,7 @@ export default function ImportModal({ open, onClose, onSuccess }: Props) {
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<{ created: number; errors: Array<{ row: number; errors: Record<string, string[]> }> } | null>(null)
 
+  const focusTrapRef = useFocusTrap(open)
   useEscapeKey(onClose, open)
 
   const FIELDS = ['company', 'position', 'status', 'applied_date', 'url', 'source', 'notes']
@@ -98,7 +100,7 @@ export default function ImportModal({ open, onClose, onSuccess }: Props) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40" role="dialog" aria-modal="true" aria-labelledby="import-modal-title">
-      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl w-full max-w-2xl mx-4 max-h-[80vh] overflow-y-auto p-6">
+      <div ref={focusTrapRef} className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl w-full max-w-2xl mx-4 max-h-[80vh] overflow-y-auto p-6">
         <h2 id="import-modal-title" className="text-lg font-semibold mb-4 dark:text-white">{t('import.title')}</h2>
 
         {!file ? (

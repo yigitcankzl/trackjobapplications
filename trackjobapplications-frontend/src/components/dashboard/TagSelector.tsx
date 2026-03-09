@@ -21,7 +21,11 @@ export default function TagSelector({ selectedIds, onChange }: Props) {
   const [newColor, setNewColor] = useState(PRESET_COLORS[0])
 
   useEffect(() => {
-    getTags().then(setTags).catch(() => addToast('Failed to load tags', 'error'))
+    let active = true
+    getTags()
+      .then(data => { if (active) setTags(data) })
+      .catch(() => { if (active) addToast('Failed to load tags', 'error') })
+    return () => { active = false }
   }, [addToast])
 
   function toggle(id: number) {

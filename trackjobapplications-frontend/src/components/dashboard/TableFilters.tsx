@@ -69,9 +69,9 @@ export default function TableFilters({
   return (
     <div className="flex flex-col gap-3 mb-4">
       {/* Search + Source + Date range + Sort row */}
-      <div className="flex items-center gap-3 flex-wrap">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:flex-wrap">
         {/* Search */}
-        <div className="relative flex-1 min-w-[200px] max-w-xs">
+        <div className="relative flex-1 min-w-0 sm:min-w-[200px] sm:max-w-xs">
           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
             <SearchIcon />
           </span>
@@ -136,7 +136,7 @@ export default function TableFilters({
         </div>
 
         {/* Sort */}
-        <div className="flex items-center gap-1.5 ml-auto">
+        <div className="flex items-center gap-1.5 sm:ml-auto">
           <span className="text-xs text-gray-400 font-medium">{t('dashboard.filters.sort')}</span>
           {SORT_OPTIONS.map(opt => (
             <button
@@ -158,7 +158,7 @@ export default function TableFilters({
       </div>
 
       {/* Status chips */}
-      <div className="flex items-center gap-1.5 flex-wrap">
+      <div className="flex items-center gap-1.5 flex-wrap overflow-x-auto">
         {STATUS_CHIPS.map(chip => (
           <button
             key={chip.value}

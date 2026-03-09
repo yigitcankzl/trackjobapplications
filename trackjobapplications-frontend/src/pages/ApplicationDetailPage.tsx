@@ -100,12 +100,12 @@ export default function ApplicationDetailPage() {
       <div className="max-w-3xl mx-auto space-y-6 pb-12">
         {/* Hero */}
         <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6">
-          <div className="flex items-start gap-4">
-            <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-bold flex-shrink-0 ${getAvatarColor(app.company)}`}>
+          <div className="flex flex-col sm:flex-row sm:items-start gap-4">
+            <div className={`w-12 h-12 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center text-xl sm:text-2xl font-bold flex-shrink-0 ${getAvatarColor(app.company)}`}>
               {(app.company[0] ?? '?').toUpperCase()}
             </div>
             <div className="flex-1 min-w-0">
-              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">{app.company}</h2>
+              <h2 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100">{app.company}</h2>
               <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{app.position}</p>
               <div className="mt-2 flex flex-wrap items-center gap-2">
                 <StatusBadge status={app.status} />

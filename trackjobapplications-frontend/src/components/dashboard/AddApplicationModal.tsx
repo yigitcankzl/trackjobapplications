@@ -109,6 +109,7 @@ export default function AddApplicationModal({ open, onClose, onSubmit, initialDa
         applied_date: form.applied_date,
         url: form.url.trim(),
         source: form.source ? (form.source as ApplicationSource) : '',
+        is_pinned: false,
         notes: form.notes.trim(),
         tag_ids: form.tag_ids,
       })

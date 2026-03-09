@@ -111,12 +111,12 @@ export default function CoverLettersPage() {
 
   return (
     <DashboardLayout>
-      <Header title={t('coverLetters.title')}>
+      <Header title={t('coverLetters.title')} action={
         <Button onClick={openCreate}>
           <PlusIcon />
           {t('coverLetters.newTemplate')}
         </Button>
-      </Header>
+      } />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Template list */}

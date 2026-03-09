@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 import { Tag } from '../../types'
 import { getTags, createTag } from '../../services/tags'
 import { useToast } from '../../context/ToastContext'
-import TagBadge from './TagBadge'
 
 interface Props {
   selectedIds: number[]

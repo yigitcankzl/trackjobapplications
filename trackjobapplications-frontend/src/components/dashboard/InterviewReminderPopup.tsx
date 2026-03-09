@@ -30,8 +30,8 @@ export default function InterviewReminderPopup({ reminders, onDismiss }: Props) 
         <button onClick={onDismiss} className="text-gray-400 hover:text-gray-600 text-xs">&times;</button>
       </div>
       <div className="space-y-2">
-        {reminders.map((r, i) => (
-          <div key={i} className="text-xs">
+        {reminders.map(r => (
+          <div key={`${r.application.id}-${r.stage.id}`} className="text-xs">
             <p className="font-medium dark:text-gray-200">
               {STAGE_LABELS[r.stage.stage_type] || r.stage.stage_type} — {r.application.company}
             </p>

@@ -19,7 +19,7 @@ export default function BulkActionBar({ selectedCount, onUpdateStatus, onDelete,
   if (selectedCount === 0) return null
 
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-xl px-6 py-3 flex items-center gap-4">
+    <div role="status" aria-live="polite" className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-xl px-6 py-3 flex items-center gap-4">
       <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
         {t('dashboard.bulk.selected', { count: selectedCount })}
       </span>
@@ -44,7 +44,7 @@ export default function BulkActionBar({ selectedCount, onUpdateStatus, onDelete,
       </Button>
 
       <button onClick={onClear} className="text-xs text-gray-400 hover:text-gray-600">
-        Clear
+        {t('dashboard.filters.clearAll')}
       </button>
     </div>
   )

@@ -1,5 +1,5 @@
 import api from '../lib/axios'
-import { ApplicationFilters, ApplicationNote, JobApplication, PaginatedResponse } from '../types'
+import { ApplicationFilters, ApplicationNote, EmailLog, JobApplication, PaginatedResponse } from '../types'
 
 type CreatePayload = Omit<JobApplication, 'id' | 'created_at' | 'updated_at'>
 type UpdatePayload = Partial<CreatePayload>
@@ -96,6 +96,16 @@ export async function bulkUpdateStatus(ids: number[], status: string): Promise<{
 export async function bulkDelete(ids: number[]): Promise<{ deleted: number }> {
   const { data } = await api.post('/applications/bulk-delete/', { ids })
   return data
+}
+
+// Email logs
+export async function getEmailLogs(applicationId: number): Promise<EmailLog[]> {
+  const { data } = await api.get<EmailLog[]>(`/applications/${applicationId}/emails/`)
+  return data
+}
+
+export async function deleteEmailLog(applicationId: number, emailId: number): Promise<void> {
+  await api.delete(`/applications/${applicationId}/emails/${emailId}/`)
 }
 
 // Import

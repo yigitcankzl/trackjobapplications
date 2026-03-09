@@ -80,6 +80,27 @@ export interface ApplicationAttachment {
   uploaded_at: string
 }
 
+export type EmailType =
+  | 'rejection'
+  | 'interview_invite'
+  | 'offer'
+  | 'follow_up'
+  | 'general'
+
+export interface EmailLog {
+  id: number
+  message_id: string
+  thread_id: string
+  subject: string
+  sender_email: string
+  sender_name: string
+  email_type: EmailType
+  snippet: string
+  suggested_status: string
+  received_at: string
+  created_at: string
+}
+
 export interface JobApplication {
   id: number
   company: string
@@ -91,12 +112,15 @@ export interface JobApplication {
   tags?: Tag[]
   is_pinned: boolean
   notes: string
+  job_posting_content?: string
+  email_thread_id?: string
   created_at: string
   updated_at: string
   note_entries?: ApplicationNote[]
   contacts?: ApplicationContact[]
   interview_stages?: InterviewStage[]
   attachments?: ApplicationAttachment[]
+  email_logs?: EmailLog[]
 }
 
 export interface PaginatedResponse<T> {

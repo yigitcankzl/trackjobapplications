@@ -219,7 +219,8 @@
       "closeMenu": "Menüyü kapat",
       "close": "Kapat",
       "clearSearch": "Aramayı temizle",
-      "pin": "Sabitle"
+      "pin": "Sabitle",
+      "followUpNeeded": "Takip gerekiyor"
     },
     "bulk": {
       "selected": "{{count}} seçildi",

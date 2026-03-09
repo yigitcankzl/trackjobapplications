@@ -219,7 +219,8 @@
       "closeMenu": "Close menu",
       "close": "Close",
       "clearSearch": "Clear search",
-      "pin": "Pin"
+      "pin": "Pin",
+      "followUpNeeded": "Follow-up needed"
     },
     "bulk": {
       "selected": "{{count}} selected",

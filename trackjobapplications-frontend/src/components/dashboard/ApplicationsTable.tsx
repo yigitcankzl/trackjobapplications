@@ -90,7 +90,7 @@ export default function ApplicationsTable({ applications, onEdit, onDelete, onTo
                   <div className="min-w-0">
                     <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 leading-tight flex items-center gap-1.5">
                       {app.company}
-                      {needsFollowUp(app) && <span className="w-2 h-2 rounded-full bg-amber-400 flex-shrink-0" title="Follow-up needed" />}
+                      {needsFollowUp(app) && <span className="w-2 h-2 rounded-full bg-amber-400 flex-shrink-0" title={t('dashboard.aria.followUpNeeded')} />}
                     </p>
                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate">{app.position}</p>
                     {app.notes && (

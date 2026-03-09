@@ -41,10 +41,12 @@ class TagAdmin(admin.ModelAdmin):
     list_display = ("name", "color", "user")
     list_filter = ("user",)
     search_fields = ("name",)
+    list_select_related = ("user",)
 
 
 @admin.register(CoverLetterTemplate)
 class CoverLetterTemplateAdmin(admin.ModelAdmin):
-    list_display = ("title", "user", "created_at")
+    list_display = ("name", "user", "created_at")
     list_filter = ("user",)
-    search_fields = ("title",)
+    search_fields = ("name",)
+    list_select_related = ("user",)

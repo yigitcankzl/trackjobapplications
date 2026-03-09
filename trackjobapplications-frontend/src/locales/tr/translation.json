@@ -399,7 +399,11 @@
     "columnMapping": "Sütun Eşleme",
     "cancel": "İptal",
     "importing": "İçe aktarılıyor...",
-    "import": "İçe Aktar"
+    "import": "İçe Aktar",
+    "file": "Dosya:",
+    "preview": "Önizleme (ilk {{count}} satır)",
+    "skip": "-- atla --",
+    "row": "Satır {{row}}"
   },
   "calendar": {
     "title": "Takvim",

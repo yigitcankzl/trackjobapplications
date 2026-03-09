@@ -399,7 +399,11 @@
     "columnMapping": "Column Mapping",
     "cancel": "Cancel",
     "importing": "Importing...",
-    "import": "Import"
+    "import": "Import",
+    "file": "File:",
+    "preview": "Preview (first {{count}} rows)",
+    "skip": "-- skip --",
+    "row": "Row {{row}}"
   },
   "calendar": {
     "title": "Calendar",

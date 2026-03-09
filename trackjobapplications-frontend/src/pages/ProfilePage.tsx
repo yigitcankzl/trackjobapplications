@@ -135,6 +135,13 @@ export default function ProfilePage() {
     }
   }
 
+  // Cleanup avatar preview URL on unmount to prevent memory leak
+  useEffect(() => {
+    return () => {
+      if (avatarPreview) URL.revokeObjectURL(avatarPreview)
+    }
+  }, [avatarPreview])
+
   const avatarSrc = avatarPreview || user?.avatar || null
 
   return (

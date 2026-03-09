@@ -117,7 +117,7 @@ export default function ApplicationsTable({ applications, onEdit, onDelete, onTo
                     <button
                       onClick={e => { e.stopPropagation(); onTogglePin(app.id) }}
                       className={`p-1.5 rounded-lg transition-colors ${app.is_pinned ? 'text-amber-500' : 'text-gray-400 opacity-0 group-hover:opacity-100 hover:text-amber-500 hover:bg-amber-50'}`}
-                      aria-label="Pin"
+                      aria-label={t('dashboard.aria.pin')}
                     >
                       <svg className="w-4 h-4" viewBox="0 0 24 24" fill={app.is_pinned ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6z" /></svg>
                     </button>

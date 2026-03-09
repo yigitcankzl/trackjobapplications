@@ -46,8 +46,8 @@ export default function SignUpForm({ onSwitch }: Props) {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center h-full px-12">
-      <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-1">{t('auth.signUp.title')}</h2>
+    <div className="flex flex-col items-center justify-center h-full px-6 sm:px-12">
+      <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-100 mb-1">{t('auth.signUp.title')}</h2>
       <p className="text-sm text-gray-400 dark:text-gray-500 mb-8">{t('auth.signUp.subtitle')}</p>
 
       <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-4">

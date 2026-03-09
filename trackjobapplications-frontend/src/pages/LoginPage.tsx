@@ -10,9 +10,8 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 p-4">
-      {/* Card */}
-      <div className="relative w-full max-w-4xl h-[560px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl overflow-hidden">
-
+      {/* Desktop: split card layout */}
+      <div className="relative w-full max-w-4xl h-[560px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl overflow-hidden hidden md:block">
         {/* Sign Up Form — right side */}
         <div
           className="absolute top-0 right-0 w-1/2 h-full transition-all duration-700 ease-in-out"
@@ -37,6 +36,15 @@ export default function LoginPage() {
 
         {/* Sliding Overlay */}
         <OverlayPanel isSignUp={isSignUp} onSwitch={() => setIsSignUp(!isSignUp)} />
+      </div>
+
+      {/* Mobile: stacked layout */}
+      <div className="w-full max-w-sm bg-white dark:bg-gray-900 rounded-2xl shadow-2xl overflow-hidden md:hidden py-8">
+        {isSignUp ? (
+          <SignUpForm onSwitch={() => setIsSignUp(false)} />
+        ) : (
+          <SignInForm onSwitch={() => setIsSignUp(true)} />
+        )}
       </div>
 
       <p className="absolute bottom-6 text-xs text-gray-400 dark:text-gray-500">

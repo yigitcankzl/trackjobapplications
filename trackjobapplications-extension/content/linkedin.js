@@ -42,6 +42,7 @@ function extractLinkedInJob() {
 // --- Message Listener (for popup) ---
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (sender.id !== chrome.runtime.id) { sendResponse(null); return; }
   if (message.type === 'GET_JOB_DATA') {
     sendResponse(extractLinkedInJob());
   }

@@ -184,6 +184,7 @@ window.addEventListener('beforeunload', () => observer.disconnect());
 
 // Respond to popup requests
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (sender.id !== chrome.runtime.id) { sendResponse(null); return; }
   if (message.type === 'GET_JOB_DATA') {
     const data = extractEmailData();
     if (data.company && data.position) {

@@ -1,7 +1,16 @@
 import pytest
+from django.core.cache import cache
 from rest_framework.test import APIClient
 
 from users.models import User
+
+
+@pytest.fixture(autouse=True)
+def clear_throttle_cache():
+    """Clear the throttle cache before each test so rate limits don't bleed across tests."""
+    cache.clear()
+    yield
+    cache.clear()
 
 
 @pytest.fixture

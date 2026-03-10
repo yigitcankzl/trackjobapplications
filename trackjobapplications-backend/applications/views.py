@@ -1,8 +1,10 @@
-from django_filters.rest_framework import DjangoFilterBackend
 import csv
 import io
 import json
 import logging
+import re
+
+from django_filters.rest_framework import DjangoFilterBackend
 
 from django.db import transaction
 from django.http import StreamingHttpResponse
@@ -138,6 +140,12 @@ class ApplicationViewSet(viewsets.ModelViewSet):
         apps = list(self.get_queryset().order_by("-applied_date")[:MAX_PAGE_SIZE_ALL])
         try:
             pdf_bytes = generate_applications_pdf(apps, request.user)
+        except MemoryError:
+            logger.critical("OOM during PDF generation for user %s", request.user.id)
+            return Response(
+                {"error": "Too many applications to export. Apply filters to reduce the number."},
+                status=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+            )
         except Exception:
             logger.exception("PDF generation failed for user %s", request.user.id)
             return Response({"error": "Failed to generate PDF."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -231,9 +239,12 @@ class ApplicationViewSet(viewsets.ModelViewSet):
                 rows = self._parse_excel(file)
             else:
                 return Response({"error": "Unsupported format. Use .csv or .xlsx"}, status=status.HTTP_400_BAD_REQUEST)
-        except Exception:
-            logger.exception("Failed to parse import file: %s", file.name)
+        except (csv.Error, UnicodeDecodeError, ValueError) as e:
+            logger.warning("Import parse error for file %s: %s", file.name, e)
             return Response({"error": "Failed to parse file. Please check the format."}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception:
+            logger.exception("Unexpected import error for file %s", file.name)
+            return Response({"error": "Unexpected server error."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         if len(rows) > MAX_IMPORT_ROWS:
             return Response(
@@ -417,11 +428,9 @@ class ApplicationAttachmentViewSet(_NestedApplicationMixin, viewsets.ModelViewSe
             serializer.save(application=app)
 
 
-import re
-
 _REJECTION_PATTERNS = re.compile(
-    r"(unfortunately|regret to inform|not (been )?selected|decided not to|"
-    r"moved forward with other|position has been filled|not a (good )?match|"
+    r"(unfortunately|regret to inform|not (?:been )?selected|decided not to|"
+    r"moved forward with other|position has been filled|not a (?:good )?match|"
     r"will not be moving forward|unable to offer|rejected|rejection)",
     re.IGNORECASE,
 )
@@ -547,11 +556,8 @@ class CompareApplicationsView(viewsets.ViewSet):
         )
         data = []
         for app in apps:
-            offer = None
-            try:
-                offer = OfferDetailSerializer(app.offer_detail).data
-            except OfferDetail.DoesNotExist:
-                pass
+            od = getattr(app, 'offer_detail', None)
+            offer = OfferDetailSerializer(od).data if od else None
             data.append({
                 "id": app.id,
                 "company": app.company,

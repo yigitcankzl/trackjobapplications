@@ -10,10 +10,12 @@ def health_check(request):
 
 
 def csrf_cookie(request):
-    """GET this endpoint to receive the csrftoken cookie before unauthenticated POSTs."""
+    """GET this endpoint to obtain the CSRF token for cross-origin POSTs.
+    Returns the token in the response body (since JS cannot read cross-origin cookies).
+    """
     from django.middleware.csrf import get_token
-    get_token(request)
-    return JsonResponse({"detail": "CSRF cookie set"})
+    token = get_token(request)
+    return JsonResponse({"csrfToken": token})
 
 
 from applications.media_views import SecureMediaView

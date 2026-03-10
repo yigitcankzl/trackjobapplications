@@ -4,27 +4,28 @@ import { API_BASE } from './config'
 const api = axios.create({
   baseURL: API_BASE,
   timeout: 30000,
-  withCredentials: true,      // Send httpOnly JWT cookies automatically
-  xsrfCookieName: 'csrftoken', // Read Django's CSRF cookie
-  xsrfHeaderName: 'X-CSRFToken', // Send as X-CSRFToken header on every mutating request
+  withCredentials: true, // Send httpOnly JWT cookies automatically
 })
 
 let refreshPromise: Promise<void> | null = null
 let refreshTimer: ReturnType<typeof setTimeout> | null = null
+
+// CSRF token stored in memory — JS cannot read cross-origin cookies via document.cookie,
+// so we fetch the token from the backend response body and set it manually as a header.
+let csrfToken: string | null = null
 let csrfPromise: Promise<void> | null = null
 
 const MUTATING_METHODS = new Set(['post', 'put', 'patch', 'delete'])
 
-function hasCsrfCookie(): boolean {
-  return document.cookie.split('; ').some(c => c.startsWith('csrftoken='))
-}
-
-async function ensureCsrfCookie(): Promise<void> {
-  if (hasCsrfCookie()) return
+async function ensureCsrfToken(): Promise<void> {
+  if (csrfToken) return
   if (!csrfPromise) {
     csrfPromise = axios
-      .get(`${API_BASE}/csrf/`, { withCredentials: true })
-      .then(() => { csrfPromise = null })
+      .get<{ csrfToken: string }>(`${API_BASE}/csrf/`, { withCredentials: true })
+      .then(({ data }) => {
+        csrfToken = data.csrfToken
+        csrfPromise = null
+      })
       .catch(() => { csrfPromise = null })
   }
   return csrfPromise
@@ -32,7 +33,10 @@ async function ensureCsrfCookie(): Promise<void> {
 
 api.interceptors.request.use(async (config) => {
   if (config.method && MUTATING_METHODS.has(config.method.toLowerCase())) {
-    await ensureCsrfCookie()
+    await ensureCsrfToken()
+    if (csrfToken) {
+      config.headers['X-CSRFToken'] = csrfToken
+    }
   }
   return config
 })
@@ -54,6 +58,7 @@ api.interceptors.response.use(
               { withCredentials: true },
             )
             .then(() => {
+              csrfToken = null // force re-fetch after token rotation
               refreshTimer = setTimeout(() => { refreshPromise = null }, 500)
             })
             .catch((err) => {

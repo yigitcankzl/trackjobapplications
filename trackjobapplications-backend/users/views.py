@@ -42,6 +42,32 @@ from .serializers import (
 )
 
 
+def _set_auth_cookies(response, access_token, refresh_token=None):
+    """Set httpOnly JWT cookies on a response."""
+    cookie_kwargs = {
+        "httponly": settings.JWT_AUTH_COOKIE_HTTPONLY,
+        "samesite": settings.JWT_AUTH_COOKIE_SAMESITE,
+        "secure": settings.JWT_AUTH_COOKIE_SECURE,
+        "path": "/",
+    }
+    from datetime import datetime
+    from rest_framework_simplejwt.settings import api_settings as jwt_settings
+
+    access_max_age = int(jwt_settings.ACCESS_TOKEN_LIFETIME.total_seconds())
+    response.set_cookie(settings.JWT_AUTH_COOKIE, access_token, max_age=access_max_age, **cookie_kwargs)
+    if refresh_token is not None:
+        refresh_max_age = int(jwt_settings.REFRESH_TOKEN_LIFETIME.total_seconds())
+        response.set_cookie(settings.JWT_AUTH_REFRESH_COOKIE, refresh_token, max_age=refresh_max_age, **cookie_kwargs)
+    return response
+
+
+def _clear_auth_cookies(response):
+    """Delete JWT cookies from a response."""
+    response.delete_cookie(settings.JWT_AUTH_COOKIE, path="/")
+    response.delete_cookie(settings.JWT_AUTH_REFRESH_COOKIE, path="/")
+    return response
+
+
 class ThrottledTokenObtainPairView(TokenObtainPairView):
     throttle_classes = [ScopedRateThrottle]
     throttle_scope = "login"
@@ -54,12 +80,26 @@ class ThrottledTokenObtainPairView(TokenObtainPairView):
                 request.data.get("email", ""),
                 request.META.get("REMOTE_ADDR", ""),
             )
+        else:
+            _set_auth_cookies(response, response.data["access"], response.data["refresh"])
         return response
 
 
 class ThrottledTokenRefreshView(TokenRefreshView):
     throttle_classes = [ScopedRateThrottle]
     throttle_scope = "token_refresh"
+
+    def post(self, request, *args, **kwargs):
+        # If refresh token is not in body, try the cookie
+        if "refresh" not in request.data and settings.JWT_AUTH_REFRESH_COOKIE in request.COOKIES:
+            data = request.data.copy()
+            data["refresh"] = request.COOKIES[settings.JWT_AUTH_REFRESH_COOKIE]
+            request._full_data = data
+        response = super().post(request, *args, **kwargs)
+        if response.status_code == 200:
+            refresh = response.data.get("refresh")
+            _set_auth_cookies(response, response.data["access"], refresh)
+        return response
 
 
 class RegisterView(generics.CreateAPIView):
@@ -83,12 +123,16 @@ class LogoutView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
-        serializer = LogoutSerializer(data=request.data, context={"request": request})
+        # Accept refresh token from body or from cookie
+        data = request.data.copy() if hasattr(request.data, "copy") else dict(request.data)
+        if "refresh" not in data and settings.JWT_AUTH_REFRESH_COOKIE in request.COOKIES:
+            data["refresh"] = request.COOKIES[settings.JWT_AUTH_REFRESH_COOKIE]
+        serializer = LogoutSerializer(data=data, context={"request": request})
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response(
-            {"detail": "Successfully logged out."}, status=status.HTTP_200_OK
-        )
+        response = Response({"detail": "Successfully logged out."}, status=status.HTTP_200_OK)
+        _clear_auth_cookies(response)
+        return response
 
 
 class MeView(generics.RetrieveUpdateAPIView):
@@ -116,7 +160,9 @@ class LogoutAllView(APIView):
 
     def post(self, request):
         _blacklist_all_tokens(request.user)
-        return Response({"detail": "All sessions logged out."}, status=status.HTTP_200_OK)
+        response = Response({"detail": "All sessions logged out."}, status=status.HTTP_200_OK)
+        _clear_auth_cookies(response)
+        return response
 
 
 class ChangePasswordView(APIView):
@@ -130,7 +176,9 @@ class ChangePasswordView(APIView):
         request.user.set_password(serializer.validated_data["new_password"])
         request.user.save()
         _blacklist_all_tokens(request.user)
-        return Response({"detail": "Password updated."}, status=status.HTTP_200_OK)
+        response = Response({"detail": "Password updated."}, status=status.HTTP_200_OK)
+        _clear_auth_cookies(response)
+        return response
 
 
 class VerifyEmailView(APIView):

@@ -165,12 +165,8 @@ function checkAndInject() {
   injectButton();
 }
 
-// Initial inject - try multiple times as Gmail loads content dynamically
+// Initial inject - MutationObserver below handles subsequent dynamic loads
 injectButton();
-setTimeout(injectButton, 500);
-setTimeout(injectButton, 1000);
-setTimeout(injectButton, 2000);
-setTimeout(injectButton, 4000);
 
 // Re-inject on SPA navigation (debounced to avoid excessive calls)
 let debounceTimer = null;

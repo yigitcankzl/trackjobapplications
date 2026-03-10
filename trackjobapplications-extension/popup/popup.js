@@ -44,6 +44,7 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
     errorEl.hidden = false;
     btn.disabled = false;
     btn.textContent = 'Log In';
+    document.getElementById('password').value = '';
   }
 });
 

@@ -303,6 +303,47 @@ class TestExportPdf:
         assert res.status_code == 200
         assert b"%PDF" in res.content
 
+    def test_export_pdf_includes_content_length(self, auth_client, user):
+        ApplicationFactory(user=user)
+        res = auth_client.get("/api/applications/export-pdf/")
+        assert res.status_code == 200
+        assert "Content-Length" in res
+        assert int(res["Content-Length"]) > 0
+
+    def test_export_pdf_content_length_matches_body(self, auth_client, user):
+        ApplicationFactory(user=user)
+        res = auth_client.get("/api/applications/export-pdf/")
+        assert res.status_code == 200
+        assert int(res["Content-Length"]) == len(res.content)
+
+    def test_export_pdf_returns_413_when_too_large(self, auth_client, user, monkeypatch):
+        from applications import views as app_views
+        big = b"x" * (11 * 1024 * 1024)  # 11 MB > 10 MB limit
+        monkeypatch.setattr(app_views, "generate_applications_pdf", lambda *_: big)
+        ApplicationFactory(user=user)
+        res = auth_client.get("/api/applications/export-pdf/")
+        assert res.status_code == 413
+        assert "too large" in res.json()["error"].lower()
+
+    def test_export_pdf_accepts_exactly_at_limit(self, auth_client, user, monkeypatch):
+        from applications import views as app_views
+        at_limit = b"%PDF" + b"x" * (10 * 1024 * 1024 - 4)  # exactly 10 MB
+        monkeypatch.setattr(app_views, "generate_applications_pdf", lambda *_: at_limit)
+        ApplicationFactory(user=user)
+        res = auth_client.get("/api/applications/export-pdf/")
+        assert res.status_code == 200
+
+    def test_export_pdf_requires_auth(self, anon_client):
+        res = anon_client.get("/api/applications/export-pdf/")
+        assert res.status_code == 401
+
+    def test_export_pdf_generation_failure_returns_500(self, auth_client, user, monkeypatch):
+        from applications import views as app_views
+        monkeypatch.setattr(app_views, "generate_applications_pdf", lambda *_: (_ for _ in ()).throw(RuntimeError("boom")))
+        ApplicationFactory(user=user)
+        res = auth_client.get("/api/applications/export-pdf/")
+        assert res.status_code == 500
+
 
 # ── Cover Letter Templates ───────────────────────────────────────
 

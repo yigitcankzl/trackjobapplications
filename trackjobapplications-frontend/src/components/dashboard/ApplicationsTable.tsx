@@ -7,6 +7,11 @@ import { EditIcon, TrashIcon, ClipboardIcon, ExternalLinkIcon } from '../icons'
 import { getAvatarColor } from '../../lib/avatar'
 import { formatMedium } from '../../lib/dates'
 import { needsFollowUp } from '../../lib/followUp'
+import { useVirtualList } from '../../hooks/useVirtualList'
+
+const ROW_HEIGHT = 73
+const TABLE_MAX_HEIGHT = 600
+const VIRTUAL_THRESHOLD = 15
 
 interface Props {
   applications: JobApplication[]
@@ -38,6 +43,18 @@ export default memo(function ApplicationsTable({ applications, onEdit, onDelete,
   const navigate = useNavigate()
   const sorted = useMemo(() => [...applications].sort((a, b) => Number(b.is_pinned) - Number(a.is_pinned)), [applications])
 
+  const useVirtual = sorted.length >= VIRTUAL_THRESHOLD
+  const colSpan = hasBulk ? 5 : 4
+
+  const { startIndex, endIndex, paddingTop, paddingBottom, handleScroll } = useVirtualList({
+    itemCount: sorted.length,
+    itemHeight: ROW_HEIGHT,
+    containerHeight: TABLE_MAX_HEIGHT,
+    overscan: 5,
+  })
+
+  const visibleRows = useVirtual ? sorted.slice(startIndex, endIndex + 1) : sorted
+
   if (applications.length === 0) {
     return (
       <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm overflow-hidden">
@@ -47,9 +64,13 @@ export default memo(function ApplicationsTable({ applications, onEdit, onDelete,
   }
 
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm overflow-x-auto">
+    <div
+      className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm overflow-x-auto"
+      style={useVirtual ? { maxHeight: TABLE_MAX_HEIGHT, overflowY: 'auto' } : undefined}
+      onScroll={useVirtual ? handleScroll : undefined}
+    >
       <table className="w-full min-w-[640px]">
-        <thead>
+        <thead className={useVirtual ? 'sticky top-0 z-10' : undefined}>
           <tr className="border-b border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/50">
             {hasBulk && (
               <th className="w-10 px-3 py-3.5">
@@ -68,7 +89,10 @@ export default memo(function ApplicationsTable({ applications, onEdit, onDelete,
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-50 dark:divide-gray-800">
-          {sorted.map(app => (
+          {useVirtual && paddingTop > 0 && (
+            <tr style={{ height: paddingTop }}><td colSpan={colSpan} /></tr>
+          )}
+          {visibleRows.map(app => (
             <tr key={app.id} onClick={() => navigate(`/applications/${app.id}`)} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate(`/applications/${app.id}`) } }} tabIndex={0} role="link" className="group hover:bg-blue-50/30 dark:hover:bg-blue-900/20 transition-colors duration-150 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:ring-inset">
               {hasBulk && (
                 <td className="px-3 py-4">
@@ -155,6 +179,9 @@ export default memo(function ApplicationsTable({ applications, onEdit, onDelete,
               </td>
             </tr>
           ))}
+          {useVirtual && paddingBottom > 0 && (
+            <tr style={{ height: paddingBottom }}><td colSpan={colSpan} /></tr>
+          )}
         </tbody>
       </table>
     </div>

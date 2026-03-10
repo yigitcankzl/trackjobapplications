@@ -12,3 +12,4 @@ MAX_EMAILS_PER_APPLICATION = 100
 
 ALLOWED_IMPORT_FIELDS = {"company", "position", "status", "applied_date", "url", "source", "notes"}
 FORMULA_PREFIXES = ("=", "+", "-", "@", "\t", "\r", "|")
+MAX_PDF_SIZE_BYTES = 10 * 1024 * 1024  # 10 MB

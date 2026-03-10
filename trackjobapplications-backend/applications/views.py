@@ -5,6 +5,7 @@ import json
 import logging
 
 from django.db import transaction
+from django.http import StreamingHttpResponse
 from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter, SearchFilter
@@ -27,6 +28,7 @@ from .constants import (
     MAX_INTERVIEWS_PER_APPLICATION,
     MAX_NOTES_PER_APPLICATION,
     MAX_PAGE_SIZE_ALL,
+    MAX_PDF_SIZE_BYTES,
     MAX_TAGS_PER_USER,
     MAX_TEMPLATES_PER_USER,
 )
@@ -133,16 +135,31 @@ class ApplicationViewSet(viewsets.ModelViewSet):
         throttle_classes=[ExportThrottle],
     )
     def export_pdf(self, request):
-        from django.http import HttpResponse
-
         apps = list(self.get_queryset().order_by("-applied_date")[:MAX_PAGE_SIZE_ALL])
         try:
             pdf_bytes = generate_applications_pdf(apps, request.user)
         except Exception:
             logger.exception("PDF generation failed for user %s", request.user.id)
             return Response({"error": "Failed to generate PDF."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        response = HttpResponse(pdf_bytes, content_type="application/pdf")
+
+        if len(pdf_bytes) > MAX_PDF_SIZE_BYTES:
+            size_mb = len(pdf_bytes) / (1024 * 1024)
+            return Response(
+                {"error": f"PDF is too large ({size_mb:.1f} MB). Apply filters to reduce the number of applications."},
+                status=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+            )
+
+        def _stream(data: bytes, chunk_size: int = 8192):
+            buf = io.BytesIO(data)
+            while True:
+                chunk = buf.read(chunk_size)
+                if not chunk:
+                    break
+                yield chunk
+
+        response = StreamingHttpResponse(_stream(pdf_bytes), content_type="application/pdf")
         response["Content-Disposition"] = 'attachment; filename="applications.pdf"'
+        response["Content-Length"] = str(len(pdf_bytes))
         return response
 
     @action(detail=False, methods=["post"], url_path="bulk-update-status")

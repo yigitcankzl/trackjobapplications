@@ -483,10 +483,13 @@ class OfferDetailViewSet(_NestedApplicationMixin, viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         from rest_framework.exceptions import ValidationError
-        app = self._get_application()
-        if hasattr(app, "offer_detail"):
-            raise ValidationError({"detail": "Offer detail already exists for this application."})
-        serializer.save(application=app)
+        with transaction.atomic():
+            app = Application.objects.select_for_update().get(
+                pk=self.kwargs["application_pk"], user=self.request.user,
+            )
+            if OfferDetail.objects.filter(application=app).exists():
+                raise ValidationError({"detail": "Offer detail already exists for this application."})
+            serializer.save(application=app)
 
     def list(self, request, *args, **kwargs):
         app = self._get_application()
@@ -521,8 +524,10 @@ class CompareApplicationsView(viewsets.ViewSet):
         data = []
         for app in apps:
             offer = None
-            if hasattr(app, "offer_detail"):
+            try:
                 offer = OfferDetailSerializer(app.offer_detail).data
+            except OfferDetail.DoesNotExist:
+                pass
             data.append({
                 "id": app.id,
                 "company": app.company,

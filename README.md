@@ -1,122 +1,175 @@
+<div align="center">
+
 # TrackJobApplications
 
-A full-stack job application tracker with a Django REST backend, React frontend, and a Chrome/Firefox browser extension that auto-fills applications from LinkedIn, Indeed, and Gmail.
+**Never lose track of a job application again.**
+
+[![CI](https://github.com/yigitcankzl/trackjobapplications/actions/workflows/ci.yml/badge.svg)](https://github.com/yigitcankzl/trackjobapplications/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Python 3.12](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)](https://python.org)
+[![Django 4](https://img.shields.io/badge/Django-4-092E20?logo=django&logoColor=white)](https://djangoproject.com)
+[![React 18](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://typescriptlang.org)
+
+[**Live Demo**](https://trackjobapplications-eight.vercel.app) · [API Docs](https://trackjobapplications-backend.fly.dev/api/v1/schema/swagger-ui/) · [Report Bug](https://github.com/yigitcankzl/trackjobapplications/issues)
+
+</div>
+
+---
+
+## What is this?
+
+TrackJobApplications is a full-stack job application tracker with a browser extension that auto-captures job listings from LinkedIn and Indeed — so you can focus on applying, not on spreadsheets.
+
+- **Web dashboard** — add, edit, filter, and export your pipeline
+- **One-click capture** — browser extension detects LinkedIn/Indeed listings and saves them instantly
+- **Status tracking** — Applied → Interview → Offer → Rejected, with notes on every entry
+- **Gmail integration** — add-on surfaces relevant emails alongside each application
+
+---
+
+## Screenshots
+
+> _Add your dashboard and extension screenshots here_
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Frontend | React 18, TypeScript, Vite, Tailwind CSS, React Query |
+| Backend | Django 4, Django REST Framework, SimpleJWT, Celery, Argon2 |
+| Database | Neon PostgreSQL |
+| Cache / Queue | Upstash Redis |
+| Extension | Chrome/Firefox MV3, AES-256-GCM token storage |
+| Hosting | Vercel (frontend) · Fly.io (backend) |
+| CI | GitHub Actions |
+
+---
 
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│  Browser Extension (MV3)                                │
-│  content/linkedin.js · content/indeed.js · content/     │
-│  gmail.js → background/service-worker.js (AES-256-GCM) │
-└───────────────────┬─────────────────────────────────────┘
-                    │ HTTPS / JWT cookie
-┌───────────────────▼─────────────────────────────────────┐
-│  React + Vite Frontend  (Vercel)                        │
-│  Axios · React Query · React Router                     │
-└───────────────────┬─────────────────────────────────────┘
-                    │ HTTPS + CSRF token
-┌───────────────────▼─────────────────────────────────────┐
-│  Django 4 + DRF Backend  (Fly.io)                       │
-│  SimpleJWT · Celery · django-axes · Argon2              │
-├───────────────┬─────────────────────────────────────────┤
-│  Neon         │  Upstash Redis                          │
-│  PostgreSQL   │  (Celery broker + Django cache)         │
-└───────────────┴─────────────────────────────────────────┘
+  ┌──────────────────────────────────────┐
+  │  Browser Extension  (MV3)            │
+  │  LinkedIn · Indeed · Gmail scripts   │
+  │  AES-256-GCM encrypted token storage │
+  └────────────────┬─────────────────────┘
+                   │  HTTPS + JWT cookie
+  ┌────────────────▼─────────────────────┐
+  │  React + Vite  ──  Vercel            │
+  └────────────────┬─────────────────────┘
+                   │  HTTPS + CSRF token
+  ┌────────────────▼─────────────────────┐
+  │  Django + DRF  ──  Fly.io            │
+  ├──────────────┬───────────────────────┤
+  │  Neon        │  Upstash Redis        │
+  │  PostgreSQL  │  (broker + cache)     │
+  └──────────────┴───────────────────────┘
 ```
 
-## Quick Start (local dev)
+---
 
-### Prerequisites
-- Docker + Docker Compose
-- Node 20+
+## Quick Start
 
-### 1. Clone and configure
+**Requirements:** Docker + Docker Compose · Node 20+
 
 ```bash
 git clone <repo-url>
 cd trackjobapplications
 cp trackjobapplications-backend/.env.example trackjobapplications-backend/.env
-# Edit .env — set SECRET_KEY, POSTGRES_PASSWORD, REDIS_PASSWORD at minimum
-```
-
-### 2. Start all services
-
-```bash
+# set SECRET_KEY, POSTGRES_PASSWORD, REDIS_PASSWORD in .env
 docker compose up --build
 ```
 
-| Service   | URL                        |
-|-----------|----------------------------|
-| Frontend  | http://localhost:3003       |
-| Backend   | http://localhost:8000       |
-| API docs  | http://localhost:8000/api/v1/schema/swagger-ui/ |
+| Service | URL |
+|---------|-----|
+| Frontend | http://localhost:3003 |
+| Backend | http://localhost:8000 |
+| Swagger | http://localhost:8000/api/v1/schema/swagger-ui/ |
 
-### 3. Run backend tests
+### Run tests
 
 ```bash
+# Backend
 docker compose exec backend pytest -v
+
+# Frontend
+cd trackjobapplications-frontend && npm ci && npm test
+
+# Extension
+cd trackjobapplications-extension && npm ci && npm test
 ```
 
-### 4. Run frontend tests
+---
 
-```bash
-cd trackjobapplications-frontend
-npm ci && npm test
-```
+## Browser Extension
 
-### 5. Run extension tests
-
-```bash
-cd trackjobapplications-extension
-npm ci && npm test
-```
-
-## Browser Extension — Manual Installation
-
-1. Open `chrome://extensions` (or `about:debugging` in Firefox)
+1. Go to `chrome://extensions` (or `about:debugging` in Firefox)
 2. Enable **Developer mode**
-3. Click **Load unpacked** → select `trackjobapplications-extension/`
-4. Navigate to a LinkedIn or Indeed job listing — buttons appear automatically
+3. Click **Load unpacked** and select the `trackjobapplications-extension/` folder
+4. Open any LinkedIn or Indeed job page — the save button appears automatically
 
-The extension stores your JWT token encrypted with **AES-256-GCM**. The key is derived via HKDF from `chrome.runtime.id` so it is unique per installation and never leaves the device.
+> Tokens are encrypted with **AES-256-GCM**. The key is derived via HKDF from `chrome.runtime.id` and never leaves your device.
 
-## Security Model
+---
+
+## Security
 
 | Concern | Mitigation |
 |---------|-----------|
-| Authentication | httpOnly JWT cookies (access 15 min, refresh 7 days) + rotation |
+| Authentication | httpOnly JWT cookies · 15 min access / 7 day refresh + rotation |
 | CSRF | Double-submit cookie (`X-CSRFToken`) on all mutating requests |
 | Brute force | `django-axes` lockout + `ScopedRateThrottle` per endpoint |
-| Password storage | Argon2id via Django's password hasher |
-| Extension token storage | AES-256-GCM, key via HKDF from `chrome.runtime.id` |
-| Content script isolation | `sender.id` check on all `onMessage` listeners |
-| CSP | Strict MV3 extension CSP + nginx CSP headers on frontend |
+| Passwords | Argon2id |
+| Extension tokens | AES-256-GCM, HKDF key per installation |
+| Content scripts | `sender.id` verified on every `onMessage` listener |
 | CSV injection | Formula-prefix sanitisation + whitespace bypass protection |
 | Email enumeration | Constant-time responses + timing padding on reset path |
 
-## Environment Variables (backend)
+---
+
+## Environment Variables
+
+<details>
+<summary>Backend <code>.env</code> reference</summary>
 
 | Variable | Description |
 |----------|-------------|
 | `SECRET_KEY` | Django secret key |
 | `DEBUG` | `False` in production |
 | `ALLOWED_HOSTS` | Comma-separated hostnames |
-| `POSTGRES_*` | Database connection |
+| `POSTGRES_DB` / `POSTGRES_USER` / `POSTGRES_PASSWORD` | Database connection |
 | `REDIS_PASSWORD` | Redis auth password |
 | `CELERY_BROKER_URL` | Redis URL for Celery |
-| `FRONTEND_URL` | Used in password reset / verification emails |
-| `EMAIL_HOST`, `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD` | SMTP settings |
+| `FRONTEND_URL` | Used in password-reset and verification emails |
+| `EMAIL_HOST` / `EMAIL_HOST_USER` / `EMAIL_HOST_PASSWORD` | SMTP settings |
 
-## Production Deployment
+</details>
 
-- **Backend:** Fly.io (`fly deploy` from `trackjobapplications-backend/`)
-- **Frontend:** Vercel (auto-deploys on push to `master`)
-- **Extension:** Submit `trackjobapplications-extension/` as a zip to the Chrome Web Store / Firefox Add-ons
+---
+
+## Deployment
+
+| Component | Platform | Command |
+|-----------|----------|---------|
+| Backend | Fly.io | `fly deploy` from `trackjobapplications-backend/` |
+| Frontend | Vercel | Auto-deploys on push to `master` |
+| Extension | Chrome Web Store / Firefox Add-ons | Zip `trackjobapplications-extension/` and submit |
+
+---
 
 ## CI
 
 GitHub Actions runs on every push and pull request:
-- Backend: `pytest` with PostgreSQL + Redis services
-- Frontend: TypeScript type check → ESLint → `npm audit` → Vitest → Vite build
-- Extension: Vitest unit tests (via Dependabot PRs)
+
+- **Backend** — pytest with live PostgreSQL + Redis services
+- **Frontend** — TypeScript → ESLint → `npm audit` → Vitest → Vite build
+- **Extension** — Vitest unit tests
+
+---
+
+## License
+
+MIT © [yigitcankzl](https://github.com/yigitcankzl)

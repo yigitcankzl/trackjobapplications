@@ -57,14 +57,21 @@ def _set_auth_cookies(response, access_token, refresh_token=None):
     response.set_cookie(settings.JWT_AUTH_COOKIE, access_token, max_age=access_max_age, **cookie_kwargs)
     if refresh_token is not None:
         refresh_max_age = int(jwt_settings.REFRESH_TOKEN_LIFETIME.total_seconds())
-        response.set_cookie(settings.JWT_AUTH_REFRESH_COOKIE, refresh_token, max_age=refresh_max_age, **cookie_kwargs)
+        # Restrict refresh cookie to auth endpoints only to limit exposure
+        response.set_cookie(
+            settings.JWT_AUTH_REFRESH_COOKIE, refresh_token,
+            max_age=refresh_max_age, path="/api/v1/auth/",
+            httponly=cookie_kwargs["httponly"],
+            samesite=cookie_kwargs["samesite"],
+            secure=cookie_kwargs["secure"],
+        )
     return response
 
 
 def _clear_auth_cookies(response):
     """Delete JWT cookies from a response."""
     response.delete_cookie(settings.JWT_AUTH_COOKIE, path="/")
-    response.delete_cookie(settings.JWT_AUTH_REFRESH_COOKIE, path="/")
+    response.delete_cookie(settings.JWT_AUTH_REFRESH_COOKIE, path="/api/v1/auth/")
     return response
 
 

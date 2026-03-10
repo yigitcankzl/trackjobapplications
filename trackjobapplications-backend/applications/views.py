@@ -59,6 +59,7 @@ from .models import Application, ApplicationAttachment, ApplicationContact, Appl
 from .pdf_utils import generate_applications_pdf
 from .serializers import (
     ApplicationAttachmentSerializer,
+    ApplicationBriefSerializer,
     ApplicationContactSerializer,
     ApplicationNoteSerializer,
     ApplicationSerializer,
@@ -106,6 +107,12 @@ class ApplicationViewSet(viewsets.ModelViewSet):
         app.is_pinned = not app.is_pinned
         app.save(update_fields=["is_pinned"])
         return Response({"is_pinned": app.is_pinned})
+
+    @action(detail=False, methods=["get"], url_path="brief")
+    def brief(self, request):
+        qs = request.user.applications.only("id", "company", "position", "status").order_by("-applied_date")
+        serializer = ApplicationBriefSerializer(qs, many=True)
+        return Response(serializer.data)
 
     @action(detail=False, methods=["get"], url_path="stats")
     def stats(self, request):

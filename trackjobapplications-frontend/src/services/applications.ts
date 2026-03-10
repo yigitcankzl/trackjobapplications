@@ -21,6 +21,13 @@ export async function getAllApplications(): Promise<JobApplication[]> {
   return data.results
 }
 
+export type ApplicationBrief = Pick<JobApplication, 'id' | 'company' | 'position' | 'status'>
+
+export async function getApplicationsBrief(): Promise<ApplicationBrief[]> {
+  const { data } = await api.get<ApplicationBrief[]>('/applications/brief/')
+  return data
+}
+
 export async function getApplication(id: number): Promise<JobApplication> {
   const { data } = await api.get<JobApplication>(`/applications/${id}/`)
   return data

@@ -5,9 +5,10 @@ import Header from '../components/dashboard/Header'
 import StatusBadge from '../components/dashboard/StatusBadge'
 import LoadingSpinner from '../components/ui/LoadingSpinner'
 import { useToast } from '../context/ToastContext'
-import { getAllApplications, compareApplications } from '../services/applications'
+import { getApplicationsBrief, compareApplications } from '../services/applications'
+import type { ApplicationBrief } from '../services/applications'
 import { getAvatarColor } from '../lib/avatar'
-import { JobApplication, CompareApplication } from '../types'
+import { CompareApplication } from '../types'
 
 type CriterionKey = 'salary' | 'location' | 'remote' | 'benefits' | 'companySize' | 'bonus'
 
@@ -94,7 +95,7 @@ export default function ComparisonPage() {
   const { t } = useTranslation()
   const { addToast } = useToast()
 
-  const [allApps, setAllApps] = useState<JobApplication[]>([])
+  const [allApps, setAllApps] = useState<ApplicationBrief[]>([])
   const [selectedIds, setSelectedIds] = useState<number[]>([])
   const [compareData, setCompareData] = useState<CompareApplication[]>([])
   const [loading, setLoading] = useState(true)
@@ -103,7 +104,7 @@ export default function ComparisonPage() {
   const [showMatrix, setShowMatrix] = useState(false)
 
   useEffect(() => {
-    getAllApplications()
+    getApplicationsBrief()
       .then(setAllApps)
       .catch(() => addToast(t('compare.loadFailed'), 'error'))
       .finally(() => setLoading(false))

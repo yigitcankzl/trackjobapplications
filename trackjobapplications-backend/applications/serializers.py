@@ -119,6 +119,13 @@ class EmailLogSerializer(serializers.ModelSerializer):
         read_only_fields = ("id", "created_at")
 
 
+class ApplicationBriefSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Application
+        fields = ("id", "company", "position", "status")
+        read_only_fields = fields
+
+
 class ApplicationSerializer(serializers.ModelSerializer):
     note_entries = ApplicationNoteSerializer(many=True, read_only=True)
     tags = TagSerializer(many=True, read_only=True)

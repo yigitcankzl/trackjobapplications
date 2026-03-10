@@ -1,12 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
-  <!-- Background -->
-  <rect width="64" height="64" rx="12" fill="#2563EB"/>
-  <!-- Briefcase body -->
-  <rect x="12" y="26" width="40" height="26" rx="4" fill="white"/>
-  <!-- Briefcase handle -->
-  <path d="M22 26v-4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4" stroke="white" stroke-width="3" stroke-linecap="round" fill="none"/>
-  <!-- Center divider -->
-  <rect x="12" y="36" width="40" height="3" fill="#2563EB" opacity="0.2"/>
-  <!-- Checkmark -->
-  <path d="M24 39l5 5 11-10" stroke="#2563EB" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <!-- Background: blue gradient rounded square, matches sidebar logo -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#2563EB"/>
+      <stop offset="100%" stop-color="#3B82F6"/>
+    </linearGradient>
+  </defs>
+  <rect width="32" height="32" rx="7" fill="url(#bg)"/>
+  <!-- BriefcaseIcon path scaled from 24px viewBox to fit in 8–24 range -->
+  <g transform="translate(4, 4) scale(0.667)">
+    <path stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+      d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+  </g>
 </svg>

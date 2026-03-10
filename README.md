@@ -47,23 +47,6 @@ TrackJobApplications is a full-stack job application tracker with a browser exte
 
 ---
 
-## Architecture
-
-```
-  ┌────────────────────────────────────┐
-  │  React + Vite  ──  Vercel          │
-  └────────────────┬───────────────────┘
-                   │  HTTPS + CSRF token
-  ┌────────────────▼───────────────────┐
-  │  Django + DRF  ──  Fly.io          │
-  ├──────────────┬─────────────────────┤
-  │  Neon        │  Upstash Redis      │
-  │  PostgreSQL  │  (broker + cache)   │
-  └──────────────┴─────────────────────┘
-```
-
----
-
 ## Quick Start
 
 **Requirements:** Docker + Docker Compose · Node 20+
@@ -100,54 +83,12 @@ cd trackjobapplications-frontend && npm ci && npm test
 
 ---
 
-## Security
-
-| Concern | Mitigation |
-|---------|-----------|
-| Authentication | httpOnly JWT cookies · 15 min access / 7 day refresh + rotation |
-| CSRF | Double-submit cookie (`X-CSRFToken`) on all mutating requests |
-| Brute force | `django-axes` lockout + `ScopedRateThrottle` per endpoint |
-| Passwords | Argon2id |
-| CSV injection | Formula-prefix sanitisation + whitespace bypass protection |
-| Email enumeration | Constant-time responses + timing padding on reset path |
-
----
-
-## Environment Variables
-
-<details>
-<summary>Backend <code>.env</code> reference</summary>
-
-| Variable | Description |
-|----------|-------------|
-| `SECRET_KEY` | Django secret key |
-| `DEBUG` | `False` in production |
-| `ALLOWED_HOSTS` | Comma-separated hostnames |
-| `POSTGRES_DB` / `POSTGRES_USER` / `POSTGRES_PASSWORD` | Database connection |
-| `REDIS_PASSWORD` | Redis auth password |
-| `CELERY_BROKER_URL` | Redis URL for Celery |
-| `FRONTEND_URL` | Used in password-reset and verification emails |
-| `EMAIL_HOST` / `EMAIL_HOST_USER` / `EMAIL_HOST_PASSWORD` | SMTP settings |
-
-</details>
-
----
-
 ## Deployment
 
 | Component | Platform | Command |
 |-----------|----------|---------|
 | Backend | Fly.io | `fly deploy` from `trackjobapplications-backend/` |
 | Frontend | Vercel | Auto-deploys on push to `master` |
-
----
-
-## CI
-
-GitHub Actions runs on every push and pull request:
-
-- **Backend** — pytest with live PostgreSQL + Redis services
-- **Frontend** — TypeScript → ESLint → `npm audit` → Vitest → Vite build
 
 ---
 

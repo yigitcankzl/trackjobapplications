@@ -8,10 +8,11 @@
     "activeTab"
   ],
   "host_permissions": [
-    "http://localhost:8000/api/v1/*"
+    "http://localhost:8000/api/v1/*",
+    "https://trackjobapplications-backend.fly.dev/api/v1/*"
   ],
   "content_security_policy": {
-    "extension_pages": "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'none'; object-src 'none'; frame-ancestors 'none'"
+    "extension_pages": "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self' http://localhost:8000 https://trackjobapplications-backend.fly.dev; object-src 'none'; frame-ancestors 'none'"
   },
   "action": {
     "default_popup": "popup/popup.html",

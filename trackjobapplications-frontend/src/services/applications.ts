@@ -87,9 +87,13 @@ export async function exportPdf(onProgress?: (pct: number) => void): Promise<voi
   const controller = new AbortController()
   const timeoutId = setTimeout(() => controller.abort(), 120_000) // 2-minute max for large exports
 
+  const csrfToken = document.cookie.split('; ')
+    .find(c => c.startsWith('csrftoken='))?.split('=')[1] ?? ''
+
   const response = await fetch(`${API_BASE}/applications/export-pdf/`, {
     method: 'POST',
     credentials: 'include',
+    headers: { 'X-CSRFToken': csrfToken },
     signal: controller.signal,
   }).finally(() => clearTimeout(timeoutId))
 

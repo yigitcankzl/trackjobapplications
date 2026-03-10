@@ -188,6 +188,12 @@ CORS_ALLOWED_ORIGINS = os.environ.get(
 CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOW_CREDENTIALS = True
 
+# Required for Django 4+ CSRF Origin check on cross-origin requests (Vercel → Fly.io)
+CSRF_TRUSTED_ORIGINS = os.environ.get(
+    "CSRF_TRUSTED_ORIGINS",
+    "http://localhost:3000,http://127.0.0.1:3000",
+).split(",")
+
 # JWT httpOnly cookie settings
 JWT_AUTH_COOKIE = "access_token"
 JWT_AUTH_REFRESH_COOKIE = "refresh_token"

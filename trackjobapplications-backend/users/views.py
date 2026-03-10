@@ -178,13 +178,16 @@ class PasswordResetRequestView(APIView):
             uid = urlsafe_base64_encode(force_bytes(user.pk))
             token = default_token_generator.make_token(user)
             reset_url = f"{settings.FRONTEND_URL}/reset-password?uid={uid}&token={token}"
-            send_mail(
-                subject="Reset your TrackJobs password",
-                message=f"Click the link to reset your password: {reset_url}",
-                from_email=None,
-                recipient_list=[user.email],
-                fail_silently=True,
-            )
+            try:
+                send_mail(
+                    subject="Reset your TrackJobs password",
+                    message=f"Click the link to reset your password: {reset_url}",
+                    from_email=None,
+                    recipient_list=[user.email],
+                    fail_silently=False,
+                )
+            except Exception:
+                logger.exception("Failed to send password reset email to %s", user.email)
         except User.DoesNotExist:
             pass
         return Response(

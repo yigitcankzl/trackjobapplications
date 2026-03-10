@@ -1,3 +1,4 @@
+import logging
 import os
 import uuid
 
@@ -13,6 +14,8 @@ from django.db import models
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
+
+logger = logging.getLogger(__name__)
 
 
 def avatar_upload_path(instance, filename):
@@ -68,13 +71,16 @@ class User(AbstractBaseUser, PermissionsMixin):
         uid = urlsafe_base64_encode(force_bytes(self.pk))
         token = default_token_generator.make_token(self)
         verify_url = f"{settings.FRONTEND_URL}/verify-email?uid={uid}&token={token}"
-        send_mail(
-            subject="Verify your TrackJobs email",
-            message=f"Click the link to verify your email: {verify_url}",
-            from_email=None,
-            recipient_list=[self.email],
-            fail_silently=True,
-        )
+        try:
+            send_mail(
+                subject="Verify your TrackJobs email",
+                message=f"Click the link to verify your email: {verify_url}",
+                from_email=None,
+                recipient_list=[self.email],
+                fail_silently=False,
+            )
+        except Exception:
+            logger.exception("Failed to send verification email to %s", self.email)
 
 
 class NotificationPreference(models.Model):

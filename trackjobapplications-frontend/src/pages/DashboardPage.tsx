@@ -60,6 +60,8 @@ export default function DashboardPage() {
     sortKey, sortDir, handleSortChange,
   } = useApplicationFilters(handleFiltersChange)
 
+  const [pdfProgress, setPdfProgress] = useState<number | null>(null)
+
   const reminders = useApplicationReminders(apps)
   const { order, dragIdx, onDragStart, onDragOver, onDragEnd } = useWidgetOrder()
   const { upcoming: interviewReminders, dismissAll: dismissInterviewReminders } = useInterviewReminders(apps)
@@ -118,9 +120,24 @@ export default function DashboardPage() {
               <DownloadIcon />
               <span className="hidden sm:inline">{t('dashboard.exportCsv')}</span>
             </Button>
-            <Button variant="secondary" onClick={() => exportPdf().catch(() => addToast(t('dashboard.errors.exportPdfFailed'), 'error'))}>
+            <Button
+              variant="secondary"
+              disabled={pdfProgress !== null}
+              onClick={async () => {
+                setPdfProgress(0)
+                try {
+                  await exportPdf((pct) => setPdfProgress(pct))
+                } catch (e) {
+                  addToast(e instanceof Error ? e.message : t('dashboard.errors.exportPdfFailed'), 'error')
+                } finally {
+                  setPdfProgress(null)
+                }
+              }}
+            >
               <DownloadIcon />
-              <span className="hidden sm:inline">{t('dashboard.exportPdf')}</span>
+              <span className="hidden sm:inline">
+                {pdfProgress !== null ? `${pdfProgress}%` : t('dashboard.exportPdf')}
+              </span>
             </Button>
             <Button onClick={() => setAddOpen(true)}>
               <PlusIcon />

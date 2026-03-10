@@ -40,7 +40,7 @@
     },
     {
       "matches": ["https://mail.google.com/*"],
-      "js": ["content/gmail.js"],
+      "js": ["content/sanitize.js", "content/gmail.js"],
       "run_at": "document_idle"
     }
   ],

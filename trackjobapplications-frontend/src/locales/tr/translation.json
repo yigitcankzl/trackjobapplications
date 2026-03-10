@@ -507,6 +507,9 @@
     "equityPlaceholder": "ör. 4 yılda 10.000 RSU",
     "locationPlaceholder": "ör. İstanbul, Türkiye",
     "benefitsPlaceholder": "Sağlık sigortası, yemek kartı, tatil...",
+    "confirmRemove": "Bu teklifi kaldır?",
+    "yes": "Evet",
+    "no": "Hayır",
     "periods": {
       "yearly": "Yıllık",
       "monthly": "Aylık",

@@ -507,6 +507,9 @@
     "equityPlaceholder": "e.g. 10,000 RSUs over 4 years",
     "locationPlaceholder": "e.g. San Francisco, CA",
     "benefitsPlaceholder": "Health insurance, 401k, PTO...",
+    "confirmRemove": "Remove this offer?",
+    "yes": "Yes",
+    "no": "No",
     "periods": {
       "yearly": "Yearly",
       "monthly": "Monthly",

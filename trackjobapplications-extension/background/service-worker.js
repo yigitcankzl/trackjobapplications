@@ -12,7 +12,15 @@ const VALID_STATUSES = new Set(['to_apply', 'applied', 'interview', 'offer', 're
 const VALID_SOURCES  = new Set(['linkedin', 'indeed', 'email', 'referral', 'company_site', 'other']);
 const DATE_RE        = /^\d{4}-\d{2}-\d{2}$/;
 
-function validateText(value, maxLength = 200) {
+const MAX_TEXT_LENGTH  = 200;
+const MAX_NOTES_LENGTH = 2000;
+const MAX_URL_LENGTH   = 2048;
+
+// Cooldown tracking for ADD_APPLICATION to prevent rapid duplicate submissions
+const _addCooldowns = new Map(); // company+position → timestamp
+const ADD_COOLDOWN_MS = 1500;
+
+function validateText(value, maxLength = MAX_TEXT_LENGTH) {
   if (typeof value !== 'string') return '';
   return value
     .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
@@ -21,7 +29,7 @@ function validateText(value, maxLength = 200) {
 }
 
 function validateUrl(value) {
-  if (typeof value !== 'string' || value.length > 2048) return '';
+  if (typeof value !== 'string' || value.length > MAX_URL_LENGTH) return '';
   let parsed;
   try { parsed = new URL(value); } catch (_) { return ''; }
   if (parsed.protocol !== 'https:') return '';
@@ -79,7 +87,11 @@ async function encryptToken(plaintext) {
 async function decryptToken(stored) {
   if (!stored) return '';
   const sep = stored.indexOf(':');
-  if (sep === -1) return stored; // legacy plaintext — pass through, re-encrypted on next save
+  if (sep === -1) {
+    // Legacy plaintext token — reject and force re-authentication
+    console.warn('[TJA] Legacy plaintext token detected, clearing to force re-auth');
+    return '';
+  }
   try {
     const key   = await _getEncryptionKey();
     const plain = await crypto.subtle.decrypt(
@@ -114,14 +126,23 @@ async function clearTokens() {
   await chrome.storage.local.remove(['access_token', 'refresh_token', 'user_email']);
 }
 
-// --- Authenticated Fetch with Auto-Refresh ---
+// --- Authenticated Fetch with Auto-Refresh and Timeout ---
+
+const API_TIMEOUT_MS = 10000;
+
+function _fetchWithTimeout(url, options = {}) {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), API_TIMEOUT_MS);
+  return fetch(url, { ...options, signal: controller.signal })
+    .finally(() => clearTimeout(id));
+}
 
 async function apiFetch(path, options = {}) {
   const apiBase = await getApiBase();
   let { access, refresh } = await getTokens();
   if (!access) throw new Error('Not authenticated');
 
-  let response = await fetch(`${apiBase}${path}`, {
+  let response = await _fetchWithTimeout(`${apiBase}${path}`, {
     ...options,
     headers: {
       'Content-Type': 'application/json',
@@ -131,7 +152,7 @@ async function apiFetch(path, options = {}) {
   });
 
   if (response.status === 401 && refresh) {
-    const refreshRes = await fetch(`${apiBase}/auth/token/refresh/`, {
+    const refreshRes = await _fetchWithTimeout(`${apiBase}/auth/token/refresh/`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-Extension-Auth': '1' },
       body: JSON.stringify({ refresh }),
@@ -140,7 +161,7 @@ async function apiFetch(path, options = {}) {
     if (refreshRes.ok) {
       const data = await refreshRes.json();
       await saveTokens(data.access, data.refresh ?? refresh);
-      response = await fetch(`${apiBase}${path}`, {
+      response = await _fetchWithTimeout(`${apiBase}${path}`, {
         ...options,
         headers: {
           'Content-Type': 'application/json',
@@ -159,7 +180,12 @@ async function apiFetch(path, options = {}) {
 
 // --- Message Handler ---
 
-chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  // Only accept messages from this extension's own content scripts or popup
+  if (sender.id !== chrome.runtime.id) {
+    sendResponse({ success: false, error: 'Unauthorized sender' });
+    return;
+  }
   handleMessage(message).then(sendResponse);
   return true; // keep channel open for async response
 });
@@ -169,7 +195,7 @@ async function handleMessage(message) {
     switch (message.type) {
       case 'LOGIN': {
         const apiBase = await getApiBase();
-        const res = await fetch(`${apiBase}/auth/login/`, {
+        const res = await _fetchWithTimeout(`${apiBase}/auth/login/`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'X-Extension-Auth': '1' },
           body: JSON.stringify({ email: message.email, password: message.password }),
@@ -192,7 +218,7 @@ async function handleMessage(message) {
         const { access, refresh } = await getTokens();
         if (refresh) {
           const apiBase = await getApiBase();
-          await fetch(`${apiBase}/auth/logout/`, {
+          await _fetchWithTimeout(`${apiBase}/auth/logout/`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -212,11 +238,17 @@ async function handleMessage(message) {
       }
 
       case 'ADD_APPLICATION': {
-        const company  = validateText(message.company, 200);
-        const position = validateText(message.position, 200);
+        const company  = validateText(message.company, MAX_TEXT_LENGTH);
+        const position = validateText(message.position, MAX_TEXT_LENGTH);
         if (!company || !position) {
           return { success: false, error: 'Invalid company or position' };
         }
+        const cooldownKey = `${company}|${position}`;
+        const lastAdd = _addCooldowns.get(cooldownKey) || 0;
+        if (Date.now() - lastAdd < ADD_COOLDOWN_MS) {
+          return { success: false, error: 'Please wait before adding the same job again' };
+        }
+        _addCooldowns.set(cooldownKey, Date.now());
         const payload = {
           company,
           position,
@@ -225,7 +257,7 @@ async function handleMessage(message) {
           applied_date: validateDate(message.applied_date),
           status:       VALID_STATUSES.has(message.status) ? message.status : 'to_apply',
         };
-        const notes = validateText(message.notes, 2000);
+        const notes = validateText(message.notes, MAX_NOTES_LENGTH);
         if (notes) payload.notes = notes;
         const res = await apiFetch('/applications/', {
           method: 'POST',

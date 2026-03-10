@@ -204,7 +204,8 @@
       "profile": "Profile",
       "darkMode": "Dark Mode",
       "lightMode": "Light Mode",
-      "coverLetters": "Cover Letters"
+      "coverLetters": "Cover Letters",
+      "compare": "Compare"
     },
     "viewTable": "Table view",
     "viewKanban": "Kanban view",
@@ -421,6 +422,56 @@
       "saveFailed": "Failed to save template.",
       "deleteFailed": "Failed to delete template.",
       "required": "Name and content are required."
+    }
+  },
+  "compare": {
+    "title": "Compare Offers",
+    "selectApps": "Select applications to compare",
+    "compareBtn": "Compare ({{count}})",
+    "comparing": "Comparing...",
+    "back": "Back to selection",
+    "showMatrix": "Decision Matrix",
+    "hideMatrix": "Hide Matrix",
+    "decisionMatrix": "Decision Matrix",
+    "field": "Field",
+    "criterion": "Criterion",
+    "loadFailed": "Failed to load applications",
+    "compareFailed": "Comparison failed",
+    "yr": "yr",
+    "mo": "mo",
+    "hr": "hr",
+    "fields": {
+      "status": "Status",
+      "salary": "Salary",
+      "signingBonus": "Signing Bonus",
+      "annualBonus": "Annual Bonus",
+      "equity": "Equity",
+      "location": "Location",
+      "remote": "Remote Policy",
+      "companySize": "Company Size",
+      "benefits": "Benefits",
+      "startDate": "Start Date",
+      "deadline": "Decision Deadline"
+    },
+    "criteria": {
+      "salary": "Salary",
+      "location": "Location",
+      "remote": "Remote",
+      "benefits": "Benefits",
+      "companySize": "Company Size",
+      "bonus": "Bonus"
+    },
+    "remoteOptions": {
+      "onsite": "On-site",
+      "hybrid": "Hybrid",
+      "remote": "Remote"
+    },
+    "sizeOptions": {
+      "startup": "Startup (1-50)",
+      "small": "Small (51-200)",
+      "medium": "Medium (201-1000)",
+      "large": "Large (1001-5000)",
+      "enterprise": "Enterprise (5000+)"
     }
   },
   "import": {

@@ -204,7 +204,8 @@
       "profile": "Profil",
       "darkMode": "Karanlık Mod",
       "lightMode": "Aydınlık Mod",
-      "coverLetters": "Ön Yazılar"
+      "coverLetters": "Ön Yazılar",
+      "compare": "Karşılaştır"
     },
     "viewTable": "Tablo görünümü",
     "viewKanban": "Kanban görünümü",
@@ -421,6 +422,56 @@
       "saveFailed": "Şablon kaydedilemedi.",
       "deleteFailed": "Şablon silinemedi.",
       "required": "Ad ve içerik gereklidir."
+    }
+  },
+  "compare": {
+    "title": "Teklifleri Karşılaştır",
+    "selectApps": "Karşılaştırmak için başvuru seçin",
+    "compareBtn": "Karşılaştır ({{count}})",
+    "comparing": "Karşılaştırılıyor...",
+    "back": "Seçime dön",
+    "showMatrix": "Karar Matrisi",
+    "hideMatrix": "Matrisi Gizle",
+    "decisionMatrix": "Karar Matrisi",
+    "field": "Alan",
+    "criterion": "Kriter",
+    "loadFailed": "Başvurular yüklenemedi",
+    "compareFailed": "Karşılaştırma başarısız",
+    "yr": "yıl",
+    "mo": "ay",
+    "hr": "saat",
+    "fields": {
+      "status": "Durum",
+      "salary": "Maaş",
+      "signingBonus": "İmza Bonusu",
+      "annualBonus": "Yıllık Bonus",
+      "equity": "Hisse",
+      "location": "Lokasyon",
+      "remote": "Uzaktan Çalışma",
+      "companySize": "Şirket Büyüklüğü",
+      "benefits": "Yan Haklar",
+      "startDate": "Başlangıç Tarihi",
+      "deadline": "Karar Son Tarihi"
+    },
+    "criteria": {
+      "salary": "Maaş",
+      "location": "Lokasyon",
+      "remote": "Uzaktan",
+      "benefits": "Yan Haklar",
+      "companySize": "Şirket Büyüklüğü",
+      "bonus": "Bonus"
+    },
+    "remoteOptions": {
+      "onsite": "Ofiste",
+      "hybrid": "Hibrit",
+      "remote": "Uzaktan"
+    },
+    "sizeOptions": {
+      "startup": "Startup (1-50)",
+      "small": "Küçük (51-200)",
+      "medium": "Orta (201-1000)",
+      "large": "Büyük (1001-5000)",
+      "enterprise": "Kurumsal (5000+)"
     }
   },
   "import": {

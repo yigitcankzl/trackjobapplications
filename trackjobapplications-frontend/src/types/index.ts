@@ -101,6 +101,41 @@ export interface EmailLog {
   created_at: string
 }
 
+export type RemotePolicy = 'onsite' | 'hybrid' | 'remote'
+export type CompanySize = 'startup' | 'small' | 'medium' | 'large' | 'enterprise'
+export type Currency = 'USD' | 'EUR' | 'GBP' | 'TRY' | 'CAD' | 'AUD' | 'JPY' | 'INR' | 'OTHER'
+export type SalaryPeriod = 'yearly' | 'monthly' | 'hourly'
+
+export interface OfferDetail {
+  id: number
+  salary: number | null
+  currency: Currency
+  salary_period: SalaryPeriod
+  signing_bonus: number | null
+  annual_bonus: number | null
+  equity: string
+  benefits: string
+  location: string
+  remote_policy: RemotePolicy | ''
+  company_size: CompanySize | ''
+  start_date: string | null
+  deadline: string | null
+  created_at: string
+  updated_at: string
+}
+
+export interface CompareApplication {
+  id: number
+  company: string
+  position: string
+  status: ApplicationStatus
+  applied_date: string
+  source: ApplicationSource | ''
+  url: string
+  tags: Tag[]
+  offer_detail: OfferDetail | null
+}
+
 export interface JobApplication {
   id: number
   company: string
@@ -121,6 +156,7 @@ export interface JobApplication {
   interview_stages?: InterviewStage[]
   attachments?: ApplicationAttachment[]
   email_logs?: EmailLog[]
+  offer_detail?: OfferDetail | null
 }
 
 export interface PaginatedResponse<T> {

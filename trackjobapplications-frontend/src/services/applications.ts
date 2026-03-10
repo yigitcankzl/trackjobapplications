@@ -1,5 +1,5 @@
 import api from '../lib/axios'
-import { ApplicationFilters, ApplicationNote, EmailLog, JobApplication, PaginatedResponse } from '../types'
+import { ApplicationFilters, ApplicationNote, CompareApplication, EmailLog, JobApplication, OfferDetail, PaginatedResponse } from '../types'
 
 type CreatePayload = Omit<JobApplication, 'id' | 'created_at' | 'updated_at'>
 type UpdatePayload = Partial<CreatePayload>
@@ -106,6 +106,34 @@ export async function getEmailLogs(applicationId: number): Promise<EmailLog[]> {
 
 export async function deleteEmailLog(applicationId: number, emailId: number): Promise<void> {
   await api.delete(`/applications/${applicationId}/emails/${emailId}/`)
+}
+
+// Offer details
+export async function getOfferDetail(applicationId: number): Promise<OfferDetail | null> {
+  const { data, status } = await api.get(`/applications/${applicationId}/offer/`, { validateStatus: s => s < 300 || s === 204 })
+  if (status === 204) return null
+  return Array.isArray(data) ? data[0] ?? null : data
+}
+
+export async function createOfferDetail(applicationId: number, payload: Partial<OfferDetail>): Promise<OfferDetail> {
+  const { data } = await api.post<OfferDetail>(`/applications/${applicationId}/offer/`, payload)
+  return data
+}
+
+export async function updateOfferDetail(applicationId: number, offerId: number, payload: Partial<OfferDetail>): Promise<OfferDetail> {
+  const { data } = await api.patch<OfferDetail>(`/applications/${applicationId}/offer/${offerId}/`, payload)
+  return data
+}
+
+export async function deleteOfferDetail(applicationId: number, offerId: number): Promise<void> {
+  await api.delete(`/applications/${applicationId}/offer/${offerId}/`)
+}
+
+// Compare
+export async function compareApplications(ids: number[]): Promise<CompareApplication[]> {
+  const params = ids.map(id => `ids=${id}`).join('&')
+  const { data } = await api.get<CompareApplication[]>(`/applications/compare/?${params}`)
+  return data
 }
 
 // Import

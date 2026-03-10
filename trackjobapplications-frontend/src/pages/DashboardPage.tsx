@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import DashboardLayout from '../components/layout/DashboardLayout'
 import Header from '../components/dashboard/Header'
@@ -61,6 +61,16 @@ export default function DashboardPage() {
   } = useApplicationFilters(handleFiltersChange)
 
   const [pdfProgress, setPdfProgress] = useState<number | null>(null)
+
+  const statConfig = useMemo(() => ({
+    total:     { label: t('dashboard.stats.total'),     value: stats.total,           color: 'text-gray-900'   as const },
+    to_apply:  { label: t('dashboard.stats.to_apply'),  value: stats.to_apply ?? 0,   color: 'text-indigo-600' as const },
+    applied:   { label: t('dashboard.stats.applied'),   value: stats.applied,         color: 'text-blue-600'   as const },
+    interview: { label: t('dashboard.stats.interview'), value: stats.interview,       color: 'text-amber-600'  as const },
+    offer:     { label: t('dashboard.stats.offer'),     value: stats.offer,           color: 'text-emerald-600' as const },
+    rejected:  { label: t('dashboard.stats.rejected'),  value: stats.rejected,        color: 'text-red-500'    as const },
+    withdrawn: { label: t('dashboard.stats.withdrawn'), value: stats.withdrawn,       color: 'text-orange-500' as const },
+  }), [t, stats])
 
   const reminders = useApplicationReminders(apps)
   const { order, dragIdx, onDragStart, onDragOver, onDragEnd } = useWidgetOrder()
@@ -151,16 +161,7 @@ export default function DashboardPage() {
 
       <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4 mb-8">
         {order.map((key, idx) => {
-          const config: Record<string, { label: string; value: string | number; color: 'text-gray-900' | 'text-indigo-600' | 'text-blue-600' | 'text-amber-600' | 'text-emerald-600' | 'text-red-500' | 'text-orange-500' }> = {
-            total: { label: t('dashboard.stats.total'), value: stats.total, color: 'text-gray-900' },
-            to_apply: { label: t('dashboard.stats.to_apply'), value: stats.to_apply ?? 0, color: 'text-indigo-600' },
-            applied: { label: t('dashboard.stats.applied'), value: stats.applied, color: 'text-blue-600' },
-            interview: { label: t('dashboard.stats.interview'), value: stats.interview, color: 'text-amber-600' },
-            offer: { label: t('dashboard.stats.offer'), value: stats.offer, color: 'text-emerald-600' },
-            rejected: { label: t('dashboard.stats.rejected'), value: stats.rejected, color: 'text-red-500' },
-            withdrawn: { label: t('dashboard.stats.withdrawn'), value: stats.withdrawn, color: 'text-orange-500' },
-          }
-          const c = config[key]
+          const c = statConfig[key as keyof typeof statConfig]
           return (
             <DraggableStatCard
               key={key}

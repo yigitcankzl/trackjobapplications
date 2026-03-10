@@ -6,9 +6,11 @@ from .views import (
     ApplicationContactViewSet,
     ApplicationNoteViewSet,
     ApplicationViewSet,
+    CompareApplicationsView,
     CoverLetterTemplateViewSet,
     EmailLogViewSet,
     InterviewStageViewSet,
+    OfferDetailViewSet,
     TagViewSet,
 )
 
@@ -30,6 +32,12 @@ attachment_router.register("", ApplicationAttachmentViewSet, basename="applicati
 email_router = DefaultRouter()
 email_router.register("", EmailLogViewSet, basename="email-log")
 
+offer_router = DefaultRouter()
+offer_router.register("", OfferDetailViewSet, basename="offer-detail")
+
+compare_router = DefaultRouter()
+compare_router.register("", CompareApplicationsView, basename="compare")
+
 tag_router = DefaultRouter()
 tag_router.register("", TagViewSet, basename="tag")
 
@@ -42,6 +50,8 @@ urlpatterns = [
     path("<int:application_pk>/interviews/", include(interview_router.urls)),
     path("<int:application_pk>/attachments/", include(attachment_router.urls)),
     path("<int:application_pk>/emails/", include(email_router.urls)),
+    path("<int:application_pk>/offer/", include(offer_router.urls)),
+    path("compare/", include(compare_router.urls)),
     path("tags/", include(tag_router.urls)),
     path("cover-letters/", include(cover_letter_router.urls)),
 ] + router.urls

@@ -55,7 +55,7 @@ def _sanitize_cell(value):
     return value
 
 from .filters import ApplicationFilter
-from .models import Application, ApplicationAttachment, ApplicationContact, ApplicationNote, CoverLetterTemplate, EmailLog, InterviewStage, Tag
+from .models import Application, ApplicationAttachment, ApplicationContact, ApplicationNote, CoverLetterTemplate, EmailLog, InterviewStage, OfferDetail, Tag
 from .pdf_utils import generate_applications_pdf
 from .serializers import (
     ApplicationAttachmentSerializer,
@@ -65,6 +65,7 @@ from .serializers import (
     CoverLetterTemplateSerializer,
     EmailLogSerializer,
     InterviewStageSerializer,
+    OfferDetailSerializer,
     TagSerializer,
 )
 
@@ -94,7 +95,7 @@ class ApplicationViewSet(viewsets.ModelViewSet):
         qs = self.request.user.applications.all()
         if self.action == "list":
             return qs.prefetch_related("tags")
-        return qs.prefetch_related("note_entries", "tags", "email_logs")
+        return qs.prefetch_related("note_entries", "tags", "email_logs").select_related("offer_detail")
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -466,3 +467,71 @@ class EmailLogViewSet(_NestedApplicationMixin, viewsets.ModelViewSet):
             if thread_id and not app.email_thread_id:
                 app.email_thread_id = thread_id
                 app.save(update_fields=["email_thread_id"])
+
+
+class OfferDetailViewSet(_NestedApplicationMixin, viewsets.ModelViewSet):
+    serializer_class = OfferDetailSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    pagination_class = None
+    http_method_names = ["get", "post", "put", "patch", "delete"]
+
+    def get_queryset(self):
+        return OfferDetail.objects.select_related("application").filter(
+            application__pk=self.kwargs["application_pk"],
+            application__user=self.request.user,
+        )
+
+    def perform_create(self, serializer):
+        from rest_framework.exceptions import ValidationError
+        app = self._get_application()
+        if hasattr(app, "offer_detail"):
+            raise ValidationError({"detail": "Offer detail already exists for this application."})
+        serializer.save(application=app)
+
+    def list(self, request, *args, **kwargs):
+        app = self._get_application()
+        try:
+            detail = app.offer_detail
+            return Response(OfferDetailSerializer(detail).data)
+        except OfferDetail.DoesNotExist:
+            return Response(None, status=status.HTTP_204_NO_CONTENT)
+
+
+class CompareApplicationsView(viewsets.ViewSet):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def list(self, request):
+        ids = request.query_params.getlist("ids")
+        if not ids or len(ids) < 2 or len(ids) > 5:
+            return Response(
+                {"error": "Provide 2-5 application ids."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        try:
+            ids = [int(i) for i in ids]
+        except (ValueError, TypeError):
+            return Response({"error": "Invalid ids."}, status=status.HTTP_400_BAD_REQUEST)
+
+        apps = (
+            request.user.applications
+            .filter(id__in=ids)
+            .select_related("offer_detail")
+            .prefetch_related("tags")
+        )
+        data = []
+        for app in apps:
+            offer = None
+            if hasattr(app, "offer_detail"):
+                offer = OfferDetailSerializer(app.offer_detail).data
+            data.append({
+                "id": app.id,
+                "company": app.company,
+                "position": app.position,
+                "status": app.status,
+                "applied_date": str(app.applied_date),
+                "source": app.source,
+                "url": app.url,
+                "tags": TagSerializer(app.tags.all(), many=True).data,
+                "offer_detail": offer,
+            })
+        return Response(data)

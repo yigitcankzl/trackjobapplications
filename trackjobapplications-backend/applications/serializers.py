@@ -2,7 +2,7 @@ import re
 
 from rest_framework import serializers
 
-from .models import Application, ApplicationAttachment, ApplicationContact, ApplicationNote, CoverLetterTemplate, EmailLog, InterviewStage, Tag
+from .models import Application, ApplicationAttachment, ApplicationContact, ApplicationNote, CoverLetterTemplate, EmailLog, InterviewStage, OfferDetail, Tag
 
 HEX_COLOR_RE = re.compile(r"^#[0-9a-fA-F]{6}$")
 
@@ -96,6 +96,18 @@ class CoverLetterTemplateSerializer(serializers.ModelSerializer):
         read_only_fields = ("id", "created_at", "updated_at")
 
 
+class OfferDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OfferDetail
+        fields = (
+            "id", "salary", "currency", "salary_period",
+            "signing_bonus", "annual_bonus", "equity", "benefits",
+            "location", "remote_policy", "company_size",
+            "start_date", "deadline", "created_at", "updated_at",
+        )
+        read_only_fields = ("id", "created_at", "updated_at")
+
+
 class EmailLogSerializer(serializers.ModelSerializer):
     class Meta:
         model = EmailLog
@@ -121,6 +133,7 @@ class ApplicationSerializer(serializers.ModelSerializer):
             self.fields["tag_ids"].child_relation.queryset = request.user.tags.all()
 
     email_logs = EmailLogSerializer(many=True, read_only=True)
+    offer_detail = OfferDetailSerializer(read_only=True)
 
     class Meta:
         model = Application
@@ -142,6 +155,7 @@ class ApplicationSerializer(serializers.ModelSerializer):
             "tags",
             "tag_ids",
             "email_logs",
+            "offer_detail",
         )
         read_only_fields = ("id", "created_at", "updated_at", "is_pinned")
 

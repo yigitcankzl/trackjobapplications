@@ -1,6 +1,11 @@
 // Default API URL — override via extension options or chrome.storage
 const DEFAULT_API_BASE = 'http://localhost:8000/api/v1';
 
+const ALLOWED_API_BASES = new Set([
+  'http://localhost:8000/api/v1',
+  'https://trackjobapplications-backend.fly.dev/api/v1',
+]);
+
 // --- Payload Validation ---
 
 const VALID_STATUSES = new Set(['to_apply', 'applied', 'interview', 'offer', 'rejected', 'withdrawn']);
@@ -30,7 +35,10 @@ function validateDate(value) {
 
 async function getApiBase() {
   const { api_base } = await chrome.storage.local.get('api_base');
-  return api_base || DEFAULT_API_BASE;
+  if (api_base && ALLOWED_API_BASES.has(api_base)) {
+    return api_base;
+  }
+  return DEFAULT_API_BASE;
 }
 
 // --- Token Encryption (AES-256-GCM via Web Crypto API) ---

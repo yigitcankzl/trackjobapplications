@@ -1,5 +1,5 @@
 # --- Dev stage ---
-FROM node:18-alpine AS dev
+FROM node:25-alpine AS dev
 
 WORKDIR /app
 
@@ -12,7 +12,7 @@ EXPOSE 3000
 CMD ["npx", "vite", "--host", "0.0.0.0", "--port", "3000"]
 
 # --- Build stage ---
-FROM node:18-alpine AS builder
+FROM node:25-alpine AS builder
 
 WORKDIR /app
 

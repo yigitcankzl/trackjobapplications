@@ -8,6 +8,7 @@ import { getAvatarColor } from '../../lib/avatar'
 import { formatShort } from '../../lib/dates'
 import TagBadge from './TagBadge'
 import { needsFollowUp } from '../../lib/followUp'
+import { useVirtualList } from '../../hooks/useVirtualList'
 
 interface Props {
   applications: JobApplication[]
@@ -18,6 +19,11 @@ interface Props {
 }
 
 const COLUMNS: ApplicationStatus[] = ['to_apply', 'applied', 'interview', 'offer', 'rejected', 'withdrawn']
+
+// Estimated height per card slot including the 10px gap (space-y-2.5)
+const CARD_ESTIMATED_HEIGHT = 140
+const COLUMN_MAX_HEIGHT = 600
+const VIRTUAL_THRESHOLD = 8
 
 interface CardProps {
   app: JobApplication
@@ -93,6 +99,68 @@ const KanbanCard = memo(function KanbanCard({ app, onEdit, onDelete, onDragStart
   )
 })
 
+interface ColumnBodyProps {
+  apps: JobApplication[]
+  isOver: boolean
+  draggingId: number | null
+  onEdit: (app: JobApplication) => void
+  onDelete: (app: JobApplication) => void
+  onDragStart: (id: number) => void
+  onDragEnd: () => void
+}
+
+function ColumnBody({ apps, isOver, draggingId, onEdit, onDelete, onDragStart, onDragEnd }: ColumnBodyProps) {
+  const { t } = useTranslation()
+  const useVirtual = apps.length >= VIRTUAL_THRESHOLD
+
+  const { startIndex, endIndex, paddingTop, paddingBottom, handleScroll } = useVirtualList({
+    itemCount: apps.length,
+    itemHeight: CARD_ESTIMATED_HEIGHT,
+    containerHeight: COLUMN_MAX_HEIGHT,
+    overscan: 3,
+  })
+
+  const visibleApps = useVirtual ? apps.slice(startIndex, endIndex + 1) : apps
+
+  const containerClass = `min-h-24 rounded-xl transition-colors duration-150 ${
+    isOver ? 'bg-blue-50/60 ring-2 ring-blue-200 ring-dashed p-1' : ''
+  } ${useVirtual ? 'overflow-y-auto' : ''}`
+
+  const containerStyle = useVirtual ? { maxHeight: COLUMN_MAX_HEIGHT } : undefined
+
+  if (apps.length === 0 && !isOver) {
+    return (
+      <div className={containerClass} style={containerStyle}>
+        <div className="rounded-xl border-2 border-dashed border-gray-100 dark:border-gray-800 py-8 text-center">
+          <p className="text-xs text-gray-300">{t('dashboard.kanban.noApplications')}</p>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div
+      className={containerClass}
+      style={containerStyle}
+      onScroll={useVirtual ? handleScroll : undefined}
+    >
+      <div style={useVirtual ? { paddingTop, paddingBottom } : undefined} className="space-y-2.5">
+        {visibleApps.map(app => (
+          <KanbanCard
+            key={app.id}
+            app={app}
+            onEdit={onEdit}
+            onDelete={onDelete}
+            onDragStart={onDragStart}
+            onDragEnd={onDragEnd}
+            isDragging={draggingId === app.id}
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export default function KanbanBoard({ applications, onEdit, onDelete, onStatusChange }: Props) {
   const { t } = useTranslation()
   const draggedId = useRef<number | null>(null)
@@ -166,30 +234,15 @@ export default function KanbanBoard({ applications, onEdit, onDelete, onStatusCh
               </span>
             </div>
 
-            {/* Cards */}
-            <div
-              className={`space-y-2.5 min-h-24 rounded-xl transition-colors duration-150 ${
-                isOver ? 'bg-blue-50/60 ring-2 ring-blue-200 ring-dashed p-1' : ''
-              }`}
-            >
-              {colApps.length === 0 && !isOver ? (
-                <div className="rounded-xl border-2 border-dashed border-gray-100 dark:border-gray-800 py-8 text-center">
-                  <p className="text-xs text-gray-300">{t('dashboard.kanban.noApplications')}</p>
-                </div>
-              ) : (
-                colApps.map(app => (
-                  <KanbanCard
-                    key={app.id}
-                    app={app}
-                    onEdit={onEdit}
-                    onDelete={onDelete}
-                    onDragStart={handleDragStart}
-                    onDragEnd={handleDragEnd}
-                    isDragging={draggingId === app.id}
-                  />
-                ))
-              )}
-            </div>
+            <ColumnBody
+              apps={colApps}
+              isOver={isOver}
+              draggingId={draggingId}
+              onEdit={onEdit}
+              onDelete={onDelete}
+              onDragStart={handleDragStart}
+              onDragEnd={handleDragEnd}
+            />
           </div>
         )
       })}

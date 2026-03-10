@@ -32,7 +32,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     function handleForceLogout() {
       setUser(null)
-      navigate('/login')
+      const publicPaths = ['/login', '/forgot-password', '/reset-password', '/verify-email']
+      if (!publicPaths.some(p => window.location.pathname.startsWith(p))) {
+        navigate('/login')
+      }
     }
     window.addEventListener('auth:logout', handleForceLogout)
     return () => window.removeEventListener('auth:logout', handleForceLogout)

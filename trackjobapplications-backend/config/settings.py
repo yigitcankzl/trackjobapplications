@@ -148,7 +148,7 @@ REST_FRAMEWORK = {
         "anon": "20/minute",
         "user": "200/minute",
         "password_change": "5/minute",
-        "register": "5/hour",
+        "register": "10/hour",
         "login": "10/minute",
         "import": "5/minute",
         "export": "10/minute",

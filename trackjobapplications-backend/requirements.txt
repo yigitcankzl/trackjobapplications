@@ -10,7 +10,7 @@ celery==5.4.0
 django-celery-beat==2.9.0
 redis==5.0.8
 drf-spectacular==0.28.0
-django-filter==24.3
+django-filter==25.2
 openpyxl==3.1.5
 reportlab==4.4.10
 pytest==8.3.4

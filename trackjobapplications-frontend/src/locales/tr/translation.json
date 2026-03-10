@@ -64,7 +64,11 @@
     "errors": {
       "invalidCredentials": "Geçersiz e-posta veya şifre.",
       "registrationFailed": "Kayıt başarısız. Lütfen tekrar deneyin.",
-      "passwordMismatch": "Şifreler eşleşmiyor."
+      "passwordMismatch": "Şifreler eşleşmiyor.",
+      "oauthFailed": "Sosyal giriş başarısız. Lütfen tekrar deneyin."
+    },
+    "social": {
+      "continueWith": "{{provider}} ile devam et"
     },
     "overlay": {
       "signInPanel": {

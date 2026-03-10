@@ -64,7 +64,11 @@
     "errors": {
       "invalidCredentials": "Invalid email or password.",
       "registrationFailed": "Registration failed. Please try again.",
-      "passwordMismatch": "Passwords do not match."
+      "passwordMismatch": "Passwords do not match.",
+      "oauthFailed": "Social login failed. Please try again."
+    },
+    "social": {
+      "continueWith": "Continue with {{provider}}"
     },
     "overlay": {
       "signInPanel": {

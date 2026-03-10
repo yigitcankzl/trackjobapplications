@@ -1,12 +1,21 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useLocation } from 'react-router-dom'
 import SignInForm from '../components/auth/SignInForm'
 import SignUpForm from '../components/auth/SignUpForm'
 import OverlayPanel from '../components/auth/OverlayPanel'
+import { useToast } from '../context/ToastContext'
 
 export default function LoginPage() {
   const { t } = useTranslation()
+  const { addToast } = useToast()
+  const { search } = useLocation()
   const [isSignUp, setIsSignUp] = useState(false)
+
+  useEffect(() => {
+    const error = new URLSearchParams(search).get('error')
+    if (error) addToast(t('auth.errors.oauthFailed'), 'error')
+  }, [search, addToast, t])
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 p-4">

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { MailIcon, LockIcon, EyeIcon } from '../icons'
 import { useAuth } from '../../context/AuthContext'
 import { useToast } from '../../context/ToastContext'
+import SocialLoginButtons from './SocialLoginButtons'
 
 interface Props {
   onSwitch: () => void
@@ -90,6 +91,8 @@ export default function SignInForm({ onSwitch }: Props) {
           <span className="text-xs text-gray-400 dark:text-gray-500">{t('auth.signIn.or')}</span>
           <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700" />
         </div>
+
+        <SocialLoginButtons />
 
         <p className="text-center text-sm text-gray-500 dark:text-gray-400 md:hidden">
           {t('auth.signIn.noAccount')}{' '}

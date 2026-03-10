@@ -81,10 +81,46 @@ export async function getStats(): Promise<AppStats> {
   return data
 }
 
-// Export PDF
-export async function exportPdf(): Promise<void> {
-  const { data } = await api.get('/applications/export-pdf/', { responseType: 'blob' })
-  const url = URL.createObjectURL(data)
+// Export PDF — streams the response and reports download progress
+export async function exportPdf(onProgress?: (pct: number) => void): Promise<void> {
+  const token = localStorage.getItem('access_token')
+  const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1'
+
+  const response = await fetch(`${baseURL}/applications/export-pdf/`, {
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+  })
+
+  if (!response.ok) {
+    let message = 'Failed to generate PDF.'
+    try {
+      const err = await response.json()
+      message = err.error ?? message
+    } catch { /* ignore parse errors */ }
+    throw new Error(message)
+  }
+
+  const contentLength = response.headers.get('Content-Length')
+  const total = contentLength ? parseInt(contentLength, 10) : 0
+  const reader = response.body!.getReader()
+  const chunks: Uint8Array[] = []
+  let received = 0
+
+  while (true) {
+    const { done, value } = await reader.read()
+    if (done) break
+    if (value) {
+      chunks.push(value)
+      received += value.length
+      if (total > 0 && onProgress) {
+        onProgress(Math.min(99, Math.round((received / total) * 100)))
+      }
+    }
+  }
+
+  onProgress?.(100)
+
+  const blob = new Blob(chunks, { type: 'application/pdf' })
+  const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
   a.href = url
   a.download = 'applications.pdf'

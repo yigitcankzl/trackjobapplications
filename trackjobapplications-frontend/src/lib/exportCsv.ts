@@ -26,11 +26,13 @@ export function exportApplicationsCsv(apps: JobApplication[]) {
   URL.revokeObjectURL(url)
 }
 
-const FORMULA_PREFIXES = ['=', '+', '-', '@', '\t', '\r', '|']
+const FORMULA_PREFIXES = new Set(['=', '+', '-', '@', '\t', '\r', '|'])
 
 function sanitizeCsvValue(value: string): string {
   let safe = value
-  if (safe && FORMULA_PREFIXES.includes(safe[0])) {
+  // Use trimStart to catch leading-whitespace bypass (e.g. " =SUM()")
+  const firstNonSpace = safe.trimStart()[0]
+  if (firstNonSpace && FORMULA_PREFIXES.has(firstNonSpace)) {
     safe = `'${safe}`
   }
   if (safe.includes(',') || safe.includes('"') || safe.includes('\n')) {

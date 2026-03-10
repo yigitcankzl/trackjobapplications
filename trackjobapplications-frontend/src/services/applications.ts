@@ -83,11 +83,10 @@ export async function getStats(): Promise<AppStats> {
 
 // Export PDF — streams the response and reports download progress
 export async function exportPdf(onProgress?: (pct: number) => void): Promise<void> {
-  const token = localStorage.getItem('access_token')
   const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1'
 
   const response = await fetch(`${baseURL}/applications/export-pdf/`, {
-    headers: token ? { Authorization: `Bearer ${token}` } : {},
+    credentials: 'include',
   })
 
   if (!response.ok) {

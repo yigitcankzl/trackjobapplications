@@ -529,6 +529,20 @@
     "rights": "Tüm hakları saklıdır.",
     "copyright": "© {{year}} TrackJobs. Tüm hakları saklıdır."
   },
+  "forgotPassword": {
+    "title": "Şifremi Unuttum",
+    "subtitle": "E-posta adresini gir, sana sıfırlama bağlantısı gönderelim.",
+    "submit": "SIFIRLAMA BAĞLANTISI GÖNDER",
+    "sentTitle": "E-postanı kontrol et",
+    "sentMessage": "Bu e-postaya sahip bir hesap varsa, şifre sıfırlama bağlantısı gönderildi.",
+    "backToLogin": "Giriş Sayfasına Dön"
+  },
+  "resetPassword": {
+    "title": "Yeni Şifre Belirle",
+    "subtitle": "Aşağıya yeni şifreni gir.",
+    "submit": "ŞİFREYİ SIFIRLA",
+    "genericError": "Geçersiz veya süresi dolmuş sıfırlama bağlantısı."
+  },
   "verifyEmail": {
     "verifying": "E-postanız doğrulanıyor...",
     "successTitle": "E-posta doğrulandı!",

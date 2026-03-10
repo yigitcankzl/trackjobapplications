@@ -529,6 +529,20 @@
     "rights": "All rights reserved.",
     "copyright": "© {{year}} TrackJobs. All rights reserved."
   },
+  "forgotPassword": {
+    "title": "Forgot Password",
+    "subtitle": "Enter your email and we'll send you a reset link.",
+    "submit": "SEND RESET LINK",
+    "sentTitle": "Check your email",
+    "sentMessage": "If an account exists with that email, a password reset link has been sent.",
+    "backToLogin": "Back to Sign In"
+  },
+  "resetPassword": {
+    "title": "Set New Password",
+    "subtitle": "Enter your new password below.",
+    "submit": "RESET PASSWORD",
+    "genericError": "Invalid or expired reset link."
+  },
   "verifyEmail": {
     "verifying": "Verifying your email...",
     "successTitle": "Email verified!",

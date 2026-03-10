@@ -137,7 +137,8 @@ class RegisterView(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
-        user.send_verification_email()
+        user.is_email_verified = True
+        user.save(update_fields=["is_email_verified"])
         return Response({"detail": "Registration submitted."}, status=status.HTTP_201_CREATED)
 
 

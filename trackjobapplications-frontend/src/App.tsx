@@ -17,6 +17,8 @@ const CalendarPage = lazy(() => import('./pages/CalendarPage'))
 const CoverLettersPage = lazy(() => import('./pages/CoverLettersPage'))
 const ComparisonPage = lazy(() => import('./pages/ComparisonPage'))
 const VerifyEmailPage = lazy(() => import('./pages/VerifyEmailPage'))
+const ForgotPasswordPage = lazy(() => import('./pages/ForgotPasswordPage'))
+const ResetPasswordPage = lazy(() => import('./pages/ResetPasswordPage'))
 
 export default function App() {
   return (
@@ -37,6 +39,8 @@ export default function App() {
               <Route path="/analytics" element={<PrivateRoute><AnalyticsPage /></PrivateRoute>} />
               <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
               <Route path="/verify-email" element={<VerifyEmailPage />} />
+              <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+              <Route path="/reset-password" element={<ResetPasswordPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
             </Suspense>

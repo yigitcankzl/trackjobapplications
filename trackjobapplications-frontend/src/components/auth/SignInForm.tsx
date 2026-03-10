@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { MailIcon, LockIcon, EyeIcon } from '../icons'
 import { useAuth } from '../../context/AuthContext'
@@ -69,6 +69,12 @@ export default function SignInForm({ onSwitch }: Props) {
           >
             <EyeIcon open={showPassword} />
           </button>
+        </div>
+
+        <div className="flex justify-end">
+          <Link to="/forgot-password" className="text-xs text-blue-600 hover:underline">
+            {t('auth.signIn.forgotPassword')}
+          </Link>
         </div>
 
         <button

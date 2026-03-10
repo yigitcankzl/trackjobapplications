@@ -15,7 +15,7 @@ openpyxl==3.1.5
 reportlab==4.4.10
 pytest==8.3.4
 pytest-django==4.9.0
-pytest-cov==6.1.1
+pytest-cov==7.0.0
 factory-boy==3.3.1
 python-json-logger==3.2.1
 django-axes==7.0.1

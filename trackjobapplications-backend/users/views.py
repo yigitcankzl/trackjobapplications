@@ -120,14 +120,15 @@ class RegisterView(generics.CreateAPIView):
     throttle_scope = "register"
 
     def create(self, request, *args, **kwargs):
+        email = request.data.get("email", "").lower().strip()
+        if User.objects.filter(email__iexact=email).exists():
+            # Don't reveal email existence — same response as successful registration
+            return Response({"detail": "Registration submitted."}, status=status.HTTP_201_CREATED)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
         user.send_verification_email()
-        return Response(
-            UserSerializer(user).data,
-            status=status.HTTP_201_CREATED,
-        )
+        return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
 
 
 class LogoutView(APIView):

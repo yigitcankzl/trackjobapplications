@@ -51,10 +51,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         }
 
     def validate_email(self, value):
-        value = value.lower().strip()
-        if User.objects.filter(email__iexact=value).exists():
-            raise serializers.ValidationError("Unable to register with this email address.")
-        return value
+        return value.lower().strip()
 
     def validate(self, attrs):
         if attrs["password"] != attrs["password2"]:

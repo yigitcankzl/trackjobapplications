@@ -8,13 +8,7 @@
     "activeTab"
   ],
   "host_permissions": [
-    "http://localhost:8000/*",
-    "https://www.linkedin.com/jobs/*",
-    "https://www.indeed.com/viewjob*",
-    "https://www.indeed.com/jobs*",
-    "https://*.indeed.com/viewjob*",
-    "https://*.indeed.com/jobs*",
-    "https://mail.google.com/*"
+    "http://localhost:8000/api/v1/*"
   ],
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'none'"

@@ -18,11 +18,18 @@ function loadOrder(): string[] {
   return DEFAULT_ORDER
 }
 
+function saveOrder(order: string[]) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(order)) } catch { /* quota */ }
+}
+
 export function useWidgetOrder() {
   const [order, setOrder] = useState<string[]>(loadOrder)
   const [dragIdx, setDragIdx] = useState<number | null>(null)
+  const [keyDragIdx, setKeyDragIdx] = useState<number | null>(null)
   const dragIdxRef = useRef<number | null>(null)
+  const keyDragIdxRef = useRef<number | null>(null)
 
+  // ── Mouse drag ──────────────────────────────────────────────
   const onDragStart = useCallback((idx: number) => {
     dragIdxRef.current = idx
     setDragIdx(idx)
@@ -45,11 +52,34 @@ export function useWidgetOrder() {
   const onDragEnd = useCallback(() => {
     dragIdxRef.current = null
     setDragIdx(null)
-    setOrder(prev => {
-      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(prev)) } catch { /* quota */ }
-      return prev
-    })
+    setOrder(prev => { saveOrder(prev); return prev })
   }, [])
 
-  return { order, dragIdx, onDragStart, onDragOver, onDragEnd }
+  // ── Keyboard drag ────────────────────────────────────────────
+  const onKeyboardGrab = useCallback((idx: number) => {
+    keyDragIdxRef.current = idx
+    setKeyDragIdx(idx)
+  }, [])
+
+  const onKeyboardMove = useCallback((dir: 'left' | 'right') => {
+    const idx = keyDragIdxRef.current
+    if (idx === null) return
+    const targetIdx = dir === 'left' ? idx - 1 : idx + 1
+    if (targetIdx < 0 || targetIdx >= DEFAULT_ORDER.length) return
+    setOrder(prev => {
+      const next = [...prev]
+      ;[next[idx], next[targetIdx]] = [next[targetIdx], next[idx]]
+      return next
+    })
+    keyDragIdxRef.current = targetIdx
+    setKeyDragIdx(targetIdx)
+  }, [])
+
+  const onKeyboardDrop = useCallback(() => {
+    keyDragIdxRef.current = null
+    setKeyDragIdx(null)
+    setOrder(prev => { saveOrder(prev); return prev })
+  }, [])
+
+  return { order, dragIdx, keyDragIdx, onDragStart, onDragOver, onDragEnd, onKeyboardGrab, onKeyboardMove, onKeyboardDrop }
 }

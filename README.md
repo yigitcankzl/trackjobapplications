@@ -30,7 +30,7 @@ TrackJobApplications is a full-stack job application tracker with a browser exte
 
 ## Screenshots
 
-> _Add your dashboard and extension screenshots here_
+> Coming soon
 
 ---
 

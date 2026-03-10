@@ -109,7 +109,10 @@ export default function WelcomePage() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-1">{t('welcome.extensions.chrome.title')}</h3>
+                  <div className="flex items-center gap-2 mb-1">
+                    <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">{t('welcome.extensions.chrome.title')}</h3>
+                    <span className="px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/30 text-xs font-semibold text-amber-600 dark:text-amber-400">Coming Soon</span>
+                  </div>
                   <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">{t('welcome.extensions.chrome.description')}</p>
                   <div className="flex items-center gap-2 mt-3">
                     <span className="px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-900/30 text-xs font-medium text-blue-600 dark:text-blue-400">LinkedIn</span>
@@ -129,7 +132,10 @@ export default function WelcomePage() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-1">{t('welcome.extensions.gmail.title')}</h3>
+                  <div className="flex items-center gap-2 mb-1">
+                    <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">{t('welcome.extensions.gmail.title')}</h3>
+                    <span className="px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/30 text-xs font-semibold text-amber-600 dark:text-amber-400">Coming Soon</span>
+                  </div>
                   <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">{t('welcome.extensions.gmail.description')}</p>
                   <div className="flex items-center gap-2 mt-3">
                     <span className="px-2 py-0.5 rounded-md bg-red-50 dark:bg-red-900/30 text-xs font-medium text-red-600 dark:text-red-400">Google Workspace</span>

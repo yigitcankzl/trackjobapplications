@@ -6,7 +6,7 @@ from users.models import User
 
 @pytest.mark.django_db
 class TestRegisterView:
-    URL = "/api/auth/register/"
+    URL = "/api/v1/auth/register/"
 
     def test_register_success(self, anon_client):
         data = {
@@ -40,12 +40,16 @@ class TestRegisterView:
             "password2": "StrongPass123!",
         }
         res = anon_client.post(self.URL, data)
-        assert res.status_code == 400
+        # Returns 201 (not 400) to prevent email enumeration
+        assert res.status_code == 201
+        # No new user should be created
+        from users.models import User
+        assert User.objects.filter(email=user.email).count() == 1
 
 
 @pytest.mark.django_db
 class TestMeView:
-    URL = "/api/auth/me/"
+    URL = "/api/v1/auth/me/"
 
     def test_get_profile(self, auth_client, user):
         res = auth_client.get(self.URL)
@@ -65,7 +69,7 @@ class TestMeView:
 
 @pytest.mark.django_db
 class TestChangePasswordView:
-    URL = "/api/auth/change-password/"
+    URL = "/api/v1/auth/change-password/"
 
     def test_success(self, auth_client, user):
         data = {
@@ -99,14 +103,13 @@ class TestChangePasswordView:
 
 @pytest.mark.django_db
 class TestLogoutView:
-    URL = "/api/auth/logout/"
+    URL = "/api/v1/auth/logout/"
 
     def test_logout_success(self, user):
+        from rest_framework_simplejwt.tokens import RefreshToken
         client = APIClient()
-        login_res = client.post("/api/auth/login/", {"email": user.email, "password": "testpass123"})
-        assert login_res.status_code == 200
-        refresh = login_res.data["refresh"]
-        client.credentials(HTTP_AUTHORIZATION=f"Bearer {login_res.data['access']}")
+        client.force_authenticate(user=user)
+        refresh = str(RefreshToken.for_user(user))
         res = client.post(self.URL, {"refresh": refresh})
         assert res.status_code == 200
 
@@ -117,7 +120,7 @@ class TestLogoutView:
 
 @pytest.mark.django_db
 class TestLogoutAllView:
-    URL = "/api/auth/logout/all/"
+    URL = "/api/v1/auth/logout/all/"
 
     def test_logout_all(self, auth_client):
         res = auth_client.post(self.URL)
@@ -126,7 +129,7 @@ class TestLogoutAllView:
 
 @pytest.mark.django_db
 class TestVerifyEmailView:
-    URL = "/api/auth/verify-email/"
+    URL = "/api/v1/auth/verify-email/"
 
     def test_verify_success(self, anon_client, user):
         from django.contrib.auth.tokens import default_token_generator
@@ -156,11 +159,11 @@ class TestVerifyEmailView:
 @pytest.mark.django_db
 class TestPasswordResetFlow:
     def test_request_reset(self, anon_client, user):
-        res = anon_client.post("/api/auth/password-reset/", {"email": user.email})
+        res = anon_client.post("/api/v1/auth/password-reset/", {"email": user.email})
         assert res.status_code == 200
 
     def test_request_reset_nonexistent_email(self, anon_client):
-        res = anon_client.post("/api/auth/password-reset/", {"email": "nobody@x.com"})
+        res = anon_client.post("/api/v1/auth/password-reset/", {"email": "nobody@x.com"})
         # Should still return 200 to prevent enumeration
         assert res.status_code == 200
 
@@ -171,7 +174,7 @@ class TestPasswordResetFlow:
 
         uid = urlsafe_base64_encode(force_bytes(user.pk))
         token = default_token_generator.make_token(user)
-        res = anon_client.post("/api/auth/password-reset/confirm/", {
+        res = anon_client.post("/api/v1/auth/password-reset/confirm/", {
             "uid": uid,
             "token": token,
             "new_password": "BrandNewPass789!",
@@ -188,7 +191,7 @@ class TestPasswordResetFlow:
 
         uid = urlsafe_base64_encode(force_bytes(user.pk))
         token = default_token_generator.make_token(user)
-        res = anon_client.post("/api/auth/password-reset/confirm/", {
+        res = anon_client.post("/api/v1/auth/password-reset/confirm/", {
             "uid": uid,
             "token": token,
             "new_password": "Pass1!",

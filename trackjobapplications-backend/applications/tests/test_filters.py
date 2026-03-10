@@ -7,7 +7,7 @@ from .factories import ApplicationFactory, TagFactory
 
 @pytest.mark.django_db
 class TestApplicationFilters:
-    URL = "/api/applications/"
+    URL = "/api/v1/applications/"
 
     def test_filter_by_source(self, auth_client, user):
         ApplicationFactory(user=user, source="linkedin")

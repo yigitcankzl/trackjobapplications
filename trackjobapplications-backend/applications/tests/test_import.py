@@ -7,7 +7,7 @@ from applications.models import Application
 
 @pytest.mark.django_db
 class TestImportApplications:
-    URL = "/api/applications/import/"
+    URL = "/api/v1/applications/import/"
 
     def test_import_csv(self, auth_client, user):
         csv_content = "company,position,applied_date,status\nGoogle,SWE,2024-06-01,applied\nMeta,PM,2024-07-01,interview\n"

@@ -3,7 +3,7 @@ import { Link, NavLink, useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useAuth } from '../../context/AuthContext'
 import { useTheme } from '../../context/ThemeContext'
-import { HomeIcon, BarChartIcon, CalendarIcon, DocumentIcon, SignOutIcon, BriefcaseIcon, ProfileIcon, SunIcon, MoonIcon, CloseIcon } from '../icons'
+import { HomeIcon, BarChartIcon, CalendarIcon, DocumentIcon, SignOutIcon, BriefcaseIcon, ProfileIcon, SunIcon, MoonIcon, CloseIcon, ScaleIcon } from '../icons'
 
 interface Props {
   mobileOpen?: boolean
@@ -26,6 +26,7 @@ export default function Sidebar({ mobileOpen, onMobileClose }: Props) {
     { label: t('dashboard.nav.dashboard'), to: '/dashboard', icon: <HomeIcon /> },
     { label: t('dashboard.nav.calendar'), to: '/calendar', icon: <CalendarIcon /> },
     { label: t('dashboard.nav.coverLetters'), to: '/cover-letters', icon: <DocumentIcon /> },
+    { label: t('dashboard.nav.compare'), to: '/compare', icon: <ScaleIcon /> },
     { label: t('dashboard.nav.analytics'), to: '/analytics', icon: <BarChartIcon /> },
     { label: t('dashboard.nav.profile'), to: '/profile', icon: <ProfileIcon /> },
   ]

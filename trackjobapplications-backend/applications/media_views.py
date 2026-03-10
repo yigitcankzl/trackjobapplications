@@ -17,8 +17,9 @@ class SecureMediaView(APIView):
         if not os.path.isfile(full_path):
             raise Http404
         self._check_ownership(request.user, path)
+        safe_name = os.path.basename(full_path).replace('"', "").replace("\n", "").replace("\r", "")
         response = FileResponse(open(full_path, "rb"))
-        response["Content-Disposition"] = f'attachment; filename="{os.path.basename(full_path)}"'
+        response["Content-Disposition"] = f'attachment; filename="{safe_name}"'
         return response
 
     def _check_ownership(self, user, path):

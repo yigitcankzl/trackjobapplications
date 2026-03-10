@@ -1,4 +1,5 @@
 import logging
+import smtplib
 from datetime import timedelta
 
 from celery import shared_task
@@ -12,8 +13,9 @@ logger = logging.getLogger(__name__)
 
 
 @shared_task(
-    autoretry_for=(Exception,),
+    autoretry_for=(smtplib.SMTPException, IOError, ConnectionError),
     retry_backoff=True,
+    retry_jitter=True,
     max_retries=3,
     acks_late=True,
 )

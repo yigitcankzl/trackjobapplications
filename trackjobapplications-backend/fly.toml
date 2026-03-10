@@ -16,7 +16,7 @@ console_command = '/code/manage.py shell'
   PORT = '8000'
 
 [processes]
-  app = 'gunicorn --bind :8000 --workers 1 --threads 2 config.wsgi'
+  app = 'gunicorn --bind :8000 --workers 3 --threads 2 --graceful-timeout 30 --timeout 120 config.wsgi'
   celery = 'celery -A config worker --loglevel=INFO'
 
 [http_service]
@@ -28,10 +28,12 @@ console_command = '/code/manage.py shell'
   processes = ['app']
 
 [[vm]]
-  memory = '256mb'
+  memory = '512mb'
   cpu_kind = 'shared'
-  cpus = 1
-  memory_mb = 256
+  cpus = 2
+  memory_mb = 512
+  kill_signal = "SIGTERM"
+  kill_timeout = 30
 
 [[statics]]
   guest_path = '/code/static'

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Background -->
+  <rect width="64" height="64" rx="12" fill="#2563EB"/>
+  <!-- Briefcase body -->
+  <rect x="12" y="26" width="40" height="26" rx="4" fill="white"/>
+  <!-- Briefcase handle -->
+  <path d="M22 26v-4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4" stroke="white" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <!-- Center divider -->
+  <rect x="12" y="36" width="40" height="3" fill="#2563EB" opacity="0.2"/>
+  <!-- Checkmark -->
+  <path d="M24 39l5 5 11-10" stroke="#2563EB" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -2,6 +2,7 @@ from django.conf import settings
 from django.middleware.csrf import CsrfViewMiddleware
 from rest_framework import exceptions
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 
 
@@ -16,8 +17,8 @@ class JWTCookieAuthentication(JWTAuthentication):
         using_cookie = bool(request.COOKIES.get(settings.JWT_AUTH_COOKIE))
         try:
             result = super().authenticate(request)
-        except (InvalidToken, TokenError):
-            # Invalid/expired cookie token — treat as unauthenticated rather than 401
+        except (InvalidToken, TokenError, AuthenticationFailed):
+            # Invalid/expired cookie or deleted user — treat as unauthenticated
             # so that AllowAny endpoints (register, login) are not blocked.
             return None
         if result is not None and using_cookie:

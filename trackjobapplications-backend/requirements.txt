@@ -21,3 +21,4 @@ python-json-logger==3.2.1
 django-axes==7.0.1
 whitenoise==6.8.2
 defusedxml==0.7.1
+social-auth-app-django==5.4.3

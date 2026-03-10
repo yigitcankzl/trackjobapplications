@@ -3,6 +3,7 @@ import time
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.http import HttpResponseRedirect
 from django.middleware.csrf import get_token as get_csrf_token
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.tokens import default_token_generator
@@ -16,7 +17,10 @@ from rest_framework.response import Response
 from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.views import APIView
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from social_core.exceptions import AuthCanceled, AuthForbidden, AuthMissingParameter, MissingBackend, SocialAuthBaseException
+from social_django.utils import load_backend, load_strategy
 
 from users.models import NotificationPreference
 
@@ -194,6 +198,11 @@ class ChangePasswordView(APIView):
     throttle_scope = "password_change"
 
     def post(self, request):
+        if not request.user.has_usable_password():
+            return Response(
+                {"detail": "No password set. Use password reset to create one."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         serializer = ChangePasswordSerializer(data=request.data, context={"request": request})
         serializer.is_valid(raise_exception=True)
         request.user.set_password(serializer.validated_data["new_password"])
@@ -305,3 +314,45 @@ class PasswordResetConfirmView(APIView):
         user.save()
         _blacklist_all_tokens(user)
         return Response({"detail": "Password has been reset successfully."}, status=status.HTTP_200_OK)
+
+
+class SocialLoginInitView(APIView):
+    """Redirect the browser to the OAuth provider's authorization page."""
+    permission_classes = [permissions.AllowAny]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "social_login"
+
+    def get(self, request, backend_name):
+        try:
+            strategy = load_strategy(request)
+            backend = load_backend(strategy, backend_name, redirect_uri=None)
+        except MissingBackend:
+            return Response({"detail": "Unknown provider."}, status=status.HTTP_400_BAD_REQUEST)
+        return HttpResponseRedirect(backend.auth_url())
+
+
+class OAuthCallbackView(APIView):
+    """Handle the OAuth provider callback, issue JWT cookies, redirect to dashboard."""
+    permission_classes = [permissions.AllowAny]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "social_callback"
+
+    def get(self, request, backend_name):
+        try:
+            strategy = load_strategy(request)
+            backend = load_backend(strategy, backend_name, redirect_uri=None)
+            user = backend.auth_complete()
+        except (AuthForbidden, AuthCanceled, AuthMissingParameter):
+            return HttpResponseRedirect(f"{settings.FRONTEND_URL}/login?error=oauth_failed")
+        except SocialAuthBaseException:
+            logger.exception("OAuth error for backend %s", backend_name)
+            return HttpResponseRedirect(f"{settings.FRONTEND_URL}/login?error=oauth_error")
+
+        if not user or not user.is_active:
+            return HttpResponseRedirect(f"{settings.FRONTEND_URL}/login?error=account_disabled")
+
+        refresh = RefreshToken.for_user(user)
+        response = HttpResponseRedirect(f"{settings.FRONTEND_URL}/dashboard")
+        _set_auth_cookies(response, str(refresh.access_token), str(refresh))
+        get_csrf_token(request)
+        return response

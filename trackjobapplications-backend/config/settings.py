@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     "drf_spectacular",
     "django_filters",
     "axes",
+    "social_django",
     # local
     "users",
     "applications",
@@ -99,6 +100,10 @@ AUTH_USER_MODEL = "users.User"
 
 AUTHENTICATION_BACKENDS = [
     "axes.backends.AxesStandaloneBackend",
+    "social_core.backends.google.GoogleOAuth2",
+    "social_core.backends.github.GithubOAuth2",
+    "social_core.backends.facebook.FacebookOAuth2",
+    "social_core.backends.linkedin.LinkedinOAuth2",
     "django.contrib.auth.backends.ModelBackend",
 ]
 
@@ -154,6 +159,8 @@ REST_FRAMEWORK = {
         "export": "10/minute",
         "token_refresh": "30/minute",
         "password_reset_confirm": "3/hour",
+        "social_login": "30/minute",
+        "social_callback": "30/minute",
     },
 }
 
@@ -309,3 +316,38 @@ AXES_COOLOFF_TIME = timedelta(minutes=30)
 AXES_LOCKOUT_PARAMETERS = ["ip_address"]
 AXES_RESET_ON_SUCCESS = True
 AXES_ENABLE_ACCESS_FAILURE_LOG = True
+
+# Social OAuth (python-social-auth)
+SOCIAL_AUTH_URL_NAMESPACE = "social"
+SOCIAL_AUTH_USER_MODEL = "users.User"
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY    = os.environ.get("GOOGLE_CLIENT_ID", "")
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", "")
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE  = ["openid", "email", "profile"]
+
+SOCIAL_AUTH_GITHUB_KEY    = os.environ.get("GITHUB_CLIENT_ID", "")
+SOCIAL_AUTH_GITHUB_SECRET = os.environ.get("GITHUB_CLIENT_SECRET", "")
+SOCIAL_AUTH_GITHUB_SCOPE  = ["user:email"]
+
+SOCIAL_AUTH_FACEBOOK_KEY    = os.environ.get("FACEBOOK_APP_ID", "")
+SOCIAL_AUTH_FACEBOOK_SECRET = os.environ.get("FACEBOOK_APP_SECRET", "")
+SOCIAL_AUTH_FACEBOOK_SCOPE  = ["email", "public_profile"]
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {"fields": "id,name,email,first_name,last_name"}
+
+SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY    = os.environ.get("LINKEDIN_CLIENT_ID", "")
+SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = os.environ.get("LINKEDIN_CLIENT_SECRET", "")
+SOCIAL_AUTH_LINKEDIN_OAUTH2_SCOPE  = ["openid", "profile", "email"]
+
+SOCIAL_AUTH_PIPELINE = (
+    "social_core.pipeline.social_auth.social_details",
+    "social_core.pipeline.social_auth.social_uid",
+    "social_core.pipeline.social_auth.auth_allowed",
+    "social_core.pipeline.social_auth.social_user",
+    "social_core.pipeline.user.get_username",
+    "users.pipeline.associate_by_email",
+    "social_core.pipeline.user.create_user",
+    "social_core.pipeline.social_auth.associate_user",
+    "social_core.pipeline.social_auth.load_extra_data",
+    "users.pipeline.set_user_fields",
+    "social_core.pipeline.user.user_details",
+)

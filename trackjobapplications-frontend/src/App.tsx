@@ -16,6 +16,7 @@ const ApplicationDetailPage = lazy(() => import('./pages/ApplicationDetailPage')
 const CalendarPage = lazy(() => import('./pages/CalendarPage'))
 const CoverLettersPage = lazy(() => import('./pages/CoverLettersPage'))
 const ComparisonPage = lazy(() => import('./pages/ComparisonPage'))
+const VerifyEmailPage = lazy(() => import('./pages/VerifyEmailPage'))
 
 export default function App() {
   return (
@@ -35,6 +36,7 @@ export default function App() {
               <Route path="/compare" element={<PrivateRoute><ComparisonPage /></PrivateRoute>} />
               <Route path="/analytics" element={<PrivateRoute><AnalyticsPage /></PrivateRoute>} />
               <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
+              <Route path="/verify-email" element={<VerifyEmailPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
             </Suspense>

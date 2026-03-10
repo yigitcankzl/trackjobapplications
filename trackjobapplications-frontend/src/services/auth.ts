@@ -104,3 +104,29 @@ export async function changePassword(
     new_password2: newPassword2,
   })
 }
+
+export async function verifyEmail(uid: string, token: string): Promise<void> {
+  await api.post('/auth/verify-email/', { uid, token })
+}
+
+export async function resendVerification(): Promise<void> {
+  await api.post('/auth/resend-verification/')
+}
+
+export async function requestPasswordReset(email: string): Promise<void> {
+  await api.post('/auth/password-reset/', { email })
+}
+
+export async function confirmPasswordReset(
+  uid: string,
+  token: string,
+  newPassword: string,
+  newPassword2: string,
+): Promise<void> {
+  await api.post('/auth/password-reset/confirm/', {
+    uid,
+    token,
+    new_password: newPassword,
+    new_password2: newPassword2,
+  })
+}

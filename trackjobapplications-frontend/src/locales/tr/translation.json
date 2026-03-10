@@ -528,5 +528,14 @@
   "footer": {
     "rights": "Tüm hakları saklıdır.",
     "copyright": "© {{year}} TrackJobs. Tüm hakları saklıdır."
+  },
+  "verifyEmail": {
+    "verifying": "E-postanız doğrulanıyor...",
+    "successTitle": "E-posta doğrulandı!",
+    "successMessage": "E-postanız başarıyla doğrulandı. Artık giriş yapabilirsiniz.",
+    "errorTitle": "Doğrulama başarısız",
+    "invalidLink": "Geçersiz doğrulama bağlantısı.",
+    "genericError": "Bir şeyler ters gitti. Lütfen tekrar deneyin.",
+    "goToLogin": "Giriş Yap"
   }
 }

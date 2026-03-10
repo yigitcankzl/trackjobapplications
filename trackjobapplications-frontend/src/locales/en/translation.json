@@ -528,5 +528,14 @@
   "footer": {
     "rights": "All rights reserved.",
     "copyright": "© {{year}} TrackJobs. All rights reserved."
+  },
+  "verifyEmail": {
+    "verifying": "Verifying your email...",
+    "successTitle": "Email verified!",
+    "successMessage": "Your email has been verified. You can now sign in.",
+    "errorTitle": "Verification failed",
+    "invalidLink": "Invalid verification link.",
+    "genericError": "Something went wrong. Please try again.",
+    "goToLogin": "Go to Sign In"
   }
 }

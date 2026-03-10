@@ -181,6 +181,18 @@ async function handleMessage(message) {
       }
 
       case 'LOGOUT': {
+        const { access, refresh } = await getTokens();
+        if (refresh) {
+          const apiBase = await getApiBase();
+          await fetch(`${apiBase}/auth/logout/`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              ...(access ? { 'Authorization': `Bearer ${access}` } : {}),
+            },
+            body: JSON.stringify({ refresh }),
+          }).catch(() => {}); // Ignore errors — clear local tokens regardless
+        }
         await clearTokens();
         return { success: true };
       }

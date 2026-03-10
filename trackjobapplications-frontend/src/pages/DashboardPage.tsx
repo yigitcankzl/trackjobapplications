@@ -73,7 +73,7 @@ export default function DashboardPage() {
   }), [t, stats])
 
   const reminders = useApplicationReminders(apps)
-  const { order, dragIdx, onDragStart, onDragOver, onDragEnd } = useWidgetOrder()
+  const { order, dragIdx, keyDragIdx, onDragStart, onDragOver, onDragEnd, onKeyboardGrab, onKeyboardMove, onKeyboardDrop } = useWidgetOrder()
   const { upcoming: interviewReminders, dismissAll: dismissInterviewReminders } = useInterviewReminders(apps)
 
   async function handleApply(app: JobApplication) {
@@ -170,9 +170,13 @@ export default function DashboardPage() {
               color={c.color}
               index={idx}
               isDragging={dragIdx === idx}
+              isKeyboardGrabbed={keyDragIdx === idx}
               onDragStart={onDragStart}
               onDragOver={onDragOver}
               onDragEnd={onDragEnd}
+              onKeyboardGrab={onKeyboardGrab}
+              onKeyboardMove={onKeyboardMove}
+              onKeyboardDrop={onKeyboardDrop}
             />
           )
         })}

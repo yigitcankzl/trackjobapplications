@@ -25,44 +25,69 @@ const DEFAULT_CRITERIA: Criterion[] = [
   { key: 'bonus', weight: 10 },
 ]
 
-function scoreCriterion(app: CompareApplication, key: CriterionKey, allApps: CompareApplication[]): number {
+const REMOTE_SCORES: Record<string, number> = { remote: 10, hybrid: 6, onsite: 3 }
+const SIZE_SCORES: Record<string, number> = { enterprise: 8, large: 7, medium: 6, small: 5, startup: 4 }
+
+interface MaxValues {
+  salary: number
+  bonus: number
+  benefitLines: number
+  locationCount: number
+}
+
+function computeMaxValues(apps: CompareApplication[]): MaxValues {
+  let salary = 0, bonus = 0, benefitLines = 0, locationCount = 0
+  for (const a of apps) {
+    const o = a.offer_detail
+    if (!o) continue
+    salary = Math.max(salary, Number(o.salary) || 0)
+    bonus = Math.max(bonus, (Number(o.signing_bonus) || 0) + (Number(o.annual_bonus) || 0))
+    const lines = o.benefits ? o.benefits.split('\n').filter(l => l.trim()).length : 0
+    benefitLines = Math.max(benefitLines, lines)
+    if (o.location) locationCount++
+  }
+  return { salary, bonus, benefitLines, locationCount }
+}
+
+function scoreCriterion(app: CompareApplication, key: CriterionKey, maxVals: MaxValues): number {
   const offer = app.offer_detail
   if (!offer) return 0
 
   switch (key) {
     case 'salary': {
       if (!offer.salary) return 0
-      const max = Math.max(...allApps.map(a => Number(a.offer_detail?.salary) || 0))
-      return max > 0 ? (Number(offer.salary) / max) * 10 : 0
+      return maxVals.salary > 0 ? (Number(offer.salary) / maxVals.salary) * 10 : 0
     }
     case 'bonus': {
       const total = (Number(offer.signing_bonus) || 0) + (Number(offer.annual_bonus) || 0)
-      const max = Math.max(...allApps.map(a => {
-        const o = a.offer_detail
-        return o ? (Number(o.signing_bonus) || 0) + (Number(o.annual_bonus) || 0) : 0
-      }))
-      return max > 0 ? (total / max) * 10 : 0
+      return maxVals.bonus > 0 ? (total / maxVals.bonus) * 10 : 0
     }
-    case 'remote': {
-      const scores: Record<string, number> = { remote: 10, hybrid: 6, onsite: 3 }
-      return scores[offer.remote_policy] || 0
-    }
-    case 'companySize': {
-      const scores: Record<string, number> = { enterprise: 8, large: 7, medium: 6, small: 5, startup: 4 }
-      return scores[offer.company_size] || 0
-    }
+    case 'remote':
+      return REMOTE_SCORES[offer.remote_policy] || 0
+    case 'companySize':
+      return SIZE_SCORES[offer.company_size] || 0
     case 'location':
       return offer.location ? 7 : 0
-    case 'benefits':
-      return offer.benefits ? Math.min(offer.benefits.length / 50, 1) * 10 : 0
+    case 'benefits': {
+      if (!offer.benefits) return 0
+      const lines = offer.benefits.split('\n').filter(l => l.trim()).length
+      return maxVals.benefitLines > 0 ? (lines / maxVals.benefitLines) * 10 : 0
+    }
     default:
       return 0
   }
 }
 
+const formatMoneyCache = new Map<string, Intl.NumberFormat>()
 function formatMoney(val: number | null, currency: string): string {
   if (val === null || val === undefined) return '-'
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency: currency || 'USD', maximumFractionDigits: 0 }).format(val)
+  const cur = currency || 'USD'
+  let fmt = formatMoneyCache.get(cur)
+  if (!fmt) {
+    fmt = new Intl.NumberFormat('en-US', { style: 'currency', currency: cur, maximumFractionDigits: 0 })
+    formatMoneyCache.set(cur, fmt)
+  }
+  return fmt.format(val)
 }
 
 export default function ComparisonPage() {
@@ -109,22 +134,26 @@ export default function ComparisonPage() {
 
   const totalWeight = criteria.reduce((s, c) => s + c.weight, 0)
 
+  const maxVals = useMemo(() => computeMaxValues(compareData), [compareData])
+
   const scores = useMemo(() => {
     if (compareData.length === 0) return []
     return compareData.map(app => {
       let total = 0
       const breakdown: Record<string, number> = {}
       for (const c of criteria) {
-        const raw = scoreCriterion(app, c.key, compareData)
+        const raw = scoreCriterion(app, c.key, maxVals)
         const weighted = totalWeight > 0 ? (raw * c.weight) / totalWeight : 0
         breakdown[c.key] = Math.round(raw * 10) / 10
         total += weighted
       }
       return { id: app.id, total: Math.round(total * 10) / 10, breakdown }
     })
-  }, [compareData, criteria, totalWeight])
+  }, [compareData, criteria, totalWeight, maxVals])
 
-  const bestId = scores.length > 0 ? scores.reduce((a, b) => a.total > b.total ? a : b).id : null
+  const sortedScores = useMemo(() => [...scores].sort((a, b) => b.total - a.total), [scores])
+
+  const bestId = sortedScores.length > 0 ? sortedScores[0].id : null
 
   if (loading) {
     return (
@@ -262,13 +291,15 @@ export default function ComparisonPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                   {criteria.map(c => (
                     <div key={c.key} className="flex items-center gap-2">
-                      <span className="text-xs text-gray-500 dark:text-gray-400 w-20">{t(`compare.criteria.${c.key}`)}</span>
+                      <label htmlFor={`weight-${c.key}`} className="text-xs text-gray-500 dark:text-gray-400 w-20">{t(`compare.criteria.${c.key}`)}</label>
                       <input
+                        id={`weight-${c.key}`}
                         type="range"
                         min={0}
                         max={100}
                         value={c.weight}
                         onChange={e => updateWeight(c.key, Number(e.target.value))}
+                        aria-label={t(`compare.criteria.${c.key}`)}
                         className="flex-1 h-1.5 accent-blue-600"
                       />
                       <span className="text-xs font-mono text-gray-600 dark:text-gray-300 w-8 text-right">{c.weight}</span>
@@ -278,30 +309,28 @@ export default function ComparisonPage() {
 
                 {/* Score bars */}
                 <div className="space-y-3 mt-4">
-                  {scores
-                    .sort((a, b) => b.total - a.total)
-                    .map((s, i) => {
-                      const app = compareData.find(a => a.id === s.id)!
-                      return (
-                        <div key={s.id} className="flex items-center gap-3">
-                          <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold flex-shrink-0 ${getAvatarColor(app.company)}`}>
-                            {app.company[0]?.toUpperCase()}
+                  {sortedScores.map((s, i) => {
+                    const app = compareData.find(a => a.id === s.id)!
+                    return (
+                      <div key={s.id} className="flex items-center gap-3">
+                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold flex-shrink-0 ${getAvatarColor(app.company)}`}>
+                          {app.company[0]?.toUpperCase()}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">{app.company}</span>
+                            <span className={`text-sm font-bold ${i === 0 ? 'text-emerald-600' : 'text-gray-500'}`}>{s.total.toFixed(1)}</span>
                           </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center justify-between mb-1">
-                              <span className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">{app.company}</span>
-                              <span className={`text-sm font-bold ${i === 0 ? 'text-emerald-600' : 'text-gray-500'}`}>{s.total.toFixed(1)}</span>
-                            </div>
-                            <div className="h-2 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
-                              <div
-                                className={`h-full rounded-full transition-all duration-500 ${i === 0 ? 'bg-emerald-500' : 'bg-blue-400'}`}
-                                style={{ width: `${(s.total / 10) * 100}%` }}
-                              />
-                            </div>
+                          <div className="h-2 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+                            <div
+                              className={`h-full rounded-full transition-all duration-500 ${i === 0 ? 'bg-emerald-500' : 'bg-blue-400'}`}
+                              style={{ width: `${(s.total / 10) * 100}%` }}
+                            />
                           </div>
                         </div>
-                      )
-                    })}
+                      </div>
+                    )
+                  })}
                 </div>
 
                 {/* Detailed breakdown table */}

@@ -26,7 +26,7 @@ export function exportApplicationsCsv(apps: JobApplication[]) {
   URL.revokeObjectURL(url)
 }
 
-const FORMULA_PREFIXES = ['=', '+', '-', '@', '\t', '\r']
+const FORMULA_PREFIXES = ['=', '+', '-', '@', '\t', '\r', '|']
 
 function sanitizeCsvValue(value: string): string {
   let safe = value

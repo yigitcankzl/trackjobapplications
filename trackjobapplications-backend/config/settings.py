@@ -192,7 +192,8 @@ CORS_ALLOW_CREDENTIALS = True
 JWT_AUTH_COOKIE = "access_token"
 JWT_AUTH_REFRESH_COOKIE = "refresh_token"
 JWT_AUTH_COOKIE_HTTPONLY = True
-JWT_AUTH_COOKIE_SAMESITE = "None"
+# Lax works for same-site localhost dev; None required for cross-origin prod (Vercel → Fly.io)
+JWT_AUTH_COOKIE_SAMESITE = "Lax" if DEBUG else "None"
 JWT_AUTH_COOKIE_SECURE = not DEBUG
 
 # Celery
@@ -239,7 +240,6 @@ if not DEBUG:
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
     SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 SECURE_CONTENT_TYPE_NOSNIFF = True
@@ -247,8 +247,11 @@ SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
 
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = "Strict"
-CSRF_COOKIE_HTTPONLY = True
-CSRF_COOKIE_SAMESITE = "Strict"
+# CSRF cookie must be JS-readable (not httpOnly) for the axios double-submit pattern
+CSRF_COOKIE_HTTPONLY = False
+# Match JWT cookie SameSite: Lax for localhost dev, None for cross-origin prod
+CSRF_COOKIE_SAMESITE = "Lax" if DEBUG else "None"
+CSRF_COOKIE_SECURE = not DEBUG
 
 # Logging
 LOGGING = {

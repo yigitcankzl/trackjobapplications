@@ -1,4 +1,6 @@
 from django.conf import settings
+from django.middleware.csrf import CsrfViewMiddleware
+from rest_framework import exceptions
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
@@ -6,7 +8,24 @@ class JWTCookieAuthentication(JWTAuthentication):
     """
     Extends JWTAuthentication to also accept the access token from an httpOnly cookie.
     Falls back to the Authorization header so the browser extension continues to work.
+    When authentication succeeds via cookie, CSRF is enforced (double-submit pattern).
     """
+
+    def authenticate(self, request):
+        using_cookie = bool(request.COOKIES.get(settings.JWT_AUTH_COOKIE))
+        result = super().authenticate(request)
+        if result is not None and using_cookie:
+            self.enforce_csrf(request)
+        return result
+
+    def enforce_csrf(self, request):
+        def dummy_get_response(req):
+            return None
+        check = CsrfViewMiddleware(dummy_get_response)
+        check.process_request(request)
+        reason = check.process_view(request, None, (), {})
+        if reason:
+            raise exceptions.PermissionDenied(f"CSRF Failed: {reason}")
 
     def get_header(self, request):
         raw = request.COOKIES.get(settings.JWT_AUTH_COOKIE)

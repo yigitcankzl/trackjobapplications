@@ -64,7 +64,7 @@ def send_interview_reminders():
         except Exception:
             # Revert reminder_sent on failure so it gets retried
             InterviewStage.objects.filter(id__in=stage_ids).update(reminder_sent=False)
-            logger.exception("Failed to send interview reminder to %s", email)
+            logger.exception("Failed to send interview reminder to user %s", pref.user.id)
 
     result = f"Sent interview reminders to {total_users} user(s) for {total_stages} interview(s)"
     logger.info(result)

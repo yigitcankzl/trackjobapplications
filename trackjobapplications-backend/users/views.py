@@ -256,7 +256,7 @@ class PasswordResetRequestView(APIView):
                     fail_silently=False,
                 )
             except Exception:
-                logger.exception("Failed to send password reset email to %s", user.email)
+                logger.exception("Failed to send password reset email to user %s", user.id)
         except User.DoesNotExist:
             # Pad response time to match the email-send path and prevent timing enumeration
             elapsed = time.monotonic() - _start

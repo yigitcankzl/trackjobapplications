@@ -80,7 +80,7 @@ class User(AbstractBaseUser, PermissionsMixin):
                 fail_silently=False,
             )
         except Exception:
-            logger.exception("Failed to send verification email to %s", self.email)
+            logger.exception("Failed to send verification email to user %s", self.pk)
 
 
 class NotificationPreference(models.Model):

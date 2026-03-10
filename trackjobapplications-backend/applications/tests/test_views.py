@@ -296,12 +296,12 @@ class TestExportPdf:
         res = auth_client.get("/api/v1/applications/export-pdf/")
         assert res.status_code == 200
         assert res["Content-Type"] == "application/pdf"
-        assert b"%PDF" in res.content
+        assert b"%PDF" in b"".join(res.streaming_content)
 
     def test_export_pdf_empty(self, auth_client):
         res = auth_client.get("/api/v1/applications/export-pdf/")
         assert res.status_code == 200
-        assert b"%PDF" in res.content
+        assert b"%PDF" in b"".join(res.streaming_content)
 
     def test_export_pdf_includes_content_length(self, auth_client, user):
         ApplicationFactory(user=user)
@@ -314,7 +314,7 @@ class TestExportPdf:
         ApplicationFactory(user=user)
         res = auth_client.get("/api/v1/applications/export-pdf/")
         assert res.status_code == 200
-        assert int(res["Content-Length"]) == len(res.content)
+        assert int(res["Content-Length"]) == len(b"".join(res.streaming_content))
 
     def test_export_pdf_returns_413_when_too_large(self, auth_client, user, monkeypatch):
         from applications import views as app_views

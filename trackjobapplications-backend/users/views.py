@@ -1,4 +1,5 @@
 import logging
+import time
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -238,7 +239,9 @@ class PasswordResetRequestView(APIView):
 
     def post(self, request):
         email = request.data.get("email", "").lower().strip()
-        # Always return success to prevent email enumeration
+        # Always return success to prevent email enumeration.
+        # Sleep on the unknown-email path to prevent timing-based enumeration.
+        _start = time.monotonic()
         try:
             user = User.objects.get(email__iexact=email)
             uid = urlsafe_base64_encode(force_bytes(user.pk))
@@ -255,7 +258,9 @@ class PasswordResetRequestView(APIView):
             except Exception:
                 logger.exception("Failed to send password reset email to %s", user.email)
         except User.DoesNotExist:
-            pass
+            # Pad response time to match the email-send path and prevent timing enumeration
+            elapsed = time.monotonic() - _start
+            time.sleep(max(0, 0.5 - elapsed))
         return Response(
             {"detail": "If an account exists with this email, a reset link has been sent."},
             status=status.HTTP_200_OK,
@@ -265,7 +270,7 @@ class PasswordResetRequestView(APIView):
 class PasswordResetConfirmView(APIView):
     permission_classes = [permissions.AllowAny]
     throttle_classes = [ScopedRateThrottle]
-    throttle_scope = "register"
+    throttle_scope = "password_reset_confirm"
 
     def post(self, request):
         uid = request.data.get("uid", "")

@@ -153,6 +153,7 @@ REST_FRAMEWORK = {
         "import": "5/minute",
         "export": "10/minute",
         "token_refresh": "30/minute",
+        "password_reset_confirm": "3/hour",
     },
 }
 

@@ -490,6 +490,29 @@
     "skip": "-- skip --",
     "row": "Row {{row}}"
   },
+  "offer": {
+    "title": "Offer Details",
+    "add": "+ Add Offer",
+    "edit": "Edit",
+    "save": "Save",
+    "remove": "Remove offer",
+    "empty": "No offer details added yet.",
+    "currency": "Currency",
+    "period": "Period",
+    "saved": "Offer details saved",
+    "deleted": "Offer details removed",
+    "loadFailed": "Failed to load offer details",
+    "saveFailed": "Failed to save offer details",
+    "deleteFailed": "Failed to remove offer details",
+    "equityPlaceholder": "e.g. 10,000 RSUs over 4 years",
+    "locationPlaceholder": "e.g. San Francisco, CA",
+    "benefitsPlaceholder": "Health insurance, 401k, PTO...",
+    "periods": {
+      "yearly": "Yearly",
+      "monthly": "Monthly",
+      "hourly": "Hourly"
+    }
+  },
   "calendar": {
     "title": "Calendar",
     "prevMonth": "Previous month",

@@ -19,6 +19,7 @@ import ContactList from '../components/detail/ContactList'
 import InterviewTimeline from '../components/detail/InterviewTimeline'
 import AttachmentList from '../components/detail/AttachmentList'
 import EmailTimeline from '../components/detail/EmailTimeline'
+import OfferDetailPanel from '../components/detail/OfferDetailPanel'
 import LoadingSpinner from '../components/ui/LoadingSpinner'
 import { ArrowLeftIcon, EditIcon, TrashIcon, CalendarIcon, ClockIcon, LinkIcon } from '../components/icons'
 
@@ -198,6 +199,11 @@ export default function ApplicationDetailPage() {
         {/* Interview Stages */}
         <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6">
           <InterviewTimeline applicationId={app.id} company={app.company} position={app.position} />
+        </div>
+
+        {/* Offer Details */}
+        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6">
+          <OfferDetailPanel applicationId={app.id} />
         </div>
 
         {/* Attachments */}

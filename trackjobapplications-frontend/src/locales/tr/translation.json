@@ -490,6 +490,29 @@
     "skip": "-- atla --",
     "row": "Satır {{row}}"
   },
+  "offer": {
+    "title": "Teklif Detayları",
+    "add": "+ Teklif Ekle",
+    "edit": "Düzenle",
+    "save": "Kaydet",
+    "remove": "Teklifi kaldır",
+    "empty": "Henüz teklif detayı eklenmedi.",
+    "currency": "Para Birimi",
+    "period": "Dönem",
+    "saved": "Teklif detayları kaydedildi",
+    "deleted": "Teklif detayları kaldırıldı",
+    "loadFailed": "Teklif detayları yüklenemedi",
+    "saveFailed": "Teklif detayları kaydedilemedi",
+    "deleteFailed": "Teklif detayları kaldırılamadı",
+    "equityPlaceholder": "ör. 4 yılda 10.000 RSU",
+    "locationPlaceholder": "ör. İstanbul, Türkiye",
+    "benefitsPlaceholder": "Sağlık sigortası, yemek kartı, tatil...",
+    "periods": {
+      "yearly": "Yıllık",
+      "monthly": "Aylık",
+      "hourly": "Saatlik"
+    }
+  },
   "calendar": {
     "title": "Takvim",
     "prevMonth": "Önceki ay",

@@ -4,17 +4,15 @@
 function getTokens() {
   var props = PropertiesService.getUserProperties();
   return {
-    access: props.getProperty('access_token') || '',
-    refresh: props.getProperty('refresh_token') || '',
+    access:  decryptToken(props.getProperty('access_token')  || ''),
+    refresh: decryptToken(props.getProperty('refresh_token') || ''),
   };
 }
 
 function saveTokens(access, refresh) {
   var props = PropertiesService.getUserProperties();
-  props.setProperty('access_token', access);
-  if (refresh) {
-    props.setProperty('refresh_token', refresh);
-  }
+  if (access)  props.setProperty('access_token',  encryptToken(access));
+  if (refresh) props.setProperty('refresh_token', encryptToken(refresh));
 }
 
 function clearTokens() {

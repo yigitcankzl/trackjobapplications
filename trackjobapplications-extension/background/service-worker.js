@@ -33,15 +33,73 @@ async function getApiBase() {
   return api_base || DEFAULT_API_BASE;
 }
 
+// --- Token Encryption (AES-256-GCM via Web Crypto API) ---
+// Key is derived from the extension's runtime ID via HKDF — never stored anywhere.
+// Protects tokens against offline chrome.storage dumps without the extension context.
+
+let _encKey = null;
+
+async function _getEncryptionKey() {
+  if (_encKey) return _encKey;
+  const enc = new TextEncoder();
+  const raw = await crypto.subtle.importKey(
+    'raw', enc.encode(chrome.runtime.id), { name: 'HKDF' }, false, ['deriveKey'],
+  );
+  _encKey = await crypto.subtle.deriveKey(
+    { name: 'HKDF', hash: 'SHA-256', salt: enc.encode('tja-token-v1'), info: enc.encode('storage') },
+    raw,
+    { name: 'AES-GCM', length: 256 },
+    false,
+    ['encrypt', 'decrypt'],
+  );
+  return _encKey;
+}
+
+function _b64(buf)  { return btoa(String.fromCharCode(...new Uint8Array(buf))); }
+function _unb64(s)  { return Uint8Array.from(atob(s), c => c.charCodeAt(0)); }
+
+async function encryptToken(plaintext) {
+  if (!plaintext) return '';
+  const key = await _getEncryptionKey();
+  const iv  = crypto.getRandomValues(new Uint8Array(12));
+  const ct  = await crypto.subtle.encrypt(
+    { name: 'AES-GCM', iv }, key, new TextEncoder().encode(plaintext),
+  );
+  return _b64(iv.buffer) + ':' + _b64(ct);
+}
+
+async function decryptToken(stored) {
+  if (!stored) return '';
+  const sep = stored.indexOf(':');
+  if (sep === -1) return stored; // legacy plaintext — pass through, re-encrypted on next save
+  try {
+    const key   = await _getEncryptionKey();
+    const plain = await crypto.subtle.decrypt(
+      { name: 'AES-GCM', iv: _unb64(stored.slice(0, sep)) },
+      key,
+      _unb64(stored.slice(sep + 1)),
+    );
+    return new TextDecoder().decode(plain);
+  } catch {
+    return ''; // tampered or wrong context — treat as missing
+  }
+}
+
 // --- Token Storage ---
 
 async function getTokens() {
   const result = await chrome.storage.local.get(['access_token', 'refresh_token']);
-  return { access: result.access_token, refresh: result.refresh_token };
+  return {
+    access:  await decryptToken(result.access_token  || ''),
+    refresh: await decryptToken(result.refresh_token || ''),
+  };
 }
 
 async function saveTokens(access, refresh) {
-  await chrome.storage.local.set({ access_token: access, refresh_token: refresh });
+  const toStore = {};
+  if (access)  toStore.access_token  = await encryptToken(access);
+  if (refresh) toStore.refresh_token = await encryptToken(refresh);
+  if (Object.keys(toStore).length > 0) await chrome.storage.local.set(toStore);
 }
 
 async function clearTokens() {

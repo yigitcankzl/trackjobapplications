@@ -215,6 +215,12 @@ PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher",
 ]
 
+# Reduce argon2 memory usage for low-RAM environments (256MB)
+from django.contrib.auth.hashers import Argon2PasswordHasher
+Argon2PasswordHasher.memory_cost = 8192   # 8MB instead of 64MB default
+Argon2PasswordHasher.parallelism = 1
+Argon2PasswordHasher.time_cost = 2
+
 DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10 MB
 
 # Production security settings

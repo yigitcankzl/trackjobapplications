@@ -82,6 +82,8 @@ class ThrottledTokenObtainPairView(TokenObtainPairView):
             )
         else:
             _set_auth_cookies(response, response.data["access"], response.data["refresh"])
+            response.data.pop("access", None)
+            response.data.pop("refresh", None)
         return response
 
 
@@ -99,6 +101,8 @@ class ThrottledTokenRefreshView(TokenRefreshView):
         if response.status_code == 200:
             refresh = response.data.get("refresh")
             _set_auth_cookies(response, response.data["access"], refresh)
+            response.data.pop("access", None)
+            response.data.pop("refresh", None)
         return response
 
 

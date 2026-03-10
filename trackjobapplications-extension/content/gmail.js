@@ -103,7 +103,8 @@ function createGmailActionButton(label, color, hoverColor, status, data) {
     btn.textContent = 'Saving...';
 
     const today = new Date().toISOString().split('T')[0];
-    const notes = `From email: ${data.subject}\nSender: ${data.senderName} <${data.senderEmail}>`;
+    const senderDomain = data.senderEmail ? data.senderEmail.split('@')[1] || '' : '';
+    const notes = `From email: ${data.subject}${senderDomain ? `\nSender domain: ${senderDomain}` : ''}`;
 
     const result = await chrome.runtime.sendMessage({
       type: 'ADD_APPLICATION',
@@ -179,6 +180,7 @@ const observer = new MutationObserver(() => {
 });
 
 observer.observe(document.body, { childList: true, subtree: true });
+window.addEventListener('beforeunload', () => observer.disconnect());
 
 // Respond to popup requests
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {

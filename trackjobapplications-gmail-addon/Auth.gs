@@ -28,6 +28,14 @@ function isLoggedIn() {
 }
 
 function login(email, password) {
+  var rl = checkRateLimit('login');
+  if (!rl.allowed) {
+    return {
+      success: false,
+      error: 'Too many login attempts. Try again in ' + rl.retryAfterSec + ' seconds.',
+    };
+  }
+
   var url = CONFIG.API_BASE + '/auth/login/';
   var options = {
     method: 'post',
@@ -42,6 +50,7 @@ function login(email, password) {
 
   if (code === 200 && body.access) {
     saveTokens(body.access, body.refresh);
+    resetRateLimit('login'); // successful login clears the attempt counter
     return { success: true };
   }
 
@@ -78,6 +87,11 @@ function refreshAccessToken() {
 }
 
 function apiFetch(endpoint, method, payload) {
+  var rl = checkRateLimit('api');
+  if (!rl.allowed) {
+    return { error: 'Rate limit exceeded. Try again in ' + rl.retryAfterSec + ' seconds.', code: 429 };
+  }
+
   var tokens = getTokens();
   if (!tokens.access) return { error: 'Not logged in', code: 401 };
 

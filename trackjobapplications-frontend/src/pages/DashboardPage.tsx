@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import DashboardLayout from '../components/layout/DashboardLayout'
 import Header from '../components/dashboard/Header'
@@ -19,58 +19,33 @@ import LoadingSpinner from '../components/ui/LoadingSpinner'
 import { PlusIcon, TableIcon, KanbanIcon, DownloadIcon, RefreshIcon } from '../components/icons'
 import { exportApplicationsCsv } from '../lib/exportCsv'
 import { isSafeUrl } from '../lib/url'
-import { getApplications, createApplication, updateApplication, deleteApplication, bulkUpdateStatus, bulkDelete, togglePin, getStats, exportPdf, AppStats } from '../services/applications'
-import { ApplicationFilters, ApplicationStatus, JobApplication, ViewMode } from '../types'
+import { exportPdf } from '../services/applications'
+import { ApplicationFilters, JobApplication, ViewMode } from '../types'
 import { useToast } from '../context/ToastContext'
 import { useApplicationFilters } from '../hooks/useApplicationFilters'
 import { useApplicationReminders } from '../hooks/useApplicationReminders'
 import { useWidgetOrder } from '../hooks/useWidgetOrder'
 import { useInterviewReminders } from '../hooks/useInterviewReminders'
+import useDashboardData from '../hooks/useDashboardData'
 
 export default function DashboardPage() {
   const { t } = useTranslation()
   const { addToast } = useToast()
-  const [apps, setApps] = useState<JobApplication[]>([])
-  const [page, setPage] = useState(1)
-  const [totalCount, setTotalCount] = useState(0)
-  const PAGE_SIZE = 20
+
+  const {
+    apps, page, totalPages, loading, stats, selectedIds,
+    loadPage, handleAdd, handleEdit, handleStatusChange,
+    handleTogglePin, handleDelete,
+    handleBulkUpdateStatus, handleBulkDelete,
+    toggleSelect, toggleSelectAll, setSelectedIds,
+  } = useDashboardData()
 
   const [view, setView] = useState<ViewMode>('table')
   const [drawerApp, setDrawerApp] = useState<JobApplication | null>(null)
   const [addOpen, setAddOpen] = useState(false)
   const [editTarget, setEditTarget] = useState<JobApplication | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<JobApplication | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [selectedIds, setSelectedIds] = useState<number[]>([])
   const [importOpen, setImportOpen] = useState(false)
-
-  const filtersRef = useRef<ApplicationFilters>({})
-
-  const [stats, setStats] = useState<AppStats>({ total: 0, to_apply: 0, applied: 0, interview: 0, offer: 0, rejected: 0, withdrawn: 0 })
-
-  const loadStats = useCallback(() => {
-    getStats().then(setStats).catch(() => addToast(t('dashboard.errors.loadFailed'), 'error'))
-  }, [addToast, t])
-
-  const requestIdRef = useRef(0)
-
-  const loadPage = useCallback((p: number, filters?: ApplicationFilters) => {
-    const f = filters ?? filtersRef.current
-    filtersRef.current = f
-    setLoading(true)
-    setSelectedIds([])
-    const reqId = ++requestIdRef.current
-    getApplications(p, f)
-      .then(res => {
-        if (reqId !== requestIdRef.current) return
-        setApps(res.results)
-        setTotalCount(res.count)
-        setPage(p)
-      })
-      .catch(() => { if (reqId === requestIdRef.current) addToast(t('dashboard.errors.loadFailed'), 'error') })
-      .finally(() => { if (reqId === requestIdRef.current) setLoading(false) })
-    loadStats()
-  }, [addToast, t, loadStats])
 
   const handleFiltersChange = useCallback((filters: ApplicationFilters) => {
     loadPage(1, filters)
@@ -89,115 +64,23 @@ export default function DashboardPage() {
   const { order, dragIdx, onDragStart, onDragOver, onDragEnd } = useWidgetOrder()
   const { upcoming: interviewReminders, dismissAll: dismissInterviewReminders } = useInterviewReminders(apps)
 
-  const totalPages = Math.ceil(totalCount / PAGE_SIZE)
-
-  // Stats are loaded via loadPage() which is called on mount by useApplicationFilters
-
-  async function handleAdd(data: Omit<JobApplication, 'id' | 'created_at' | 'updated_at'>) {
-    try {
-      await createApplication(data)
-      loadPage(1)
-      addToast(t('dashboard.toast.added'))
-    } catch {
-      addToast(t('dashboard.errors.addFailed'), 'error')
-    }
-  }
-
-  async function handleEdit(data: Omit<JobApplication, 'id' | 'created_at' | 'updated_at'>) {
-    if (!editTarget) return
-    try {
-      const updated = await updateApplication(editTarget.id, data)
-      setApps(prev => prev.map(a => (a.id === editTarget.id ? updated : a)))
-      addToast(t('dashboard.toast.saved'))
-    } catch {
-      addToast(t('dashboard.errors.editFailed'), 'error')
-    }
-  }
-
-  async function handleStatusChange(id: number, newStatus: ApplicationStatus) {
-    try {
-      const updated = await updateApplication(id, { status: newStatus })
-      setApps(prev => prev.map(a => (a.id === id ? updated : a)))
-      loadStats()
-      addToast(t('dashboard.toast.statusUpdated'))
-    } catch {
-      addToast(t('dashboard.errors.editFailed'), 'error')
-    }
-  }
-
-  async function handleTogglePin(id: number) {
-    try {
-      const { is_pinned } = await togglePin(id)
-      setApps(prev => prev.map(a => (a.id === id ? { ...a, is_pinned } : a)))
-    } catch {
-      addToast(t('dashboard.errors.editFailed'), 'error')
-    }
-  }
-
   async function handleApply(app: JobApplication) {
     if (!app.url || !isSafeUrl(app.url)) return
     window.open(app.url, '_blank', 'noopener')
     if (app.status === 'to_apply') {
-      try {
-        const updated = await updateApplication(app.id, { status: 'applied' })
-        setApps(prev => prev.map(a => (a.id === app.id ? updated : a)))
-        loadStats()
-        addToast(t('dashboard.toast.statusUpdated'))
-      } catch {
-        addToast(t('dashboard.errors.editFailed'), 'error')
-      }
+      handleStatusChange(app.id, 'applied')
     }
   }
 
-  async function handleDelete() {
+  async function onDeleteConfirm() {
     if (!deleteTarget) return
-    try {
-      await deleteApplication(deleteTarget.id)
-      const maxPage = Math.ceil((totalCount - 1) / PAGE_SIZE) || 1
-      loadPage(Math.min(page, maxPage))
-      setDeleteTarget(null)
-      addToast(t('dashboard.toast.deleted'))
-    } catch {
-      addToast(t('dashboard.errors.deleteFailed'), 'error')
-    }
+    await handleDelete(deleteTarget.id)
+    setDeleteTarget(null)
   }
 
-  // Bulk actions
-  async function handleBulkUpdateStatus(status: ApplicationStatus) {
-    try {
-      const { updated } = await bulkUpdateStatus(selectedIds, status)
-      addToast(t('dashboard.toast.bulkStatusUpdated', { count: updated }))
-      setSelectedIds([])
-      loadPage(page)
-    } catch {
-      addToast(t('dashboard.errors.bulkUpdateFailed'), 'error')
-    }
-  }
-
-  async function handleBulkDelete() {
-    try {
-      const { deleted } = await bulkDelete(selectedIds)
-      addToast(t('dashboard.toast.bulkDeleted', { count: deleted }))
-      setSelectedIds([])
-      const maxPage = Math.ceil((totalCount - selectedIds.length) / PAGE_SIZE) || 1
-      loadPage(Math.min(page, maxPage))
-    } catch {
-      addToast(t('dashboard.errors.bulkDeleteFailed'), 'error')
-    }
-  }
-
-  function toggleSelect(id: number) {
-    setSelectedIds(prev =>
-      prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
-    )
-  }
-
-  function toggleSelectAll() {
-    if (selectedIds.length === apps.length) {
-      setSelectedIds([])
-    } else {
-      setSelectedIds(apps.map(a => a.id))
-    }
+  async function onEditSubmit(data: Omit<JobApplication, 'id' | 'created_at' | 'updated_at'>) {
+    if (!editTarget) return
+    await handleEdit(editTarget.id, data)
   }
 
   return (
@@ -347,7 +230,7 @@ export default function DashboardPage() {
       <AddApplicationModal
         open={!!editTarget}
         onClose={() => setEditTarget(null)}
-        onSubmit={handleEdit}
+        onSubmit={onEditSubmit}
         initialData={editTarget ?? undefined}
       />
 
@@ -363,7 +246,7 @@ export default function DashboardPage() {
             : ''
         }
         confirmLabel={t('dashboard.confirm.delete')}
-        onConfirm={handleDelete}
+        onConfirm={onDeleteConfirm}
         onCancel={() => setDeleteTarget(null)}
       />
 

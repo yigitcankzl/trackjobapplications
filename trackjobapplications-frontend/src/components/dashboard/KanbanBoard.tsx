@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react'
+import { memo, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { JobApplication, ApplicationStatus } from '../../types'
@@ -28,7 +28,7 @@ interface CardProps {
   isDragging: boolean
 }
 
-function KanbanCard({ app, onEdit, onDelete, onDragStart, onDragEnd, isDragging }: CardProps) {
+const KanbanCard = memo(function KanbanCard({ app, onEdit, onDelete, onDragStart, onDragEnd, isDragging }: CardProps) {
   const { t } = useTranslation()
   const navigate = useNavigate()
   return (
@@ -91,7 +91,7 @@ function KanbanCard({ app, onEdit, onDelete, onDragStart, onDragEnd, isDragging 
       <p className="text-xs text-gray-400">{formatShort(app.applied_date)}</p>
     </div>
   )
-}
+})
 
 export default function KanbanBoard({ applications, onEdit, onDelete, onStatusChange }: Props) {
   const { t } = useTranslation()

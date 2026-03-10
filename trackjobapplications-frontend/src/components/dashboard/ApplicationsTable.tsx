@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { memo, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { JobApplication } from '../../types'
@@ -32,7 +32,7 @@ function EmptyState() {
   )
 }
 
-export default function ApplicationsTable({ applications, onEdit, onDelete, onTogglePin, onApply, selectedIds, onToggleSelect, onToggleSelectAll }: Props) {
+export default memo(function ApplicationsTable({ applications, onEdit, onDelete, onTogglePin, onApply, selectedIds, onToggleSelect, onToggleSelectAll }: Props) {
   const hasBulk = !!(selectedIds && onToggleSelect && onToggleSelectAll)
   const { t } = useTranslation()
   const navigate = useNavigate()
@@ -159,4 +159,4 @@ export default function ApplicationsTable({ applications, onEdit, onDelete, onTo
       </table>
     </div>
   )
-}
+})

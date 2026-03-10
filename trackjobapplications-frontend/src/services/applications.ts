@@ -1,4 +1,5 @@
 import api from '../lib/axios'
+import { API_BASE } from '../lib/config'
 import { ApplicationFilters, ApplicationNote, CompareApplication, EmailLog, JobApplication, OfferDetail, PaginatedResponse } from '../types'
 
 type CreatePayload = Omit<JobApplication, 'id' | 'created_at' | 'updated_at'>
@@ -83,11 +84,14 @@ export async function getStats(): Promise<AppStats> {
 
 // Export PDF — streams the response and reports download progress
 export async function exportPdf(onProgress?: (pct: number) => void): Promise<void> {
-  const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1'
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), 120_000) // 2-minute max for large exports
 
-  const response = await fetch(`${baseURL}/applications/export-pdf/`, {
+  const response = await fetch(`${API_BASE}/applications/export-pdf/`, {
+    method: 'POST',
     credentials: 'include',
-  })
+    signal: controller.signal,
+  }).finally(() => clearTimeout(timeoutId))
 
   if (!response.ok) {
     let message = 'Failed to generate PDF.'

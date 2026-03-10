@@ -133,7 +133,7 @@ async function apiFetch(path, options = {}) {
   if (response.status === 401 && refresh) {
     const refreshRes = await fetch(`${apiBase}/auth/token/refresh/`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'X-Extension-Auth': '1' },
       body: JSON.stringify({ refresh }),
     });
 
@@ -171,7 +171,7 @@ async function handleMessage(message) {
         const apiBase = await getApiBase();
         const res = await fetch(`${apiBase}/auth/login/`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'X-Extension-Auth': '1' },
           body: JSON.stringify({ email: message.email, password: message.password }),
         });
         if (!res.ok) {

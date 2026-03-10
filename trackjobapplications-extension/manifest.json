@@ -12,7 +12,7 @@
     "https://trackjobapplications-backend.fly.dev/api/v1/*"
   ],
   "content_security_policy": {
-    "extension_pages": "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self' http://localhost:8000 https://trackjobapplications-backend.fly.dev; object-src 'none'; frame-ancestors 'none'"
+    "extension_pages": "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self' https://trackjobapplications-backend.fly.dev; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
   },
   "action": {
     "default_popup": "popup/popup.html",
@@ -31,9 +31,7 @@
     {
       "matches": [
         "https://www.indeed.com/viewjob*",
-        "https://www.indeed.com/jobs*",
-        "https://*.indeed.com/viewjob*",
-        "https://*.indeed.com/jobs*"
+        "https://www.indeed.com/jobs*"
       ],
       "js": ["content/sanitize.js", "content/indeed.js"],
       "run_at": "document_idle"

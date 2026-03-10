@@ -9,10 +9,13 @@ def health_check(request):
     return JsonResponse({"status": "ok"})
 
 
+from applications.media_views import SecureMediaView
+
 urlpatterns = [
     path("api/health/", health_check),
     path("api/v1/auth/", include("users.urls")),
     path("api/v1/applications/", include("applications.urls")),
+    path("api/v1/media/<path:path>", SecureMediaView.as_view()),
 ]
 
 if settings.DEBUG:

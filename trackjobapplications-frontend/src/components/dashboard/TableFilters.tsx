@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ApplicationSource, SortKey, StatusFilter } from '../../types'
 import { SearchIcon, CloseIcon, ChevronUpIcon } from '../icons'
@@ -23,7 +23,7 @@ interface Props {
 
 const SOURCE_KEYS: (ApplicationSource | '')[] = ['', 'linkedin', 'indeed', 'glassdoor', 'referral', 'company_website', 'other']
 
-export default function TableFilters({
+export default memo(function TableFilters({
   search,
   onSearchChange,
   statusFilter,
@@ -42,7 +42,7 @@ export default function TableFilters({
   const { history, addSearch, removeSearch, clearAll } = useSearchHistory()
   const [searchFocused, setSearchFocused] = useState(false)
 
-  const STATUS_CHIPS: { value: StatusFilter; label: string }[] = [
+  const STATUS_CHIPS = useMemo<{ value: StatusFilter; label: string }[]>(() => [
     { value: 'all', label: t('dashboard.status.all') },
     { value: 'to_apply', label: t('dashboard.status.to_apply') },
     { value: 'applied', label: t('dashboard.status.applied') },
@@ -50,13 +50,19 @@ export default function TableFilters({
     { value: 'offer', label: t('dashboard.status.offer') },
     { value: 'rejected', label: t('dashboard.status.rejected') },
     { value: 'withdrawn', label: t('dashboard.status.withdrawn') },
-  ]
+  ], [t])
 
-  const SORT_OPTIONS: { value: SortKey; label: string }[] = [
+  const SORT_OPTIONS = useMemo<{ value: SortKey; label: string }[]>(() => [
     { value: 'date', label: t('dashboard.filters.sortDate') },
     { value: 'company', label: t('dashboard.filters.sortCompany') },
     { value: 'status', label: t('dashboard.filters.sortStatus') },
-  ]
+  ], [t])
+
+  const handleClearSearch = useCallback(() => onSearchChange(''), [onSearchChange])
+  const handleHistorySelect = useCallback((query: string) => {
+    onSearchChange(query)
+    setSearchFocused(false)
+  }, [onSearchChange])
 
   return (
     <div className="flex flex-col gap-3 mb-4">
@@ -83,7 +89,7 @@ export default function TableFilters({
           />
           {search && (
             <button
-              onClick={() => onSearchChange('')}
+              onClick={handleClearSearch}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
               aria-label={t('dashboard.aria.clearSearch')}
             >
@@ -92,7 +98,7 @@ export default function TableFilters({
           )}
           <SearchHistoryDropdown
             history={history}
-            onSelect={query => { onSearchChange(query); setSearchFocused(false) }}
+            onSelect={handleHistorySelect}
             onRemove={removeSearch}
             onClearAll={clearAll}
             visible={searchFocused && !search}
@@ -167,4 +173,4 @@ export default function TableFilters({
       </div>
     </div>
   )
-}
+})

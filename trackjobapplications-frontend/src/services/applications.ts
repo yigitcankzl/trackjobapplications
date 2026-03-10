@@ -131,8 +131,10 @@ export async function deleteOfferDetail(applicationId: number, offerId: number):
 
 // Compare
 export async function compareApplications(ids: number[]): Promise<CompareApplication[]> {
-  const params = ids.map(id => `ids=${id}`).join('&')
-  const { data } = await api.get<CompareApplication[]>(`/applications/compare/?${params}`)
+  const { data } = await api.get<CompareApplication[]>('/applications/compare/', {
+    params: { ids },
+    paramsSerializer: { indexes: null },
+  })
   return data
 }
 

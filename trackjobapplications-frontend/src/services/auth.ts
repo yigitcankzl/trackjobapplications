@@ -1,45 +1,9 @@
 import api from '../lib/axios'
-import { AuthTokens, NotificationPreference, User } from '../types'
+import { NotificationPreference, User } from '../types'
 
-const TOKEN_KEYS = {
-  access: 'access_token',
-  refresh: 'refresh_token',
-} as const
-
-export function getAccessToken(): string | null {
-  return localStorage.getItem(TOKEN_KEYS.access)
-}
-
-export function getRefreshToken(): string | null {
-  return localStorage.getItem(TOKEN_KEYS.refresh)
-}
-
-export function isAuthenticated(): boolean {
-  return !!getAccessToken()
-}
-
-export function saveTokens(tokens: AuthTokens): void {
-  try {
-    localStorage.setItem(TOKEN_KEYS.access, tokens.access)
-    localStorage.setItem(TOKEN_KEYS.refresh, tokens.refresh)
-  } catch {
-    // Safari private browsing or quota exceeded
-  }
-}
-
-export function clearTokens(): void {
-  try {
-    localStorage.removeItem(TOKEN_KEYS.access)
-    localStorage.removeItem(TOKEN_KEYS.refresh)
-  } catch {
-    // Safari private browsing
-  }
-}
-
-export async function login(email: string, password: string): Promise<AuthTokens> {
-  const { data } = await api.post<AuthTokens>('/auth/login/', { email, password })
-  saveTokens(data)
-  return data
+export async function login(email: string, password: string): Promise<void> {
+  // Backend sets httpOnly cookies on success — no tokens to handle here
+  await api.post('/auth/login/', { email, password })
 }
 
 export async function register(
@@ -60,15 +24,12 @@ export async function register(
 }
 
 export async function logout(): Promise<void> {
-  const refresh = getRefreshToken()
-  if (refresh) {
-    try {
-      await api.post('/auth/logout/', { refresh })
-    } catch {
-      // Token may already be blacklisted — ignore
-    }
+  try {
+    // Backend clears httpOnly cookies and blacklists the refresh token
+    await api.post('/auth/logout/', {})
+  } catch {
+    // Ignore errors — cookies will expire naturally
   }
-  clearTokens()
 }
 
 export async function fetchMe(): Promise<User> {

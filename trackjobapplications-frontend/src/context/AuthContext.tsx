@@ -21,14 +21,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     let active = true
-    if (auth.isAuthenticated()) {
-      auth.fetchMe()
-        .then(me => { if (active) setUser(me) })
-        .catch(() => auth.clearTokens())
-        .finally(() => { if (active) setLoading(false) })
-    } else {
-      setLoading(false)
-    }
+    // Always attempt fetchMe — auth state is determined by httpOnly cookie, not localStorage
+    auth.fetchMe()
+      .then(me => { if (active) setUser(me) })
+      .catch(() => { /* Not authenticated — stay logged out */ })
+      .finally(() => { if (active) setLoading(false) })
     return () => { active = false }
   }, [])
 
@@ -65,7 +62,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const me = await auth.fetchMe()
       setUser(me)
     } catch {
-      auth.clearTokens()
       setUser(null)
     }
   }, [])

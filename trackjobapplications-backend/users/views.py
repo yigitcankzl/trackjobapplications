@@ -132,7 +132,7 @@ class RegisterView(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
         user.send_verification_email()
-        return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
+        return Response({"detail": "Registration submitted."}, status=status.HTTP_201_CREATED)
 
 
 class LogoutView(APIView):

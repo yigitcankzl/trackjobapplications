@@ -30,7 +30,7 @@
   "content_scripts": [
     {
       "matches": ["https://www.linkedin.com/jobs/*"],
-      "js": ["content/linkedin.js"],
+      "js": ["content/sanitize.js", "content/linkedin.js"],
       "run_at": "document_idle"
     },
     {
@@ -40,7 +40,7 @@
         "https://*.indeed.com/viewjob*",
         "https://*.indeed.com/jobs*"
       ],
-      "js": ["content/indeed.js"],
+      "js": ["content/sanitize.js", "content/indeed.js"],
       "run_at": "document_idle"
     },
     {

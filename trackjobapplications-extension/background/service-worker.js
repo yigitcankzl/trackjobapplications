@@ -1,6 +1,33 @@
 // Default API URL — override via extension options or chrome.storage
 const DEFAULT_API_BASE = 'http://localhost:8000/api/v1';
 
+// --- Payload Validation ---
+
+const VALID_STATUSES = new Set(['to_apply', 'applied', 'interview', 'offer', 'rejected', 'withdrawn']);
+const VALID_SOURCES  = new Set(['linkedin', 'indeed', 'email', 'referral', 'company_site', 'other']);
+const DATE_RE        = /^\d{4}-\d{2}-\d{2}$/;
+
+function validateText(value, maxLength = 200) {
+  if (typeof value !== 'string') return '';
+  return value
+    .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
+    .trim()
+    .slice(0, maxLength);
+}
+
+function validateUrl(value) {
+  if (typeof value !== 'string' || value.length > 2048) return '';
+  let parsed;
+  try { parsed = new URL(value); } catch (_) { return ''; }
+  if (parsed.protocol !== 'https:') return '';
+  return parsed.href;
+}
+
+function validateDate(value) {
+  if (typeof value === 'string' && DATE_RE.test(value)) return value;
+  return new Date().toISOString().split('T')[0];
+}
+
 async function getApiBase() {
   const { api_base } = await chrome.storage.local.get('api_base');
   return api_base || DEFAULT_API_BASE;
@@ -107,15 +134,21 @@ async function handleMessage(message) {
       }
 
       case 'ADD_APPLICATION': {
+        const company  = validateText(message.company, 200);
+        const position = validateText(message.position, 200);
+        if (!company || !position) {
+          return { success: false, error: 'Invalid company or position' };
+        }
         const payload = {
-          company: message.company,
-          position: message.position,
-          url: message.url,
-          source: message.source,
-          applied_date: message.applied_date,
-          status: message.status || 'to_apply',
+          company,
+          position,
+          url:          validateUrl(message.url),
+          source:       VALID_SOURCES.has(message.source) ? message.source : 'other',
+          applied_date: validateDate(message.applied_date),
+          status:       VALID_STATUSES.has(message.status) ? message.status : 'to_apply',
         };
-        if (message.notes) payload.notes = message.notes;
+        const notes = validateText(message.notes, 2000);
+        if (notes) payload.notes = notes;
         const res = await apiFetch('/applications/', {
           method: 'POST',
           body: JSON.stringify(payload),

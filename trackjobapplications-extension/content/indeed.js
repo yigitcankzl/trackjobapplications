@@ -13,9 +13,14 @@ function extractIndeedJob() {
     document.querySelector('[data-company-name]')?.textContent?.trim() ||
     '';
 
-  const url = window.location.href.split('#')[0];
+  const rawUrl = window.location.href.split('#')[0];
 
-  return { company, position, url, source: 'indeed' };
+  return {
+    company:  sanitizeText(company, 200),
+    position: sanitizeText(position, 200),
+    url:      sanitizeUrl(rawUrl, ['indeed.com']),
+    source:   'indeed',
+  };
 }
 
 // --- Message Listener (for popup) ---

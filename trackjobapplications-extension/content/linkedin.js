@@ -31,7 +31,12 @@ function extractLinkedInJob() {
     }
   }
 
-  return { company, position, url, source: 'linkedin' };
+  return {
+    company:  sanitizeText(company, 200),
+    position: sanitizeText(position, 200),
+    url:      sanitizeUrl(url, ['linkedin.com']),
+    source:   'linkedin',
+  };
 }
 
 // --- Message Listener (for popup) ---

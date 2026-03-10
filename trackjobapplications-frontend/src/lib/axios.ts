@@ -1,7 +1,8 @@
 import axios from 'axios'
+import { API_BASE } from './config'
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1',
+  baseURL: API_BASE,
   timeout: 30000,
   withCredentials: true,      // Send httpOnly JWT cookies automatically
   xsrfCookieName: 'csrftoken', // Read Django's CSRF cookie
@@ -23,7 +24,7 @@ api.interceptors.response.use(
           // No body needed — refresh cookie is sent automatically via withCredentials
           refreshPromise = axios
             .post(
-              `${import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1'}/auth/token/refresh/`,
+              `${API_BASE}/auth/token/refresh/`,
               {},
               { withCredentials: true },
             )

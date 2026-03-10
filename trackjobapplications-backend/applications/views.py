@@ -130,7 +130,7 @@ class ApplicationViewSet(viewsets.ModelViewSet):
 
     @action(
         detail=False,
-        methods=["get"],
+        methods=["post"],
         url_path="export-pdf",
         throttle_classes=[ExportThrottle],
     )

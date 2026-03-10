@@ -40,7 +40,7 @@ export default class ErrorBoundary extends Component<Props, State> {
         <div className="flex min-h-screen items-center justify-center bg-gray-50">
           <div className="text-center max-w-sm mx-4">
             <p className="text-lg font-semibold text-gray-800 mb-2">Something went wrong</p>
-            <p className="text-sm text-gray-500 mb-4">{this.state.error?.message}</p>
+            <p className="text-sm text-gray-500 mb-4">Please refresh the page and try again.</p>
             {canRetry ? (
               <button
                 onClick={this.handleRetry}

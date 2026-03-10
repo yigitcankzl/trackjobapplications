@@ -14,7 +14,7 @@ from .factories import (
 
 @pytest.mark.django_db
 class TestApplicationViewSet:
-    URL = "/api/applications/"
+    URL = "/api/v1/applications/"
 
     def test_list_own(self, auth_client, user):
         ApplicationFactory.create_batch(3, user=user)
@@ -82,31 +82,31 @@ class TestBulkActions:
     def test_bulk_update_status(self, auth_client, user):
         apps = ApplicationFactory.create_batch(3, user=user, status="applied")
         ids = [a.id for a in apps]
-        res = auth_client.post("/api/applications/bulk-update-status/", {"ids": ids, "status": "interview"}, format="json")
+        res = auth_client.post("/api/v1/applications/bulk-update-status/", {"ids": ids, "status": "interview"}, format="json")
         assert res.status_code == 200
         assert res.data["updated"] == 3
         assert Application.objects.filter(id__in=ids, status="interview").count() == 3
 
     def test_bulk_update_invalid_status(self, auth_client, user):
         app = ApplicationFactory(user=user)
-        res = auth_client.post("/api/applications/bulk-update-status/", {"ids": [app.id], "status": "invalid"}, format="json")
+        res = auth_client.post("/api/v1/applications/bulk-update-status/", {"ids": [app.id], "status": "invalid"}, format="json")
         assert res.status_code == 400
 
     def test_bulk_update_empty_ids(self, auth_client):
-        res = auth_client.post("/api/applications/bulk-update-status/", {"ids": [], "status": "applied"}, format="json")
+        res = auth_client.post("/api/v1/applications/bulk-update-status/", {"ids": [], "status": "applied"}, format="json")
         assert res.status_code == 400
 
     def test_bulk_delete(self, auth_client, user):
         apps = ApplicationFactory.create_batch(2, user=user)
         ids = [a.id for a in apps]
-        res = auth_client.post("/api/applications/bulk-delete/", {"ids": ids}, format="json")
+        res = auth_client.post("/api/v1/applications/bulk-delete/", {"ids": ids}, format="json")
         assert res.status_code == 200
         assert res.data["deleted"] == 2
 
     def test_bulk_delete_only_own(self, auth_client, user, other_user):
         own = ApplicationFactory(user=user)
         foreign = ApplicationFactory(user=other_user)
-        res = auth_client.post("/api/applications/bulk-delete/", {"ids": [own.id, foreign.id]}, format="json")
+        res = auth_client.post("/api/v1/applications/bulk-delete/", {"ids": [own.id, foreign.id]}, format="json")
         assert res.status_code == 200
         assert res.data["deleted"] == 1
         assert Application.objects.filter(id=foreign.id).exists()
@@ -116,7 +116,7 @@ class TestBulkActions:
 
 @pytest.mark.django_db
 class TestTagViewSet:
-    URL = "/api/applications/tags/"
+    URL = "/api/v1/applications/tags/"
 
     def test_create(self, auth_client):
         res = auth_client.post(self.URL, {"name": "Remote", "color": "#10B981"})
@@ -137,7 +137,7 @@ class TestTagViewSet:
 
     def test_assign_tag_to_application(self, auth_client, user):
         tag = TagFactory(user=user)
-        res = auth_client.post("/api/applications/", {
+        res = auth_client.post("/api/v1/applications/", {
             "company": "X", "position": "Y", "applied_date": "2024-01-01", "tag_ids": [tag.id],
         }, format="json")
         assert res.status_code == 201
@@ -149,7 +149,7 @@ class TestTagViewSet:
 @pytest.mark.django_db
 class TestContactViewSet:
     def _url(self, app_id):
-        return f"/api/applications/{app_id}/contacts/"
+        return f"/api/v1/applications/{app_id}/contacts/"
 
     def test_create(self, auth_client, user):
         app = ApplicationFactory(user=user)
@@ -182,7 +182,7 @@ class TestContactViewSet:
 @pytest.mark.django_db
 class TestInterviewStageViewSet:
     def _url(self, app_id):
-        return f"/api/applications/{app_id}/interviews/"
+        return f"/api/v1/applications/{app_id}/interviews/"
 
     def test_create(self, auth_client, user):
         app = ApplicationFactory(user=user)
@@ -211,7 +211,7 @@ class TestInterviewStageViewSet:
 @pytest.mark.django_db
 class TestAttachmentViewSet:
     def _url(self, app_id):
-        return f"/api/applications/{app_id}/attachments/"
+        return f"/api/v1/applications/{app_id}/attachments/"
 
     def test_upload(self, auth_client, user, tmp_path, settings):
         from django.core.files.uploadedfile import SimpleUploadedFile
@@ -239,7 +239,7 @@ class TestAttachmentViewSet:
 
 @pytest.mark.django_db
 class TestStats:
-    URL = "/api/applications/stats/"
+    URL = "/api/v1/applications/stats/"
 
     def test_stats_returns_counts(self, auth_client, user):
         ApplicationFactory(user=user, status="applied")
@@ -271,19 +271,19 @@ class TestStats:
 class TestTogglePin:
     def test_toggle_pin_on(self, auth_client, user):
         app = ApplicationFactory(user=user, is_pinned=False)
-        res = auth_client.post(f"/api/applications/{app.id}/toggle-pin/")
+        res = auth_client.post(f"/api/v1/applications/{app.id}/toggle-pin/")
         assert res.status_code == 200
         assert res.data["is_pinned"] is True
 
     def test_toggle_pin_off(self, auth_client, user):
         app = ApplicationFactory(user=user, is_pinned=True)
-        res = auth_client.post(f"/api/applications/{app.id}/toggle-pin/")
+        res = auth_client.post(f"/api/v1/applications/{app.id}/toggle-pin/")
         assert res.status_code == 200
         assert res.data["is_pinned"] is False
 
     def test_toggle_pin_others_denied(self, auth_client, other_user):
         app = ApplicationFactory(user=other_user)
-        res = auth_client.post(f"/api/applications/{app.id}/toggle-pin/")
+        res = auth_client.post(f"/api/v1/applications/{app.id}/toggle-pin/")
         assert res.status_code == 404
 
 
@@ -293,26 +293,26 @@ class TestTogglePin:
 class TestExportPdf:
     def test_export_pdf(self, auth_client, user):
         ApplicationFactory(user=user, company="TestCo", position="Dev")
-        res = auth_client.get("/api/applications/export-pdf/")
+        res = auth_client.get("/api/v1/applications/export-pdf/")
         assert res.status_code == 200
         assert res["Content-Type"] == "application/pdf"
         assert b"%PDF" in res.content
 
     def test_export_pdf_empty(self, auth_client):
-        res = auth_client.get("/api/applications/export-pdf/")
+        res = auth_client.get("/api/v1/applications/export-pdf/")
         assert res.status_code == 200
         assert b"%PDF" in res.content
 
     def test_export_pdf_includes_content_length(self, auth_client, user):
         ApplicationFactory(user=user)
-        res = auth_client.get("/api/applications/export-pdf/")
+        res = auth_client.get("/api/v1/applications/export-pdf/")
         assert res.status_code == 200
         assert "Content-Length" in res
         assert int(res["Content-Length"]) > 0
 
     def test_export_pdf_content_length_matches_body(self, auth_client, user):
         ApplicationFactory(user=user)
-        res = auth_client.get("/api/applications/export-pdf/")
+        res = auth_client.get("/api/v1/applications/export-pdf/")
         assert res.status_code == 200
         assert int(res["Content-Length"]) == len(res.content)
 
@@ -321,7 +321,7 @@ class TestExportPdf:
         big = b"x" * (11 * 1024 * 1024)  # 11 MB > 10 MB limit
         monkeypatch.setattr(app_views, "generate_applications_pdf", lambda *_: big)
         ApplicationFactory(user=user)
-        res = auth_client.get("/api/applications/export-pdf/")
+        res = auth_client.get("/api/v1/applications/export-pdf/")
         assert res.status_code == 413
         assert "too large" in res.json()["error"].lower()
 
@@ -330,18 +330,18 @@ class TestExportPdf:
         at_limit = b"%PDF" + b"x" * (10 * 1024 * 1024 - 4)  # exactly 10 MB
         monkeypatch.setattr(app_views, "generate_applications_pdf", lambda *_: at_limit)
         ApplicationFactory(user=user)
-        res = auth_client.get("/api/applications/export-pdf/")
+        res = auth_client.get("/api/v1/applications/export-pdf/")
         assert res.status_code == 200
 
     def test_export_pdf_requires_auth(self, anon_client):
-        res = anon_client.get("/api/applications/export-pdf/")
+        res = anon_client.get("/api/v1/applications/export-pdf/")
         assert res.status_code == 401
 
     def test_export_pdf_generation_failure_returns_500(self, auth_client, user, monkeypatch):
         from applications import views as app_views
         monkeypatch.setattr(app_views, "generate_applications_pdf", lambda *_: (_ for _ in ()).throw(RuntimeError("boom")))
         ApplicationFactory(user=user)
-        res = auth_client.get("/api/applications/export-pdf/")
+        res = auth_client.get("/api/v1/applications/export-pdf/")
         assert res.status_code == 500
 
 
@@ -349,7 +349,7 @@ class TestExportPdf:
 
 @pytest.mark.django_db
 class TestCoverLetterTemplateViewSet:
-    URL = "/api/applications/cover-letters/"
+    URL = "/api/v1/applications/cover-letters/"
 
     def test_create(self, auth_client):
         res = auth_client.post(self.URL, {"name": "General", "content": "Dear {company}..."})

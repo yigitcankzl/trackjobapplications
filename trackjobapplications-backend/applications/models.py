@@ -53,6 +53,9 @@ class Application(models.Model):
             models.Index(fields=["status", "updated_at"]),
             models.Index(fields=["-applied_date"]),
             models.Index(fields=["user", "-applied_date"]),
+            models.Index(fields=["user", "status"]),
+            models.Index(fields=["user", "source"]),
+            models.Index(fields=["email_thread_id"]),
         ]
         constraints = [
             models.UniqueConstraint(

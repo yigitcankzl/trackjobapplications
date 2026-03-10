@@ -9,10 +9,18 @@ def health_check(request):
     return JsonResponse({"status": "ok"})
 
 
+def csrf_cookie(request):
+    """GET this endpoint to receive the csrftoken cookie before unauthenticated POSTs."""
+    from django.middleware.csrf import get_token
+    get_token(request)
+    return JsonResponse({"detail": "CSRF cookie set"})
+
+
 from applications.media_views import SecureMediaView
 
 urlpatterns = [
     path("api/health/", health_check),
+    path("api/v1/csrf/", csrf_cookie),
     path("api/v1/auth/", include("users.urls")),
     path("api/v1/applications/", include("applications.urls")),
     path("api/v1/media/<path:path>", SecureMediaView.as_view()),

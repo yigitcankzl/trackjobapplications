@@ -3,6 +3,7 @@ import time
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.middleware.csrf import get_token as get_csrf_token
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.tokens import default_token_generator
 from django.core.exceptions import ValidationError
@@ -90,6 +91,8 @@ class ThrottledTokenObtainPairView(TokenObtainPairView):
             )
         else:
             _set_auth_cookies(response, response.data["access"], response.data["refresh"])
+            # Ensure csrftoken cookie is set so subsequent POSTs can pass CSRF validation
+            get_csrf_token(request)
             # Extension clients cannot use cookies — keep tokens in body for them
             if not request.headers.get("X-Extension-Auth"):
                 response.data.pop("access", None)
@@ -111,6 +114,8 @@ class ThrottledTokenRefreshView(TokenRefreshView):
         if response.status_code == 200:
             refresh = response.data.get("refresh")
             _set_auth_cookies(response, response.data["access"], refresh)
+            # Refresh the csrftoken cookie alongside the JWT cookies
+            get_csrf_token(request)
             # Extension clients cannot use cookies — keep tokens in body for them
             if not request.headers.get("X-Extension-Auth"):
                 response.data.pop("access", None)

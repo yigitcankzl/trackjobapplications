@@ -11,6 +11,31 @@ const api = axios.create({
 
 let refreshPromise: Promise<void> | null = null
 let refreshTimer: ReturnType<typeof setTimeout> | null = null
+let csrfPromise: Promise<void> | null = null
+
+const MUTATING_METHODS = new Set(['post', 'put', 'patch', 'delete'])
+
+function hasCsrfCookie(): boolean {
+  return document.cookie.split('; ').some(c => c.startsWith('csrftoken='))
+}
+
+async function ensureCsrfCookie(): Promise<void> {
+  if (hasCsrfCookie()) return
+  if (!csrfPromise) {
+    csrfPromise = axios
+      .get(`${API_BASE}/csrf/`, { withCredentials: true })
+      .then(() => { csrfPromise = null })
+      .catch(() => { csrfPromise = null })
+  }
+  return csrfPromise
+}
+
+api.interceptors.request.use(async (config) => {
+  if (config.method && MUTATING_METHODS.has(config.method.toLowerCase())) {
+    await ensureCsrfCookie()
+  }
+  return config
+})
 
 api.interceptors.response.use(
   (response) => response,

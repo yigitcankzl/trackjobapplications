@@ -257,7 +257,7 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
 
 SESSION_COOKIE_HTTPONLY = True
-SESSION_COOKIE_SAMESITE = "Strict"
+SESSION_COOKIE_SAMESITE = "Lax"
 # CSRF cookie must be JS-readable (not httpOnly) for the axios double-submit pattern
 CSRF_COOKIE_HTTPONLY = False
 # Match JWT cookie SameSite: Lax for localhost dev, None for cross-origin prod

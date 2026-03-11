@@ -101,8 +101,6 @@ AUTHENTICATION_BACKENDS = [
     "axes.backends.AxesStandaloneBackend",
     "social_core.backends.google.GoogleOAuth2",
     "social_core.backends.github.GithubOAuth2",
-    "social_core.backends.facebook.FacebookOAuth2",
-    "social_core.backends.linkedin.LinkedinOAuth2",
     "django.contrib.auth.backends.ModelBackend",
 ]
 
@@ -328,14 +326,6 @@ SOCIAL_AUTH_GITHUB_KEY    = os.environ.get("GITHUB_CLIENT_ID", "")
 SOCIAL_AUTH_GITHUB_SECRET = os.environ.get("GITHUB_CLIENT_SECRET", "")
 SOCIAL_AUTH_GITHUB_SCOPE  = ["user:email"]
 
-SOCIAL_AUTH_FACEBOOK_KEY    = os.environ.get("FACEBOOK_APP_ID", "")
-SOCIAL_AUTH_FACEBOOK_SECRET = os.environ.get("FACEBOOK_APP_SECRET", "")
-SOCIAL_AUTH_FACEBOOK_SCOPE  = ["email", "public_profile"]
-SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {"fields": "id,name,email,first_name,last_name"}
-
-SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY    = os.environ.get("LINKEDIN_CLIENT_ID", "")
-SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = os.environ.get("LINKEDIN_CLIENT_SECRET", "")
-SOCIAL_AUTH_LINKEDIN_OAUTH2_SCOPE  = ["openid", "profile", "email"]
 
 SOCIAL_AUTH_PIPELINE = (
     "social_core.pipeline.social_auth.social_details",

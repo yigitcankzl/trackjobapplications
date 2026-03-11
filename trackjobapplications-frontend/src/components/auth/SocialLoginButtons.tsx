@@ -1,12 +1,10 @@
-import { GoogleIcon, GitHubIcon, FacebookIcon, LinkedInIcon } from '../icons'
+import { GoogleIcon, GitHubIcon } from '../icons'
 
 const BACKEND = (import.meta.env.VITE_API_URL as string | undefined) ?? 'http://localhost:8000/api/v1'
 
 const providers = [
-  { id: 'google-oauth2',   label: 'Google',   Icon: GoogleIcon },
-  { id: 'github',          label: 'GitHub',   Icon: GitHubIcon },
-  { id: 'facebook',        label: 'Facebook', Icon: FacebookIcon },
-  { id: 'linkedin-oauth2', label: 'LinkedIn', Icon: LinkedInIcon },
+  { id: 'google-oauth2', label: 'Google', Icon: GoogleIcon },
+  { id: 'github',        label: 'GitHub', Icon: GitHubIcon },
 ] as const
 
 export default function SocialLoginButtons() {

@@ -13,11 +13,13 @@ services:
       - key: SECRET_KEY
         sync: false
       - key: ALLOWED_HOSTS
-        sync: false
+        value: "trackjobapplications-backend.onrender.com"
       - key: CORS_ALLOWED_ORIGINS
-        sync: false
+        value: "https://trackjobapplications.vercel.app"
       - key: CSRF_TRUSTED_ORIGINS
-        sync: false
+        value: "https://trackjobapplications-backend.onrender.com,https://trackjobapplications.vercel.app"
+      - key: FRONTEND_URL
+        value: "https://trackjobapplications.vercel.app"
       - key: POSTGRES_DB
         sync: false
       - key: POSTGRES_USER
@@ -33,8 +35,6 @@ services:
       - key: CELERY_BROKER_URL
         sync: false
       - key: CELERY_RESULT_BACKEND
-        sync: false
-      - key: FRONTEND_URL
         sync: false
       - key: EMAIL_BACKEND
         value: "django.core.mail.backends.smtp.EmailBackend"

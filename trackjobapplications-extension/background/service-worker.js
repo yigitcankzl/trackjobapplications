@@ -300,6 +300,30 @@ async function handleMessage(message) {
         return { success: true, data: await res.json() };
       }
 
+      case 'ADD_INTERVIEW': {
+        const appId = message.application_id;
+        if (!appId || typeof appId !== 'number') {
+          return { success: false, error: 'Invalid application ID' };
+        }
+        const validTypes = new Set([
+          'phone_screen', 'technical', 'behavioral', 'onsite', 'take_home', 'final', 'other',
+        ]);
+        const stageType = validTypes.has(message.stage_type) ? message.stage_type : 'other';
+        if (!message.scheduled_at) {
+          return { success: false, error: 'Interview date is required' };
+        }
+        const payload = { stage_type: stageType, scheduled_at: message.scheduled_at };
+        const res = await apiFetch(`/applications/${appId}/interviews/`, {
+          method: 'POST',
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          return { success: false, error: err.detail || err.scheduled_at?.[0] || 'Failed to add interview' };
+        }
+        return { success: true, data: await res.json() };
+      }
+
       case 'GET_STATS': {
         const res = await apiFetch('/applications/stats/');
         if (!res.ok) return { success: false, error: 'Failed to load stats' };

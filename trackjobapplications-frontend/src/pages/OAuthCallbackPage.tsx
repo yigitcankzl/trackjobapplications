@@ -21,7 +21,7 @@ export default function OAuthCallbackPage() {
     api.post('/auth/social/token/', { code })
       .then(() => navigate('/dashboard', { replace: true }))
       .catch(() => navigate('/login?error=oauth_failed', { replace: true }))
-  }, [])
+  }, [navigate, searchParams])
 
   return (
     <div className="flex items-center justify-center min-h-screen">

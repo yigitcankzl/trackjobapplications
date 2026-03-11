@@ -341,7 +341,8 @@ class OAuthCallbackView(APIView):
     def get(self, request, backend_name):
         try:
             strategy = load_strategy(request)
-            backend = load_backend(strategy, backend_name, redirect_uri=None)
+            callback_url = request.build_absolute_uri(f'/api/v1/auth/social/callback/{backend_name}/')
+            backend = load_backend(strategy, backend_name, redirect_uri=callback_url)
             user = backend.auth_complete()
         except (AuthForbidden, AuthCanceled, AuthMissingParameter):
             return HttpResponseRedirect(f"{settings.FRONTEND_URL}/login?error=oauth_failed")

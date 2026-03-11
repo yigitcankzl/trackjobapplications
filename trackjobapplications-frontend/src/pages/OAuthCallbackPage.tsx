@@ -1,11 +1,13 @@
 import { useEffect, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import api from '../lib/axios'
+import { useAuth } from '../context/AuthContext'
 import LoadingSpinner from '../components/ui/LoadingSpinner'
 
 export default function OAuthCallbackPage() {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
+  const { refreshUser } = useAuth()
   const called = useRef(false)
 
   useEffect(() => {
@@ -19,9 +21,10 @@ export default function OAuthCallbackPage() {
     }
 
     api.post('/auth/social/token/', { code })
+      .then(() => refreshUser())
       .then(() => navigate('/dashboard', { replace: true }))
       .catch(() => navigate('/login?error=oauth_failed', { replace: true }))
-  }, [navigate, searchParams])
+  }, [navigate, searchParams, refreshUser])
 
   return (
     <div className="flex items-center justify-center min-h-screen">

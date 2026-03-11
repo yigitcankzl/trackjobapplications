@@ -2,8 +2,9 @@ services:
   - type: web
     name: trackjobapplications-backend
     runtime: docker
-    dockerfilePath: ./trackjobapplications-backend/Dockerfile
-    dockerContext: ./trackjobapplications-backend
+    rootDir: trackjobapplications-backend
+    dockerfilePath: ./Dockerfile
+    dockerContext: ./
     plan: free
     region: frankfurt
     envVars:

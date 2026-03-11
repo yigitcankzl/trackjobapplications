@@ -183,6 +183,114 @@ button {
   margin-top: 6px;
 }
 
+/* Stats */
+#stats-section {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 6px 0;
+}
+
+.stat-num {
+  display: block;
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.stat-label {
+  font-size: 10px;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.stat-to-apply { color: #6366f1; }
+.stat-applied  { color: #3b82f6; }
+.stat-interview { color: #f59e0b; }
+.stat-offer    { color: #10b981; }
+.stat-rejected { color: #ef4444; }
+
+/* Recent Applications */
+#recent-section {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.section-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+#recent-list {
+  list-style: none;
+}
+
+#recent-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 12px;
+}
+
+#recent-list li:last-child {
+  border-bottom: none;
+}
+
+.recent-info {
+  min-width: 0;
+  flex: 1;
+}
+
+.recent-company {
+  font-weight: 600;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.recent-position {
+  color: #6b7280;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.status-badge {
+  flex-shrink: 0;
+  margin-left: 8px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-to_apply   { background: #ede9fe; color: #5b21b6; }
+.status-applied    { background: #dbeafe; color: #1e40af; }
+.status-interview  { background: #fef3c7; color: #92400e; }
+.status-offer      { background: #d1fae5; color: #065f46; }
+.status-rejected   { background: #fee2e2; color: #991b1b; }
+.status-withdrawn  { background: #f3f4f6; color: #4b5563; }
+
 /* Loading */
 #loading {
   text-align: center;

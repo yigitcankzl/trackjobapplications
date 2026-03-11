@@ -134,7 +134,7 @@ const API_TIMEOUT_MS = 10000;
 function _fetchWithTimeout(url, options = {}) {
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), API_TIMEOUT_MS);
-  return fetch(url, { ...options, signal: controller.signal })
+  return fetch(url, { ...options, signal: controller.signal, credentials: 'omit' })
     .finally(() => clearTimeout(id));
 }
 

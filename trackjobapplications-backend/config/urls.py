@@ -9,6 +9,15 @@ def health_check(request):
     return JsonResponse({"status": "ok"})
 
 
+def debug_env(request):
+    import os
+    return JsonResponse({
+        "GOOGLE_CLIENT_ID_set": bool(os.environ.get("GOOGLE_CLIENT_ID")),
+        "GOOGLE_CLIENT_ID_len": len(os.environ.get("GOOGLE_CLIENT_ID", "")),
+        "GITHUB_CLIENT_ID_set": bool(os.environ.get("GITHUB_CLIENT_ID")),
+    })
+
+
 def csrf_cookie(request):
     """GET this endpoint to obtain the CSRF token for cross-origin POSTs.
     Returns the token in the response body (since JS cannot read cross-origin cookies).
@@ -22,6 +31,7 @@ from applications.media_views import SecureMediaView
 
 urlpatterns = [
     path("api/health/", health_check),
+    path("api/debug-env/", debug_env),
     path("api/v1/csrf/", csrf_cookie),
     path("api/v1/auth/", include("users.urls")),
     path("api/v1/applications/", include("applications.urls")),

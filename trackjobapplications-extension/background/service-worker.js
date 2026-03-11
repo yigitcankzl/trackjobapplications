@@ -203,7 +203,8 @@ async function handleMessage(message) {
         });
         if (!res.ok) {
           const err = await res.json().catch(() => ({}));
-          return { success: false, error: err.detail || 'Login failed' };
+          const detail = err.detail || err.non_field_errors?.[0] || Object.values(err).flat().join(', ') || 'Login failed';
+          return { success: false, error: typeof detail === 'string' ? detail : JSON.stringify(detail) };
         }
         const data = await res.json();
         await saveTokens(data.access, data.refresh);

@@ -187,16 +187,30 @@ interviewBtn.addEventListener('click', () => {
   addApplication('interview');
 });
 
+// --- Offer Toggle ---
+
+const offerBtn = document.getElementById('offer-btn');
+const offerFields = document.getElementById('offer-fields');
+
+offerBtn.addEventListener('click', () => {
+  if (offerFields.hidden) {
+    offerFields.hidden = false;
+    offerBtn.textContent = 'Save Offer';
+    document.getElementById('offer-salary').focus();
+    return;
+  }
+  addApplication('offer');
+});
+
 // --- Add Application ---
 
-const allActionBtns = ['save-btn', 'apply-btn', 'interview-btn'];
+const allActionBtns = ['save-btn', 'apply-btn', 'interview-btn', 'offer-btn'];
 
 async function addApplication(status) {
   if (!currentJobData) return;
 
-  const activeBtn = document.getElementById(
-    status === 'to_apply' ? 'save-btn' : status === 'applied' ? 'apply-btn' : 'interview-btn'
-  );
+  const btnMap = { to_apply: 'save-btn', applied: 'apply-btn', interview: 'interview-btn', offer: 'offer-btn' };
+  const activeBtn = document.getElementById(btnMap[status]);
   allActionBtns.forEach(id => { document.getElementById(id).disabled = true; });
   const originalText = activeBtn.textContent;
   activeBtn.textContent = 'Saving...';
@@ -249,7 +263,27 @@ async function addApplication(status) {
       }
     }
 
-    const labels = { to_apply: 'Saved!', applied: 'Applied!', interview: 'Interview saved!' };
+    // Add offer if status is offer
+    if (status === 'offer' && appId) {
+      const salary = parseFloat(document.getElementById('offer-salary').value);
+      const offerMsg = {
+        type: 'ADD_OFFER',
+        application_id: appId,
+        currency: document.getElementById('offer-currency').value,
+        salary_period: document.getElementById('offer-period').value,
+      };
+      if (!isNaN(salary) && salary > 0) offerMsg.salary = salary;
+      const benefits = document.getElementById('offer-benefits').value.trim();
+      if (benefits) offerMsg.benefits = benefits;
+      const offerRes = await chrome.runtime.sendMessage(offerMsg);
+      if (!offerRes.success) {
+        showFeedback(offerRes.error || 'App saved, but offer failed', 'error');
+        loadDashboard();
+        return;
+      }
+    }
+
+    const labels = { to_apply: 'Saved!', applied: 'Applied!', interview: 'Interview saved!', offer: 'Offer saved!' };
     showFeedback(labels[status], 'success');
     activeBtn.textContent = labels[status];
     loadDashboard();
@@ -291,12 +325,36 @@ async function loadDashboard() {
     };
     for (const app of recentRes.data) {
       const li = document.createElement('li');
-      li.innerHTML =
-        `<div class="recent-info">` +
-          `<div class="recent-company">${escapeHtml(app.company)}</div>` +
-          `<div class="recent-position">${escapeHtml(app.position)}</div>` +
-        `</div>` +
-        `<span class="status-badge status-${app.status}">${statusLabels[app.status] || app.status}</span>`;
+
+      const pinBtn = document.createElement('button');
+      pinBtn.className = `pin-btn${app.is_pinned ? ' pinned' : ''}`;
+      pinBtn.textContent = '\u{1F4CC}';
+      pinBtn.title = app.is_pinned ? 'Unpin' : 'Pin';
+      pinBtn.addEventListener('click', async () => {
+        pinBtn.disabled = true;
+        const res = await chrome.runtime.sendMessage({
+          type: 'TOGGLE_PIN', application_id: app.id,
+        });
+        if (res.success) {
+          pinBtn.classList.toggle('pinned', res.data.is_pinned);
+          pinBtn.title = res.data.is_pinned ? 'Unpin' : 'Pin';
+        }
+        pinBtn.disabled = false;
+      });
+
+      const info = document.createElement('div');
+      info.className = 'recent-info';
+      info.innerHTML =
+        `<div class="recent-company">${escapeHtml(app.company)}</div>` +
+        `<div class="recent-position">${escapeHtml(app.position)}</div>`;
+
+      const badge = document.createElement('span');
+      badge.className = `status-badge status-${app.status}`;
+      badge.textContent = statusLabels[app.status] || app.status;
+
+      li.appendChild(pinBtn);
+      li.appendChild(info);
+      li.appendChild(badge);
       list.appendChild(li);
     }
     document.getElementById('recent-section').hidden = false;

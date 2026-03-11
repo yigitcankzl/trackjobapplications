@@ -206,6 +206,46 @@ button {
   cursor: not-allowed;
 }
 
+.btn-interview {
+  flex: 1;
+  background: #f59e0b;
+  color: #fff;
+}
+
+.btn-interview:hover {
+  background: #d97706;
+}
+
+.btn-interview:disabled {
+  background: #fcd34d;
+  cursor: not-allowed;
+}
+
+/* Interview fields */
+.interview-fields {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.interview-fields select,
+.interview-fields input {
+  flex: 1;
+  padding: 7px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 12px;
+  font-family: inherit;
+  outline: none;
+  background: #fff;
+}
+
+.interview-fields select:focus,
+.interview-fields input:focus {
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.15);
+}
+
 /* No job message */
 #no-job p {
   font-size: 13px;

@@ -279,6 +279,27 @@ async function handleMessage(message) {
         return { success: true, data };
       }
 
+      case 'ADD_CONTACT': {
+        const appId = message.application_id;
+        if (!appId || typeof appId !== 'number') {
+          return { success: false, error: 'Invalid application ID' };
+        }
+        const name = validateText(message.name, 100);
+        if (!name) return { success: false, error: 'Contact name is required' };
+        const payload = { name };
+        const email = validateText(message.email, 254);
+        if (email) payload.email = email;
+        const res = await apiFetch(`/applications/${appId}/contacts/`, {
+          method: 'POST',
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          return { success: false, error: err.detail || 'Failed to add contact' };
+        }
+        return { success: true, data: await res.json() };
+      }
+
       case 'GET_STATS': {
         const res = await apiFetch('/applications/stats/');
         if (!res.ok) return { success: false, error: 'Failed to load stats' };

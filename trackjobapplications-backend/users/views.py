@@ -396,4 +396,5 @@ class SocialTokenExchangeView(APIView):
         response = Response({"detail": "OK"})
         _set_auth_cookies(response, str(refresh.access_token), str(refresh))
         get_csrf_token(request)
+        logger.info("OAuth token exchange success for user=%s", user.pk)
         return response

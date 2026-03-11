@@ -122,7 +122,7 @@ class EmailLogSerializer(serializers.ModelSerializer):
 class ApplicationBriefSerializer(serializers.ModelSerializer):
     class Meta:
         model = Application
-        fields = ("id", "company", "position", "status")
+        fields = ("id", "company", "position", "status", "is_pinned")
         read_only_fields = fields
 
 

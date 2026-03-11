@@ -279,6 +279,19 @@ async function handleMessage(message) {
         return { success: true, data };
       }
 
+      case 'GET_STATS': {
+        const res = await apiFetch('/applications/stats/');
+        if (!res.ok) return { success: false, error: 'Failed to load stats' };
+        return { success: true, data: await res.json() };
+      }
+
+      case 'GET_RECENT': {
+        const res = await apiFetch('/applications/brief/');
+        if (!res.ok) return { success: false, error: 'Failed to load applications' };
+        const all = await res.json();
+        return { success: true, data: all.slice(0, 5) };
+      }
+
       default:
         return { success: false, error: 'Unknown message type' };
     }

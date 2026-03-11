@@ -1,12 +1,19 @@
 import pytest
 from datetime import timedelta
+from io import StringIO
 from unittest.mock import patch
 
+from django.core.management import call_command
 from django.utils import timezone
 
-from applications.tasks import send_interview_reminders
 from users.models import NotificationPreference
 from .factories import ApplicationFactory, InterviewStageFactory
+
+
+def _run_send_reminders():
+    out = StringIO()
+    call_command("send_reminders", stdout=out)
+    return out.getvalue()
 
 
 @pytest.mark.django_db
@@ -26,7 +33,7 @@ class TestSendInterviewReminders:
             scheduled_at=timezone.now() + timedelta(hours=6),
             completed=False,
         )
-        result = send_interview_reminders()
+        result = _run_send_reminders()
         assert "1 user(s)" in result
         assert mock_mail.called
 
@@ -38,7 +45,7 @@ class TestSendInterviewReminders:
             scheduled_at=timezone.now() + timedelta(hours=6),
             completed=False,
         )
-        result = send_interview_reminders()
+        result = _run_send_reminders()
         assert "0 user(s)" in result
         assert not mock_mail.called
 
@@ -51,7 +58,7 @@ class TestSendInterviewReminders:
             scheduled_at=timezone.now() + timedelta(hours=6),
             completed=True,
         )
-        result = send_interview_reminders()
+        result = _run_send_reminders()
         assert "0 user(s)" in result
         assert not mock_mail.called
 
@@ -64,7 +71,7 @@ class TestSendInterviewReminders:
             scheduled_at=timezone.now() - timedelta(hours=2),
             completed=False,
         )
-        result = send_interview_reminders()
+        result = _run_send_reminders()
         assert "0 user(s)" in result
 
     @patch("applications.email_utils.send_mail")
@@ -76,7 +83,7 @@ class TestSendInterviewReminders:
             scheduled_at=timezone.now() + timedelta(hours=6),
             completed=False,
         )
-        result = send_interview_reminders()
+        result = _run_send_reminders()
         assert "0 user(s)" in result
         assert not mock_mail.called
 
@@ -91,7 +98,7 @@ class TestSendInterviewReminders:
             scheduled_at=timezone.now() + timedelta(hours=6),
             completed=False,
         )
-        send_interview_reminders()
+        _run_send_reminders()
         call_kwargs = mock_mail.call_args
         assert "notify@example.com" in call_kwargs.kwargs.get("recipient_list", [])
 
@@ -104,11 +111,11 @@ class TestSendInterviewReminders:
             scheduled_at=timezone.now() + timedelta(hours=6),
             completed=False,
         )
-        send_interview_reminders()
+        _run_send_reminders()
         assert mock_mail.call_count == 1
         stage.refresh_from_db()
         assert stage.reminder_sent is True
 
         mock_mail.reset_mock()
-        send_interview_reminders()
+        _run_send_reminders()
         assert not mock_mail.called

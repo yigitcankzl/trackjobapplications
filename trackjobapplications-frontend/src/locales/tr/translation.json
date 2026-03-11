@@ -69,7 +69,7 @@
       "oauthFailed": "Sosyal giriş başarısız. Lütfen tekrar deneyin."
     },
     "social": {
-      "continueWith": "{{provider}} ile devam et"
+      "continueWith": "veya şununla devam et"
     },
     "overlay": {
       "signInPanel": {

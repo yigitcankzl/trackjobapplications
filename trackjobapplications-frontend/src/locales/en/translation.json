@@ -69,7 +69,7 @@
       "oauthFailed": "Social login failed. Please try again."
     },
     "social": {
-      "continueWith": "Continue with {{provider}}"
+      "continueWith": "Or continue with"
     },
     "overlay": {
       "signInPanel": {

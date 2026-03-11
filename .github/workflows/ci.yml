@@ -45,6 +45,7 @@ jobs:
       POSTGRES_HOST: localhost
       POSTGRES_PORT: "5432"
       POSTGRES_SSLMODE: prefer
+      REDIS_URL: redis://localhost:6379/0
 
     defaults:
       run:

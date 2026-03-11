@@ -61,10 +61,32 @@
           </select>
           <input type="datetime-local" id="interview-date">
         </div>
+        <div id="offer-fields" class="offer-fields" hidden>
+          <div class="offer-row">
+            <input type="number" id="offer-salary" placeholder="Salary" min="0" step="1000">
+            <select id="offer-currency">
+              <option value="USD">USD</option>
+              <option value="EUR">EUR</option>
+              <option value="GBP">GBP</option>
+              <option value="TRY">TRY</option>
+              <option value="CAD">CAD</option>
+              <option value="AUD">AUD</option>
+              <option value="JPY">JPY</option>
+              <option value="INR">INR</option>
+            </select>
+            <select id="offer-period">
+              <option value="yearly">Year</option>
+              <option value="monthly">Month</option>
+              <option value="hourly">Hour</option>
+            </select>
+          </div>
+          <textarea id="offer-benefits" class="offer-benefits" placeholder="Benefits (optional)..." rows="2"></textarea>
+        </div>
         <div class="btn-group">
           <button id="save-btn" class="btn-save">To Apply</button>
           <button id="apply-btn" class="btn-apply">Applied</button>
           <button id="interview-btn" class="btn-interview">Interview</button>
+          <button id="offer-btn" class="btn-offer">Offer</button>
         </div>
       </div>
 

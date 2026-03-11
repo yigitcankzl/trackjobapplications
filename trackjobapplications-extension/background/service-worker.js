@@ -185,9 +185,11 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   // Only accept messages from this extension's own content scripts or popup
   if (sender.id !== chrome.runtime.id) {
     sendResponse({ success: false, error: 'Unauthorized sender' });
-    return;
+    return false;
   }
-  handleMessage(message).then(sendResponse);
+  // Return promise directly for Firefox, use sendResponse for Chrome
+  const promise = handleMessage(message);
+  promise.then(sendResponse);
   return true; // keep channel open for async response
 });
 

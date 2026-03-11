@@ -40,7 +40,10 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
     showMainSection(auth.email);
     await Promise.all([loadJobData(), loadDashboard()]);
   } else {
-    errorEl.textContent = result.error;
+    const errMsg = (typeof result === 'object' && result !== null)
+      ? (result.error || JSON.stringify(result))
+      : String(result);
+    errorEl.textContent = typeof errMsg === 'string' ? errMsg : JSON.stringify(errMsg);
     errorEl.hidden = false;
     btn.disabled = false;
     btn.textContent = 'Log In';

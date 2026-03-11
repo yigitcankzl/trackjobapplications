@@ -327,6 +327,39 @@ async function handleMessage(message) {
         return { success: true, data: await res.json() };
       }
 
+      case 'TOGGLE_PIN': {
+        const appId = message.application_id;
+        if (!appId || typeof appId !== 'number') {
+          return { success: false, error: 'Invalid application ID' };
+        }
+        const res = await apiFetch(`/applications/${appId}/toggle-pin/`, {
+          method: 'POST',
+        });
+        if (!res.ok) return { success: false, error: 'Failed to toggle pin' };
+        return { success: true, data: await res.json() };
+      }
+
+      case 'ADD_OFFER': {
+        const appId = message.application_id;
+        if (!appId || typeof appId !== 'number') {
+          return { success: false, error: 'Invalid application ID' };
+        }
+        const payload = {};
+        if (message.salary) payload.salary = String(message.salary);
+        if (message.currency) payload.currency = message.currency;
+        if (message.salary_period) payload.salary_period = message.salary_period;
+        if (message.benefits) payload.benefits = validateText(message.benefits, MAX_NOTES_LENGTH);
+        const res = await apiFetch(`/applications/${appId}/offer/`, {
+          method: 'POST',
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          return { success: false, error: err.detail || err.salary?.[0] || 'Failed to add offer' };
+        }
+        return { success: true, data: await res.json() };
+      }
+
       case 'GET_TAGS': {
         const res = await apiFetch('/applications/tags/');
         if (!res.ok) return { success: false, error: 'Failed to load tags' };

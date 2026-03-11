@@ -103,15 +103,24 @@ function showNoJob() {
   document.getElementById('no-job').hidden = false;
 }
 
-// --- Notes Toggle ---
+// --- Extras Toggles ---
 
 document.getElementById('notes-toggle-btn').addEventListener('click', (e) => {
   e.preventDefault();
   const textarea = document.getElementById('job-notes');
   const link = e.currentTarget;
   textarea.hidden = !textarea.hidden;
-  link.textContent = textarea.hidden ? '+ Add note' : '- Hide note';
+  link.textContent = textarea.hidden ? '+ Note' : '- Note';
   if (!textarea.hidden) textarea.focus();
+});
+
+document.getElementById('contact-toggle-btn').addEventListener('click', (e) => {
+  e.preventDefault();
+  const fields = document.getElementById('contact-fields');
+  const link = e.currentTarget;
+  fields.hidden = !fields.hidden;
+  link.textContent = fields.hidden ? '+ Recruiter' : '- Recruiter';
+  if (!fields.hidden) document.getElementById('contact-name').focus();
 });
 
 // --- Add Application (two buttons) ---
@@ -146,6 +155,17 @@ async function addApplication(status) {
   const result = await chrome.runtime.sendMessage(msg);
 
   if (result.success) {
+    // Add recruiter contact if provided
+    const contactName = document.getElementById('contact-name').value.trim();
+    if (contactName && result.data?.id) {
+      const contactMsg = {
+        type: 'ADD_CONTACT',
+        application_id: result.data.id,
+        name: contactName,
+        email: document.getElementById('contact-email').value.trim(),
+      };
+      await chrome.runtime.sendMessage(contactMsg);
+    }
     const label = status === 'to_apply' ? 'Saved!' : 'Applied!';
     showFeedback(label, 'success');
     activeBtn.textContent = label;

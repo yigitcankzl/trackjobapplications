@@ -5,12 +5,30 @@ User = get_user_model()
 
 def associate_by_email(backend, details, user=None, *args, **kwargs):
     """Link an existing password-registered account when the social provider
-    returns the same email address, preventing duplicate user rows."""
+    returns the same *verified* email address, preventing duplicate user rows."""
     if user:
         return {}
     email = details.get("email")
     if not email:
         return {}
+
+    # Only auto-link if the provider has verified the email.
+    # Google always returns verified emails; GitHub may not.
+    response = kwargs.get("response", {})
+    email_verified = response.get("email_verified") or response.get("verified_email")
+    if not email_verified:
+        # GitHub: check the emails endpoint for a verified primary email
+        if hasattr(backend, "name") and backend.name == "github":
+            emails_data = kwargs.get("emails", [])
+            email_verified = any(
+                e.get("email", "").lower() == email.lower()
+                and e.get("verified")
+                and e.get("primary")
+                for e in (emails_data or [])
+            )
+        if not email_verified:
+            return {}
+
     try:
         existing = User.objects.get(email__iexact=email)
         return {"user": existing}

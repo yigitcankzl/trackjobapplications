@@ -316,6 +316,7 @@ AXES_ENABLE_ACCESS_FAILURE_LOG = True
 
 # Social OAuth (python-social-auth)
 SOCIAL_AUTH_URL_NAMESPACE = "social"
+SOCIAL_AUTH_STRATEGY = "config.social_strategy.DjangoStrategyWithRequest"
 SOCIAL_AUTH_USER_MODEL = "users.User"
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY    = os.environ.get("GOOGLE_CLIENT_ID", "")

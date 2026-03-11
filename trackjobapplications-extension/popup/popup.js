@@ -127,6 +127,7 @@ async function addApplication(status) {
     source: currentJobData.source,
     applied_date: today,
     status: status,
+    job_posting_content: currentJobData.job_posting_content,
   });
 
   if (result.success) {

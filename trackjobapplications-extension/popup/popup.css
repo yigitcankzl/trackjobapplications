@@ -113,6 +113,40 @@ button {
   color: #111827;
 }
 
+/* Notes */
+.notes-toggle {
+  margin-top: 8px;
+}
+
+.notes-toggle a {
+  font-size: 12px;
+  color: #6b7280;
+  text-decoration: none;
+}
+
+.notes-toggle a:hover {
+  color: #3b82f6;
+}
+
+.job-notes {
+  width: 100%;
+  margin-top: 6px;
+  padding: 8px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 12px;
+  resize: vertical;
+  min-height: 48px;
+  max-height: 120px;
+  outline: none;
+}
+
+.job-notes:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+}
+
 .btn-group {
   display: flex;
   gap: 8px;

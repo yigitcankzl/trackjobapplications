@@ -103,6 +103,17 @@ function showNoJob() {
   document.getElementById('no-job').hidden = false;
 }
 
+// --- Notes Toggle ---
+
+document.getElementById('notes-toggle-btn').addEventListener('click', (e) => {
+  e.preventDefault();
+  const textarea = document.getElementById('job-notes');
+  const link = e.currentTarget;
+  textarea.hidden = !textarea.hidden;
+  link.textContent = textarea.hidden ? '+ Add note' : '- Hide note';
+  if (!textarea.hidden) textarea.focus();
+});
+
 // --- Add Application (two buttons) ---
 
 async function addApplication(status) {
@@ -118,8 +129,9 @@ async function addApplication(status) {
   activeBtn.textContent = 'Saving...';
 
   const today = new Date().toISOString().split('T')[0];
+  const notes = document.getElementById('job-notes').value.trim();
 
-  const result = await chrome.runtime.sendMessage({
+  const msg = {
     type: 'ADD_APPLICATION',
     company: currentJobData.company,
     position: currentJobData.position,
@@ -128,7 +140,10 @@ async function addApplication(status) {
     applied_date: today,
     status: status,
     job_posting_content: currentJobData.job_posting_content,
-  });
+  };
+  if (notes) msg.notes = notes;
+
+  const result = await chrome.runtime.sendMessage(msg);
 
   if (result.success) {
     const label = status === 'to_apply' ? 'Saved!' : 'Applied!';

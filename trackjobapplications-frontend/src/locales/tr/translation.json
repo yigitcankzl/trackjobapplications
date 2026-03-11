@@ -401,6 +401,9 @@
     "createTemplate": "Şablon Oluştur",
     "loading": "Şablonlar yükleniyor...",
     "previewNote": "{company}, {position}, {date} gibi yer tutucular gerçek değerlerle değiştirilecektir.",
+    "fillFields": "Alanları doldur",
+    "copy": "Kopyala",
+    "copied": "Kopyalandı!",
     "empty": {
       "title": "Henüz ön yazı şablonu yok",
       "subtitle": "Hızlı ön yazı oluşturmak için yer tutuculu yeniden kullanılabilir şablonlar oluşturun."

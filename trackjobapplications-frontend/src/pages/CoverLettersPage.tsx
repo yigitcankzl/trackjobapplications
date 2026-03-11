@@ -10,6 +10,11 @@ import Button from '../components/ui/Button'
 
 const PLACEHOLDERS = ['{company}', '{position}', '{date}']
 
+function extractPlaceholders(content: string): string[] {
+  const matches = content.match(/\{[^}]+\}/g)
+  return matches ? [...new Set(matches)] : []
+}
+
 export default function CoverLettersPage() {
   const { t } = useTranslation()
   const { addToast } = useToast()
@@ -19,6 +24,8 @@ export default function CoverLettersPage() {
   const [creating, setCreating] = useState(false)
   const [form, setForm] = useState({ name: '', content: '' })
   const [preview, setPreview] = useState<CoverLetterTemplate | null>(null)
+  const [fillValues, setFillValues] = useState<Record<string, string>>({})
+  const [copied, setCopied] = useState(false)
   const [deleting, setDeleting] = useState<CoverLetterTemplate | null>(null)
 
   useEffect(() => {
@@ -85,11 +92,8 @@ export default function CoverLettersPage() {
     }
   }
 
-  function renderPreview(content: string) {
-    return content
-      .replace(/\{company\}/g, 'Acme Corp')
-      .replace(/\{position\}/g, 'Software Engineer')
-      .replace(/\{date\}/g, new Date().toLocaleDateString())
+  function renderPreview(content: string, values: Record<string, string>) {
+    return content.replace(/\{[^}]+\}/g, (match) => values[match] || match)
   }
 
   function insertPlaceholder(placeholder: string) {
@@ -144,8 +148,8 @@ export default function CoverLettersPage() {
                   key={tpl.id}
                   role="button"
                   tabIndex={0}
-                  onClick={() => { setPreview(tpl); setCreating(false); setEditing(null) }}
-                  onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setPreview(tpl); setCreating(false); setEditing(null) } }}
+                  onClick={() => { setPreview(tpl); setFillValues({}); setCopied(false); setCreating(false); setEditing(null) }}
+                  onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setPreview(tpl); setFillValues({}); setCopied(false); setCreating(false); setEditing(null) } }}
                   className={`group bg-white dark:bg-gray-900 rounded-xl border shadow-sm p-4 cursor-pointer transition-all duration-200 ${
                     preview?.id === tpl.id || editing?.id === tpl.id
                       ? 'border-blue-200 dark:border-blue-800 ring-1 ring-blue-100 dark:ring-blue-900'
@@ -238,8 +242,8 @@ export default function CoverLettersPage() {
 
         {/* Preview panel */}
         {preview && !isFormOpen && (
-          <div className="lg:col-span-2 bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm p-6">
-            <div className="flex items-center justify-between mb-4">
+          <div className="lg:col-span-2 bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm p-6 space-y-4">
+            <div className="flex items-center justify-between">
               <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-200">{preview.name}</h2>
               <div className="flex items-center gap-1">
                 <button
@@ -256,10 +260,45 @@ export default function CoverLettersPage() {
                 </button>
               </div>
             </div>
+
+            {/* Fill placeholders */}
+            {extractPlaceholders(preview.content).length > 0 && (
+              <div className="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4 space-y-3">
+                <p className="text-xs font-semibold text-blue-700 dark:text-blue-300 uppercase tracking-wide">{t('coverLetters.fillFields')}</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {extractPlaceholders(preview.content).map(placeholder => (
+                    <div key={placeholder}>
+                      <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">{placeholder}</label>
+                      <input
+                        type="text"
+                        value={fillValues[placeholder] || ''}
+                        onChange={e => setFillValues(prev => ({ ...prev, [placeholder]: e.target.value }))}
+                        placeholder={placeholder.replace(/[{}]/g, '')}
+                        className="w-full px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Rendered result */}
             <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-4 text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed">
-              {renderPreview(preview.content)}
+              {renderPreview(preview.content, fillValues)}
             </div>
-            <p className="text-xs text-gray-400 mt-3">{t('coverLetters.previewNote')}</p>
+
+            <div className="flex justify-end">
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(renderPreview(preview.content, fillValues))
+                  setCopied(true)
+                  setTimeout(() => setCopied(false), 2000)
+                }}
+                className="px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+              >
+                {copied ? t('coverLetters.copied') : t('coverLetters.copy')}
+              </button>
+            </div>
           </div>
         )}
       </div>

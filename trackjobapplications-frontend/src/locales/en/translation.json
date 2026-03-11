@@ -401,6 +401,9 @@
     "createTemplate": "Create Template",
     "loading": "Loading templates...",
     "previewNote": "Placeholders like {company}, {position}, {date} will be replaced with actual values.",
+    "fillFields": "Fill in fields",
+    "copy": "Copy",
+    "copied": "Copied!",
     "empty": {
       "title": "No cover letter templates",
       "subtitle": "Create reusable templates with placeholders for quick cover letter generation."

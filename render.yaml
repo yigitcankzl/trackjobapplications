@@ -48,40 +48,5 @@ services:
         sync: false
       - key: GITHUB_CLIENT_SECRET
         sync: false
-  - type: cron
-    name: interview-reminders
-    runtime: docker
-    rootDir: trackjobapplications-backend
-    dockerfilePath: ./Dockerfile
-    dockerContext: ./
-    schedule: "0 * * * *"
-    plan: free
-    region: frankfurt
-    dockerCommand: python manage.py send_reminders
-    envVars:
-      - key: DEBUG
-        value: "False"
-      - key: SECRET_KEY
-        sync: false
-      - key: POSTGRES_DB
-        sync: false
-      - key: POSTGRES_USER
-        sync: false
-      - key: POSTGRES_PASSWORD
-        sync: false
-      - key: POSTGRES_HOST
-        sync: false
-      - key: POSTGRES_PORT
-        value: "5432"
-      - key: POSTGRES_SSLMODE
-        value: "require"
-      - key: FRONTEND_URL
-        sync: false
-      - key: EMAIL_BACKEND
-        value: "django.core.mail.backends.smtp.EmailBackend"
-      - key: EMAIL_HOST_USER
-        sync: false
-      - key: EMAIL_HOST_PASSWORD
-        sync: false
-      - key: DEFAULT_FROM_EMAIL
+      - key: CRON_SECRET
         sync: false

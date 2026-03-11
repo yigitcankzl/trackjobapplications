@@ -45,8 +45,6 @@ services:
       - .env
     environment:
       DJANGO_SETTINGS_MODULE: config.settings
-      CELERY_BROKER_URL: redis://:${REDIS_PASSWORD}@redis:6379/0
-      CELERY_RESULT_BACKEND: redis://:${REDIS_PASSWORD}@redis:6379/0
     depends_on:
       db:
         condition: service_healthy
@@ -56,56 +54,6 @@ services:
       resources:
         limits:
           memory: 512M
-
-  celery-worker:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    entrypoint: []
-    command: celery -A config worker -l info --concurrency=4 --prefetch-multiplier=1
-    volumes:
-      - media_data:/app/media
-    env_file:
-      - .env
-    environment:
-      DJANGO_SETTINGS_MODULE: config.settings
-      CELERY_BROKER_URL: redis://:${REDIS_PASSWORD}@redis:6379/0
-      CELERY_RESULT_BACKEND: redis://:${REDIS_PASSWORD}@redis:6379/0
-    depends_on:
-      db:
-        condition: service_healthy
-      web:
-        condition: service_started
-      redis:
-        condition: service_healthy
-    deploy:
-      resources:
-        limits:
-          memory: 512M
-
-  celery-beat:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    entrypoint: []
-    command: celery -A config beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
-    env_file:
-      - .env
-    environment:
-      DJANGO_SETTINGS_MODULE: config.settings
-      CELERY_BROKER_URL: redis://:${REDIS_PASSWORD}@redis:6379/0
-      CELERY_RESULT_BACKEND: redis://:${REDIS_PASSWORD}@redis:6379/0
-    depends_on:
-      db:
-        condition: service_healthy
-      web:
-        condition: service_started
-      redis:
-        condition: service_healthy
-    deploy:
-      resources:
-        limits:
-          memory: 256M
 
 volumes:
   postgres_data:

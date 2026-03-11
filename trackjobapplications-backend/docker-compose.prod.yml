@@ -15,7 +15,3 @@ services:
       --access-logfile -
       --error-logfile -
     restart: unless-stopped
-  celery-worker:
-    restart: unless-stopped
-  celery-beat:
-    restart: unless-stopped

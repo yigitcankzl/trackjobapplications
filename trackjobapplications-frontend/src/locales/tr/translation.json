@@ -1,4 +1,5 @@
 {
+  "comingSoon": "Yakında",
   "nav": {
     "signIn": "Giriş Yap",
     "getStarted": "Hemen Başla"
@@ -301,7 +302,8 @@
         "6": "6 saat",
         "24": "24 saat",
         "48": "48 saat"
-      }
+      },
+      "comingSoonDesc": "E-posta hatırlatmaları yakında kullanılabilir olacak"
     },
     "errors": {
       "passwordMismatch": "Şifreler eşleşmiyor",

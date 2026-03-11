@@ -1,4 +1,5 @@
 {
+  "comingSoon": "Coming Soon",
   "nav": {
     "signIn": "Sign In",
     "getStarted": "Get Started"
@@ -301,7 +302,8 @@
         "6": "6 hours",
         "24": "24 hours",
         "48": "48 hours"
-      }
+      },
+      "comingSoonDesc": "Email reminders will be available soon"
     },
     "errors": {
       "passwordMismatch": "Passwords do not match",

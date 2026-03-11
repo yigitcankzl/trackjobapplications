@@ -44,6 +44,7 @@ jobs:
       POSTGRES_PASSWORD: testpass
       POSTGRES_HOST: localhost
       POSTGRES_PORT: "5432"
+      POSTGRES_SSLMODE: prefer
 
     defaults:
       run:

@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   if (authStatus.authenticated) {
     showMainSection(authStatus.email);
-    await loadJobData();
+    await Promise.all([loadJobData(), loadDashboard()]);
   } else {
     showLoginSection();
   }
@@ -38,7 +38,7 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
     const auth = await chrome.runtime.sendMessage({ type: 'CHECK_AUTH' });
     document.getElementById('login-section').hidden = true;
     showMainSection(auth.email);
-    await loadJobData();
+    await Promise.all([loadJobData(), loadDashboard()]);
   } else {
     errorEl.textContent = result.error;
     errorEl.hidden = false;
@@ -134,6 +134,7 @@ async function addApplication(status) {
     const label = status === 'to_apply' ? 'Saved!' : 'Applied!';
     showFeedback(label, 'success');
     activeBtn.textContent = label;
+    loadDashboard();
   } else {
     showFeedback(result.error, 'error');
     saveBtn.disabled = false;
@@ -144,6 +145,52 @@ async function addApplication(status) {
 
 document.getElementById('save-btn').addEventListener('click', () => addApplication('to_apply'));
 document.getElementById('apply-btn').addEventListener('click', () => addApplication('applied'));
+
+// --- Dashboard (Stats + Recent) ---
+
+async function loadDashboard() {
+  const [statsRes, recentRes] = await Promise.all([
+    chrome.runtime.sendMessage({ type: 'GET_STATS' }),
+    chrome.runtime.sendMessage({ type: 'GET_RECENT' }),
+  ]);
+
+  if (statsRes.success) {
+    const s = statsRes.data;
+    document.getElementById('stat-total').textContent = s.total;
+    document.getElementById('stat-to-apply').textContent = s.to_apply;
+    document.getElementById('stat-applied').textContent = s.applied;
+    document.getElementById('stat-interview').textContent = s.interview;
+    document.getElementById('stat-offer').textContent = s.offer;
+    document.getElementById('stat-rejected').textContent = s.rejected;
+    document.getElementById('stats-section').hidden = false;
+  }
+
+  if (recentRes.success && recentRes.data.length > 0) {
+    const list = document.getElementById('recent-list');
+    list.innerHTML = '';
+    const statusLabels = {
+      to_apply: 'To Apply', applied: 'Applied', interview: 'Interview',
+      offer: 'Offer', rejected: 'Rejected', withdrawn: 'Withdrawn',
+    };
+    for (const app of recentRes.data) {
+      const li = document.createElement('li');
+      li.innerHTML =
+        `<div class="recent-info">` +
+          `<div class="recent-company">${escapeHtml(app.company)}</div>` +
+          `<div class="recent-position">${escapeHtml(app.position)}</div>` +
+        `</div>` +
+        `<span class="status-badge status-${app.status}">${statusLabels[app.status] || app.status}</span>`;
+      list.appendChild(li);
+    }
+    document.getElementById('recent-section').hidden = false;
+  }
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
 
 function showFeedback(message, type) {
   const el = document.getElementById('feedback');

@@ -111,7 +111,7 @@ export default function ProfilePage() {
           <div className="relative overflow-hidden rounded-xl">
             <div className="absolute inset-0 bg-white/70 dark:bg-gray-900/70 backdrop-blur-[2px] rounded-xl z-10 flex flex-col items-center justify-center gap-1">
               <span className="text-sm font-semibold text-gray-700 dark:text-gray-200">{t('comingSoon')}</span>
-              <span className="text-xs text-gray-400 dark:text-gray-500">{t('profile.notifications.comingSoonDesc')}</span>
+              <span className="text-xs text-gray-400 dark:text-gray-500">{t('comingSoonDesc')}</span>
             </div>
             <DragDropZone
               onFileDrop={file => { setAvatarFile(file); if (avatarPreview) URL.revokeObjectURL(avatarPreview); setAvatarPreview(URL.createObjectURL(file)) }}
@@ -185,7 +185,7 @@ export default function ProfilePage() {
             <div className="relative overflow-hidden rounded-xl">
               <div className="absolute inset-0 bg-white/70 dark:bg-gray-900/70 backdrop-blur-[2px] rounded-xl z-10 flex flex-col items-center justify-center gap-1">
                 <span className="text-sm font-semibold text-gray-700 dark:text-gray-200">{t('comingSoon')}</span>
-                <span className="text-xs text-gray-400 dark:text-gray-500">{t('profile.notifications.comingSoonDesc')}</span>
+                <span className="text-xs text-gray-400 dark:text-gray-500">{t('comingSoonDesc')}</span>
               </div>
               <DragDropZone
                 onFileDrop={file => setResumeFile(file)}

@@ -97,11 +97,21 @@ class ThrottledTokenObtainPairView(TokenObtainPairView):
     throttle_scope = "login"
 
     def post(self, request, *args, **kwargs):
+        email = request.data.get("email", "").lower().strip()
+        try:
+            u = User.objects.get(email__iexact=email)
+            if not u.has_usable_password():
+                return Response(
+                    {"detail": "This account uses Google Sign-In. Please use the 'Sign in with Google' button."},
+                    status=status.HTTP_401_UNAUTHORIZED,
+                )
+        except User.DoesNotExist:
+            pass
         response = super().post(request, *args, **kwargs)
         if response.status_code != 200:
             logger.warning(
                 "Failed login attempt for email=%s from IP=%s",
-                request.data.get("email", ""),
+                email,
                 request.META.get("REMOTE_ADDR", ""),
             )
         else:

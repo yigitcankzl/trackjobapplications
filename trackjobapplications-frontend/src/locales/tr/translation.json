@@ -67,7 +67,9 @@
       "invalidCredentials": "Geçersiz e-posta veya şifre.",
       "registrationFailed": "Kayıt başarısız. Lütfen tekrar deneyin.",
       "passwordMismatch": "Şifreler eşleşmiyor.",
-      "oauthFailed": "Sosyal giriş başarısız. Lütfen tekrar deneyin."
+      "oauthFailed": "Sosyal giriş başarısız. Lütfen tekrar deneyin.",
+      "useGoogleSignIn": "Bu hesap Google ile oluşturuldu. Lütfen 'Google ile Giriş Yap' butonunu kullan.",
+      "tooManyAttempts": "Çok fazla başarısız giriş denemesi. Lütfen 30 dakika sonra tekrar dene."
     },
     "social": {
       "continueWith": "veya şununla devam et"

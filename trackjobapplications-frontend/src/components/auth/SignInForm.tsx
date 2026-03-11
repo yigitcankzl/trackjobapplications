@@ -30,7 +30,12 @@ export default function SignInForm({ onSwitch }: Props) {
       const data = (err as { response?: { data?: unknown } })?.response?.data as Record<string, unknown> | undefined
       const raw = data?.detail ?? data?.non_field_errors
       const detail = typeof raw === 'string' ? raw : Array.isArray(raw) ? raw[0] : undefined
-      addToast(detail || t('auth.errors.invalidCredentials'), 'error')
+      const message = detail?.includes('Google Sign-In')
+        ? t('auth.errors.useGoogleSignIn')
+        : detail?.includes('Too many failed')
+          ? t('auth.errors.tooManyAttempts')
+          : detail || t('auth.errors.invalidCredentials')
+      addToast(message, 'error')
     } finally {
       setIsLoading(false)
     }

@@ -67,7 +67,9 @@
       "invalidCredentials": "Invalid email or password.",
       "registrationFailed": "Registration failed. Please try again.",
       "passwordMismatch": "Passwords do not match.",
-      "oauthFailed": "Social login failed. Please try again."
+      "oauthFailed": "Social login failed. Please try again.",
+      "useGoogleSignIn": "This account uses Google Sign-In. Please use the 'Sign in with Google' button.",
+      "tooManyAttempts": "Too many failed login attempts. Please try again in 30 minutes."
     },
     "social": {
       "continueWith": "Or continue with"

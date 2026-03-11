@@ -344,15 +344,21 @@ class OAuthCallbackView(APIView):
             callback_url = request.build_absolute_uri(f'/api/v1/auth/social/callback/{backend_name}/')
             backend = load_backend(strategy, backend_name, redirect_uri=callback_url)
             user = backend.auth_complete()
-        except (AuthForbidden, AuthCanceled, AuthMissingParameter):
+        except (AuthForbidden, AuthCanceled, AuthMissingParameter) as e:
+            logger.warning("OAuth %s for backend=%s: %s", type(e).__name__, backend_name, e)
             return HttpResponseRedirect(f"{settings.FRONTEND_URL}/login?error=oauth_failed")
-        except SocialAuthBaseException:
-            logger.exception("OAuth error for backend %s", backend_name)
+        except SocialAuthBaseException as e:
+            logger.exception("OAuth %s for backend=%s: %s", type(e).__name__, backend_name, e)
+            return HttpResponseRedirect(f"{settings.FRONTEND_URL}/login?error=oauth_error")
+        except Exception as e:
+            logger.exception("Unexpected OAuth error for backend=%s: %s", backend_name, e)
             return HttpResponseRedirect(f"{settings.FRONTEND_URL}/login?error=oauth_error")
 
         if not user or not user.is_active:
+            logger.warning("OAuth returned no user or inactive user for backend=%s, user=%s", backend_name, user)
             return HttpResponseRedirect(f"{settings.FRONTEND_URL}/login?error=account_disabled")
 
+        logger.info("OAuth success for backend=%s user=%s", backend_name, user.pk)
         refresh = RefreshToken.for_user(user)
         response = HttpResponseRedirect(f"{settings.FRONTEND_URL}/dashboard")
         _set_auth_cookies(response, str(refresh.access_token), str(refresh))

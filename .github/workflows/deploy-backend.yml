@@ -3,6 +3,9 @@ name: Deploy Backend to Fly.io
 on:
   workflow_dispatch: # disabled: migrated to Render
 
+permissions:
+  contents: read
+
 jobs:
   deploy:
     name: Deploy

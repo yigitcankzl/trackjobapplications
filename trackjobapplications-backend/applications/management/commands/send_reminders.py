@@ -42,15 +42,13 @@ class Command(BaseCommand):
                 continue
 
             stage_ids = [s.id for s in stages_list]
-            InterviewStage.objects.filter(id__in=stage_ids).update(reminder_sent=True)
-
             email = pref.user.notification_email or pref.user.email
             try:
                 self._send_with_retry(pref, stages_list, email)
+                InterviewStage.objects.filter(id__in=stage_ids).update(reminder_sent=True)
                 total_users += 1
                 total_stages += len(stages_list)
             except Exception:
-                InterviewStage.objects.filter(id__in=stage_ids).update(reminder_sent=False)
                 logger.exception("Failed to send interview reminder to user %s", pref.user.id)
 
         result = f"Sent interview reminders to {total_users} user(s) for {total_stages} interview(s)"

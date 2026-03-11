@@ -238,9 +238,9 @@ PASSWORD_HASHERS = [
 
 # Reduce argon2 memory usage for low-RAM environments (256MB)
 from django.contrib.auth.hashers import Argon2PasswordHasher
-Argon2PasswordHasher.memory_cost = 8192   # 8MB instead of 64MB default
+Argon2PasswordHasher.memory_cost = 19456   # 19MB — OWASP minimum for Argon2id
 Argon2PasswordHasher.parallelism = 1
-Argon2PasswordHasher.time_cost = 3
+Argon2PasswordHasher.time_cost = 2
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10 MB
 
@@ -317,7 +317,7 @@ CACHES = {
 # django-axes: account lockout after failed login attempts
 AXES_FAILURE_LIMIT = 5
 AXES_COOLOFF_TIME = timedelta(minutes=30)
-AXES_LOCKOUT_PARAMETERS = ["ip_address"]
+AXES_LOCKOUT_PARAMETERS = [["ip_address", "username"]]
 AXES_RESET_ON_SUCCESS = True
 AXES_ENABLE_ACCESS_FAILURE_LOG = True
 AXES_LOCKOUT_CALLABLE = "users.views.axes_lockout_response"

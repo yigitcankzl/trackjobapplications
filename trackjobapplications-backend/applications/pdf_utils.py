@@ -1,4 +1,5 @@
 import io
+from xml.sax.saxutils import escape
 
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4, landscape
@@ -21,19 +22,20 @@ def generate_applications_pdf(apps, user):
     styles = getSampleStyleSheet()
     elements = []
 
-    elements.append(Paragraph(f"Job Applications — {user.first_name} {user.last_name}", styles["Title"]))
+    elements.append(Paragraph(f"Job Applications — {escape(user.first_name)} {escape(user.last_name)}", styles["Title"]))
     elements.append(Spacer(1, 6 * mm))
 
     header = ["Company", "Position", "Status", "Applied", "Source", "Notes"]
     data = [header]
     for app in apps:
+        notes = app.notes or "—"
         data.append([
-            app.company[:40],
-            app.position[:40],
-            app.get_status_display(),
+            escape(app.company[:40]),
+            escape(app.position[:40]),
+            escape(app.get_status_display()),
             str(app.applied_date),
-            app.get_source_display() or "—",
-            (app.notes[:60] + "...") if len(app.notes) > 60 else (app.notes or "—"),
+            escape(app.get_source_display() or "—"),
+            escape((notes[:60] + "...") if len(notes) > 60 else notes),
         ])
 
     col_widths = [80 * mm, 80 * mm, 30 * mm, 25 * mm, 30 * mm, 50 * mm]

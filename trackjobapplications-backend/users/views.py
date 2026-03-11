@@ -110,8 +110,7 @@ class ThrottledTokenObtainPairView(TokenObtainPairView):
         response = super().post(request, *args, **kwargs)
         if response.status_code != 200:
             logger.warning(
-                "Failed login attempt for email=%s from IP=%s",
-                email,
+                "Failed login attempt from IP=%s",
                 request.META.get("REMOTE_ADDR", ""),
             )
         else:

@@ -9,7 +9,7 @@ const ALLOWED_API_BASES = new Set([
 // --- Payload Validation ---
 
 const VALID_STATUSES = new Set(['to_apply', 'applied', 'interview', 'offer', 'rejected', 'withdrawn']);
-const VALID_SOURCES  = new Set(['linkedin', 'indeed', 'email', 'referral', 'company_site', 'other']);
+const VALID_SOURCES  = new Set(['linkedin', 'indeed', 'glassdoor', 'ziprecruiter', 'email', 'referral', 'company_site', 'other']);
 const DATE_RE        = /^\d{4}-\d{2}-\d{2}$/;
 
 const MAX_TEXT_LENGTH          = 200;

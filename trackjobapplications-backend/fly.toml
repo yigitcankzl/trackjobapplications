@@ -17,7 +17,6 @@ console_command = '/code/manage.py shell'
 
 [processes]
   app = 'gunicorn --bind :8000 --workers 1 --threads 2 --graceful-timeout 30 --timeout 120 config.wsgi'
-  celery = 'celery -A config worker --loglevel=INFO'
 
 [http_service]
   internal_port = 8000

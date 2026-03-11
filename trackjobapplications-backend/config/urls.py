@@ -20,14 +20,12 @@ def csrf_cookie(request):
 
 
 from applications.media_views import SecureMediaView
-from applications.cron_views import CronSendRemindersView
 
 urlpatterns = [
     path("api/health/", health_check),
     path("api/v1/csrf/", csrf_cookie),
     path("api/v1/auth/", include("users.urls")),
     path("api/v1/applications/", include("applications.urls")),
-    path("api/v1/cron/send-reminders/", CronSendRemindersView.as_view()),
     path("api/v1/media/<path:path>", SecureMediaView.as_view()),
 ]
 

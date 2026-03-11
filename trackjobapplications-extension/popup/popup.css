@@ -113,19 +113,42 @@ button {
   color: #111827;
 }
 
-/* Notes */
-.notes-toggle {
+/* Extras toggles (note + recruiter) */
+.extras-toggles {
+  display: flex;
+  gap: 12px;
   margin-top: 8px;
 }
 
-.notes-toggle a {
+.extras-toggles a {
   font-size: 12px;
   color: #6b7280;
   text-decoration: none;
 }
 
-.notes-toggle a:hover {
+.extras-toggles a:hover {
   color: #3b82f6;
+}
+
+/* Contact fields */
+.contact-fields {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.contact-fields input {
+  flex: 1;
+  padding: 7px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 12px;
+  outline: none;
+}
+
+.contact-fields input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
 }
 
 .job-notes {

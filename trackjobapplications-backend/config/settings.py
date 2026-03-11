@@ -28,7 +28,6 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "rest_framework_simplejwt.token_blacklist",
     "corsheaders",
-    "django_celery_beat",
     "drf_spectacular",
     "django_filters",
     "axes",
@@ -216,14 +215,6 @@ JWT_AUTH_COOKIE_HTTPONLY = True
 JWT_AUTH_COOKIE_SAMESITE = "Lax" if DEBUG else "None"
 JWT_AUTH_COOKIE_SECURE = not DEBUG
 
-# Celery
-CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", "redis://localhost:6379/0")
-CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND", "redis://localhost:6379/0")
-CELERY_ACCEPT_CONTENT = ["json"]
-CELERY_TASK_SERIALIZER = "json"
-# Coming soon: interview reminder emails
-CELERY_BEAT_SCHEDULE = {}
-
 FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://localhost:3003")
 
 # Email
@@ -295,11 +286,6 @@ LOGGING = {
     },
     "loggers": {
         "applications": {
-            "handlers": ["console"],
-            "level": "INFO",
-            "propagate": False,
-        },
-        "celery": {
             "handlers": ["console"],
             "level": "INFO",
             "propagate": False,

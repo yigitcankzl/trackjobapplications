@@ -31,11 +31,19 @@ function extractLinkedInJob() {
     }
   }
 
+  // Extract the full job description text so it survives if the listing is removed
+  const jobPostingContent =
+    document.querySelector('.jobs-description__content .jobs-box__html-content')?.innerText?.trim() ||
+    document.querySelector('.jobs-description-content__text')?.innerText?.trim() ||
+    document.querySelector('#job-details')?.innerText?.trim() ||
+    '';
+
   return {
     company:  sanitizeText(company, 200),
     position: sanitizeText(position, 200),
     url:      sanitizeUrl(url, ['linkedin.com']),
     source:   'linkedin',
+    job_posting_content: sanitizeText(jobPostingContent, 50000),
   };
 }
 
@@ -93,6 +101,7 @@ function createActionButton(label, color, hoverColor, status) {
       source: data.source,
       applied_date: today,
       status: status,
+      job_posting_content: data.job_posting_content,
     });
 
     if (result.success) {

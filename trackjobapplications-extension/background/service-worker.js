@@ -12,9 +12,10 @@ const VALID_STATUSES = new Set(['to_apply', 'applied', 'interview', 'offer', 're
 const VALID_SOURCES  = new Set(['linkedin', 'indeed', 'email', 'referral', 'company_site', 'other']);
 const DATE_RE        = /^\d{4}-\d{2}-\d{2}$/;
 
-const MAX_TEXT_LENGTH  = 200;
-const MAX_NOTES_LENGTH = 2000;
-const MAX_URL_LENGTH   = 2048;
+const MAX_TEXT_LENGTH          = 200;
+const MAX_NOTES_LENGTH         = 2000;
+const MAX_URL_LENGTH           = 2048;
+const MAX_JOB_POSTING_LENGTH   = 50000;
 
 // Cooldown tracking for ADD_APPLICATION to prevent rapid duplicate submissions
 const _addCooldowns = new Map(); // company+position → timestamp
@@ -259,6 +260,8 @@ async function handleMessage(message) {
         };
         const notes = validateText(message.notes, MAX_NOTES_LENGTH);
         if (notes) payload.notes = notes;
+        const jobPostingContent = validateText(message.job_posting_content, MAX_JOB_POSTING_LENGTH);
+        if (jobPostingContent) payload.job_posting_content = jobPostingContent;
         const res = await apiFetch('/applications/', {
           method: 'POST',
           body: JSON.stringify(payload),

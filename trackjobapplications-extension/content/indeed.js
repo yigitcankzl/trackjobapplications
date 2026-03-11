@@ -15,11 +15,19 @@ function extractIndeedJob() {
 
   const rawUrl = window.location.href.split('#')[0];
 
+  // Extract the full job description text so it survives if the listing is removed
+  const jobPostingContent =
+    document.querySelector('#jobDescriptionText')?.innerText?.trim() ||
+    document.querySelector('.jobsearch-JobComponent-description')?.innerText?.trim() ||
+    document.querySelector('[data-testid="jobDescriptionText"]')?.innerText?.trim() ||
+    '';
+
   return {
     company:  sanitizeText(company, 200),
     position: sanitizeText(position, 200),
     url:      sanitizeUrl(rawUrl, ['indeed.com']),
     source:   'indeed',
+    job_posting_content: sanitizeText(jobPostingContent, 50000),
   };
 }
 
@@ -76,6 +84,7 @@ function createActionButton(label, color, hoverColor, status) {
       source: data.source,
       applied_date: today,
       status: status,
+      job_posting_content: data.job_posting_content,
     });
 
     if (result.success) {

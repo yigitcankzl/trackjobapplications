@@ -1,4 +1,4 @@
-import api from '../lib/axios'
+import api, { ensureCsrfToken, getCsrfToken } from '../lib/axios'
 import { API_BASE } from '../lib/config'
 import { ApplicationFilters, ApplicationNote, CompareApplication, EmailLog, JobApplication, OfferDetail, PaginatedResponse } from '../types'
 
@@ -87,13 +87,13 @@ export async function exportPdf(onProgress?: (pct: number) => void): Promise<voi
   const controller = new AbortController()
   const timeoutId = setTimeout(() => controller.abort(), 120_000) // 2-minute max for large exports
 
-  const csrfToken = document.cookie.split('; ')
-    .find(c => c.startsWith('csrftoken='))?.split('=')[1] ?? ''
+  await ensureCsrfToken()
+  const token = getCsrfToken() ?? ''
 
   const response = await fetch(`${API_BASE}/applications/export-pdf/`, {
     method: 'POST',
     credentials: 'include',
-    headers: { 'X-CSRFToken': csrfToken },
+    headers: { 'X-CSRFToken': token },
     signal: controller.signal,
   }).finally(() => clearTimeout(timeoutId))
 

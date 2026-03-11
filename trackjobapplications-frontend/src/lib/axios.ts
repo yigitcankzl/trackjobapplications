@@ -76,4 +76,7 @@ api.interceptors.response.use(
   },
 )
 
+export function getCsrfToken(): string | null { return csrfToken }
+export { ensureCsrfToken }
+
 export default api

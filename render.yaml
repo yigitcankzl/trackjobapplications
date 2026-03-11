@@ -33,10 +33,8 @@ services:
       - key: FRONTEND_URL
         sync: false
       - key: EMAIL_BACKEND
-        value: "django.core.mail.backends.smtp.EmailBackend"
-      - key: EMAIL_HOST_USER
-        sync: false
-      - key: EMAIL_HOST_PASSWORD
+        value: "django_resend.backend.ResendBackend"
+      - key: RESEND_API_KEY
         sync: false
       - key: DEFAULT_FROM_EMAIL
         sync: false

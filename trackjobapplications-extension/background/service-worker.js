@@ -1,5 +1,5 @@
 // Default API URL — override via extension options or chrome.storage
-const DEFAULT_API_BASE = 'http://localhost:8000/api/v1';
+const DEFAULT_API_BASE = 'https://trackjobapplications-backend.onrender.com/api/v1';
 
 const ALLOWED_API_BASES = new Set([
   'http://localhost:8000/api/v1',

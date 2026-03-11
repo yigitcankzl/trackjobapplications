@@ -34,16 +34,14 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
 
   const result = await chrome.runtime.sendMessage({ type: 'LOGIN', email, password });
 
-  if (result.success) {
+  if (result && result.success) {
     const auth = await chrome.runtime.sendMessage({ type: 'CHECK_AUTH' });
     document.getElementById('login-section').hidden = true;
     showMainSection(auth.email);
     await Promise.all([loadJobData(), loadDashboard()]);
   } else {
-    const errMsg = (typeof result === 'object' && result !== null)
-      ? (result.error || JSON.stringify(result))
-      : String(result);
-    errorEl.textContent = typeof errMsg === 'string' ? errMsg : JSON.stringify(errMsg);
+    const err = result?.error;
+    errorEl.textContent = (typeof err === 'string') ? err : JSON.stringify(err || result || 'Login failed');
     errorEl.hidden = false;
     btn.disabled = false;
     btn.textContent = 'Log In';
@@ -291,7 +289,8 @@ async function addApplication(status) {
     activeBtn.textContent = labels[status];
     loadDashboard();
   } else {
-    showFeedback(result.error, 'error');
+    const err = result?.error;
+    showFeedback((typeof err === 'string') ? err : JSON.stringify(err || 'Error'), 'error');
     allActionBtns.forEach(id => { document.getElementById(id).disabled = false; });
     activeBtn.textContent = originalText;
   }

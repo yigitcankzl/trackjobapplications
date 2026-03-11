@@ -2,7 +2,6 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
-from celery.schedules import crontab
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -215,12 +214,8 @@ CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", "redis://localhost:6379/
 CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND", "redis://localhost:6379/0")
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
-CELERY_BEAT_SCHEDULE = {
-    "interview-reminders": {
-        "task": "applications.tasks.send_interview_reminders",
-        "schedule": crontab(minute=0),
-    },
-}
+# Coming soon: interview reminder emails
+CELERY_BEAT_SCHEDULE = {}
 
 FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://localhost:3003")
 

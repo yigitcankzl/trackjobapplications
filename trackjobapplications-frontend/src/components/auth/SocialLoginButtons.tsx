@@ -1,4 +1,3 @@
-import { useTranslation } from 'react-i18next'
 import { GoogleIcon, GitHubIcon, FacebookIcon, LinkedInIcon } from '../icons'
 
 const BACKEND = (import.meta.env.VITE_API_URL as string | undefined) ?? 'http://localhost:8000/api/v1'
@@ -11,11 +10,8 @@ const providers = [
 ] as const
 
 export default function SocialLoginButtons() {
-  const { t } = useTranslation()
-
   return (
     <div className="flex flex-col items-center gap-3 w-full">
-      <span className="text-xs text-gray-400 dark:text-gray-500">{t('auth.social.continueWith')}</span>
       <div className="flex gap-3">
         {providers.map(({ id, label, Icon }) => (
           <a

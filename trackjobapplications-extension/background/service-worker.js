@@ -3,7 +3,7 @@ const DEFAULT_API_BASE = 'http://localhost:8000/api/v1';
 
 const ALLOWED_API_BASES = new Set([
   'http://localhost:8000/api/v1',
-  'https://trackjobapplications-backend.fly.dev/api/v1',
+  'https://trackjobapplications-backend.onrender.com/api/v1',
 ]);
 
 // --- Payload Validation ---

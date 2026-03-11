@@ -9,10 +9,10 @@
   ],
   "host_permissions": [
     "http://localhost:8000/api/v1/*",
-    "https://trackjobapplications-backend.fly.dev/api/v1/*"
+    "https://trackjobapplications-backend.onrender.com/api/v1/*"
   ],
   "content_security_policy": {
-    "extension_pages": "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self' https://trackjobapplications-backend.fly.dev; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+    "extension_pages": "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self' https://trackjobapplications-backend.onrender.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
   },
   "action": {
     "default_popup": "popup/popup.html",

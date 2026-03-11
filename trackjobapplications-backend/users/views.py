@@ -286,7 +286,7 @@ class PasswordResetRequestView(APIView):
                 send_mail(
                     subject="Reset your TrackJobs password",
                     message=f"Click the link to reset your password: {reset_url}",
-                    from_email=None,
+                    from_email=settings.DEFAULT_FROM_EMAIL,
                     recipient_list=[user.email],
                     fail_silently=False,
                 )

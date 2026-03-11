@@ -325,7 +325,8 @@ class SocialLoginInitView(APIView):
     def get(self, request, backend_name):
         try:
             strategy = load_strategy(request)
-            backend = load_backend(strategy, backend_name, redirect_uri=None)
+            callback_url = request.build_absolute_uri(f'/api/v1/auth/social/callback/{backend_name}/')
+            backend = load_backend(strategy, backend_name, redirect_uri=callback_url)
         except MissingBackend:
             return Response({"detail": "Unknown provider."}, status=status.HTTP_400_BAD_REQUEST)
         return HttpResponseRedirect(backend.auth_url())

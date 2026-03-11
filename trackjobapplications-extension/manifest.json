@@ -37,6 +37,22 @@
       "run_at": "document_idle"
     },
     {
+      "matches": [
+        "https://www.glassdoor.com/job-listing/*",
+        "https://www.glassdoor.com/Job/*"
+      ],
+      "js": ["content/sanitize.js", "content/glassdoor.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://www.ziprecruiter.com/jobs/*",
+        "https://www.ziprecruiter.com/c/*"
+      ],
+      "js": ["content/sanitize.js", "content/ziprecruiter.js"],
+      "run_at": "document_idle"
+    },
+    {
       "matches": ["https://mail.google.com/*"],
       "js": ["content/sanitize.js", "content/gmail.js"],
       "run_at": "document_idle"

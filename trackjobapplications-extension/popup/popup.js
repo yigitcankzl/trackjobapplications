@@ -72,7 +72,7 @@ async function loadJobData() {
   if (!tab) return showNoJob();
 
   const url = tab.url || '';
-  const isSupported = url.includes('linkedin.com/jobs') || url.includes('indeed.com') || url.includes('mail.google.com');
+  const isSupported = url.includes('linkedin.com/jobs') || url.includes('indeed.com') || url.includes('glassdoor.com') || url.includes('ziprecruiter.com') || url.includes('mail.google.com');
 
   if (!isSupported) return showNoJob();
 
@@ -94,7 +94,7 @@ function showJobInfo(data) {
   document.getElementById('no-job').hidden = true;
   document.getElementById('job-company').textContent = data.company;
   document.getElementById('job-position').textContent = data.position;
-  const sourceNames = { linkedin: 'LinkedIn', indeed: 'Indeed', other: 'Email' };
+  const sourceNames = { linkedin: 'LinkedIn', indeed: 'Indeed', glassdoor: 'Glassdoor', ziprecruiter: 'ZipRecruiter', other: 'Email' };
   document.getElementById('job-source').textContent = sourceNames[data.source] || data.source;
   loadTags();
 }

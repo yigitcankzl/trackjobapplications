@@ -27,7 +27,9 @@ export default function SignInForm({ onSwitch }: Props) {
       await login(email, password)
       navigate('/dashboard')
     } catch (err: unknown) {
-      const detail = (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail
+      const data = (err as { response?: { data?: unknown } })?.response?.data as Record<string, unknown> | undefined
+      const raw = data?.detail ?? data?.non_field_errors
+      const detail = typeof raw === 'string' ? raw : Array.isArray(raw) ? raw[0] : undefined
       addToast(detail || t('auth.errors.invalidCredentials'), 'error')
     } finally {
       setIsLoading(false)

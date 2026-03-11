@@ -219,6 +219,9 @@ FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://localhost:3003")
 
 # Cron
 CRON_SECRET = os.environ.get("CRON_SECRET", "")
+if not DEBUG and not CRON_SECRET:
+    from django.core.exceptions import ImproperlyConfigured
+    raise ImproperlyConfigured("CRON_SECRET must be set in production")
 
 # Email
 EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend")

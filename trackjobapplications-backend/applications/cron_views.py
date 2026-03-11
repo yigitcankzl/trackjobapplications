@@ -1,3 +1,4 @@
+import hmac
 import logging
 
 from django.conf import settings
@@ -18,7 +19,7 @@ class CronSendRemindersView(APIView):
 
     def post(self, request):
         token = request.headers.get("X-Cron-Secret", "")
-        if not token or token != settings.CRON_SECRET:
+        if not token or not hmac.compare_digest(token, settings.CRON_SECRET):
             return Response(status=status.HTTP_403_FORBIDDEN)
 
         call_command("send_reminders")

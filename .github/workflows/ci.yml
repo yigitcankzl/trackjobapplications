@@ -41,8 +41,6 @@ jobs:
       POSTGRES_PASSWORD: testpass
       POSTGRES_HOST: localhost
       POSTGRES_PORT: "5432"
-      CELERY_BROKER_URL: redis://localhost:6379/0
-      CELERY_RESULT_BACKEND: redis://localhost:6379/0
 
     defaults:
       run:

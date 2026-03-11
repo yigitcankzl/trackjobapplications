@@ -37,8 +37,6 @@ services:
       - ./trackjobapplications-backend/.env
     environment:
       DJANGO_SETTINGS_MODULE: config.settings
-      CELERY_BROKER_URL: redis://:${REDIS_PASSWORD:?REDIS_PASSWORD is required}@redis:6379/0
-      CELERY_RESULT_BACKEND: redis://:${REDIS_PASSWORD:?REDIS_PASSWORD is required}@redis:6379/0
       ROLE: web
     healthcheck:
       test: ["CMD-SHELL", "python -c 'import urllib.request; urllib.request.urlopen(\"http://localhost:8000/api/health/\")'"]
@@ -46,52 +44,6 @@ services:
       timeout: 5s
       retries: 3
       start_period: 15s
-    depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-
-  celery-worker:
-    build:
-      context: ./trackjobapplications-backend
-      dockerfile: Dockerfile
-    command: celery -A config worker -l info --concurrency=4 --prefetch-multiplier=1
-    volumes:
-      - ./trackjobapplications-backend:/app
-    env_file:
-      - ./trackjobapplications-backend/.env
-    environment:
-      DJANGO_SETTINGS_MODULE: config.settings
-      CELERY_BROKER_URL: redis://:${REDIS_PASSWORD:?REDIS_PASSWORD is required}@redis:6379/0
-      CELERY_RESULT_BACKEND: redis://:${REDIS_PASSWORD:?REDIS_PASSWORD is required}@redis:6379/0
-      ROLE: worker
-    healthcheck:
-      test: ["CMD-SHELL", "celery -A config inspect ping --timeout 5"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
-    depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-
-  celery-beat:
-    build:
-      context: ./trackjobapplications-backend
-      dockerfile: Dockerfile
-    command: celery -A config beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
-    volumes:
-      - ./trackjobapplications-backend:/app
-    env_file:
-      - ./trackjobapplications-backend/.env
-    environment:
-      DJANGO_SETTINGS_MODULE: config.settings
-      CELERY_BROKER_URL: redis://:${REDIS_PASSWORD:?REDIS_PASSWORD is required}@redis:6379/0
-      CELERY_RESULT_BACKEND: redis://:${REDIS_PASSWORD:?REDIS_PASSWORD is required}@redis:6379/0
-      ROLE: beat
     depends_on:
       db:
         condition: service_healthy

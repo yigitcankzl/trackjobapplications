@@ -181,16 +181,12 @@ async function apiFetch(path, options = {}) {
 
 // --- Message Handler ---
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message, sender) => {
   // Only accept messages from this extension's own content scripts or popup
   if (sender.id !== chrome.runtime.id) {
-    sendResponse({ success: false, error: 'Unauthorized sender' });
-    return false;
+    return Promise.resolve({ success: false, error: 'Unauthorized sender' });
   }
-  // Return promise directly for Firefox, use sendResponse for Chrome
-  const promise = handleMessage(message);
-  promise.then(sendResponse);
-  return true; // keep channel open for async response
+  return handleMessage(message);
 });
 
 async function handleMessage(message) {

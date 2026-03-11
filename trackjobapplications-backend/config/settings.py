@@ -302,6 +302,18 @@ LOGGING = {
     },
 }
 
+# Cache
+REDIS_URL = os.environ.get("REDIS_URL", "redis://redis:6379/0")
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": REDIS_URL,
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+    }
+}
+
 # django-axes: account lockout after failed login attempts
 AXES_FAILURE_LIMIT = 5
 AXES_COOLOFF_TIME = timedelta(minutes=30)

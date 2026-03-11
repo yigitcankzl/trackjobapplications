@@ -96,6 +96,42 @@ function showJobInfo(data) {
   document.getElementById('job-position').textContent = data.position;
   const sourceNames = { linkedin: 'LinkedIn', indeed: 'Indeed', other: 'Email' };
   document.getElementById('job-source').textContent = sourceNames[data.source] || data.source;
+  loadTags();
+}
+
+// --- Tags ---
+
+const selectedTagIds = new Set();
+
+async function loadTags() {
+  const res = await chrome.runtime.sendMessage({ type: 'GET_TAGS' });
+  const picker = document.getElementById('tag-picker');
+  if (!res.success || !res.data.length) {
+    picker.hidden = true;
+    return;
+  }
+  picker.innerHTML = '';
+  selectedTagIds.clear();
+  for (const tag of res.data) {
+    const chip = document.createElement('span');
+    chip.className = 'tag-chip';
+    chip.textContent = tag.name;
+    chip.style.backgroundColor = tag.color + '33'; // 20% opacity bg
+    chip.style.color = tag.color;
+    chip.dataset.tagId = tag.id;
+    chip.addEventListener('click', () => {
+      const id = Number(chip.dataset.tagId);
+      if (selectedTagIds.has(id)) {
+        selectedTagIds.delete(id);
+        chip.classList.remove('selected');
+      } else {
+        selectedTagIds.add(id);
+        chip.classList.add('selected');
+      }
+    });
+    picker.appendChild(chip);
+  }
+  picker.hidden = false;
 }
 
 function showNoJob() {
@@ -179,6 +215,7 @@ async function addApplication(status) {
     job_posting_content: currentJobData.job_posting_content,
   };
   if (notes) msg.notes = notes;
+  if (selectedTagIds.size > 0) msg.tag_ids = [...selectedTagIds];
 
   const result = await chrome.runtime.sendMessage(msg);
 

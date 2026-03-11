@@ -72,6 +72,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = useCallback(async () => {
     await auth.logout()
     setUser(null)
+    // Clear user-specific data from localStorage
+    localStorage.removeItem('tj_search_history')
+    localStorage.removeItem('tj_widget_order')
+    localStorage.removeItem('dismissed_interview_reminders')
+    // Clear PWA service worker cache
+    if ('caches' in window) {
+      caches.delete('trackjobs-v1').catch(() => {})
+    }
     navigate('/login')
   }, [navigate])
 

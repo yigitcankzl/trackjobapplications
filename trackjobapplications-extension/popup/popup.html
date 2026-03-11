@@ -48,9 +48,22 @@
           <input type="text" id="contact-name" placeholder="Recruiter name" maxlength="100">
           <input type="email" id="contact-email" placeholder="Email (optional)" maxlength="254">
         </div>
+        <div id="interview-fields" class="interview-fields" hidden>
+          <select id="interview-type">
+            <option value="phone_screen">Phone Screen</option>
+            <option value="technical">Technical</option>
+            <option value="behavioral">Behavioral</option>
+            <option value="onsite">On-site</option>
+            <option value="take_home">Take-home</option>
+            <option value="final">Final Round</option>
+            <option value="other">Other</option>
+          </select>
+          <input type="datetime-local" id="interview-date">
+        </div>
         <div class="btn-group">
-          <button id="save-btn" class="btn-save">Save (To Apply)</button>
-          <button id="apply-btn" class="btn-apply">Mark as Applied</button>
+          <button id="save-btn" class="btn-save">To Apply</button>
+          <button id="apply-btn" class="btn-apply">Applied</button>
+          <button id="interview-btn" class="btn-interview">Interview</button>
         </div>
       </div>
 

@@ -83,6 +83,15 @@ def _clear_auth_cookies(response):
     return response
 
 
+def axes_lockout_response(request, credentials=None, *args, **kwargs):
+    """Return a JSON 401 response when axes locks out an IP, so the frontend can display a proper message."""
+    from django.http import JsonResponse
+    return JsonResponse(
+        {"detail": "Too many failed login attempts. Please try again in 30 minutes."},
+        status=401,
+    )
+
+
 class ThrottledTokenObtainPairView(TokenObtainPairView):
     throttle_classes = [ScopedRateThrottle]
     throttle_scope = "login"

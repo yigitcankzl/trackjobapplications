@@ -318,6 +318,7 @@ AXES_COOLOFF_TIME = timedelta(minutes=30)
 AXES_LOCKOUT_PARAMETERS = ["ip_address"]
 AXES_RESET_ON_SUCCESS = True
 AXES_ENABLE_ACCESS_FAILURE_LOG = True
+AXES_LOCKOUT_CALLABLE = "users.views.axes_lockout_response"
 
 # Social OAuth (python-social-auth)
 SOCIAL_AUTH_URL_NAMESPACE = "social"

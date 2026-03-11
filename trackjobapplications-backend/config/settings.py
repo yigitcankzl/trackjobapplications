@@ -217,6 +217,9 @@ JWT_AUTH_COOKIE_SECURE = not DEBUG
 
 FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://localhost:3003")
 
+# Cron
+CRON_SECRET = os.environ.get("CRON_SECRET", "")
+
 # Email
 EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend")
 EMAIL_HOST = os.environ.get("EMAIL_HOST", "smtp.gmail.com")

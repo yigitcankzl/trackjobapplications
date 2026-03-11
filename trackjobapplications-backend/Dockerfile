@@ -19,4 +19,4 @@ RUN chmod +x /app/entrypoint.sh \
 USER appuser
 
 ENTRYPOINT ["/app/entrypoint.sh"]
-CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000"]
+CMD ["sh", "-c", "gunicorn config.wsgi:application --bind 0.0.0.0:${PORT:-8000} --workers 1 --threads 2 --graceful-timeout 30 --timeout 120"]

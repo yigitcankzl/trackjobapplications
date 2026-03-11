@@ -291,8 +291,8 @@ export default function CoverLettersPage() {
               <button
                 onClick={() => {
                   navigator.clipboard.writeText(renderPreview(preview.content, fillValues))
-                  setCopied(true)
-                  setTimeout(() => setCopied(false), 2000)
+                    .then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000) })
+                    .catch(() => { /* clipboard API unavailable */ })
                 }}
                 className="px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-colors"
               >

@@ -4,6 +4,7 @@ import { InterviewStage, InterviewStageType } from '../../types'
 import { getInterviews, createInterview, updateInterview, deleteInterview } from '../../services/interviews'
 import { useToast } from '../../context/ToastContext'
 import { buildGoogleCalendarUrl } from '../../lib/calendar'
+import { isSafeUrl } from '../../lib/url'
 import LoadingSpinner from '../ui/LoadingSpinner'
 
 interface Props {
@@ -147,11 +148,11 @@ export default function InterviewTimeline({ applicationId, company, position }: 
                 </div>
                 <div className="flex items-center gap-1.5">
                   <a
-                    href={buildGoogleCalendarUrl({
+                    href={(() => { const url = buildGoogleCalendarUrl({
                       title: `${stageLabel(stage.stage_type)}${company ? ` — ${company}` : ''}${position ? ` (${position})` : ''}`,
                       start: stage.scheduled_at,
                       description: stage.notes,
-                    })}
+                    }); return isSafeUrl(url) ? url : '#' })()}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={e => e.stopPropagation()}

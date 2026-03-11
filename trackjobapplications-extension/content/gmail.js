@@ -110,7 +110,7 @@ function createGmailActionButton(label, color, hoverColor, status, data) {
       type: 'ADD_APPLICATION',
       company: data.company,
       position: data.position,
-      url: window.location.href,
+      url: sanitizeUrl(window.location.href, ['mail.google.com']),
       source: 'other',
       applied_date: today,
       notes: notes,
@@ -187,7 +187,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       sendResponse({
         company: data.company,
         position: data.position,
-        url: window.location.href,
+        url: sanitizeUrl(window.location.href, ['mail.google.com']),
         source: 'other',
       });
     } else {

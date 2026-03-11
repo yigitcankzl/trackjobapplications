@@ -81,7 +81,7 @@ if os.environ.get("POSTGRES_DB"):
             "PORT": os.environ.get("POSTGRES_PORT", "5432"),
             "CONN_MAX_AGE": 600,
             "CONN_HEALTH_CHECKS": True,
-            "OPTIONS": {"sslmode": os.environ.get("POSTGRES_SSLMODE", "prefer")},
+            "OPTIONS": {"sslmode": os.environ.get("POSTGRES_SSLMODE", "require")},
         }
     }
 else:

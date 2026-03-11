@@ -88,7 +88,7 @@ def axes_lockout_response(request, credentials=None, *args, **kwargs):
     from django.http import JsonResponse
     return JsonResponse(
         {"detail": "Too many failed login attempts. Please try again in 30 minutes."},
-        status=401,
+        status=429,
     )
 
 

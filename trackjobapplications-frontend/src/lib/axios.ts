@@ -26,7 +26,7 @@ async function ensureCsrfToken(): Promise<void> {
         csrfToken = data.csrfToken
         csrfPromise = null
       })
-      .catch(() => { csrfPromise = null })
+      .catch(() => { csrfPromise = null; console.warn('Failed to fetch CSRF token') })
   }
   return csrfPromise
 }

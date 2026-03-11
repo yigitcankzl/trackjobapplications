@@ -222,7 +222,9 @@ CRON_SECRET = os.environ.get("CRON_SECRET", "")
 
 # Email
 EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend")
-RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "")
+ANYMAIL = {
+    "RESEND_API_KEY": os.environ.get("RESEND_API_KEY", ""),
+}
 DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "TrackJobs <onboarding@resend.dev>")
 
 PASSWORD_HASHERS = [

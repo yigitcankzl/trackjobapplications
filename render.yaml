@@ -33,7 +33,7 @@ services:
       - key: FRONTEND_URL
         sync: false
       - key: EMAIL_BACKEND
-        value: "django_resend.backend.ResendBackend"
+        value: "anymail.backends.resend.EmailBackend"
       - key: RESEND_API_KEY
         sync: false
       - key: DEFAULT_FROM_EMAIL

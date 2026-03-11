@@ -262,6 +262,9 @@ async function handleMessage(message) {
         if (notes) payload.notes = notes;
         const jobPostingContent = validateText(message.job_posting_content, MAX_JOB_POSTING_LENGTH);
         if (jobPostingContent) payload.job_posting_content = jobPostingContent;
+        if (Array.isArray(message.tag_ids) && message.tag_ids.length > 0) {
+          payload.tag_ids = message.tag_ids.filter(id => typeof id === 'number' && id > 0);
+        }
         const res = await apiFetch('/applications/', {
           method: 'POST',
           body: JSON.stringify(payload),
@@ -321,6 +324,12 @@ async function handleMessage(message) {
           const err = await res.json().catch(() => ({}));
           return { success: false, error: err.detail || err.scheduled_at?.[0] || 'Failed to add interview' };
         }
+        return { success: true, data: await res.json() };
+      }
+
+      case 'GET_TAGS': {
+        const res = await apiFetch('/applications/tags/');
+        if (!res.ok) return { success: false, error: 'Failed to load tags' };
         return { success: true, data: await res.json() };
       }
 

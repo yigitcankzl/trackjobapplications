@@ -39,10 +39,15 @@
           <label>Source</label>
           <span id="job-source"></span>
         </div>
-        <div class="notes-toggle">
-          <a href="#" id="notes-toggle-btn">+ Add note</a>
+        <div class="extras-toggles">
+          <a href="#" id="notes-toggle-btn">+ Note</a>
+          <a href="#" id="contact-toggle-btn">+ Recruiter</a>
         </div>
         <textarea id="job-notes" class="job-notes" placeholder="Quick note (optional)..." hidden></textarea>
+        <div id="contact-fields" class="contact-fields" hidden>
+          <input type="text" id="contact-name" placeholder="Recruiter name" maxlength="100">
+          <input type="email" id="contact-email" placeholder="Email (optional)" maxlength="254">
+        </div>
         <div class="btn-group">
           <button id="save-btn" class="btn-save">Save (To Apply)</button>
           <button id="apply-btn" class="btn-apply">Mark as Applied</button>

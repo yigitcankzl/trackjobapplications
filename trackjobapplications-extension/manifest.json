@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "TrackJobApplications",
   "version": "1.0.0",
-  "description": "Add job applications from LinkedIn and Indeed with one click.",
+  "description": "Track job applications from LinkedIn, Indeed, Glassdoor, and ZipRecruiter with one click.",
   "permissions": [
     "storage",
     "activeTab"

@@ -123,17 +123,45 @@ document.getElementById('contact-toggle-btn').addEventListener('click', (e) => {
   if (!fields.hidden) document.getElementById('contact-name').focus();
 });
 
-// --- Add Application (two buttons) ---
+// --- Interview Toggle ---
+
+const interviewBtn = document.getElementById('interview-btn');
+const interviewFields = document.getElementById('interview-fields');
+
+interviewBtn.addEventListener('click', () => {
+  if (interviewFields.hidden) {
+    // First click: show interview fields, pre-fill date to tomorrow
+    interviewFields.hidden = false;
+    const dateInput = document.getElementById('interview-date');
+    if (!dateInput.value) {
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      tomorrow.setHours(10, 0, 0, 0);
+      dateInput.value = tomorrow.toISOString().slice(0, 16);
+    }
+    interviewBtn.textContent = 'Save Interview';
+    return;
+  }
+  // Second click: validate and save
+  const dateVal = document.getElementById('interview-date').value;
+  if (!dateVal) {
+    showFeedback('Please select interview date/time', 'error');
+    return;
+  }
+  addApplication('interview');
+});
+
+// --- Add Application ---
+
+const allActionBtns = ['save-btn', 'apply-btn', 'interview-btn'];
 
 async function addApplication(status) {
   if (!currentJobData) return;
 
-  const saveBtn = document.getElementById('save-btn');
-  const applyBtn = document.getElementById('apply-btn');
-  saveBtn.disabled = true;
-  applyBtn.disabled = true;
-
-  const activeBtn = status === 'to_apply' ? saveBtn : applyBtn;
+  const activeBtn = document.getElementById(
+    status === 'to_apply' ? 'save-btn' : status === 'applied' ? 'apply-btn' : 'interview-btn'
+  );
+  allActionBtns.forEach(id => { document.getElementById(id).disabled = true; });
   const originalText = activeBtn.textContent;
   activeBtn.textContent = 'Saving...';
 
@@ -155,25 +183,42 @@ async function addApplication(status) {
   const result = await chrome.runtime.sendMessage(msg);
 
   if (result.success) {
+    const appId = result.data?.id;
+
     // Add recruiter contact if provided
     const contactName = document.getElementById('contact-name').value.trim();
-    if (contactName && result.data?.id) {
-      const contactMsg = {
+    if (contactName && appId) {
+      await chrome.runtime.sendMessage({
         type: 'ADD_CONTACT',
-        application_id: result.data.id,
+        application_id: appId,
         name: contactName,
         email: document.getElementById('contact-email').value.trim(),
-      };
-      await chrome.runtime.sendMessage(contactMsg);
+      });
     }
-    const label = status === 'to_apply' ? 'Saved!' : 'Applied!';
-    showFeedback(label, 'success');
-    activeBtn.textContent = label;
+
+    // Add interview if status is interview
+    if (status === 'interview' && appId) {
+      const scheduledAt = new Date(document.getElementById('interview-date').value).toISOString();
+      const interviewRes = await chrome.runtime.sendMessage({
+        type: 'ADD_INTERVIEW',
+        application_id: appId,
+        stage_type: document.getElementById('interview-type').value,
+        scheduled_at: scheduledAt,
+      });
+      if (!interviewRes.success) {
+        showFeedback(interviewRes.error || 'App saved, but interview failed', 'error');
+        loadDashboard();
+        return;
+      }
+    }
+
+    const labels = { to_apply: 'Saved!', applied: 'Applied!', interview: 'Interview saved!' };
+    showFeedback(labels[status], 'success');
+    activeBtn.textContent = labels[status];
     loadDashboard();
   } else {
     showFeedback(result.error, 'error');
-    saveBtn.disabled = false;
-    applyBtn.disabled = false;
+    allActionBtns.forEach(id => { document.getElementById(id).disabled = false; });
     activeBtn.textContent = originalText;
   }
 }

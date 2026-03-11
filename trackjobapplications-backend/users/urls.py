@@ -12,6 +12,7 @@ from .views import (
     RegisterView,
     ResendVerificationView,
     SocialLoginInitView,
+    SocialTokenExchangeView,
     ThrottledTokenObtainPairView,
     ThrottledTokenRefreshView,
     VerifyEmailView,
@@ -32,4 +33,5 @@ urlpatterns = [
     path("password-reset/confirm/", PasswordResetConfirmView.as_view(), name="auth-password-reset-confirm"),
     path("social/login/<str:backend_name>/", SocialLoginInitView.as_view(), name="social-login"),
     path("social/callback/<str:backend_name>/", OAuthCallbackView.as_view(), name="social-callback"),
+    path("social/token/", SocialTokenExchangeView.as_view(), name="social-token-exchange"),
 ]

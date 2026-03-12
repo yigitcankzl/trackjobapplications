@@ -106,7 +106,7 @@ export default function ProfilePage() {
       <Header title={t('profile.title')} />
       <div className="max-w-2xl mx-auto space-y-8 pb-12">
         {/* Profile Info */}
-        <form onSubmit={handleSaveProfile} className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100 dark:border-stone-800 p-6 space-y-6">
+        <form onSubmit={handleSaveProfile} className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6 space-y-6">
           {/* Avatar */}
           <div className="relative overflow-hidden rounded-lg">
             <div className="absolute inset-0 bg-white/70 dark:bg-stone-900/70 backdrop-blur-[2px] rounded-lg z-10 flex flex-col items-center justify-center gap-1">
@@ -229,7 +229,7 @@ export default function ProfilePage() {
         </form>
 
         {/* Email Notifications - Coming Soon */}
-        <div className="relative bg-white dark:bg-stone-900 rounded-lg border border-stone-100 dark:border-stone-800 p-6 space-y-5 overflow-hidden">
+        <div className="relative bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6 space-y-5 overflow-hidden">
           {/* Coming Soon overlay */}
           <div className="absolute inset-0 bg-white/70 dark:bg-stone-900/70 backdrop-blur-[2px] rounded-lg z-10 flex flex-col items-center justify-center gap-1.5">
             <span className="text-sm font-semibold text-stone-700 dark:text-stone-200">{t('comingSoon')}</span>
@@ -266,7 +266,7 @@ export default function ProfilePage() {
         </div>
 
         {/* Change Password */}
-        <form onSubmit={handleChangePassword} className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100 dark:border-stone-800 p-6 space-y-4">
+        <form onSubmit={handleChangePassword} className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6 space-y-4">
           <h2 className="text-sm font-semibold text-stone-800 dark:text-stone-100">{t('profile.changePassword')}</h2>
           <div>
             <label className="block text-xs font-medium text-stone-500 dark:text-stone-400 mb-1">{t('profile.oldPassword')}</label>

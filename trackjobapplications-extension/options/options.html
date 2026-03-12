@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TrackJobApplications — Auto-Fill Profile</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header-bar">
+      <div class="logo-group">
+        <div class="logo-icon">
+          <svg class="logo-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+            <line x1="12" y1="22.08" x2="12" y2="12"/>
+          </svg>
+        </div>
+        <span class="logo-text">Auto-Fill Profile</span>
+      </div>
+      <button class="theme-btn" id="theme-toggle" title="Toggle theme">
+        <svg id="theme-icon-light" class="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <svg id="theme-icon-dark" class="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+    </div>
+
+    <p class="subtitle">This information will be used to auto-fill job application forms.</p>
+
+    <form id="profile-form">
+      <fieldset>
+        <legend>Personal Information</legend>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName" placeholder="John">
+          </div>
+          <div class="form-field">
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" placeholder="Doe">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="john@example.com">
+          </div>
+          <div class="form-field">
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" placeholder="+1 (555) 123-4567">
+          </div>
+        </div>
+        <div class="form-field">
+          <label for="location">Location</label>
+          <input type="text" id="location" placeholder="San Francisco, CA">
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Online Profiles</legend>
+        <div class="form-field">
+          <label for="linkedin">LinkedIn URL</label>
+          <input type="url" id="linkedin" placeholder="https://linkedin.com/in/johndoe">
+        </div>
+        <div class="form-field">
+          <label for="github">GitHub URL</label>
+          <input type="url" id="github" placeholder="https://github.com/johndoe">
+        </div>
+        <div class="form-field">
+          <label for="portfolio">Portfolio / Website</label>
+          <input type="url" id="portfolio" placeholder="https://johndoe.dev">
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Education</legend>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="university">University / School</label>
+            <input type="text" id="university" placeholder="Stanford University">
+          </div>
+          <div class="form-field">
+            <label for="degree">Degree</label>
+            <input type="text" id="degree" placeholder="B.S. Computer Science">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="gpa">GPA</label>
+            <input type="text" id="gpa" placeholder="3.8">
+          </div>
+          <div class="form-field">
+            <label for="graduationYear">Graduation Year</label>
+            <input type="text" id="graduationYear" placeholder="2024">
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Work Authorization</legend>
+        <div class="form-field">
+          <label for="workAuthorization">Are you authorized to work?</label>
+          <select id="workAuthorization">
+            <option value="">-- Select --</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label for="sponsorship">Do you require sponsorship?</label>
+          <select id="sponsorship">
+            <option value="">-- Select --</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Demographics (Optional)</legend>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="gender">Gender</label>
+            <select id="gender">
+              <option value="">-- Select --</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="non-binary">Non-binary</option>
+              <option value="other">Other</option>
+              <option value="decline">Prefer not to say</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="veteranStatus">Veteran Status</label>
+            <select id="veteranStatus">
+              <option value="">-- Select --</option>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+              <option value="decline">Prefer not to say</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="ethnicity">Ethnicity</label>
+            <select id="ethnicity">
+              <option value="">-- Select --</option>
+              <option value="hispanic">Hispanic or Latino</option>
+              <option value="white">White</option>
+              <option value="black">Black or African American</option>
+              <option value="asian">Asian</option>
+              <option value="native">American Indian or Alaska Native</option>
+              <option value="pacific">Native Hawaiian or Pacific Islander</option>
+              <option value="two_or_more">Two or More Races</option>
+              <option value="decline">Prefer not to say</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="disabilityStatus">Disability Status</label>
+            <select id="disabilityStatus">
+              <option value="">-- Select --</option>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+              <option value="decline">Prefer not to say</option>
+            </select>
+          </div>
+        </div>
+      </fieldset>
+
+      <div class="btn-row">
+        <button type="submit" class="btn-save" id="save-btn">Save Profile</button>
+      </div>
+    </form>
+
+    <div id="feedback" hidden></div>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>

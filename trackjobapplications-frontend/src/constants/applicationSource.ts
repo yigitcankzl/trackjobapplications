@@ -1,12 +1,12 @@
 import { ApplicationSource } from '../types'
 
 export const SOURCE_CONFIG: Record<ApplicationSource, { className: string; color: string }> = {
-  linkedin: { className: 'bg-blue-50/70 text-blue-700 dark:bg-blue-950/30 dark:text-blue-400 ring-1 ring-blue-200/60 dark:ring-blue-800/60', color: 'bg-blue-500' },
-  indeed: { className: 'bg-purple-50/70 text-purple-700 dark:bg-purple-950/30 dark:text-purple-400 ring-1 ring-purple-200/60 dark:ring-purple-800/60', color: 'bg-purple-500' },
-  glassdoor: { className: 'bg-green-50/70 text-green-700 dark:bg-green-950/30 dark:text-green-400 ring-1 ring-green-200/60 dark:ring-green-800/60', color: 'bg-green-500' },
-  referral: { className: 'bg-amber-50/70 text-amber-700 dark:bg-amber-950/30 dark:text-amber-400 ring-1 ring-amber-200/60 dark:ring-amber-800/60', color: 'bg-amber-500' },
-  company_website: { className: 'bg-cyan-50/70 text-cyan-700 dark:bg-cyan-950/30 dark:text-cyan-400 ring-1 ring-cyan-200/60 dark:ring-cyan-800/60', color: 'bg-cyan-500' },
-  other: { className: 'bg-stone-100 text-stone-600 dark:bg-stone-800/40 dark:text-stone-400 ring-1 ring-stone-200 dark:ring-stone-700', color: 'bg-stone-400' },
+  linkedin: { className: 'bg-sky-50 text-sky-700 dark:bg-sky-950/30 dark:text-sky-400 ring-1 ring-sky-200 dark:ring-sky-800', color: 'bg-sky-600' },
+  indeed: { className: 'bg-violet-50 text-violet-700 dark:bg-violet-950/30 dark:text-violet-400 ring-1 ring-violet-200 dark:ring-violet-800', color: 'bg-violet-600' },
+  glassdoor: { className: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400 ring-1 ring-emerald-200 dark:ring-emerald-800', color: 'bg-emerald-600' },
+  referral: { className: 'bg-yellow-50 text-yellow-700 dark:bg-yellow-950/30 dark:text-yellow-400 ring-1 ring-yellow-200 dark:ring-yellow-800', color: 'bg-yellow-500' },
+  company_website: { className: 'bg-fuchsia-50 text-fuchsia-700 dark:bg-fuchsia-950/30 dark:text-fuchsia-400 ring-1 ring-fuchsia-200 dark:ring-fuchsia-800', color: 'bg-fuchsia-500' },
+  other: { className: 'bg-zinc-100 text-zinc-600 dark:bg-zinc-800/40 dark:text-zinc-400 ring-1 ring-zinc-200 dark:ring-zinc-700', color: 'bg-zinc-400' },
 }
 
 export const SOURCE_KEYS: ApplicationSource[] = Object.keys(SOURCE_CONFIG) as ApplicationSource[]

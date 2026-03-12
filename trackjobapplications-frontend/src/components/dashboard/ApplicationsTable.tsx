@@ -28,11 +28,11 @@ function EmptyState() {
   const { t } = useTranslation()
   return (
     <div className="flex flex-col items-center justify-center py-24 text-center">
-      <div className="w-14 h-14 rounded-2xl bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center mb-4 text-blue-400">
+      <div className="w-14 h-14 rounded-lg bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center mb-4 text-blue-400">
         <ClipboardIcon />
       </div>
-      <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('dashboard.table.emptyTitle')}</p>
-      <p className="text-xs text-gray-400">{t('dashboard.table.emptySubtitle')}</p>
+      <p className="text-sm font-medium text-stone-700 dark:text-stone-300 mb-1">{t('dashboard.table.emptyTitle')}</p>
+      <p className="text-xs text-stone-400">{t('dashboard.table.emptySubtitle')}</p>
     </div>
   )
 }
@@ -57,7 +57,7 @@ export default memo(function ApplicationsTable({ applications, onEdit, onDelete,
 
   if (applications.length === 0) {
     return (
-      <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100 dark:border-stone-800 shadow-sm overflow-hidden">
         <EmptyState />
       </div>
     )
@@ -65,30 +65,30 @@ export default memo(function ApplicationsTable({ applications, onEdit, onDelete,
 
   return (
     <div
-      className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm overflow-x-auto"
+      className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100 dark:border-stone-800 shadow-sm overflow-x-auto"
       style={useVirtual ? { maxHeight: TABLE_MAX_HEIGHT, overflowY: 'auto' } : undefined}
       onScroll={useVirtual ? handleScroll : undefined}
     >
       <table className="w-full min-w-[640px]">
         <thead className={useVirtual ? 'sticky top-0 z-10' : undefined}>
-          <tr className="border-b border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/50">
+          <tr className="border-b border-stone-100 dark:border-stone-800 bg-stone-50/50 dark:bg-stone-800/50">
             {hasBulk && (
               <th className="w-10 px-3 py-3.5">
                 <input
                   type="checkbox"
                   checked={applications.length > 0 && selectedIds.length === applications.length}
                   onChange={onToggleSelectAll}
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  className="rounded border-stone-300 text-blue-600 focus:ring-blue-500"
                 />
               </th>
             )}
-            <th className="text-left text-xs font-semibold text-gray-400 uppercase tracking-wide px-6 py-3.5">{t('dashboard.table.company')}</th>
-            <th className="text-left text-xs font-semibold text-gray-400 uppercase tracking-wide px-6 py-3.5">{t('dashboard.table.status')}</th>
-            <th className="text-left text-xs font-semibold text-gray-400 uppercase tracking-wide px-6 py-3.5">{t('dashboard.table.applied')}</th>
+            <th className="text-left text-xs font-semibold text-stone-400 uppercase tracking-wide px-6 py-3.5">{t('dashboard.table.company')}</th>
+            <th className="text-left text-xs font-semibold text-stone-400 uppercase tracking-wide px-6 py-3.5">{t('dashboard.table.status')}</th>
+            <th className="text-left text-xs font-semibold text-stone-400 uppercase tracking-wide px-6 py-3.5">{t('dashboard.table.applied')}</th>
             <th className="w-20 px-6 py-3.5" />
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-50 dark:divide-gray-800">
+        <tbody className="divide-y divide-stone-50 dark:divide-stone-800">
           {useVirtual && paddingTop > 0 && (
             <tr style={{ height: paddingTop }}><td colSpan={colSpan} /></tr>
           )}
@@ -101,24 +101,24 @@ export default memo(function ApplicationsTable({ applications, onEdit, onDelete,
                     checked={selectedIds.includes(app.id)}
                     onChange={e => { e.stopPropagation(); onToggleSelect(app.id) }}
                     onClick={e => e.stopPropagation()}
-                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    className="rounded border-stone-300 text-blue-600 focus:ring-blue-500"
                   />
                 </td>
               )}
               {/* Company + Position + Notes */}
               <td className="px-6 py-4">
                 <div className="flex items-center gap-3.5">
-                  <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold flex-shrink-0 ${getAvatarColor(app.company)}`}>
+                  <div className={`w-9 h-9 rounded-lg flex items-center justify-center text-sm font-bold flex-shrink-0 ${getAvatarColor(app.company)}`}>
                     {(app.company[0] ?? '?').toUpperCase()}
                   </div>
                   <div className="min-w-0">
-                    <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 leading-tight flex items-center gap-1.5">
+                    <p className="text-sm font-semibold text-stone-900 dark:text-stone-100 leading-tight flex items-center gap-1.5">
                       {app.company}
                       {needsFollowUp(app) && <span className="w-2 h-2 rounded-full bg-amber-400 flex-shrink-0" title={t('dashboard.aria.followUpNeeded')} />}
                     </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate">{app.position}</p>
+                    <p className="text-xs text-stone-500 dark:text-stone-400 mt-0.5 truncate">{app.position}</p>
                     {app.notes && (
-                      <p className="text-xs text-gray-400 mt-0.5 truncate max-w-xs italic">{app.notes}</p>
+                      <p className="text-xs text-stone-400 mt-0.5 truncate max-w-xs italic">{app.notes}</p>
                     )}
                   </div>
                 </div>
@@ -131,7 +131,7 @@ export default memo(function ApplicationsTable({ applications, onEdit, onDelete,
 
               {/* Date */}
               <td className="px-6 py-4 whitespace-nowrap">
-                <span className="text-sm text-gray-500 dark:text-gray-400">{formatMedium(app.applied_date)}</span>
+                <span className="text-sm text-stone-500 dark:text-stone-400">{formatMedium(app.applied_date)}</span>
               </td>
 
               {/* Actions — only visible on row hover */}
@@ -140,7 +140,7 @@ export default memo(function ApplicationsTable({ applications, onEdit, onDelete,
                   {onTogglePin && (
                     <button
                       onClick={e => { e.stopPropagation(); onTogglePin(app.id) }}
-                      className={`p-1.5 rounded-lg transition-colors ${app.is_pinned ? 'text-amber-500' : 'text-gray-400 opacity-0 group-hover:opacity-100 hover:text-amber-500 hover:bg-amber-50'}`}
+                      className={`p-1.5 rounded-lg transition-colors ${app.is_pinned ? 'text-amber-500' : 'text-stone-400 opacity-0 group-hover:opacity-100 hover:text-amber-500 hover:bg-amber-50'}`}
                       aria-label={t('dashboard.aria.pin')}
                     >
                       <svg className="w-4 h-4" viewBox="0 0 24 24" fill={app.is_pinned ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6z" /></svg>
@@ -152,8 +152,8 @@ export default memo(function ApplicationsTable({ applications, onEdit, onDelete,
                       disabled={!app.url}
                       className={`p-1.5 rounded-lg transition-colors ${
                         app.url
-                          ? 'text-gray-400 opacity-0 group-hover:opacity-100 hover:text-emerald-600 hover:bg-emerald-50'
-                          : 'text-gray-200 cursor-not-allowed opacity-0 group-hover:opacity-100'
+                          ? 'text-stone-400 opacity-0 group-hover:opacity-100 hover:text-emerald-600 hover:bg-emerald-50'
+                          : 'text-stone-200 cursor-not-allowed opacity-0 group-hover:opacity-100'
                       }`}
                       aria-label={app.url ? t('dashboard.aria.apply') : t('dashboard.aria.noUrl')}
                       title={app.url ? t('dashboard.aria.apply') : t('dashboard.aria.noUrl')}
@@ -163,14 +163,14 @@ export default memo(function ApplicationsTable({ applications, onEdit, onDelete,
                   )}
                   <button
                     onClick={e => { e.stopPropagation(); onEdit(app) }}
-                    className="p-1.5 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-100 transition-colors opacity-0 group-hover:opacity-100"
+                    className="p-1.5 rounded-lg text-stone-400 hover:text-blue-600 hover:bg-blue-100 transition-colors opacity-0 group-hover:opacity-100"
                     aria-label={t('dashboard.aria.edit')}
                   >
                     <EditIcon />
                   </button>
                   <button
                     onClick={e => { e.stopPropagation(); onDelete(app) }}
-                    className="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors opacity-0 group-hover:opacity-100"
+                    className="p-1.5 rounded-lg text-stone-400 hover:text-red-500 hover:bg-red-50 transition-colors opacity-0 group-hover:opacity-100"
                     aria-label={t('dashboard.aria.delete')}
                   >
                     <TrashIcon />

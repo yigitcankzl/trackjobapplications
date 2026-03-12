@@ -19,8 +19,8 @@ export default function BulkActionBar({ selectedCount, onUpdateStatus, onDelete,
   if (selectedCount === 0) return null
 
   return (
-    <div role="status" aria-live="polite" className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-xl px-6 py-3 flex items-center gap-4">
-      <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
+    <div role="status" aria-live="polite" className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-lg shadow-xl px-6 py-3 flex items-center gap-4">
+      <span className="text-sm font-medium text-stone-700 dark:text-stone-200">
         {t('dashboard.bulk.selected', { count: selectedCount })}
       </span>
 
@@ -28,7 +28,7 @@ export default function BulkActionBar({ selectedCount, onUpdateStatus, onDelete,
         <select
           value={status}
           onChange={e => setStatus(e.target.value as ApplicationStatus)}
-          className="px-2 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-sm bg-white dark:bg-gray-900 dark:text-gray-100"
+          className="px-2 py-1.5 rounded-lg border border-stone-200 dark:border-stone-700 text-sm bg-white dark:bg-stone-900 dark:text-stone-100"
         >
           {STATUS_KEYS.map(s => (
             <option key={s} value={s}>{t(`dashboard.status.${s}`)}</option>
@@ -43,7 +43,7 @@ export default function BulkActionBar({ selectedCount, onUpdateStatus, onDelete,
         {t('dashboard.bulk.deleteSelected')}
       </Button>
 
-      <button onClick={onClear} className="text-xs text-gray-400 hover:text-gray-600">
+      <button onClick={onClear} className="text-xs text-stone-400 hover:text-stone-600">
         {t('dashboard.filters.clearAll')}
       </button>
     </div>

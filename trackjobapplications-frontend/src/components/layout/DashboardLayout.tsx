@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react'
+import { ReactNode, useState, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import Sidebar from '../dashboard/Sidebar'
 import { MenuIcon } from '../icons'
@@ -10,7 +10,15 @@ interface Props {
 export default function DashboardLayout({ children }: Props) {
   const { t } = useTranslation()
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [collapsed, setCollapsed] = useState(false)
+  const [collapsed, setCollapsed] = useState(() => localStorage.getItem('sidebar-collapsed') === '1')
+
+  const toggleCollapse = useCallback(() => {
+    setCollapsed(c => {
+      const next = !c
+      localStorage.setItem('sidebar-collapsed', next ? '1' : '0')
+      return next
+    })
+  }, [])
 
   return (
     <div className="flex min-h-screen bg-stone-50 dark:bg-stone-950">
@@ -18,7 +26,7 @@ export default function DashboardLayout({ children }: Props) {
         mobileOpen={sidebarOpen}
         onMobileClose={() => setSidebarOpen(false)}
         collapsed={collapsed}
-        onToggleCollapse={() => setCollapsed(c => !c)}
+        onToggleCollapse={toggleCollapse}
       />
       <div className="flex-1 flex flex-col min-w-0">
         {/* Mobile top bar */}

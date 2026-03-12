@@ -23,6 +23,32 @@ import OfferDetailPanel from '../components/detail/OfferDetailPanel'
 import LoadingSpinner from '../components/ui/LoadingSpinner'
 import { ArrowLeftIcon, EditIcon, TrashIcon, CalendarIcon, ClockIcon, LinkIcon } from '../components/icons'
 
+function JobPostingSection({ content, t }: { content: string; t: (key: string) => string }) {
+  const [expanded, setExpanded] = useState(false)
+
+  return (
+    <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6">
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="w-full flex items-center justify-between text-left"
+      >
+        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">{t('detail.jobDescription')}</p>
+        <svg
+          className={`w-4 h-4 text-gray-400 transition-transform ${expanded ? 'rotate-180' : ''}`}
+          fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      {expanded && (
+        <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap mt-3 max-h-96 overflow-y-auto">
+          {content}
+        </p>
+      )}
+    </div>
+  )
+}
+
 export default function ApplicationDetailPage() {
   const { t } = useTranslation()
   const { id } = useParams<{ id: string }>()
@@ -177,6 +203,11 @@ export default function ApplicationDetailPage() {
             </div>
           )}
         </div>
+
+        {/* Job Description */}
+        {app.job_posting_content && (
+          <JobPostingSection content={app.job_posting_content} t={t} />
+        )}
 
         {/* Notes */}
         {app.notes && (

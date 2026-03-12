@@ -111,7 +111,7 @@ export default function Sidebar({ mobileOpen, onMobileClose }: Props) {
   return (
     <>
       {/* Desktop sidebar */}
-      <aside className="hidden lg:flex w-60 min-h-screen bg-white dark:bg-stone-900 border-r border-stone-200 dark:border-stone-800 flex-col">
+      <aside className="hidden lg:flex w-60 min-h-screen bg-white dark:bg-stone-900 border-r border-stone-200/60 dark:border-stone-800 shadow-sm flex-col">
         {sidebarContent}
       </aside>
 

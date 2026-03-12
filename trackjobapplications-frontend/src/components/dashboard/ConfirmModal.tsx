@@ -35,7 +35,7 @@ export default function ConfirmModal({
         role="dialog"
         aria-modal="true"
         aria-labelledby="confirm-dialog-title"
-        className="relative bg-white dark:bg-stone-900 rounded-lg border border-stone-200 dark:border-stone-800 w-full max-w-sm mx-4 p-6"
+        className="relative bg-white dark:bg-stone-900 rounded-lg border border-stone-200/60 dark:border-stone-800 shadow-xl w-full max-w-sm mx-4 p-6"
       >
         <div className="flex items-start gap-4 mb-5">
           <div className="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center flex-shrink-0">

@@ -28,7 +28,7 @@ function EmptyState() {
   const { t } = useTranslation()
   return (
     <div className="flex flex-col items-center justify-center py-24 text-center">
-      <div className="w-14 h-14 rounded-lg bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center mb-4 text-blue-400">
+      <div className="w-14 h-14 rounded-lg bg-teal-50 dark:bg-teal-900/30 flex items-center justify-center mb-4 text-teal-500">
         <ClipboardIcon />
       </div>
       <p className="text-sm font-medium text-stone-700 dark:text-stone-300 mb-1">{t('dashboard.table.emptyTitle')}</p>
@@ -78,7 +78,7 @@ export default memo(function ApplicationsTable({ applications, onEdit, onDelete,
                   type="checkbox"
                   checked={applications.length > 0 && selectedIds.length === applications.length}
                   onChange={onToggleSelectAll}
-                  className="rounded border-stone-300 text-blue-600 focus:ring-stone-500"
+                  className="rounded border-stone-300 text-teal-600 focus:ring-stone-500"
                 />
               </th>
             )}
@@ -93,7 +93,7 @@ export default memo(function ApplicationsTable({ applications, onEdit, onDelete,
             <tr style={{ height: paddingTop }}><td colSpan={colSpan} /></tr>
           )}
           {visibleRows.map(app => (
-            <tr key={app.id} onClick={() => navigate(`/applications/${app.id}`)} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate(`/applications/${app.id}`) } }} tabIndex={0} role="link" className="group hover:bg-blue-50/30 dark:hover:bg-blue-900/20 transition-colors duration-150 cursor-pointer focus:outline-none focus:ring-2 focus:ring-stone-500/30 focus:ring-inset">
+            <tr key={app.id} onClick={() => navigate(`/applications/${app.id}`)} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate(`/applications/${app.id}`) } }} tabIndex={0} role="link" className="group hover:bg-stone-50/50 dark:hover:bg-stone-800/30 transition-colors duration-150 cursor-pointer focus:outline-none focus:ring-2 focus:ring-stone-500/30 focus:ring-inset">
               {hasBulk && (
                 <td className="px-3 py-4">
                   <input
@@ -101,7 +101,7 @@ export default memo(function ApplicationsTable({ applications, onEdit, onDelete,
                     checked={selectedIds.includes(app.id)}
                     onChange={e => { e.stopPropagation(); onToggleSelect(app.id) }}
                     onClick={e => e.stopPropagation()}
-                    className="rounded border-stone-300 text-blue-600 focus:ring-stone-500"
+                    className="rounded border-stone-300 text-teal-600 focus:ring-stone-500"
                   />
                 </td>
               )}
@@ -163,7 +163,7 @@ export default memo(function ApplicationsTable({ applications, onEdit, onDelete,
                   )}
                   <button
                     onClick={e => { e.stopPropagation(); onEdit(app) }}
-                    className="p-1.5 rounded-lg text-stone-400 hover:text-blue-600 hover:bg-blue-100 transition-colors opacity-0 group-hover:opacity-100"
+                    className="p-1.5 rounded-lg text-stone-400 hover:text-teal-600 hover:bg-teal-50 transition-colors opacity-0 group-hover:opacity-100"
                     aria-label={t('dashboard.aria.edit')}
                   >
                     <EditIcon />

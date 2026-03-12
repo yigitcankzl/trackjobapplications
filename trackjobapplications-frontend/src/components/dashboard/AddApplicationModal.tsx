@@ -160,7 +160,7 @@ export default function AddApplicationModal({ open, onClose, onSubmit, initialDa
                 className={`w-full px-3.5 py-2.5 rounded-lg border text-sm outline-none transition-colors placeholder:text-stone-300 ${
                   errors.company
                     ? 'border-red-300 focus:border-red-400 focus:ring-2 focus:ring-red-100'
-                    : 'border-stone-200 dark:border-stone-700 focus:border-blue-400 focus:ring-2 focus:ring-stone-100 dark:focus:ring-stone-900'
+                    : 'border-stone-200 dark:border-stone-700 focus:border-stone-400 focus:ring-2 focus:ring-stone-100 dark:focus:ring-stone-900'
                 }`}
               />
               {errors.company && <p className="mt-1 text-xs text-red-500">{errors.company}</p>}
@@ -178,7 +178,7 @@ export default function AddApplicationModal({ open, onClose, onSubmit, initialDa
                 className={`w-full px-3.5 py-2.5 rounded-lg border text-sm outline-none transition-colors placeholder:text-stone-300 ${
                   errors.position
                     ? 'border-red-300 focus:border-red-400 focus:ring-2 focus:ring-red-100'
-                    : 'border-stone-200 dark:border-stone-700 focus:border-blue-400 focus:ring-2 focus:ring-stone-100 dark:focus:ring-stone-900'
+                    : 'border-stone-200 dark:border-stone-700 focus:border-stone-400 focus:ring-2 focus:ring-stone-100 dark:focus:ring-stone-900'
                 }`}
               />
               {errors.position && <p className="mt-1 text-xs text-red-500">{errors.position}</p>}
@@ -190,7 +190,7 @@ export default function AddApplicationModal({ open, onClose, onSubmit, initialDa
                 <select
                   value={form.status}
                   onChange={e => setForm(f => ({ ...f, status: e.target.value as ApplicationStatus }))}
-                  className="w-full px-3.5 py-2.5 rounded-lg border border-stone-200 dark:border-stone-700 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-stone-100 dark:focus:ring-stone-900 transition-colors bg-white dark:bg-stone-800 dark:text-stone-100"
+                  className="w-full px-3.5 py-2.5 rounded-lg border border-stone-200 dark:border-stone-700 text-sm outline-none focus:border-stone-400 focus:ring-2 focus:ring-stone-100 dark:focus:ring-stone-900 transition-colors bg-white dark:bg-stone-800 dark:text-stone-100"
                 >
                   {STATUS_KEYS.map(status => (
                     <option key={status} value={status}>{t(`dashboard.status.${status}`)}</option>
@@ -209,7 +209,7 @@ export default function AddApplicationModal({ open, onClose, onSubmit, initialDa
                   className={`w-full px-3.5 py-2.5 rounded-lg border text-sm outline-none transition-colors ${
                     errors.applied_date
                       ? 'border-red-300 focus:border-red-400 focus:ring-2 focus:ring-red-100'
-                      : 'border-stone-200 dark:border-stone-700 focus:border-blue-400 focus:ring-2 focus:ring-stone-100 dark:focus:ring-stone-900'
+                      : 'border-stone-200 dark:border-stone-700 focus:border-stone-400 focus:ring-2 focus:ring-stone-100 dark:focus:ring-stone-900'
                   }`}
                 />
                 {errors.applied_date && <p className="mt-1 text-xs text-red-500">{errors.applied_date}</p>}
@@ -224,7 +224,7 @@ export default function AddApplicationModal({ open, onClose, onSubmit, initialDa
                   placeholder={t('dashboard.form.jobUrlPlaceholder')}
                   value={form.url}
                   onChange={e => setForm(f => ({ ...f, url: e.target.value }))}
-                  className="w-full px-3.5 py-2.5 rounded-lg border border-stone-200 dark:border-stone-700 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-stone-100 dark:focus:ring-stone-900 transition-colors placeholder:text-stone-300 dark:bg-stone-800 dark:text-stone-100"
+                  className="w-full px-3.5 py-2.5 rounded-lg border border-stone-200 dark:border-stone-700 text-sm outline-none focus:border-stone-400 focus:ring-2 focus:ring-stone-100 dark:focus:ring-stone-900 transition-colors placeholder:text-stone-300 dark:bg-stone-800 dark:text-stone-100"
                 />
               </div>
               <div>
@@ -232,7 +232,7 @@ export default function AddApplicationModal({ open, onClose, onSubmit, initialDa
                 <select
                   value={form.source}
                   onChange={e => setForm(f => ({ ...f, source: e.target.value }))}
-                  className="w-full px-3.5 py-2.5 rounded-lg border border-stone-200 dark:border-stone-700 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-stone-100 dark:focus:ring-stone-900 transition-colors bg-white dark:bg-stone-800 dark:text-stone-100"
+                  className="w-full px-3.5 py-2.5 rounded-lg border border-stone-200 dark:border-stone-700 text-sm outline-none focus:border-stone-400 focus:ring-2 focus:ring-stone-100 dark:focus:ring-stone-900 transition-colors bg-white dark:bg-stone-800 dark:text-stone-100"
                 >
                   <option value="">{t('dashboard.form.selectSource')}</option>
                   {SOURCE_KEYS.map(src => (
@@ -249,7 +249,7 @@ export default function AddApplicationModal({ open, onClose, onSubmit, initialDa
                 value={form.notes}
                 onChange={e => setForm(f => ({ ...f, notes: e.target.value }))}
                 rows={3}
-                className="w-full px-3.5 py-2.5 rounded-lg border border-stone-200 dark:border-stone-700 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-stone-100 dark:focus:ring-stone-900 transition-colors resize-none placeholder:text-stone-300 dark:bg-stone-800 dark:text-stone-100"
+                className="w-full px-3.5 py-2.5 rounded-lg border border-stone-200 dark:border-stone-700 text-sm outline-none focus:border-stone-400 focus:ring-2 focus:ring-stone-100 dark:focus:ring-stone-900 transition-colors resize-none placeholder:text-stone-300 dark:bg-stone-800 dark:text-stone-100"
               />
             </div>
 

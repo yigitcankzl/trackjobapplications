@@ -70,10 +70,10 @@ const KanbanCard = memo(function KanbanCard({
       aria-label={`${app.company}, ${app.position}. ${isKeyboardGrabbed ? 'Grabbed — use Arrow Left/Right to move column, Space or Escape to drop.' : 'Press Space to move with keyboard.'}`}
       className={`group bg-white dark:bg-stone-900 rounded-lg border shadow-sm p-4 transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-stone-500/30 ${
         isDragging
-          ? 'opacity-40 scale-95 border-blue-200'
+          ? 'opacity-40 scale-95 border-stone-200'
           : isKeyboardGrabbed
-            ? 'ring-2 ring-blue-500 ring-offset-2 scale-105 shadow-lg border-blue-300 dark:border-blue-700'
-            : 'border-stone-100 dark:border-stone-800 hover:shadow-md hover:border-blue-100 dark:hover:border-blue-800'
+            ? 'ring-2 ring-stone-500 ring-offset-2 scale-105 shadow-lg border-stone-300 dark:border-stone-700'
+            : 'border-stone-100 dark:border-stone-800 hover:shadow-md hover:border-stone-200 dark:hover:border-stone-700'
       }`}
     >
       <div className="flex items-start justify-between gap-2 mb-3">
@@ -91,7 +91,7 @@ const KanbanCard = memo(function KanbanCard({
         <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
           <button
             onClick={e => { e.stopPropagation(); onEdit(app) }}
-            className="p-1 rounded-lg text-stone-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+            className="p-1 rounded-lg text-stone-400 hover:text-teal-600 hover:bg-teal-50 transition-colors"
             aria-label={t('dashboard.aria.edit')}
           >
             <EditIcon />
@@ -155,7 +155,7 @@ function ColumnBody({
   const visibleApps = useVirtual ? apps.slice(startIndex, endIndex + 1) : apps
 
   const containerClass = `min-h-24 rounded-lg transition-colors duration-150 ${
-    isOver ? 'bg-blue-50/60 ring-2 ring-blue-200 ring-dashed p-1' : ''
+    isOver ? 'bg-stone-50/60 ring-2 ring-stone-200 ring-dashed p-1' : ''
   } ${useVirtual ? 'overflow-y-auto' : ''}`
 
   const containerStyle = useVirtual ? { maxHeight: COLUMN_MAX_HEIGHT } : undefined

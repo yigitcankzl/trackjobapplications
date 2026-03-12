@@ -106,7 +106,7 @@ export default function ImportModal({ open, onClose, onSuccess }: Props) {
         {!file ? (
           <div
             onClick={() => fileRef.current?.click()}
-            className="border-2 border-dashed border-stone-300 dark:border-stone-600 rounded-lg p-12 text-center cursor-pointer hover:border-blue-400 transition-colors"
+            className="border-2 border-dashed border-stone-300 dark:border-stone-600 rounded-lg p-12 text-center cursor-pointer hover:border-stone-400 transition-colors"
           >
             <p className="text-stone-500 dark:text-stone-400">{t('import.selectFile')}</p>
             <p className="text-xs text-stone-400 mt-1">{t('import.supportedFormats')}</p>

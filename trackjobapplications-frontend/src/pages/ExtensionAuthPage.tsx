@@ -21,6 +21,9 @@ export default function ExtensionAuthPage() {
           email: data.email,
         })
         window.location.hash = params.toString()
+        // Clear hash after a short delay to reduce token exposure in browser history.
+        // The extension's tab watcher reads the URL before this fires.
+        setTimeout(() => { window.location.hash = ''; history.replaceState(null, '', window.location.pathname); }, 500)
       } catch {
         if (cancelled) return
         // Not authenticated — redirect to login with ?next= so user comes back here

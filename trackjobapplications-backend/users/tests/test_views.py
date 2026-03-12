@@ -40,8 +40,8 @@ class TestRegisterView:
             "password2": "StrongPass123!",
         }
         res = anon_client.post(self.URL, data)
-        assert res.status_code == 400
-        assert "email" in res.data
+        # Returns 201 with generic message to prevent email enumeration
+        assert res.status_code == 201
         # No new user should be created
         from users.models import User
         assert User.objects.filter(email=user.email).count() == 1

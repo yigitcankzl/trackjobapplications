@@ -80,18 +80,18 @@ export default function InterviewTimeline({ applicationId, company, position }: 
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-200">{t('detail.interviewStages.title')}</h3>
+        <h3 className="text-sm font-semibold text-stone-700 dark:text-stone-200">{t('detail.interviewStages.title')}</h3>
         <button onClick={() => setShowAdd(!showAdd)} className="text-xs text-blue-600 hover:text-blue-700 font-medium">
           {showAdd ? t('detail.cancel') : t('detail.add')}
         </button>
       </div>
 
       {showAdd && (
-        <div className="space-y-2 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+        <div className="space-y-2 p-3 bg-stone-50 dark:bg-stone-800 rounded-lg">
           <select
             value={form.stage_type}
             onChange={e => setForm(p => ({ ...p, stage_type: e.target.value as InterviewStageType }))}
-            className="w-full px-2 py-1.5 text-sm rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 dark:text-gray-100"
+            className="w-full px-2 py-1.5 text-sm rounded border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 dark:text-stone-100"
           >
             {STAGE_TYPES.map(st => <option key={st} value={st}>{stageLabel(st)}</option>)}
           </select>
@@ -99,14 +99,14 @@ export default function InterviewTimeline({ applicationId, company, position }: 
             type="datetime-local"
             value={form.scheduled_at}
             onChange={e => setForm(p => ({ ...p, scheduled_at: e.target.value }))}
-            className="w-full px-2 py-1.5 text-sm rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 dark:text-gray-100"
+            className="w-full px-2 py-1.5 text-sm rounded border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 dark:text-stone-100"
           />
           <textarea
             value={form.notes}
             onChange={e => setForm(p => ({ ...p, notes: e.target.value }))}
             placeholder={t('detail.interviewStages.notesPlaceholder')}
             rows={2}
-            className="w-full px-2 py-1.5 text-sm rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 dark:text-gray-100"
+            className="w-full px-2 py-1.5 text-sm rounded border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 dark:text-stone-100"
           />
           <button onClick={handleAdd} className="w-full py-1.5 text-sm bg-blue-600 text-white rounded hover:bg-blue-700">{t('detail.interviewStages.addStage')}</button>
         </div>
@@ -115,36 +115,36 @@ export default function InterviewTimeline({ applicationId, company, position }: 
       {loading ? (
         <LoadingSpinner size="sm" centered />
       ) : stages.length === 0 && !showAdd ? (
-        <p className="text-xs text-gray-400">{t('detail.interviewStages.empty')}</p>
+        <p className="text-xs text-stone-400">{t('detail.interviewStages.empty')}</p>
       ) : (
         <ol className="relative pl-4 list-none">
-          <div className="absolute left-1.5 top-0 bottom-0 w-0.5 bg-gray-200 dark:bg-gray-700" />
+          <div className="absolute left-1.5 top-0 bottom-0 w-0.5 bg-stone-200 dark:bg-stone-700" />
           {stages.map(stage => (
             <li key={stage.id} className="relative mb-4 pl-4">
               <div className={`absolute -left-[7px] top-1 w-3 h-3 rounded-full border-2 ${
                 stage.completed
                   ? 'bg-emerald-500 border-emerald-500'
-                  : 'bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600'
+                  : 'bg-white dark:bg-stone-900 border-stone-300 dark:border-stone-600'
               }`} />
               <div className="flex items-start justify-between">
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium dark:text-gray-200">{stageLabel(stage.stage_type)}</span>
+                    <span className="text-sm font-medium dark:text-stone-200">{stageLabel(stage.stage_type)}</span>
                     <button
                       onClick={() => toggleComplete(stage)}
                       className={`text-xs px-1.5 py-0.5 rounded ${
                         stage.completed
                           ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400'
-                          : 'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400'
+                          : 'bg-stone-100 text-stone-500 dark:bg-stone-800 dark:text-stone-400'
                       }`}
                     >
                       {stage.completed ? t('detail.interviewStages.done') : t('detail.interviewStages.pending')}
                     </button>
                   </div>
-                  <p className="text-xs text-gray-500 mt-0.5">
+                  <p className="text-xs text-stone-500 mt-0.5">
                     {new Date(stage.scheduled_at).toLocaleString()}
                   </p>
-                  {stage.notes && <p className="text-xs text-gray-400 mt-1">{stage.notes}</p>}
+                  {stage.notes && <p className="text-xs text-stone-400 mt-1">{stage.notes}</p>}
                 </div>
                 <div className="flex items-center gap-1.5">
                   <a

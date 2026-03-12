@@ -29,14 +29,10 @@ export default function SignInForm({ onSwitch }: Props) {
       const next = searchParams.get('next')
       navigate(next && next.startsWith('/') && !next.startsWith('//') ? next : '/dashboard')
     } catch (err: unknown) {
-      const data = (err as { response?: { data?: unknown } })?.response?.data as Record<string, unknown> | undefined
-      const raw = data?.detail ?? data?.non_field_errors
-      const detail = typeof raw === 'string' ? raw : Array.isArray(raw) ? raw[0] : undefined
-      const message = detail?.includes('Google Sign-In')
-        ? t('auth.errors.useGoogleSignIn')
-        : detail?.includes('Too many failed')
-          ? t('auth.errors.tooManyAttempts')
-          : detail || t('auth.errors.invalidCredentials')
+      const status = (err as { response?: { status?: number } })?.response?.status
+      const message = status === 429
+        ? t('auth.errors.tooManyAttempts')
+        : t('auth.errors.invalidCredentials')
       addToast(message, 'error')
     } finally {
       setIsLoading(false)

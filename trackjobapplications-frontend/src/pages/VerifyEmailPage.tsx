@@ -27,10 +27,8 @@ export default function VerifyEmailPage() {
 
     verifyEmail(uid, token)
       .then(() => setStatus('success'))
-      .catch((err) => {
-        const msg =
-          err?.response?.data?.detail ?? t('verifyEmail.genericError')
-        setErrorMsg(msg)
+      .catch(() => {
+        setErrorMsg(t('verifyEmail.genericError'))
         setStatus('error')
       })
   }, [searchParams, t])

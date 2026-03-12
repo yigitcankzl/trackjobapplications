@@ -27,9 +27,8 @@ export default function ResetPasswordPage() {
     try {
       await confirmPasswordReset(uid, token, password, password2)
       navigate('/login')
-    } catch (err: unknown) {
-      const detail = (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail
-      setError(typeof detail === 'string' ? detail : t('resetPassword.genericError'))
+    } catch {
+      setError(t('resetPassword.genericError'))
     } finally {
       setIsLoading(false)
     }

@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   if (authStatus.authenticated) {
     showMainSection(authStatus.email);
-    await Promise.all([loadJobData(), loadDashboard()]);
+    await Promise.all([loadJobData(), loadDashboard(), initAutofill()]);
   } else {
     showLoginSection();
   }
@@ -76,7 +76,7 @@ document.getElementById('web-login-btn').addEventListener('click', async () => {
           if (auth.authenticated) {
             document.getElementById('login-section').hidden = true;
             showMainSection(auth.email);
-            await Promise.all([loadJobData(), loadDashboard()]);
+            await Promise.all([loadJobData(), loadDashboard(), initAutofill()]);
           }
         })();
       }
@@ -515,3 +515,43 @@ function showFeedback(message, type) {
   el.className = type;
   el.hidden = false;
 }
+
+// --- Auto-Fill ---
+
+async function initAutofill() {
+  const profileRes = await chrome.runtime.sendMessage({ type: 'GET_AUTOFILL_PROFILE' });
+  const hasProfile = profileRes.success && Object.keys(profileRes.data || {}).length > 0;
+  document.getElementById('autofill-section').hidden = false;
+
+  const btn = document.getElementById('autofill-btn');
+  if (!hasProfile) {
+    btn.title = 'Set up your profile first';
+  }
+}
+
+document.getElementById('autofill-btn').addEventListener('click', async () => {
+  const btn = document.getElementById('autofill-btn');
+  const resultEl = document.getElementById('autofill-result');
+  btn.disabled = true;
+  btn.textContent = 'Filling...';
+  resultEl.hidden = true;
+
+  const res = await chrome.runtime.sendMessage({ type: 'INJECT_AND_AUTOFILL' });
+
+  if (res.success) {
+    const d = res.data;
+    resultEl.textContent = `Filled ${d.filledCount} of ${d.totalFields} fields`;
+    resultEl.className = 'autofill-result autofill-success';
+  } else {
+    resultEl.textContent = res.error || 'Auto-fill failed';
+    resultEl.className = 'autofill-result autofill-error';
+  }
+  resultEl.hidden = false;
+  btn.disabled = false;
+  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 113 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Auto-Fill';
+});
+
+document.getElementById('autofill-settings-btn').addEventListener('click', (e) => {
+  e.preventDefault();
+  chrome.runtime.openOptionsPage();
+});

@@ -27,7 +27,7 @@ export default function SignInForm({ onSwitch }: Props) {
     try {
       await login(email, password)
       const next = searchParams.get('next')
-      navigate(next && next.startsWith('/') ? next : '/dashboard')
+      navigate(next && next.startsWith('/') && !next.startsWith('//') ? next : '/dashboard')
     } catch (err: unknown) {
       const data = (err as { response?: { data?: unknown } })?.response?.data as Record<string, unknown> | undefined
       const raw = data?.detail ?? data?.non_field_errors

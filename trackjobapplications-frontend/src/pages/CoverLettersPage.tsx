@@ -129,8 +129,8 @@ export default function CoverLettersPage() {
             <div className="text-center py-12 text-stone-400 text-sm">{t('coverLetters.loading')}</div>
           ) : templates.length === 0 && !isFormOpen ? (
             <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-12 text-center">
-              <div className="w-12 h-12 rounded-lg bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center mx-auto mb-4">
-                <svg className="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-12 h-12 rounded-lg bg-teal-50 dark:bg-teal-900/30 flex items-center justify-center mx-auto mb-4">
+                <svg className="w-6 h-6 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
               </div>
@@ -152,8 +152,8 @@ export default function CoverLettersPage() {
                   onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setPreview(tpl); setFillValues({}); setCopied(false); setCreating(false); setEditing(null) } }}
                   className={`group bg-white dark:bg-stone-900 rounded-lg border shadow-sm p-4 cursor-pointer transition-all duration-200 ${
                     preview?.id === tpl.id || editing?.id === tpl.id
-                      ? 'border-blue-200 dark:border-blue-800 ring-1 ring-blue-100 dark:ring-blue-900'
-                      : 'border-stone-100/60 dark:border-stone-800 hover:shadow-md hover:border-blue-100'
+                      ? 'border-teal-200 dark:border-teal-800 ring-1 ring-teal-100 dark:ring-teal-900'
+                      : 'border-stone-100/60 dark:border-stone-800 hover:shadow-md hover:border-stone-200'
                   }`}
                 >
                   <div className="flex items-start justify-between gap-2">
@@ -164,7 +164,7 @@ export default function CoverLettersPage() {
                     <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
                       <button
                         onClick={e => { e.stopPropagation(); openEdit(tpl) }}
-                        className="p-1.5 rounded-lg text-stone-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                        className="p-1.5 rounded-lg text-stone-400 hover:text-teal-600 hover:bg-teal-50 transition-colors"
                       >
                         <EditIcon />
                       </button>
@@ -217,7 +217,7 @@ export default function CoverLettersPage() {
                       key={p}
                       type="button"
                       onClick={() => insertPlaceholder(p)}
-                      className="px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-900/30 text-xs font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-100 transition-colors"
+                      className="px-2 py-0.5 rounded-md bg-teal-50 dark:bg-teal-900/30 text-xs font-medium text-teal-600 dark:text-teal-400 hover:bg-teal-100 transition-colors"
                     >
                       {p}
                     </button>
@@ -248,7 +248,7 @@ export default function CoverLettersPage() {
               <div className="flex items-center gap-1">
                 <button
                   onClick={() => openEdit(preview)}
-                  className="p-1.5 rounded-lg text-stone-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                  className="p-1.5 rounded-lg text-stone-400 hover:text-teal-600 hover:bg-teal-50 transition-colors"
                 >
                   <EditIcon />
                 </button>
@@ -263,8 +263,8 @@ export default function CoverLettersPage() {
 
             {/* Fill placeholders */}
             {extractPlaceholders(preview.content).length > 0 && (
-              <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 space-y-3">
-                <p className="text-xs font-semibold text-blue-700 dark:text-blue-300 uppercase tracking-wide">{t('coverLetters.fillFields')}</p>
+              <div className="bg-teal-50 dark:bg-teal-900/20 rounded-lg p-4 space-y-3">
+                <p className="text-xs font-semibold text-teal-700 dark:text-teal-300 uppercase tracking-wide">{t('coverLetters.fillFields')}</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {extractPlaceholders(preview.content).map(placeholder => (
                     <div key={placeholder}>
@@ -294,7 +294,7 @@ export default function CoverLettersPage() {
                     .then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000) })
                     .catch(() => { /* clipboard API unavailable */ })
                 }}
-                className="px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+                className="px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-stone-900 hover:bg-stone-800 transition-colors"
               >
                 {copied ? t('coverLetters.copied') : t('coverLetters.copy')}
               </button>

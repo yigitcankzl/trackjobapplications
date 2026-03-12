@@ -145,7 +145,7 @@ export default function ApplicationDetailPage() {
             <div className="flex items-center gap-2 flex-shrink-0">
               <button
                 onClick={() => setEditOpen(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold text-teal-700 bg-teal-50 hover:bg-teal-100 dark:bg-teal-900/30 dark:text-teal-400 dark:hover:bg-teal-900/50 transition-colors"
               >
                 <EditIcon />
                 {t('detail.edit')}
@@ -164,7 +164,7 @@ export default function ApplicationDetailPage() {
         {/* Details */}
         <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6 space-y-5">
           <div className="flex items-start gap-3">
-            <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+            <div className="w-8 h-8 rounded-lg bg-teal-50 dark:bg-teal-900/30 flex items-center justify-center flex-shrink-0 mt-0.5">
               <CalendarIcon />
             </div>
             <div>
@@ -195,7 +195,7 @@ export default function ApplicationDetailPage() {
                   href={app.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-blue-600 hover:text-blue-700 hover:underline truncate block"
+                  className="text-sm text-teal-600 hover:text-teal-700 hover:underline truncate block"
                 >
                   {app.url}
                 </a>
@@ -261,16 +261,16 @@ export default function ApplicationDetailPage() {
                 <div key={stage} className="flex items-center flex-1">
                   <div className="flex flex-col items-center flex-1">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors ${
-                      isActive ? 'bg-blue-600 text-white' : isPast ? 'bg-blue-200 text-blue-700' : 'bg-stone-100 dark:bg-stone-800 text-stone-400'
+                      isActive ? 'bg-teal-600 text-white' : isPast ? 'bg-teal-200 text-teal-700' : 'bg-stone-100 dark:bg-stone-800 text-stone-400'
                     }`}>
                       {i + 1}
                     </div>
-                    <span className={`text-xs mt-1.5 font-medium ${isActive ? 'text-blue-600' : 'text-stone-400'}`}>
+                    <span className={`text-xs mt-1.5 font-medium ${isActive ? 'text-teal-600' : 'text-stone-400'}`}>
                       {t(`dashboard.status.${stage}`)}
                     </span>
                   </div>
                   {i < 2 && (
-                    <div className={`h-0.5 flex-1 -mt-5 ${isPast || isActive ? 'bg-blue-200' : 'bg-stone-100 dark:bg-stone-800'}`} />
+                    <div className={`h-0.5 flex-1 -mt-5 ${isPast || isActive ? 'bg-teal-200' : 'bg-stone-100 dark:bg-stone-800'}`} />
                   )}
                 </div>
               )

@@ -115,7 +115,7 @@ export default function WelcomePage() {
                   </div>
                   <p className="text-xs text-stone-500 dark:text-stone-400 leading-relaxed">{t('welcome.extensions.chrome.description')}</p>
                   <div className="flex items-center gap-2 mt-3">
-                    <span className="px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-900/30 text-xs font-medium text-blue-600 dark:text-blue-400">LinkedIn</span>
+                    <span className="px-2 py-0.5 rounded-md bg-teal-50 dark:bg-teal-900/30 text-xs font-medium text-teal-600 dark:text-teal-400">LinkedIn</span>
                     <span className="px-2 py-0.5 rounded-md bg-purple-50 dark:bg-purple-900/30 text-xs font-medium text-purple-600 dark:text-purple-400">Indeed</span>
                     <span className="px-2 py-0.5 rounded-md bg-stone-100 dark:bg-stone-800 text-xs font-medium text-stone-500 dark:text-stone-400">Gmail</span>
                   </div>

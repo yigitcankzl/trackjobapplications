@@ -117,9 +117,9 @@ export default function CalendarPage() {
             return (
               <div
                 key={day}
-                className={`bg-white dark:bg-stone-900 min-h-16 sm:min-h-24 p-1 sm:p-1.5 ${isToday ? 'ring-2 ring-inset ring-blue-500' : ''}`}
+                className={`bg-white dark:bg-stone-900 min-h-16 sm:min-h-24 p-1 sm:p-1.5 ${isToday ? 'ring-2 ring-inset ring-teal-500' : ''}`}
               >
-                <span className={`text-xs font-medium ${isToday ? 'text-blue-600 font-bold' : 'text-stone-500 dark:text-stone-400'}`}>
+                <span className={`text-xs font-medium ${isToday ? 'text-teal-600 font-bold' : 'text-stone-500 dark:text-stone-400'}`}>
                   {day}
                 </span>
                 <div className="mt-1 space-y-0.5">
@@ -127,7 +127,7 @@ export default function CalendarPage() {
                     <button
                       key={app.id}
                       onClick={() => navigate(`/applications/${app.id}`)}
-                      className="w-full flex items-center gap-1 px-1 py-0.5 rounded text-left hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors"
+                      className="w-full flex items-center gap-1 px-1 py-0.5 rounded text-left hover:bg-stone-50 dark:hover:bg-stone-800/30 transition-colors"
                     >
                       <div className={`w-4 h-4 rounded flex items-center justify-center text-[8px] font-bold flex-shrink-0 ${getAvatarColor(app.company)}`}>
                         {(app.company[0] || '?').toUpperCase()}

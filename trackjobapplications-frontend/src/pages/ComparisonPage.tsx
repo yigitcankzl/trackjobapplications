@@ -183,7 +183,7 @@ export default function ComparisonPage() {
                   onClick={() => toggleSelect(app.id)}
                   className={`flex items-center gap-3 p-3 rounded-lg border text-left transition-all ${
                     selectedIds.includes(app.id)
-                      ? 'border-blue-400 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-600'
+                      ? 'border-teal-400 bg-teal-50 dark:bg-teal-900/20 dark:border-teal-600'
                       : 'border-stone-100 dark:border-stone-800 hover:border-stone-200 dark:hover:border-stone-700'
                   }`}
                 >
@@ -202,7 +202,7 @@ export default function ComparisonPage() {
               <button
                 onClick={handleCompare}
                 disabled={selectedIds.length < 2 || comparing}
-                className="px-4 py-2 rounded-lg text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                className="px-4 py-2 rounded-lg text-sm font-semibold text-white bg-stone-900 hover:bg-stone-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
               >
                 {comparing ? t('compare.comparing') : t('compare.compareBtn', { count: selectedIds.length })}
               </button>
@@ -222,7 +222,7 @@ export default function ComparisonPage() {
               </button>
               <button
                 onClick={() => setShowMatrix(!showMatrix)}
-                className="px-3 py-1.5 rounded-lg text-sm font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors"
+                className="px-3 py-1.5 rounded-lg text-sm font-medium text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-900/30 hover:bg-teal-100 dark:hover:bg-teal-900/50 transition-colors"
               >
                 {showMatrix ? t('compare.hideMatrix') : t('compare.showMatrix')}
               </button>
@@ -300,7 +300,7 @@ export default function ComparisonPage() {
                         value={c.weight}
                         onChange={e => updateWeight(c.key, Number(e.target.value))}
                         aria-label={t(`compare.criteria.${c.key}`)}
-                        className="flex-1 h-1.5 accent-blue-600"
+                        className="flex-1 h-1.5 accent-teal-600"
                       />
                       <span className="text-xs font-mono text-stone-600 dark:text-stone-300 w-8 text-right">{c.weight}</span>
                     </div>
@@ -323,7 +323,7 @@ export default function ComparisonPage() {
                           </div>
                           <div className="h-2 bg-stone-100 dark:bg-stone-800 rounded-full overflow-hidden">
                             <div
-                              className={`h-full rounded-full transition-all duration-500 ${i === 0 ? 'bg-emerald-500' : 'bg-blue-400'}`}
+                              className={`h-full rounded-full transition-all duration-500 ${i === 0 ? 'bg-emerald-500' : 'bg-teal-400'}`}
                               style={{ width: `${(s.total / 10) * 100}%` }}
                             />
                           </div>

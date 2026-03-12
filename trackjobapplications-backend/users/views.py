@@ -4,6 +4,7 @@ import uuid
 
 from django.core.cache import cache
 from django.conf import settings
+from django.db import transaction
 from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
 from django.middleware.csrf import get_token as get_csrf_token
@@ -307,20 +308,25 @@ class PasswordResetConfirmView(APIView):
 
         try:
             user_id = force_str(urlsafe_base64_decode(uid))
-            user = User.objects.get(pk=user_id)
-        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        except (TypeError, ValueError, OverflowError):
             return Response({"detail": "Invalid reset link."}, status=status.HTTP_400_BAD_REQUEST)
 
-        if not default_token_generator.check_token(user, token):
-            return Response({"detail": "Invalid or expired reset link."}, status=status.HTTP_400_BAD_REQUEST)
+        with transaction.atomic():
+            try:
+                user = User.objects.select_for_update().get(pk=user_id)
+            except User.DoesNotExist:
+                return Response({"detail": "Invalid reset link."}, status=status.HTTP_400_BAD_REQUEST)
 
-        try:
-            validate_password(new_password, user)
-        except ValidationError as e:
-            return Response({"detail": e.messages}, status=status.HTTP_400_BAD_REQUEST)
+            if not default_token_generator.check_token(user, token):
+                return Response({"detail": "Invalid or expired reset link."}, status=status.HTTP_400_BAD_REQUEST)
 
-        user.set_password(new_password)
-        user.save()
+            try:
+                validate_password(new_password, user)
+            except ValidationError as e:
+                return Response({"detail": e.messages}, status=status.HTTP_400_BAD_REQUEST)
+
+            user.set_password(new_password)
+            user.save()
         _blacklist_all_tokens(user)
         return Response({"detail": "Password has been reset successfully."}, status=status.HTTP_200_OK)
 

@@ -215,7 +215,8 @@
       "lightMode": "Light Mode",
       "coverLetters": "Cover Letters",
       "compare": "Compare",
-      "extension": "Browser Extension"
+      "extension": "Browser Extension",
+      "collapse": "Collapse"
     },
     "viewTable": "Table view",
     "viewKanban": "Kanban view",

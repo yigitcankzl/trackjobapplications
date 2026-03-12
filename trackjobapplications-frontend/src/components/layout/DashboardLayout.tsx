@@ -10,10 +10,16 @@ interface Props {
 export default function DashboardLayout({ children }: Props) {
   const { t } = useTranslation()
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [collapsed, setCollapsed] = useState(false)
 
   return (
     <div className="flex min-h-screen bg-stone-50 dark:bg-stone-950">
-      <Sidebar mobileOpen={sidebarOpen} onMobileClose={() => setSidebarOpen(false)} />
+      <Sidebar
+        mobileOpen={sidebarOpen}
+        onMobileClose={() => setSidebarOpen(false)}
+        collapsed={collapsed}
+        onToggleCollapse={() => setCollapsed(c => !c)}
+      />
       <div className="flex-1 flex flex-col min-w-0">
         {/* Mobile top bar */}
         <div className="lg:hidden flex items-center gap-3 px-4 py-3 bg-white dark:bg-stone-900 border-b border-stone-100/60 dark:border-stone-800 shadow-sm">

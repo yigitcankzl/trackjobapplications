@@ -9,13 +9,13 @@ const ALLOWED_API_BASES = new Set([
 // --- Payload Validation ---
 
 const VALID_STATUSES = new Set(['to_apply', 'applied', 'interview', 'offer', 'rejected', 'withdrawn']);
-const VALID_SOURCES  = new Set(['linkedin', 'indeed', 'glassdoor', 'ziprecruiter', 'email', 'referral', 'company_site', 'other']);
-const DATE_RE        = /^\d{4}-\d{2}-\d{2}$/;
+const VALID_SOURCES = new Set(['linkedin', 'indeed', 'glassdoor', 'ziprecruiter', 'email', 'referral', 'company_site', 'other']);
+const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
-const MAX_TEXT_LENGTH          = 200;
-const MAX_NOTES_LENGTH         = 2000;
-const MAX_URL_LENGTH           = 2048;
-const MAX_JOB_POSTING_LENGTH   = 50000;
+const MAX_TEXT_LENGTH = 200;
+const MAX_NOTES_LENGTH = 2000;
+const MAX_URL_LENGTH = 2048;
+const MAX_JOB_POSTING_LENGTH = 50000;
 
 // Cooldown tracking for ADD_APPLICATION to prevent rapid duplicate submissions
 const _addCooldowns = new Map(); // company+position → timestamp
@@ -72,14 +72,14 @@ async function _getEncryptionKey() {
   return _encKey;
 }
 
-function _b64(buf)  { return btoa(String.fromCharCode(...new Uint8Array(buf))); }
-function _unb64(s)  { return Uint8Array.from(atob(s), c => c.charCodeAt(0)); }
+function _b64(buf) { return btoa(String.fromCharCode(...new Uint8Array(buf))); }
+function _unb64(s) { return Uint8Array.from(atob(s), c => c.charCodeAt(0)); }
 
 async function encryptToken(plaintext) {
   if (!plaintext) return '';
   const key = await _getEncryptionKey();
-  const iv  = crypto.getRandomValues(new Uint8Array(12));
-  const ct  = await crypto.subtle.encrypt(
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const ct = await crypto.subtle.encrypt(
     { name: 'AES-GCM', iv }, key, new TextEncoder().encode(plaintext),
   );
   return _b64(iv.buffer) + ':' + _b64(ct);
@@ -94,7 +94,7 @@ async function decryptToken(stored) {
     return '';
   }
   try {
-    const key   = await _getEncryptionKey();
+    const key = await _getEncryptionKey();
     const plain = await crypto.subtle.decrypt(
       { name: 'AES-GCM', iv: _unb64(stored.slice(0, sep)) },
       key,
@@ -111,14 +111,14 @@ async function decryptToken(stored) {
 async function getTokens() {
   const result = await chrome.storage.local.get(['access_token', 'refresh_token']);
   return {
-    access:  await decryptToken(result.access_token  || ''),
+    access: await decryptToken(result.access_token || ''),
     refresh: await decryptToken(result.refresh_token || ''),
   };
 }
 
 async function saveTokens(access, refresh) {
   const toStore = {};
-  if (access)  toStore.access_token  = await encryptToken(access);
+  if (access) toStore.access_token = await encryptToken(access);
   if (refresh) toStore.refresh_token = await encryptToken(refresh);
   if (Object.keys(toStore).length > 0) await chrome.storage.local.set(toStore);
 }
@@ -213,49 +213,69 @@ async function handleMessage(message) {
         // Watch for the tab to navigate to /extension-auth with hash containing tokens
         return new Promise((resolve) => {
           const TIMEOUT_MS = 300000; // 5 minutes
-          let timeoutId = setTimeout(() => {
-            chrome.tabs.onUpdated.removeListener(listener);
-            resolve({ success: false, error: 'Login timed out' });
-          }, TIMEOUT_MS);
+          let resolved = false;
+          let pollId = null;
 
-          function listener(updatedTabId, changeInfo, updatedTab) {
-            if (updatedTabId !== tabId) return;
-            const url = changeInfo.url || updatedTab.url || '';
-            if (!url.includes('/extension-auth#')) return;
-
-            // Extract tokens from hash
-            try {
-              const hash = url.split('#')[1];
-              if (!hash) return;
-              const params = new URLSearchParams(hash);
-              const access = params.get('access');
-              const refresh = params.get('refresh');
-              const email = params.get('email');
-              if (!access || !refresh) return;
-
-              clearTimeout(timeoutId);
-              chrome.tabs.onUpdated.removeListener(listener);
-
-              // Save tokens and close tab
-              (async () => {
-                await saveTokens(access, refresh);
-                if (email) await chrome.storage.local.set({ user_email: email });
-                try { await chrome.tabs.remove(tabId); } catch {}
-                resolve({ success: true });
-              })();
-            } catch {
-              // Ignore parse errors, keep listening
-            }
-          }
-
-          chrome.tabs.onUpdated.addListener(listener);
-
-          // If tab is closed before login completes
-          function onRemoved(removedTabId) {
-            if (removedTabId !== tabId) return;
+          function cleanup() {
+            if (pollId) { clearInterval(pollId); pollId = null; }
             clearTimeout(timeoutId);
             chrome.tabs.onUpdated.removeListener(listener);
             chrome.tabs.onRemoved.removeListener(onRemoved);
+          }
+
+          let timeoutId = setTimeout(() => {
+            cleanup();
+            resolve({ success: false, error: 'Login timed out' });
+          }, TIMEOUT_MS);
+
+          async function tryExtractTokens(url) {
+            if (resolved) return;
+            if (!url.includes('/extension-auth#')) return;
+            const hash = url.split('#')[1];
+            if (!hash) return;
+            const params = new URLSearchParams(hash);
+            const access = params.get('access');
+            const refresh = params.get('refresh');
+            const email = params.get('email');
+            if (!access || !refresh) return;
+
+            resolved = true;
+            cleanup();
+            await saveTokens(access, refresh);
+            if (email) await chrome.storage.local.set({ user_email: email });
+            try { await chrome.tabs.remove(tabId); } catch { }
+            resolve({ success: true });
+          }
+
+          // Primary: listen for tab URL updates
+          function listener(updatedTabId, changeInfo, updatedTab) {
+            if (updatedTabId !== tabId) return;
+            const url = changeInfo.url || updatedTab.url || '';
+            tryExtractTokens(url).catch(() => { });
+          }
+          chrome.tabs.onUpdated.addListener(listener);
+
+          // Fallback: poll tab URL every second (some browsers don't fire
+          // onUpdated for hash-only changes set via window.location.hash)
+          pollId = setInterval(async () => {
+            try {
+              const t = await chrome.tabs.get(tabId);
+              if (t && t.url) await tryExtractTokens(t.url);
+            } catch {
+              // Tab no longer exists
+              if (!resolved) {
+                resolved = true;
+                cleanup();
+                resolve({ success: false, error: 'Login tab was closed' });
+              }
+            }
+          }, 1000);
+
+          // If tab is closed before login completes
+          function onRemoved(removedTabId) {
+            if (removedTabId !== tabId || resolved) return;
+            resolved = true;
+            cleanup();
             resolve({ success: false, error: 'Login tab was closed' });
           }
           chrome.tabs.onRemoved.addListener(onRemoved);
@@ -295,7 +315,7 @@ async function handleMessage(message) {
               ...(access ? { 'Authorization': `Bearer ${access}` } : {}),
             },
             body: JSON.stringify({ refresh }),
-          }).catch(() => {}); // Ignore errors — clear local tokens regardless
+          }).catch(() => { }); // Ignore errors — clear local tokens regardless
         }
         await clearTokens();
         return { success: true };
@@ -308,7 +328,7 @@ async function handleMessage(message) {
       }
 
       case 'ADD_APPLICATION': {
-        const company  = validateText(message.company, MAX_TEXT_LENGTH);
+        const company = validateText(message.company, MAX_TEXT_LENGTH);
         const position = validateText(message.position, MAX_TEXT_LENGTH);
         if (!company || !position) {
           return { success: false, error: 'Invalid company or position' };
@@ -322,10 +342,10 @@ async function handleMessage(message) {
         const payload = {
           company,
           position,
-          url:          validateUrl(message.url),
-          source:       VALID_SOURCES.has(message.source) ? message.source : 'other',
+          url: validateUrl(message.url),
+          source: VALID_SOURCES.has(message.source) ? message.source : 'other',
           applied_date: validateDate(message.applied_date),
-          status:       VALID_STATUSES.has(message.status) ? message.status : 'to_apply',
+          status: VALID_STATUSES.has(message.status) ? message.status : 'to_apply',
         };
         const notes = validateText(message.notes, MAX_NOTES_LENGTH);
         if (notes) payload.notes = notes;

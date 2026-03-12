@@ -32,8 +32,8 @@ describe('Pagination', () => {
 
   it('highlights the current page', () => {
     setup(2, 3)
-    expect(screen.getByRole('button', { name: '2' })).toHaveClass('bg-blue-600')
-    expect(screen.getByRole('button', { name: '1' })).not.toHaveClass('bg-blue-600')
+    expect(screen.getByRole('button', { name: '2' })).toHaveClass('bg-stone-900')
+    expect(screen.getByRole('button', { name: '1' })).not.toHaveClass('bg-stone-900')
   })
 
   it('disables prev button on first page', () => {

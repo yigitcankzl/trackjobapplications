@@ -59,7 +59,7 @@ export default function TagSelector({ selectedIds, onChange }: Props) {
             className={`px-2 py-0.5 rounded-full text-xs font-medium border transition-colors ${
               selectedIds.includes(tag.id)
                 ? 'text-white border-transparent'
-                : 'bg-transparent border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300'
+                : 'bg-transparent border-stone-300 dark:border-stone-600 text-stone-600 dark:text-stone-300'
             }`}
             style={selectedIds.includes(tag.id) ? { backgroundColor: tag.color } : undefined}
           >
@@ -69,7 +69,7 @@ export default function TagSelector({ selectedIds, onChange }: Props) {
         <button
           type="button"
           onClick={() => setShowCreate(!showCreate)}
-          className="px-2 py-0.5 rounded-full text-xs font-medium border border-dashed border-gray-300 dark:border-gray-600 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+          className="px-2 py-0.5 rounded-full text-xs font-medium border border-dashed border-stone-300 dark:border-stone-600 text-stone-400 hover:text-stone-600 dark:hover:text-stone-200"
         >
           {t('detail.tags.new')}
         </button>
@@ -81,7 +81,7 @@ export default function TagSelector({ selectedIds, onChange }: Props) {
             value={newName}
             onChange={e => setNewName(e.target.value)}
             placeholder={t('detail.tags.namePlaceholder')}
-            className="px-2 py-1 text-xs rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 dark:text-gray-100 outline-none"
+            className="px-2 py-1 text-xs rounded border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 dark:text-stone-100 outline-none"
             onKeyDown={e => e.key === 'Enter' && handleCreate()}
           />
           <div className="flex gap-1">
@@ -90,7 +90,7 @@ export default function TagSelector({ selectedIds, onChange }: Props) {
                 key={c}
                 type="button"
                 onClick={() => setNewColor(c)}
-                className={`w-4 h-4 rounded-full ${newColor === c ? 'ring-2 ring-offset-1 ring-gray-400' : ''}`}
+                className={`w-4 h-4 rounded-full ${newColor === c ? 'ring-2 ring-offset-1 ring-stone-400' : ''}`}
                 style={{ backgroundColor: c }}
               />
             ))}

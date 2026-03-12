@@ -68,12 +68,12 @@ const KanbanCard = memo(function KanbanCard({
       role="link"
       aria-grabbed={isKeyboardGrabbed}
       aria-label={`${app.company}, ${app.position}. ${isKeyboardGrabbed ? 'Grabbed — use Arrow Left/Right to move column, Space or Escape to drop.' : 'Press Space to move with keyboard.'}`}
-      className={`group bg-white dark:bg-gray-900 rounded-xl border shadow-sm p-4 transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500/30 ${
+      className={`group bg-white dark:bg-stone-900 rounded-lg border shadow-sm p-4 transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500/30 ${
         isDragging
           ? 'opacity-40 scale-95 border-blue-200'
           : isKeyboardGrabbed
             ? 'ring-2 ring-blue-500 ring-offset-2 scale-105 shadow-lg border-blue-300 dark:border-blue-700'
-            : 'border-gray-100 dark:border-gray-800 hover:shadow-md hover:border-blue-100 dark:hover:border-blue-800'
+            : 'border-stone-100 dark:border-stone-800 hover:shadow-md hover:border-blue-100 dark:hover:border-blue-800'
       }`}
     >
       <div className="flex items-start justify-between gap-2 mb-3">
@@ -82,7 +82,7 @@ const KanbanCard = memo(function KanbanCard({
             {(app.company[0] ?? '?').toUpperCase()}
           </div>
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 leading-tight truncate flex items-center gap-1.5">
+            <p className="text-sm font-semibold text-stone-900 dark:text-stone-100 leading-tight truncate flex items-center gap-1.5">
               {app.company}
               {needsFollowUp(app) && <span className="w-2 h-2 rounded-full bg-amber-400 flex-shrink-0" />}
             </p>
@@ -91,14 +91,14 @@ const KanbanCard = memo(function KanbanCard({
         <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
           <button
             onClick={e => { e.stopPropagation(); onEdit(app) }}
-            className="p-1 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+            className="p-1 rounded-lg text-stone-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
             aria-label={t('dashboard.aria.edit')}
           >
             <EditIcon />
           </button>
           <button
             onClick={e => { e.stopPropagation(); onDelete(app) }}
-            className="p-1 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+            className="p-1 rounded-lg text-stone-400 hover:text-red-500 hover:bg-red-50 transition-colors"
             aria-label={t('dashboard.aria.delete')}
           >
             <TrashIcon />
@@ -106,10 +106,10 @@ const KanbanCard = memo(function KanbanCard({
         </div>
       </div>
 
-      <p className="text-xs text-gray-500 dark:text-gray-400 mb-3 leading-relaxed">{app.position}</p>
+      <p className="text-xs text-stone-500 dark:text-stone-400 mb-3 leading-relaxed">{app.position}</p>
 
       {app.notes && (
-        <p className="text-xs text-gray-400 italic mb-3 truncate">{app.notes}</p>
+        <p className="text-xs text-stone-400 italic mb-3 truncate">{app.notes}</p>
       )}
 
       {app.tags && app.tags.length > 0 && (
@@ -118,7 +118,7 @@ const KanbanCard = memo(function KanbanCard({
         </div>
       )}
 
-      <p className="text-xs text-gray-400">{formatShort(app.applied_date)}</p>
+      <p className="text-xs text-stone-400">{formatShort(app.applied_date)}</p>
     </div>
   )
 })
@@ -154,7 +154,7 @@ function ColumnBody({
 
   const visibleApps = useVirtual ? apps.slice(startIndex, endIndex + 1) : apps
 
-  const containerClass = `min-h-24 rounded-xl transition-colors duration-150 ${
+  const containerClass = `min-h-24 rounded-lg transition-colors duration-150 ${
     isOver ? 'bg-blue-50/60 ring-2 ring-blue-200 ring-dashed p-1' : ''
   } ${useVirtual ? 'overflow-y-auto' : ''}`
 
@@ -163,8 +163,8 @@ function ColumnBody({
   if (apps.length === 0 && !isOver) {
     return (
       <div className={containerClass} style={containerStyle}>
-        <div className="rounded-xl border-2 border-dashed border-gray-100 dark:border-gray-800 py-8 text-center">
-          <p className="text-xs text-gray-300">{t('dashboard.kanban.noApplications')}</p>
+        <div className="rounded-lg border-2 border-dashed border-stone-100 dark:border-stone-800 py-8 text-center">
+          <p className="text-xs text-stone-300">{t('dashboard.kanban.noApplications')}</p>
         </div>
       </div>
     )
@@ -279,10 +279,10 @@ export default function KanbanBoard({ applications, onEdit, onDelete, onStatusCh
           >
             <div className="flex items-center gap-2 mb-3">
               <span className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${STATUS_COLORS[status]}`} />
-              <span className="text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide">
+              <span className="text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wide">
                 {t(`dashboard.status.${status}`)}
               </span>
-              <span className="ml-auto text-xs font-semibold text-gray-400 bg-gray-100 dark:bg-gray-800 rounded-full px-2 py-0.5">
+              <span className="ml-auto text-xs font-semibold text-stone-400 bg-stone-100 dark:bg-stone-800 rounded-full px-2 py-0.5">
                 {colApps.length}
               </span>
             </div>

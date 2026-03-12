@@ -20,7 +20,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-stone-50 dark:bg-stone-950 p-4">
       {/* Desktop: split card layout */}
-      <div className="relative w-full max-w-4xl h-[560px] bg-white dark:bg-stone-900 rounded-lg border border-stone-200 dark:border-stone-800 overflow-hidden hidden md:block">
+      <div className="relative w-full max-w-4xl h-[560px] bg-white dark:bg-stone-900 rounded-lg border border-stone-200/60 dark:border-stone-800 shadow-lg overflow-hidden hidden md:block">
         {/* Sign Up Form — right side */}
         <div
           className="absolute top-0 right-0 w-1/2 h-full transition-all duration-700 ease-in-out"
@@ -48,7 +48,7 @@ export default function LoginPage() {
       </div>
 
       {/* Mobile: stacked layout */}
-      <div className="w-full max-w-sm bg-white dark:bg-stone-900 rounded-lg border border-stone-200 dark:border-stone-800 overflow-hidden md:hidden py-8">
+      <div className="w-full max-w-sm bg-white dark:bg-stone-900 rounded-lg border border-stone-200/60 dark:border-stone-800 shadow-lg overflow-hidden md:hidden py-8">
         {isSignUp ? (
           <SignUpForm onSwitch={() => setIsSignUp(false)} />
         ) : (

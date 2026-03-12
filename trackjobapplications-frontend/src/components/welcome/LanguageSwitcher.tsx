@@ -55,14 +55,14 @@ export default function LanguageSwitcher() {
                 onClick={() => { i18n.changeLanguage(code); setOpen(false) }}
                 className={`w-full flex items-center gap-2.5 px-3 py-2 text-sm transition-colors ${
                   isActive
-                    ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 font-semibold'
+                    ? 'text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-900/30 font-semibold'
                     : 'text-stone-700 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-700'
                 }`}
               >
                 <span className="text-base">{flag}</span>
                 <span>{label}</span>
                 {isActive && (
-                  <svg className="w-3.5 h-3.5 ml-auto text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                  <svg className="w-3.5 h-3.5 ml-auto text-teal-500" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
                 )}

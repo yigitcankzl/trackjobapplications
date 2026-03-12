@@ -45,14 +45,14 @@ export default function DragDropZone({ onFileDrop, accept, label, children }: Pr
       onDrop={handleDrop}
       className={`relative rounded-lg transition-all ${
         isDragOver
-          ? 'border-2 border-dashed border-blue-400 bg-blue-50/50 dark:bg-blue-900/20'
+          ? 'border-2 border-dashed border-teal-400 bg-teal-50/50 dark:bg-teal-900/20'
           : 'border-2 border-transparent'
       }`}
     >
       {children}
       {isDragOver && (
-        <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-blue-50/80 dark:bg-blue-900/40 pointer-events-none">
-          <span className="text-sm font-medium text-blue-600 dark:text-blue-400">{label}</span>
+        <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-teal-50/80 dark:bg-teal-900/40 pointer-events-none">
+          <span className="text-sm font-medium text-teal-600 dark:text-teal-400">{label}</span>
         </div>
       )}
     </div>

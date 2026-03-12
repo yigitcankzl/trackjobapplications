@@ -79,7 +79,7 @@ export default function ApplicationDrawer({ app, onClose, onEdit, onDelete }: Pr
               {/* Details grid */}
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <div className="w-8 h-8 rounded-lg bg-teal-50 dark:bg-teal-900/30 flex items-center justify-center flex-shrink-0 mt-0.5">
                     <CalendarIcon />
                   </div>
                   <div>
@@ -116,7 +116,7 @@ export default function ApplicationDrawer({ app, onClose, onEdit, onDelete }: Pr
                         href={app.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-sm text-blue-600 hover:text-blue-700 hover:underline truncate block"
+                        className="text-sm text-teal-600 hover:text-teal-700 hover:underline truncate block"
                       >
                         {app.url}
                       </a>
@@ -159,16 +159,16 @@ export default function ApplicationDrawer({ app, onClose, onEdit, onDelete }: Pr
                       <div key={stage} className="flex items-center flex-1">
                         <div className="flex flex-col items-center flex-1">
                           <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-colors ${
-                            isActive ? 'bg-blue-600 text-white' : isPast ? 'bg-blue-200 text-blue-700' : 'bg-stone-100 text-stone-400'
+                            isActive ? 'bg-teal-600 text-white' : isPast ? 'bg-teal-200 text-teal-700' : 'bg-stone-100 text-stone-400'
                           }`}>
                             {i + 1}
                           </div>
-                          <span className={`text-xs mt-1 font-medium ${isActive ? 'text-blue-600' : 'text-stone-400'}`}>
+                          <span className={`text-xs mt-1 font-medium ${isActive ? 'text-teal-600' : 'text-stone-400'}`}>
                             {t(`dashboard.status.${stage}`)}
                           </span>
                         </div>
                         {i < 2 && (
-                          <div className={`h-0.5 flex-1 -mt-4 ${isPast || isActive ? 'bg-blue-200 dark:bg-blue-800' : 'bg-stone-100 dark:bg-stone-800'}`} />
+                          <div className={`h-0.5 flex-1 -mt-4 ${isPast || isActive ? 'bg-teal-200 dark:bg-teal-800' : 'bg-stone-100 dark:bg-stone-800'}`} />
                         )}
                       </div>
                     )
@@ -181,7 +181,7 @@ export default function ApplicationDrawer({ app, onClose, onEdit, onDelete }: Pr
             <div className="flex items-center gap-3 px-6 py-4 border-t border-stone-100 dark:border-stone-800 bg-stone-50/50 dark:bg-stone-800/50">
               <button
                 onClick={() => { onEdit(app); onClose() }}
-                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors"
+                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold text-teal-700 dark:text-teal-300 bg-teal-50 dark:bg-teal-900/30 hover:bg-teal-100 dark:hover:bg-teal-900/50 transition-colors"
               >
                 <EditIcon />
                 {t('dashboard.drawer.edit')}

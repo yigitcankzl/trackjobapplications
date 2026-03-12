@@ -133,10 +133,23 @@ button {
   color: #78716c;
 }
 
+.user-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
 .user-bar a {
   font-size: 12px;
-  color: #ef4444;
   text-decoration: none;
+}
+
+#go-to-website-btn {
+  color: #0d9488;
+}
+
+#logout-btn {
+  color: #ef4444;
 }
 
 .user-bar a:hover {
@@ -475,11 +488,25 @@ button {
   letter-spacing: 0.3px;
 }
 
-.stat-to-apply { color: #475569; }
-.stat-applied  { color: #0d9488; }
-.stat-interview { color: #f97316; }
-.stat-offer    { color: #65a30d; }
-.stat-rejected { color: #f43f5e; }
+.stat-to-apply {
+  color: #475569;
+}
+
+.stat-applied {
+  color: #0d9488;
+}
+
+.stat-interview {
+  color: #f97316;
+}
+
+.stat-offer {
+  color: #65a30d;
+}
+
+.stat-rejected {
+  color: #f43f5e;
+}
 
 /* Recent Applications */
 #recent-section {
@@ -544,12 +571,35 @@ button {
   text-transform: uppercase;
 }
 
-.status-to_apply   { background: #f8fafc; color: #475569; }
-.status-applied    { background: #f0fdfa; color: #0f766e; }
-.status-interview  { background: #fff7ed; color: #c2410c; }
-.status-offer      { background: #f7fee7; color: #4d7c0f; }
-.status-rejected   { background: #fff1f2; color: #be123c; }
-.status-withdrawn  { background: #f4f4f5; color: #71717a; }
+.status-to_apply {
+  background: #f8fafc;
+  color: #475569;
+}
+
+.status-applied {
+  background: #f0fdfa;
+  color: #0f766e;
+}
+
+.status-interview {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.status-offer {
+  background: #f7fee7;
+  color: #4d7c0f;
+}
+
+.status-rejected {
+  background: #fff1f2;
+  color: #be123c;
+}
+
+.status-withdrawn {
+  background: #f4f4f5;
+  color: #71717a;
+}
 
 /* Loading */
 #loading {
@@ -641,6 +691,10 @@ body.dark .user-bar span {
   color: #a8a29e;
 }
 
+body.dark #go-to-website-btn {
+  color: #5eead4;
+}
+
 body.dark .field label {
   color: #a8a29e;
 }
@@ -721,12 +775,35 @@ body.dark .recent-position {
   color: #a8a29e;
 }
 
-body.dark .status-to_apply   { background: #1e293b; color: #94a3b8; }
-body.dark .status-applied    { background: #042f2e; color: #5eead4; }
-body.dark .status-interview  { background: #431407; color: #fdba74; }
-body.dark .status-offer      { background: #1a2e05; color: #bef264; }
-body.dark .status-rejected   { background: #4c0519; color: #fda4af; }
-body.dark .status-withdrawn  { background: #27272a; color: #a1a1aa; }
+body.dark .status-to_apply {
+  background: #1e293b;
+  color: #94a3b8;
+}
+
+body.dark .status-applied {
+  background: #042f2e;
+  color: #5eead4;
+}
+
+body.dark .status-interview {
+  background: #431407;
+  color: #fdba74;
+}
+
+body.dark .status-offer {
+  background: #1a2e05;
+  color: #bef264;
+}
+
+body.dark .status-rejected {
+  background: #4c0519;
+  color: #fda4af;
+}
+
+body.dark .status-withdrawn {
+  background: #27272a;
+  color: #a1a1aa;
+}
 
 body.dark #no-job p {
   color: #a8a29e;

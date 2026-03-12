@@ -87,6 +87,14 @@ function showMainSection(email) {
   document.getElementById('user-email').textContent = email;
 }
 
+document.getElementById('go-to-website-btn').addEventListener('click', async (e) => {
+  e.preventDefault();
+  const result = await chrome.runtime.sendMessage({ type: 'GET_FRONTEND_URL' });
+  if (result && result.url) {
+    chrome.tabs.create({ url: result.url + '/dashboard' });
+  }
+});
+
 document.getElementById('logout-btn').addEventListener('click', async (e) => {
   e.preventDefault();
   await chrome.runtime.sendMessage({ type: 'LOGOUT' });

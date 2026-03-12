@@ -321,6 +321,11 @@ async function handleMessage(message) {
         return { success: true };
       }
 
+      case 'GET_FRONTEND_URL': {
+        const url = await getFrontendUrl();
+        return { url };
+      }
+
       case 'CHECK_AUTH': {
         const { access } = await getTokens();
         const stored = await chrome.storage.local.get('user_email');

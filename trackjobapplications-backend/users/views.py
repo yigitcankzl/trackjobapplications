@@ -335,6 +335,24 @@ class PasswordResetConfirmView(APIView):
         return Response({"detail": "Password has been reset successfully."}, status=status.HTTP_200_OK)
 
 
+class ExtensionTokenView(APIView):
+    """Issue raw JWT tokens for the browser extension.
+
+    The user is already authenticated via httpOnly cookies (normal web login).
+    The extension opens a tab to /extension-auth on the frontend, which calls
+    this endpoint via credentialed XHR to get tokens it can store locally.
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        refresh = RefreshToken.for_user(request.user)
+        return Response({
+            "access": str(refresh.access_token),
+            "refresh": str(refresh),
+            "email": request.user.email,
+        })
+
+
 class SocialLoginInitView(APIView):
     """Redirect the browser to the OAuth provider's authorization page."""
     permission_classes = [permissions.AllowAny]

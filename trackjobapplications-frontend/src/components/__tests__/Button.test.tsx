@@ -10,19 +10,19 @@ describe('Button', () => {
 
   it('defaults to primary variant', () => {
     render(<Button>X</Button>)
-    expect(screen.getByRole('button')).toHaveClass('bg-gradient-to-r')
+    expect(screen.getByRole('button')).toHaveClass('bg-stone-900')
   })
 
   it('applies secondary variant classes', () => {
     render(<Button variant="secondary">X</Button>)
     const btn = screen.getByRole('button')
-    expect(btn).toHaveClass('text-gray-600')
-    expect(btn).not.toHaveClass('bg-gradient-to-r')
+    expect(btn).toHaveClass('text-stone-600')
+    expect(btn).not.toHaveClass('bg-stone-900')
   })
 
   it('applies danger variant classes', () => {
     render(<Button variant="danger">X</Button>)
-    expect(screen.getByRole('button')).toHaveClass('bg-red-500')
+    expect(screen.getByRole('button')).toHaveClass('bg-red-600')
   })
 
   it('is disabled when disabled prop is true', () => {

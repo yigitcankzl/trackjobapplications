@@ -100,16 +100,16 @@ export default function ImportModal({ open, onClose, onSuccess }: Props) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40" role="dialog" aria-modal="true" aria-labelledby="import-modal-title">
-      <div ref={focusTrapRef} className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl w-full max-w-2xl mx-4 max-h-[80vh] overflow-y-auto p-6">
+      <div ref={focusTrapRef} className="bg-white dark:bg-stone-900 rounded-lg shadow-xl w-full max-w-2xl mx-4 max-h-[80vh] overflow-y-auto p-6">
         <h2 id="import-modal-title" className="text-lg font-semibold mb-4 dark:text-white">{t('import.title')}</h2>
 
         {!file ? (
           <div
             onClick={() => fileRef.current?.click()}
-            className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl p-12 text-center cursor-pointer hover:border-blue-400 transition-colors"
+            className="border-2 border-dashed border-stone-300 dark:border-stone-600 rounded-lg p-12 text-center cursor-pointer hover:border-stone-400 transition-colors"
           >
-            <p className="text-gray-500 dark:text-gray-400">{t('import.selectFile')}</p>
-            <p className="text-xs text-gray-400 mt-1">{t('import.supportedFormats')}</p>
+            <p className="text-stone-500 dark:text-stone-400">{t('import.selectFile')}</p>
+            <p className="text-xs text-stone-400 mt-1">{t('import.supportedFormats')}</p>
             <input
               ref={fileRef}
               type="file"
@@ -120,7 +120,7 @@ export default function ImportModal({ open, onClose, onSuccess }: Props) {
           </div>
         ) : result ? (
           <div className="space-y-3">
-            <p className="text-sm dark:text-gray-200">
+            <p className="text-sm dark:text-stone-200">
               <span className="font-medium text-emerald-600">{result.created}</span> {t('import.imported')}
               {result.errors.length > 0 && (
                 <span className="ml-2 text-red-500">{result.errors.length} {t('import.errors')}</span>
@@ -141,22 +141,22 @@ export default function ImportModal({ open, onClose, onSuccess }: Props) {
           </div>
         ) : (
           <div className="space-y-4">
-            <p className="text-sm text-gray-600 dark:text-gray-300">
+            <p className="text-sm text-stone-600 dark:text-stone-300">
               {t('import.file')} <span className="font-medium">{file.name}</span>
             </p>
 
             {headers.length > 0 && (
               <>
                 <div className="space-y-2">
-                  <p className="text-sm font-medium dark:text-gray-200">{t('import.columnMapping')}</p>
+                  <p className="text-sm font-medium dark:text-stone-200">{t('import.columnMapping')}</p>
                   <div className="grid grid-cols-2 gap-2">
                     {headers.map(h => (
                       <div key={h} className="flex items-center gap-2">
-                        <span className="text-xs text-gray-500 w-28 truncate">{h}</span>
+                        <span className="text-xs text-stone-500 w-28 truncate">{h}</span>
                         <select
                           value={mapping[h] || ''}
                           onChange={e => setMapping(prev => ({ ...prev, [h]: e.target.value }))}
-                          className="flex-1 px-2 py-1 text-xs rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 dark:text-gray-100"
+                          className="flex-1 px-2 py-1 text-xs rounded border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800 dark:text-stone-100"
                         >
                           <option value="">{t('import.skip')}</option>
                           {FIELDS.map(f => (
@@ -170,12 +170,12 @@ export default function ImportModal({ open, onClose, onSuccess }: Props) {
 
                 {preview.length > 0 && (
                   <div className="overflow-x-auto">
-                    <p className="text-xs text-gray-400 mb-1">{t('import.preview', { count: preview.length })}</p>
+                    <p className="text-xs text-stone-400 mb-1">{t('import.preview', { count: preview.length })}</p>
                     <table className="text-xs w-full border-collapse">
                       <thead>
                         <tr>
                           {headers.map(h => (
-                            <th key={h} className="border border-gray-200 dark:border-gray-700 px-2 py-1 text-left text-gray-500">{h}</th>
+                            <th key={h} className="border border-stone-200 dark:border-stone-700 px-2 py-1 text-left text-stone-500">{h}</th>
                           ))}
                         </tr>
                       </thead>
@@ -183,7 +183,7 @@ export default function ImportModal({ open, onClose, onSuccess }: Props) {
                         {preview.map((row, i) => (
                           <tr key={i}>
                             {row.map((cell, j) => (
-                              <td key={j} className="border border-gray-200 dark:border-gray-700 px-2 py-1 text-gray-600 dark:text-gray-300 truncate max-w-[120px]">{cell}</td>
+                              <td key={j} className="border border-stone-200 dark:border-stone-700 px-2 py-1 text-stone-600 dark:text-stone-300 truncate max-w-[120px]">{cell}</td>
                             ))}
                           </tr>
                         ))}

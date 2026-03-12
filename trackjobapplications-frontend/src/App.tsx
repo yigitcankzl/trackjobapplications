@@ -20,6 +20,7 @@ const VerifyEmailPage = lazy(() => import('./pages/VerifyEmailPage'))
 const ForgotPasswordPage = lazy(() => import('./pages/ForgotPasswordPage'))
 const ResetPasswordPage = lazy(() => import('./pages/ResetPasswordPage'))
 const OAuthCallbackPage = lazy(() => import('./pages/OAuthCallbackPage'))
+const ExtensionPage = lazy(() => import('./pages/ExtensionPage'))
 
 export default function App() {
   return (
@@ -39,6 +40,7 @@ export default function App() {
               <Route path="/compare" element={<PrivateRoute><ComparisonPage /></PrivateRoute>} />
               <Route path="/analytics" element={<PrivateRoute><AnalyticsPage /></PrivateRoute>} />
               <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
+              <Route path="/extension" element={<PrivateRoute><ExtensionPage /></PrivateRoute>} />
               <Route path="/verify-email" element={<VerifyEmailPage />} />
               <Route path="/forgot-password" element={<ForgotPasswordPage />} />
               <Route path="/reset-password" element={<ResetPasswordPage />} />

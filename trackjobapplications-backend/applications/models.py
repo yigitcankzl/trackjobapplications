@@ -23,6 +23,7 @@ class Application(models.Model):
         ("linkedin", "LinkedIn"),
         ("indeed", "Indeed"),
         ("glassdoor", "Glassdoor"),
+        ("ziprecruiter", "ZipRecruiter"),
         ("referral", "Referral"),
         ("company_website", "Company Website"),
         ("other", "Other"),

@@ -2,17 +2,17 @@
   "manifest_version": 3,
   "name": "TrackJobApplications",
   "version": "1.0.0",
-  "description": "Add job applications from LinkedIn and Indeed with one click.",
+  "description": "Track job applications from LinkedIn, Indeed, Glassdoor, and ZipRecruiter with one click.",
   "permissions": [
     "storage",
     "activeTab"
   ],
   "host_permissions": [
     "http://localhost:8000/api/v1/*",
-    "https://trackjobapplications-backend.fly.dev/api/v1/*"
+    "https://trackjobapplications-backend.onrender.com/api/v1/*"
   ],
   "content_security_policy": {
-    "extension_pages": "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self' https://trackjobapplications-backend.fly.dev; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+    "extension_pages": "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self' http://localhost:8000 https://trackjobapplications-backend.onrender.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
   },
   "action": {
     "default_popup": "popup/popup.html",
@@ -37,13 +37,30 @@
       "run_at": "document_idle"
     },
     {
+      "matches": [
+        "https://www.glassdoor.com/job-listing/*",
+        "https://www.glassdoor.com/Job/*"
+      ],
+      "js": ["content/sanitize.js", "content/glassdoor.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://www.ziprecruiter.com/jobs/*",
+        "https://www.ziprecruiter.com/c/*"
+      ],
+      "js": ["content/sanitize.js", "content/ziprecruiter.js"],
+      "run_at": "document_idle"
+    },
+    {
       "matches": ["https://mail.google.com/*"],
       "js": ["content/sanitize.js", "content/gmail.js"],
       "run_at": "document_idle"
     }
   ],
   "background": {
-    "service_worker": "background/service-worker.js"
+    "service_worker": "background/service-worker.js",
+    "scripts": ["background/service-worker.js"]
   },
   "browser_specific_settings": {
     "gecko": {

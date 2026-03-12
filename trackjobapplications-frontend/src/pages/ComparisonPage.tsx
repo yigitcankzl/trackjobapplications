@@ -172,27 +172,27 @@ export default function ComparisonPage() {
       <div className="max-w-6xl mx-auto space-y-6 pb-12">
         {/* Application selector */}
         {compareData.length === 0 && (
-          <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6">
-            <p className="text-sm font-medium text-gray-600 dark:text-gray-300 mb-3">
-              {t('compare.selectApps')} <span className="text-gray-400">({selectedIds.length}/5)</span>
+          <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6">
+            <p className="text-sm font-medium text-stone-600 dark:text-stone-300 mb-3">
+              {t('compare.selectApps')} <span className="text-stone-400">({selectedIds.length}/5)</span>
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 max-h-80 overflow-y-auto">
               {allApps.map(app => (
                 <button
                   key={app.id}
                   onClick={() => toggleSelect(app.id)}
-                  className={`flex items-center gap-3 p-3 rounded-xl border text-left transition-all ${
+                  className={`flex items-center gap-3 p-3 rounded-lg border text-left transition-all ${
                     selectedIds.includes(app.id)
-                      ? 'border-blue-400 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-600'
-                      : 'border-gray-100 dark:border-gray-800 hover:border-gray-200 dark:hover:border-gray-700'
+                      ? 'border-teal-400 bg-teal-50 dark:bg-teal-900/20 dark:border-teal-600'
+                      : 'border-stone-100 dark:border-stone-800 hover:border-stone-200 dark:hover:border-stone-700'
                   }`}
                 >
                   <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold flex-shrink-0 ${getAvatarColor(app.company)}`}>
                     {(app.company[0] ?? '?').toUpperCase()}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">{app.company}</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{app.position}</p>
+                    <p className="text-sm font-medium text-stone-900 dark:text-stone-100 truncate">{app.company}</p>
+                    <p className="text-xs text-stone-500 dark:text-stone-400 truncate">{app.position}</p>
                   </div>
                   <StatusBadge status={app.status} />
                 </button>
@@ -202,7 +202,7 @@ export default function ComparisonPage() {
               <button
                 onClick={handleCompare}
                 disabled={selectedIds.length < 2 || comparing}
-                className="px-4 py-2 rounded-xl text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                className="px-4 py-2 rounded-lg text-sm font-semibold text-white bg-stone-900 hover:bg-stone-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
               >
                 {comparing ? t('compare.comparing') : t('compare.compareBtn', { count: selectedIds.length })}
               </button>
@@ -216,13 +216,13 @@ export default function ComparisonPage() {
             <div className="flex items-center justify-between">
               <button
                 onClick={() => { setCompareData([]); setSelectedIds([]) }}
-                className="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+                className="text-sm text-stone-500 hover:text-stone-700 dark:text-stone-400 dark:hover:text-stone-200 transition-colors"
               >
                 &larr; {t('compare.back')}
               </button>
               <button
                 onClick={() => setShowMatrix(!showMatrix)}
-                className="px-3 py-1.5 rounded-lg text-sm font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors"
+                className="px-3 py-1.5 rounded-lg text-sm font-medium text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-900/30 hover:bg-teal-100 dark:hover:bg-teal-900/50 transition-colors"
               >
                 {showMatrix ? t('compare.hideMatrix') : t('compare.showMatrix')}
               </button>
@@ -233,26 +233,26 @@ export default function ComparisonPage() {
               <table className="w-full text-sm">
                 <thead>
                   <tr>
-                    <th className="text-left p-3 text-xs font-semibold text-gray-400 uppercase tracking-wide w-36">{t('compare.field')}</th>
+                    <th className="text-left p-3 text-xs font-semibold text-stone-400 uppercase tracking-wide w-36">{t('compare.field')}</th>
                     {compareData.map(app => (
                       <th key={app.id} className="p-3 text-center min-w-[180px]">
                         <div className="flex flex-col items-center gap-1">
-                          <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg font-bold ${getAvatarColor(app.company)} ${bestId === app.id ? 'ring-2 ring-emerald-400' : ''}`}>
+                          <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-lg font-bold ${getAvatarColor(app.company)} ${bestId === app.id ? 'ring-2 ring-emerald-400' : ''}`}>
                             {app.company[0]?.toUpperCase()}
                           </div>
-                          <span className="font-semibold text-gray-900 dark:text-gray-100">{app.company}</span>
-                          <span className="text-xs text-gray-500 dark:text-gray-400">{app.position}</span>
+                          <span className="font-semibold text-stone-900 dark:text-stone-100">{app.company}</span>
+                          <span className="text-xs text-stone-500 dark:text-stone-400">{app.position}</span>
                         </div>
                       </th>
                     ))}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-50 dark:divide-gray-800">
+                <tbody className="divide-y divide-stone-50 dark:divide-stone-800">
                   <CompareRow label={t('compare.fields.status')} data={compareData} render={a => <StatusBadge status={a.status} />} />
                   <CompareRow label={t('compare.fields.salary')} data={compareData} render={a => {
                     const o = a.offer_detail
-                    if (!o?.salary) return <span className="text-gray-400">-</span>
-                    return <span className="font-semibold text-emerald-600 dark:text-emerald-400">{formatMoney(o.salary, o.currency)}<span className="text-xs text-gray-400 ml-1">/{o.salary_period === 'yearly' ? t('compare.yr') : o.salary_period === 'monthly' ? t('compare.mo') : t('compare.hr')}</span></span>
+                    if (!o?.salary) return <span className="text-stone-400">-</span>
+                    return <span className="font-semibold text-emerald-600 dark:text-emerald-400">{formatMoney(o.salary, o.currency)}<span className="text-xs text-stone-400 ml-1">/{o.salary_period === 'yearly' ? t('compare.yr') : o.salary_period === 'monthly' ? t('compare.mo') : t('compare.hr')}</span></span>
                   }} />
                   <CompareRow label={t('compare.fields.signingBonus')} data={compareData} render={a => {
                     const o = a.offer_detail
@@ -266,15 +266,15 @@ export default function ComparisonPage() {
                   <CompareRow label={t('compare.fields.location')} data={compareData} render={a => <span>{a.offer_detail?.location || '-'}</span>} />
                   <CompareRow label={t('compare.fields.remote')} data={compareData} render={a => {
                     const p = a.offer_detail?.remote_policy
-                    if (!p) return <span className="text-gray-400">-</span>
-                    const colors: Record<string, string> = { remote: 'text-emerald-600 bg-emerald-50 dark:bg-emerald-900/30', hybrid: 'text-amber-600 bg-amber-50 dark:bg-amber-900/30', onsite: 'text-gray-600 bg-gray-100 dark:bg-gray-800' }
+                    if (!p) return <span className="text-stone-400">-</span>
+                    const colors: Record<string, string> = { remote: 'text-emerald-600 bg-emerald-50 dark:bg-emerald-900/30', hybrid: 'text-amber-600 bg-amber-50 dark:bg-amber-900/30', onsite: 'text-stone-600 bg-stone-100 dark:bg-stone-800' }
                     return <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${colors[p] || ''}`}>{t(`compare.remoteOptions.${p}`)}</span>
                   }} />
                   <CompareRow label={t('compare.fields.companySize')} data={compareData} render={a => <span>{a.offer_detail?.company_size ? t(`compare.sizeOptions.${a.offer_detail.company_size}`) : '-'}</span>} />
                   <CompareRow label={t('compare.fields.benefits')} data={compareData} render={a => {
                     const b = a.offer_detail?.benefits
-                    if (!b) return <span className="text-gray-400">-</span>
-                    return <p className="text-xs text-gray-600 dark:text-gray-300 whitespace-pre-wrap max-h-24 overflow-y-auto">{b}</p>
+                    if (!b) return <span className="text-stone-400">-</span>
+                    return <p className="text-xs text-stone-600 dark:text-stone-300 whitespace-pre-wrap max-h-24 overflow-y-auto">{b}</p>
                   }} />
                   <CompareRow label={t('compare.fields.startDate')} data={compareData} render={a => <span>{a.offer_detail?.start_date || '-'}</span>} />
                   <CompareRow label={t('compare.fields.deadline')} data={compareData} render={a => <span>{a.offer_detail?.deadline || '-'}</span>} />
@@ -284,14 +284,14 @@ export default function ComparisonPage() {
 
             {/* Decision matrix */}
             {showMatrix && (
-              <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6 space-y-4">
-                <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">{t('compare.decisionMatrix')}</h3>
+              <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6 space-y-4">
+                <h3 className="text-sm font-semibold text-stone-900 dark:text-stone-100">{t('compare.decisionMatrix')}</h3>
 
                 {/* Weight sliders */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                   {criteria.map(c => (
                     <div key={c.key} className="flex items-center gap-2">
-                      <label htmlFor={`weight-${c.key}`} className="text-xs text-gray-500 dark:text-gray-400 w-20">{t(`compare.criteria.${c.key}`)}</label>
+                      <label htmlFor={`weight-${c.key}`} className="text-xs text-stone-500 dark:text-stone-400 w-20">{t(`compare.criteria.${c.key}`)}</label>
                       <input
                         id={`weight-${c.key}`}
                         type="range"
@@ -300,9 +300,9 @@ export default function ComparisonPage() {
                         value={c.weight}
                         onChange={e => updateWeight(c.key, Number(e.target.value))}
                         aria-label={t(`compare.criteria.${c.key}`)}
-                        className="flex-1 h-1.5 accent-blue-600"
+                        className="flex-1 h-1.5 accent-teal-600"
                       />
-                      <span className="text-xs font-mono text-gray-600 dark:text-gray-300 w-8 text-right">{c.weight}</span>
+                      <span className="text-xs font-mono text-stone-600 dark:text-stone-300 w-8 text-right">{c.weight}</span>
                     </div>
                   ))}
                 </div>
@@ -318,12 +318,12 @@ export default function ComparisonPage() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between mb-1">
-                            <span className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">{app.company}</span>
-                            <span className={`text-sm font-bold ${i === 0 ? 'text-emerald-600' : 'text-gray-500'}`}>{s.total.toFixed(1)}</span>
+                            <span className="text-sm font-medium text-stone-900 dark:text-stone-100 truncate">{app.company}</span>
+                            <span className={`text-sm font-bold ${i === 0 ? 'text-emerald-600' : 'text-stone-500'}`}>{s.total.toFixed(1)}</span>
                           </div>
-                          <div className="h-2 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+                          <div className="h-2 bg-stone-100 dark:bg-stone-800 rounded-full overflow-hidden">
                             <div
-                              className={`h-full rounded-full transition-all duration-500 ${i === 0 ? 'bg-emerald-500' : 'bg-blue-400'}`}
+                              className={`h-full rounded-full transition-all duration-500 ${i === 0 ? 'bg-emerald-500' : 'bg-teal-400'}`}
                               style={{ width: `${(s.total / 10) * 100}%` }}
                             />
                           </div>
@@ -338,18 +338,18 @@ export default function ComparisonPage() {
                   <table className="w-full text-xs">
                     <thead>
                       <tr>
-                        <th className="text-left p-2 text-gray-400 font-medium">{t('compare.criterion')}</th>
+                        <th className="text-left p-2 text-stone-400 font-medium">{t('compare.criterion')}</th>
                         {compareData.map(app => (
-                          <th key={app.id} className="p-2 text-center text-gray-400 font-medium">{app.company}</th>
+                          <th key={app.id} className="p-2 text-center text-stone-400 font-medium">{app.company}</th>
                         ))}
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-50 dark:divide-gray-800">
+                    <tbody className="divide-y divide-stone-50 dark:divide-stone-800">
                       {criteria.map(c => (
                         <tr key={c.key}>
-                          <td className="p-2 text-gray-600 dark:text-gray-300">{t(`compare.criteria.${c.key}`)} <span className="text-gray-400">({c.weight})</span></td>
+                          <td className="p-2 text-stone-600 dark:text-stone-300">{t(`compare.criteria.${c.key}`)} <span className="text-stone-400">({c.weight})</span></td>
                           {scores.map(s => (
-                            <td key={s.id} className="p-2 text-center font-mono text-gray-700 dark:text-gray-200">{s.breakdown[c.key]}</td>
+                            <td key={s.id} className="p-2 text-center font-mono text-stone-700 dark:text-stone-200">{s.breakdown[c.key]}</td>
                           ))}
                         </tr>
                       ))}
@@ -368,9 +368,9 @@ export default function ComparisonPage() {
 function CompareRow({ label, data, render }: { label: string; data: CompareApplication[]; render: (app: CompareApplication) => React.ReactNode }) {
   return (
     <tr>
-      <td className="p-3 text-xs font-semibold text-gray-400 uppercase tracking-wide whitespace-nowrap">{label}</td>
+      <td className="p-3 text-xs font-semibold text-stone-400 uppercase tracking-wide whitespace-nowrap">{label}</td>
       {data.map(app => (
-        <td key={app.id} className="p-3 text-center text-sm text-gray-700 dark:text-gray-200">{render(app)}</td>
+        <td key={app.id} className="p-3 text-center text-sm text-stone-700 dark:text-stone-200">{render(app)}</td>
       ))}
     </tr>
   )

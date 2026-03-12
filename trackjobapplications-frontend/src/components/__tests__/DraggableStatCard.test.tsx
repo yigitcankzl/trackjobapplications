@@ -6,7 +6,7 @@ function setup(overrides: Partial<React.ComponentProps<typeof DraggableStatCard>
   const defaults = {
     label: 'Applied',
     value: 5,
-    color: 'text-blue-600' as const,
+    color: 'text-teal-600' as const,
     index: 2,
     isDragging: false,
     isKeyboardGrabbed: false,
@@ -53,11 +53,11 @@ describe('DraggableStatCard', () => {
     expect(screen.getByRole('button')).toHaveClass('opacity-40')
   })
 
-  it('applies ring-2 ring-blue-500 when isKeyboardGrabbed', () => {
+  it('applies ring-2 ring-stone-500 when isKeyboardGrabbed', () => {
     setup({ isKeyboardGrabbed: true })
     const el = screen.getByRole('button')
     expect(el).toHaveClass('ring-2')
-    expect(el).toHaveClass('ring-blue-500')
+    expect(el).toHaveClass('ring-stone-500')
   })
 
   it('calls onKeyboardGrab with index on Space when not grabbed', () => {

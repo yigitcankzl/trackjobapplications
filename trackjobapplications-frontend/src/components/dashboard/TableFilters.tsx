@@ -70,7 +70,7 @@ export default memo(function TableFilters({
       <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:flex-wrap">
         {/* Search */}
         <div className="relative flex-1 min-w-0 sm:min-w-[200px] sm:max-w-xs">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400">
             <SearchIcon />
           </span>
           <input
@@ -85,12 +85,12 @@ export default memo(function TableFilters({
                 addSearch(search)
               }
             }}
-            className="w-full pl-9 pr-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900 transition-colors placeholder:text-gray-300 bg-white dark:bg-gray-900 dark:text-gray-100"
+            className="w-full pl-9 pr-4 py-2 rounded-lg border border-stone-200 dark:border-stone-700 text-sm outline-none focus:border-stone-400 focus:ring-2 focus:ring-stone-100 dark:focus:ring-stone-900 transition-colors placeholder:text-stone-300 bg-white dark:bg-stone-900 dark:text-stone-100"
           />
           {search && (
             <button
               onClick={handleClearSearch}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600"
               aria-label={t('dashboard.aria.clearSearch')}
             >
               <CloseIcon />
@@ -109,7 +109,7 @@ export default memo(function TableFilters({
         <select
           value={sourceFilter}
           onChange={e => onSourceFilterChange(e.target.value as ApplicationSource | '')}
-          className="px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-sm bg-white dark:bg-gray-900 dark:text-gray-100 outline-none focus:border-blue-400"
+          className="px-3 py-2 rounded-lg border border-stone-200 dark:border-stone-700 text-sm bg-white dark:bg-stone-900 dark:text-stone-100 outline-none focus:border-stone-400"
         >
           {SOURCE_KEYS.map(key => (
             <option key={key} value={key}>{key === '' ? t('dashboard.filters.allSources') : t(`source.${key}`)}</option>
@@ -122,28 +122,28 @@ export default memo(function TableFilters({
             type="date"
             value={dateAfter}
             onChange={e => onDateAfterChange(e.target.value)}
-            className="px-2 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-sm bg-white dark:bg-gray-900 dark:text-gray-100 outline-none focus:border-blue-400"
+            className="px-2 py-2 rounded-lg border border-stone-200 dark:border-stone-700 text-sm bg-white dark:bg-stone-900 dark:text-stone-100 outline-none focus:border-stone-400"
           />
-          <span className="text-gray-400 text-xs">—</span>
+          <span className="text-stone-400 text-xs">—</span>
           <input
             type="date"
             value={dateBefore}
             onChange={e => onDateBeforeChange(e.target.value)}
-            className="px-2 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-sm bg-white dark:bg-gray-900 dark:text-gray-100 outline-none focus:border-blue-400"
+            className="px-2 py-2 rounded-lg border border-stone-200 dark:border-stone-700 text-sm bg-white dark:bg-stone-900 dark:text-stone-100 outline-none focus:border-stone-400"
           />
         </div>
 
         {/* Sort */}
         <div className="flex items-center gap-1.5 sm:ml-auto">
-          <span className="text-xs text-gray-400 font-medium">{t('dashboard.filters.sort')}</span>
+          <span className="text-xs text-stone-400 font-medium">{t('dashboard.filters.sort')}</span>
           {SORT_OPTIONS.map(opt => (
             <button
               key={opt.value}
               onClick={() => onSortChange(opt.value)}
               className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                 sortKey === opt.value
-                  ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
-                  : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+                  ? 'bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400'
+                  : 'text-stone-500 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800'
               }`}
             >
               {opt.label}
@@ -163,8 +163,8 @@ export default memo(function TableFilters({
             onClick={() => onStatusFilterChange(chip.value)}
             className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
               statusFilter === chip.value
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+                ? 'bg-stone-900 text-white'
+                : 'bg-stone-100 dark:bg-stone-800 text-stone-500 dark:text-stone-400 hover:bg-stone-200 dark:hover:bg-stone-700'
             }`}
           >
             {chip.label}

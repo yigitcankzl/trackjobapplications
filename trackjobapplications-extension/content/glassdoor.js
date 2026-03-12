@@ -1,48 +1,32 @@
 // --- DOM Extraction ---
 
-function extractLinkedInJob() {
+function extractGlassdoorJob() {
   const position =
-    document.querySelector('.job-details-jobs-unified-top-card__job-title')?.textContent?.trim() ||
-    document.querySelector('h1.t-24')?.textContent?.trim() ||
-    document.querySelector('.jobs-unified-top-card h1')?.textContent?.trim() ||
+    document.querySelector('[data-test="job-title"]')?.textContent?.trim() ||
+    document.querySelector('.JobDetails_jobTitle__Rg4jR')?.textContent?.trim() ||
+    document.querySelector('h1')?.textContent?.trim() ||
     '';
 
   const company =
-    document.querySelector('.job-details-jobs-unified-top-card__company-name a')?.textContent?.trim() ||
-    document.querySelector('.jobs-unified-top-card__company-name a')?.textContent?.trim() ||
-    document.querySelector('.job-details-jobs-unified-top-card__company-name')?.textContent?.trim() ||
+    document.querySelector('[data-test="employerName"]')?.textContent?.trim() ||
+    document.querySelector('.JobDetails_companyName__N1YrN a')?.textContent?.trim() ||
+    document.querySelector('.EmployerProfile_compactEmployerName__9MGcV')?.textContent?.trim() ||
     '';
 
-  // Try to get the specific job URL from the page
-  // LinkedIn uses currentJobId param or /jobs/view/ID/ paths
-  let url = window.location.href;
-  const jobIdMatch = url.match(/currentJobId=(\d+)/) || url.match(/\/jobs\/view\/(\d+)/);
-  if (jobIdMatch) {
-    url = `https://www.linkedin.com/jobs/view/${jobIdMatch[1]}/`;
-  } else {
-    // Fallback: try to find job link in the detail panel
-    const jobLink = document.querySelector('a[href*="/jobs/view/"]');
-    if (jobLink) {
-      const href = jobLink.getAttribute('href');
-      const idMatch = href.match(/\/jobs\/view\/(\d+)/);
-      if (idMatch) {
-        url = `https://www.linkedin.com/jobs/view/${idMatch[1]}/`;
-      }
-    }
-  }
+  const rawUrl = window.location.href.split('#')[0];
 
-  // Extract the full job description text so it survives if the listing is removed
+  // Extract the full job description text
   const jobPostingContent =
-    document.querySelector('.jobs-description__content .jobs-box__html-content')?.innerText?.trim() ||
-    document.querySelector('.jobs-description-content__text')?.innerText?.trim() ||
-    document.querySelector('#job-details')?.innerText?.trim() ||
+    document.querySelector('[data-test="job-description"]')?.innerText?.trim() ||
+    document.querySelector('.JobDetails_jobDescription__uW_fK')?.innerText?.trim() ||
+    document.querySelector('#JobDescriptionContainer')?.innerText?.trim() ||
     '';
 
   return {
     company:  sanitizeText(company, 200),
     position: sanitizeText(position, 200),
-    url:      sanitizeUrl(url, ['linkedin.com']),
-    source:   'linkedin',
+    url:      sanitizeUrl(rawUrl, ['glassdoor.com']),
+    source:   'glassdoor',
     job_posting_content: sanitizeText(jobPostingContent, 50000),
   };
 }
@@ -52,7 +36,7 @@ function extractLinkedInJob() {
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (sender.id !== chrome.runtime.id) { sendResponse(null); return; }
   if (message.type === 'GET_JOB_DATA') {
-    sendResponse(extractLinkedInJob());
+    sendResponse(extractGlassdoorJob());
   }
 });
 
@@ -63,7 +47,6 @@ const CONTAINER_ID = 'tja-btn-container';
 function createActionButton(label, color, hoverColor, status) {
   const btn = document.createElement('button');
   btn.textContent = label;
-  btn.dataset.status = status;
   btn.style.cssText = `
     background: ${color};
     color: #fff;
@@ -81,7 +64,7 @@ function createActionButton(label, color, hoverColor, status) {
   btn.addEventListener('mouseleave', () => { if (!btn.disabled) btn.style.background = color; });
 
   btn.addEventListener('click', async () => {
-    const data = extractLinkedInJob();
+    const data = extractGlassdoorJob();
     if (!data.company || !data.position) {
       btn.textContent = 'Could not extract job info';
       btn.style.background = '#ef4444';
@@ -125,9 +108,9 @@ function injectButton() {
   if (document.getElementById(CONTAINER_ID)) return;
 
   const titleEl =
-    document.querySelector('.job-details-jobs-unified-top-card__job-title') ||
-    document.querySelector('h1.t-24') ||
-    document.querySelector('.jobs-unified-top-card h1');
+    document.querySelector('[data-test="job-title"]') ||
+    document.querySelector('.JobDetails_jobTitle__Rg4jR') ||
+    document.querySelector('h1');
 
   if (titleEl) {
     const container = document.createElement('span');
@@ -139,25 +122,12 @@ function injectButton() {
   }
 }
 
-// Track current URL to detect SPA navigation
-let lastUrl = window.location.href;
-
-function resetButtonIfNavigated() {
-  const currentUrl = window.location.href;
-  if (currentUrl !== lastUrl) {
-    lastUrl = currentUrl;
-    const existing = document.getElementById(CONTAINER_ID);
-    if (existing) existing.remove();
-  }
-  injectButton();
-}
-
 // Initial inject
 injectButton();
 
-// Re-inject on SPA navigation (LinkedIn is a SPA)
+// Re-inject on SPA navigation
 const observer = new MutationObserver(() => {
-  resetButtonIfNavigated();
+  injectButton();
 });
 
 observer.observe(document.body, { childList: true, subtree: true });

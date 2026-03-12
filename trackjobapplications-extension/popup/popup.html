@@ -7,7 +7,21 @@
 </head>
 <body>
   <div class="container">
-    <h2>TrackJobApplications</h2>
+    <div class="header-bar">
+      <div class="logo-group">
+        <div class="logo-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+          </svg>
+        </div>
+        <span class="logo-text">TrackJobs</span>
+      </div>
+      <button id="theme-toggle" class="theme-btn" title="Toggle dark mode">
+        <svg id="theme-icon" class="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+        </svg>
+      </button>
+    </div>
 
     <!-- Login Section -->
     <div id="login-section" hidden>
@@ -39,9 +53,54 @@
           <label>Source</label>
           <span id="job-source"></span>
         </div>
+        <div id="tag-picker" class="tag-picker" hidden></div>
+        <div class="extras-toggles">
+          <a href="#" id="notes-toggle-btn">+ Note</a>
+          <a href="#" id="contact-toggle-btn">+ Recruiter</a>
+        </div>
+        <textarea id="job-notes" class="job-notes" placeholder="Quick note (optional)..." hidden></textarea>
+        <div id="contact-fields" class="contact-fields" hidden>
+          <input type="text" id="contact-name" placeholder="Recruiter name" maxlength="100">
+          <input type="email" id="contact-email" placeholder="Email (optional)" maxlength="254">
+        </div>
+        <div id="interview-fields" class="interview-fields" hidden>
+          <select id="interview-type">
+            <option value="phone_screen">Phone Screen</option>
+            <option value="technical">Technical</option>
+            <option value="behavioral">Behavioral</option>
+            <option value="onsite">On-site</option>
+            <option value="take_home">Take-home</option>
+            <option value="final">Final Round</option>
+            <option value="other">Other</option>
+          </select>
+          <input type="datetime-local" id="interview-date">
+        </div>
+        <div id="offer-fields" class="offer-fields" hidden>
+          <div class="offer-row">
+            <input type="number" id="offer-salary" placeholder="Salary" min="0" step="1000">
+            <select id="offer-currency">
+              <option value="USD">USD</option>
+              <option value="EUR">EUR</option>
+              <option value="GBP">GBP</option>
+              <option value="TRY">TRY</option>
+              <option value="CAD">CAD</option>
+              <option value="AUD">AUD</option>
+              <option value="JPY">JPY</option>
+              <option value="INR">INR</option>
+            </select>
+            <select id="offer-period">
+              <option value="yearly">Year</option>
+              <option value="monthly">Month</option>
+              <option value="hourly">Hour</option>
+            </select>
+          </div>
+          <textarea id="offer-benefits" class="offer-benefits" placeholder="Benefits (optional)..." rows="2"></textarea>
+        </div>
         <div class="btn-group">
-          <button id="save-btn" class="btn-save">Save (To Apply)</button>
-          <button id="apply-btn" class="btn-apply">Mark as Applied</button>
+          <button id="save-btn" class="btn-save">To Apply</button>
+          <button id="apply-btn" class="btn-apply">Applied</button>
+          <button id="interview-btn" class="btn-interview">Interview</button>
+          <button id="offer-btn" class="btn-offer">Offer</button>
         </div>
       </div>
 
@@ -50,6 +109,42 @@
       </div>
 
       <div id="feedback" hidden></div>
+
+      <!-- Stats -->
+      <div id="stats-section" hidden>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <span class="stat-num" id="stat-total">-</span>
+            <span class="stat-label">Total</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num stat-to-apply" id="stat-to-apply">-</span>
+            <span class="stat-label">To Apply</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num stat-applied" id="stat-applied">-</span>
+            <span class="stat-label">Applied</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num stat-interview" id="stat-interview">-</span>
+            <span class="stat-label">Interview</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num stat-offer" id="stat-offer">-</span>
+            <span class="stat-label">Offer</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num stat-rejected" id="stat-rejected">-</span>
+            <span class="stat-label">Rejected</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Applications -->
+      <div id="recent-section" hidden>
+        <h3 class="section-title">Recent</h3>
+        <ul id="recent-list"></ul>
+      </div>
     </div>
 
     <!-- Loading -->

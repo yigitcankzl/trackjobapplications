@@ -114,7 +114,7 @@ class ApplicationViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=["get"], url_path="brief")
     def brief(self, request):
-        qs = request.user.applications.only("id", "company", "position", "status").order_by("-applied_date")
+        qs = request.user.applications.only("id", "company", "position", "status", "is_pinned").order_by("-applied_date")
         serializer = ApplicationBriefSerializer(qs, many=True)
         return Response(serializer.data)
 

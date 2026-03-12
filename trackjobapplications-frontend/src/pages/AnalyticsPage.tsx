@@ -85,16 +85,16 @@ export default function AnalyticsPage() {
 
       {/* Summary cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-        <StatCard label={t('analytics.totalApplications')} value={total} color="text-gray-900" />
-        <StatCard label={t('analytics.interviewRate')} value={`${interviewRate}%`} color="text-amber-600" />
-        <StatCard label={t('analytics.offerRate')} value={`${offerRate}%`} color="text-emerald-600" />
-        <StatCard label={t('analytics.active')} value={counts.applied + counts.interview} color="text-blue-600" />
+        <StatCard label={t('analytics.totalApplications')} value={total} color="text-stone-900" />
+        <StatCard label={t('analytics.interviewRate')} value={`${interviewRate}%`} color="text-orange-500" />
+        <StatCard label={t('analytics.offerRate')} value={`${offerRate}%`} color="text-lime-600" />
+        <StatCard label={t('analytics.active')} value={counts.applied + counts.interview} color="text-teal-600" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Status distribution */}
-        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm p-6">
-          <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-5">{t('analytics.statusDistribution')}</h2>
+        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6">
+          <h2 className="text-sm font-semibold text-stone-800 dark:text-stone-200 mb-5">{t('analytics.statusDistribution')}</h2>
           <div className="space-y-3.5">
             {STATUSES.map(status => {
               const count = counts[status]
@@ -105,9 +105,9 @@ export default function AnalyticsPage() {
                     <span className={`text-xs font-semibold ${STATUS_TEXT[status]}`}>
                       {t(`dashboard.status.${status}`)}
                     </span>
-                    <span className="text-xs font-bold text-gray-700 dark:text-gray-300">{count}</span>
+                    <span className="text-xs font-bold text-stone-700 dark:text-stone-300">{count}</span>
                   </div>
-                  <div className="w-full h-2 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+                  <div className="w-full h-2 bg-stone-100 dark:bg-stone-800 rounded-full overflow-hidden">
                     <div
                       className={`h-full rounded-full transition-all duration-500 ${STATUS_COLORS[status]}`}
                       style={{ width: `${pct}%` }}
@@ -119,7 +119,7 @@ export default function AnalyticsPage() {
           </div>
 
           {/* Legend */}
-          <div className="mt-6 pt-5 border-t border-gray-100 dark:border-gray-800 flex flex-wrap gap-3">
+          <div className="mt-6 pt-5 border-t border-stone-100/60 dark:border-stone-800 flex flex-wrap gap-3">
             {STATUSES.map(status => (
               <div key={status} className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg ${STATUS_BG[status]}`}>
                 <span className={`w-2 h-2 rounded-full flex-shrink-0 ${STATUS_COLORS[status]}`} />
@@ -132,14 +132,14 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Applications over time */}
-        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm p-6">
+        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6">
           <div className="flex items-center justify-between mb-5">
-            <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-200">{t('analytics.applicationsOverTime')}</h2>
-            <div className="flex items-center bg-gray-100 dark:bg-gray-800 rounded-xl p-1 gap-0.5">
+            <h2 className="text-sm font-semibold text-stone-800 dark:text-stone-200">{t('analytics.applicationsOverTime')}</h2>
+            <div className="flex items-center bg-stone-100 dark:bg-stone-800 rounded-lg p-1 gap-0.5">
               <button
                 onClick={() => setTimeView('weekly')}
                 className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
-                  timeView === 'weekly' ? 'bg-white dark:bg-gray-700 text-blue-600 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700'
+                  timeView === 'weekly' ? 'bg-white dark:bg-stone-700 text-stone-900 dark:text-stone-100 shadow-sm' : 'text-stone-500 dark:text-stone-400 hover:text-stone-700'
                 }`}
               >
                 {t('analytics.weekly')}
@@ -147,7 +147,7 @@ export default function AnalyticsPage() {
               <button
                 onClick={() => setTimeView('monthly')}
                 className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
-                  timeView === 'monthly' ? 'bg-white dark:bg-gray-700 text-blue-600 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700'
+                  timeView === 'monthly' ? 'bg-white dark:bg-stone-700 text-stone-900 dark:text-stone-100 shadow-sm' : 'text-stone-500 dark:text-stone-400 hover:text-stone-700'
                 }`}
               >
                 {t('analytics.monthly')}
@@ -158,7 +158,7 @@ export default function AnalyticsPage() {
             const data = timeView === 'monthly' ? byMonth : byWeek
             const maxVal = timeView === 'monthly' ? maxMonthCount : maxWeekCount
             if (data.length === 0) {
-              return <div className="flex items-center justify-center h-40 text-sm text-gray-400">{t('analytics.noData')}</div>
+              return <div className="flex items-center justify-center h-40 text-sm text-stone-400">{t('analytics.noData')}</div>
             }
             return (
               <div className="flex items-end gap-2 sm:gap-3 h-44 overflow-x-auto">
@@ -169,14 +169,14 @@ export default function AnalyticsPage() {
                     : (() => { const [wy, wm, wd] = key.split('-').map(Number); return new Date(wy, wm - 1, wd).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) })()
                   return (
                     <div key={key} className="flex-1 flex flex-col items-center gap-1.5 min-w-0">
-                      <span className="text-xs font-bold text-gray-700 dark:text-gray-300">{count}</span>
+                      <span className="text-xs font-bold text-stone-700 dark:text-stone-300">{count}</span>
                       <div className="w-full relative" style={{ height: '120px' }}>
                         <div
-                          className="absolute bottom-0 w-full bg-blue-500 rounded-t-lg transition-all duration-500"
+                          className="absolute bottom-0 w-full bg-teal-500 rounded-t-lg transition-all duration-500"
                           style={{ height: `${heightPct}%` }}
                         />
                       </div>
-                      <span className="text-xs text-gray-400 text-center leading-tight">{label}</span>
+                      <span className="text-xs text-stone-400 text-center leading-tight">{label}</span>
                     </div>
                   )
                 })}
@@ -187,8 +187,8 @@ export default function AnalyticsPage() {
       </div>
 
       {/* Pipeline funnel */}
-      <div className="mt-6 bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm p-6">
-        <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-5">{t('analytics.pipeline')}</h2>
+      <div className="mt-6 bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6">
+        <h2 className="text-sm font-semibold text-stone-800 dark:text-stone-200 mb-5">{t('analytics.pipeline')}</h2>
         <div className="flex items-center gap-0 overflow-x-auto pb-2">
           {(['applied', 'interview', 'offer'] as ApplicationStatus[]).map((status, i, arr) => {
             const count = counts[status]
@@ -196,15 +196,15 @@ export default function AnalyticsPage() {
             const convRate = prev > 0 ? Math.round(count / prev * 100) : 0
             return (
               <div key={status} className="flex items-center flex-1 min-w-0">
-                <div className={`flex-1 rounded-xl p-4 text-center ${STATUS_BG[status]}`}>
+                <div className={`flex-1 rounded-lg p-4 text-center ${STATUS_BG[status]}`}>
                   <p className={`text-2xl font-bold ${STATUS_TEXT[status]}`}>{count}</p>
-                  <p className="text-xs font-semibold text-gray-500 mt-0.5">{t(`dashboard.status.${status}`)}</p>
+                  <p className="text-xs font-semibold text-stone-500 mt-0.5">{t(`dashboard.status.${status}`)}</p>
                   {i > 0 && (
-                    <p className="text-xs text-gray-400 mt-1">{convRate}{t('analytics.conversion')}</p>
+                    <p className="text-xs text-stone-400 mt-1">{convRate}{t('analytics.conversion')}</p>
                   )}
                 </div>
                 {i < arr.length - 1 && (
-                  <span className="text-gray-300 flex-shrink-0 mx-1">
+                  <span className="text-stone-300 flex-shrink-0 mx-1">
                     <ChevronRightIcon />
                   </span>
                 )}
@@ -220,18 +220,18 @@ export default function AnalyticsPage() {
         if (entries.length === 0) return null
         const maxSrc = Math.max(...entries.map(([, c]) => c), 1)
         return (
-          <div className="mt-6 bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm p-6">
-            <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-5">{t('analytics.sourceDistribution')}</h2>
+          <div className="mt-6 bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6">
+            <h2 className="text-sm font-semibold text-stone-800 dark:text-stone-200 mb-5">{t('analytics.sourceDistribution')}</h2>
             <div className="space-y-3.5">
               {entries.map(([src, count]) => {
                 const pct = Math.round(count / maxSrc * 100)
                 return (
                   <div key={src}>
                     <div className="flex items-center justify-between mb-1">
-                      <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">{t(`source.${src}`)}</span>
-                      <span className="text-xs font-bold text-gray-700 dark:text-gray-300">{count}</span>
+                      <span className="text-xs font-semibold text-stone-700 dark:text-stone-300">{t(`source.${src}`)}</span>
+                      <span className="text-xs font-bold text-stone-700 dark:text-stone-300">{count}</span>
                     </div>
-                    <div className="w-full h-2 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+                    <div className="w-full h-2 bg-stone-100 dark:bg-stone-800 rounded-full overflow-hidden">
                       <div
                         className={`h-full rounded-full transition-all duration-500 ${SOURCE_CONFIG[src].color}`}
                         style={{ width: `${pct}%` }}

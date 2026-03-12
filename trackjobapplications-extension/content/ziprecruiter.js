@@ -1,48 +1,34 @@
 // --- DOM Extraction ---
 
-function extractLinkedInJob() {
+function extractZipRecruiterJob() {
   const position =
-    document.querySelector('.job-details-jobs-unified-top-card__job-title')?.textContent?.trim() ||
-    document.querySelector('h1.t-24')?.textContent?.trim() ||
-    document.querySelector('.jobs-unified-top-card h1')?.textContent?.trim() ||
+    document.querySelector('.job_title')?.textContent?.trim() ||
+    document.querySelector('[data-testid="job-title"]')?.textContent?.trim() ||
+    document.querySelector('h1.job_title')?.textContent?.trim() ||
+    document.querySelector('h1')?.textContent?.trim() ||
     '';
 
   const company =
-    document.querySelector('.job-details-jobs-unified-top-card__company-name a')?.textContent?.trim() ||
-    document.querySelector('.jobs-unified-top-card__company-name a')?.textContent?.trim() ||
-    document.querySelector('.job-details-jobs-unified-top-card__company-name')?.textContent?.trim() ||
+    document.querySelector('.hiring_company .company_name')?.textContent?.trim() ||
+    document.querySelector('[data-testid="job-company-name"]')?.textContent?.trim() ||
+    document.querySelector('.JobDetails_companyName a')?.textContent?.trim() ||
+    document.querySelector('.company_name')?.textContent?.trim() ||
     '';
 
-  // Try to get the specific job URL from the page
-  // LinkedIn uses currentJobId param or /jobs/view/ID/ paths
-  let url = window.location.href;
-  const jobIdMatch = url.match(/currentJobId=(\d+)/) || url.match(/\/jobs\/view\/(\d+)/);
-  if (jobIdMatch) {
-    url = `https://www.linkedin.com/jobs/view/${jobIdMatch[1]}/`;
-  } else {
-    // Fallback: try to find job link in the detail panel
-    const jobLink = document.querySelector('a[href*="/jobs/view/"]');
-    if (jobLink) {
-      const href = jobLink.getAttribute('href');
-      const idMatch = href.match(/\/jobs\/view\/(\d+)/);
-      if (idMatch) {
-        url = `https://www.linkedin.com/jobs/view/${idMatch[1]}/`;
-      }
-    }
-  }
+  const rawUrl = window.location.href.split('#')[0];
 
-  // Extract the full job description text so it survives if the listing is removed
+  // Extract the full job description text
   const jobPostingContent =
-    document.querySelector('.jobs-description__content .jobs-box__html-content')?.innerText?.trim() ||
-    document.querySelector('.jobs-description-content__text')?.innerText?.trim() ||
-    document.querySelector('#job-details')?.innerText?.trim() ||
+    document.querySelector('.job_description')?.innerText?.trim() ||
+    document.querySelector('[data-testid="job-description"]')?.innerText?.trim() ||
+    document.querySelector('.jobDescriptionSection')?.innerText?.trim() ||
     '';
 
   return {
     company:  sanitizeText(company, 200),
     position: sanitizeText(position, 200),
-    url:      sanitizeUrl(url, ['linkedin.com']),
-    source:   'linkedin',
+    url:      sanitizeUrl(rawUrl, ['ziprecruiter.com']),
+    source:   'ziprecruiter',
     job_posting_content: sanitizeText(jobPostingContent, 50000),
   };
 }
@@ -52,7 +38,7 @@ function extractLinkedInJob() {
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (sender.id !== chrome.runtime.id) { sendResponse(null); return; }
   if (message.type === 'GET_JOB_DATA') {
-    sendResponse(extractLinkedInJob());
+    sendResponse(extractZipRecruiterJob());
   }
 });
 
@@ -63,7 +49,6 @@ const CONTAINER_ID = 'tja-btn-container';
 function createActionButton(label, color, hoverColor, status) {
   const btn = document.createElement('button');
   btn.textContent = label;
-  btn.dataset.status = status;
   btn.style.cssText = `
     background: ${color};
     color: #fff;
@@ -81,7 +66,7 @@ function createActionButton(label, color, hoverColor, status) {
   btn.addEventListener('mouseleave', () => { if (!btn.disabled) btn.style.background = color; });
 
   btn.addEventListener('click', async () => {
-    const data = extractLinkedInJob();
+    const data = extractZipRecruiterJob();
     if (!data.company || !data.position) {
       btn.textContent = 'Could not extract job info';
       btn.style.background = '#ef4444';
@@ -125,9 +110,9 @@ function injectButton() {
   if (document.getElementById(CONTAINER_ID)) return;
 
   const titleEl =
-    document.querySelector('.job-details-jobs-unified-top-card__job-title') ||
-    document.querySelector('h1.t-24') ||
-    document.querySelector('.jobs-unified-top-card h1');
+    document.querySelector('.job_title') ||
+    document.querySelector('[data-testid="job-title"]') ||
+    document.querySelector('h1');
 
   if (titleEl) {
     const container = document.createElement('span');
@@ -139,25 +124,12 @@ function injectButton() {
   }
 }
 
-// Track current URL to detect SPA navigation
-let lastUrl = window.location.href;
-
-function resetButtonIfNavigated() {
-  const currentUrl = window.location.href;
-  if (currentUrl !== lastUrl) {
-    lastUrl = currentUrl;
-    const existing = document.getElementById(CONTAINER_ID);
-    if (existing) existing.remove();
-  }
-  injectButton();
-}
-
 // Initial inject
 injectButton();
 
-// Re-inject on SPA navigation (LinkedIn is a SPA)
+// Re-inject on SPA navigation
 const observer = new MutationObserver(() => {
-  resetButtonIfNavigated();
+  injectButton();
 });
 
 observer.observe(document.body, { childList: true, subtree: true });

@@ -157,17 +157,17 @@ export default function OfferDetailPanel({ applicationId }: Props) {
 
   if (loading) return <LoadingSpinner size="sm" centered />
 
-  const inputClass = 'w-full px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent'
-  const labelClass = 'block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1'
+  const inputClass = 'w-full px-3 py-2 text-sm rounded-lg border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800 text-stone-900 dark:text-stone-100 focus:ring-2 focus:ring-stone-500 focus:border-transparent'
+  const labelClass = 'block text-xs font-medium text-stone-500 dark:text-stone-400 mb-1'
 
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
-        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">{t('offer.title')}</p>
+        <p className="text-xs font-semibold text-stone-400 uppercase tracking-wide">{t('offer.title')}</p>
         {!editing && (
           <button
             onClick={() => setEditing(true)}
-            className="text-xs font-medium text-blue-600 dark:text-blue-400 hover:underline"
+            className="text-xs font-medium text-teal-600 dark:text-teal-400 hover:underline"
           >
             {offer ? t('offer.edit') : t('offer.add')}
           </button>
@@ -175,7 +175,7 @@ export default function OfferDetailPanel({ applicationId }: Props) {
       </div>
 
       {!editing && !offer && (
-        <p className="text-sm text-gray-400 dark:text-gray-500">{t('offer.empty')}</p>
+        <p className="text-sm text-stone-400 dark:text-stone-500">{t('offer.empty')}</p>
       )}
 
       {!editing && offer && (
@@ -185,29 +185,29 @@ export default function OfferDetailPanel({ applicationId }: Props) {
               <p className={labelClass}>{t('compare.fields.salary')}</p>
               <p className="font-semibold text-emerald-600 dark:text-emerald-400">
                 {formatMoney(offer.salary, offer.currency || 'USD')}
-                <span className="text-xs text-gray-400 ml-1">/{offer.salary_period === 'yearly' ? t('compare.yr') : offer.salary_period === 'monthly' ? t('compare.mo') : t('compare.hr')}</span>
+                <span className="text-xs text-stone-400 ml-1">/{offer.salary_period === 'yearly' ? t('compare.yr') : offer.salary_period === 'monthly' ? t('compare.mo') : t('compare.hr')}</span>
               </p>
             </div>
           )}
           {offer.signing_bonus != null && (
             <div>
               <p className={labelClass}>{t('compare.fields.signingBonus')}</p>
-              <p className="text-gray-800 dark:text-gray-200">{formatMoney(offer.signing_bonus, offer.currency || 'USD')}</p>
+              <p className="text-stone-800 dark:text-stone-200">{formatMoney(offer.signing_bonus, offer.currency || 'USD')}</p>
             </div>
           )}
           {offer.annual_bonus != null && (
             <div>
               <p className={labelClass}>{t('compare.fields.annualBonus')}</p>
-              <p className="text-gray-800 dark:text-gray-200">{formatMoney(offer.annual_bonus, offer.currency || 'USD')}</p>
+              <p className="text-stone-800 dark:text-stone-200">{formatMoney(offer.annual_bonus, offer.currency || 'USD')}</p>
             </div>
           )}
-          {offer.equity && <div><p className={labelClass}>{t('compare.fields.equity')}</p><p className="text-gray-800 dark:text-gray-200">{offer.equity}</p></div>}
-          {offer.location && <div><p className={labelClass}>{t('compare.fields.location')}</p><p className="text-gray-800 dark:text-gray-200">{offer.location}</p></div>}
-          {offer.remote_policy && <div><p className={labelClass}>{t('compare.fields.remote')}</p><p className="text-gray-800 dark:text-gray-200">{t(`compare.remoteOptions.${offer.remote_policy}`)}</p></div>}
-          {offer.company_size && <div><p className={labelClass}>{t('compare.fields.companySize')}</p><p className="text-gray-800 dark:text-gray-200">{t(`compare.sizeOptions.${offer.company_size}`)}</p></div>}
-          {offer.benefits && <div className="col-span-2"><p className={labelClass}>{t('compare.fields.benefits')}</p><p className="text-gray-800 dark:text-gray-200 whitespace-pre-wrap text-xs">{offer.benefits}</p></div>}
-          {offer.start_date && <div><p className={labelClass}>{t('compare.fields.startDate')}</p><p className="text-gray-800 dark:text-gray-200">{offer.start_date}</p></div>}
-          {offer.deadline && <div><p className={labelClass}>{t('compare.fields.deadline')}</p><p className="text-gray-800 dark:text-gray-200">{offer.deadline}</p></div>}
+          {offer.equity && <div><p className={labelClass}>{t('compare.fields.equity')}</p><p className="text-stone-800 dark:text-stone-200">{offer.equity}</p></div>}
+          {offer.location && <div><p className={labelClass}>{t('compare.fields.location')}</p><p className="text-stone-800 dark:text-stone-200">{offer.location}</p></div>}
+          {offer.remote_policy && <div><p className={labelClass}>{t('compare.fields.remote')}</p><p className="text-stone-800 dark:text-stone-200">{t(`compare.remoteOptions.${offer.remote_policy}`)}</p></div>}
+          {offer.company_size && <div><p className={labelClass}>{t('compare.fields.companySize')}</p><p className="text-stone-800 dark:text-stone-200">{t(`compare.sizeOptions.${offer.company_size}`)}</p></div>}
+          {offer.benefits && <div className="col-span-2"><p className={labelClass}>{t('compare.fields.benefits')}</p><p className="text-stone-800 dark:text-stone-200 whitespace-pre-wrap text-xs">{offer.benefits}</p></div>}
+          {offer.start_date && <div><p className={labelClass}>{t('compare.fields.startDate')}</p><p className="text-stone-800 dark:text-stone-200">{offer.start_date}</p></div>}
+          {offer.deadline && <div><p className={labelClass}>{t('compare.fields.deadline')}</p><p className="text-stone-800 dark:text-stone-200">{offer.deadline}</p></div>}
         </div>
       )}
 
@@ -297,17 +297,17 @@ export default function OfferDetailPanel({ applicationId }: Props) {
                   <button onClick={handleDelete} className="text-xs font-semibold text-white bg-red-600 hover:bg-red-700 px-2 py-1 rounded">
                     {t('offer.yes')}
                   </button>
-                  <button onClick={() => setConfirmingDelete(false)} className="text-xs text-gray-500 hover:text-gray-700 px-2 py-1">
+                  <button onClick={() => setConfirmingDelete(false)} className="text-xs text-stone-500 hover:text-stone-700 px-2 py-1">
                     {t('offer.no')}
                   </button>
                 </div>
               )}
             </div>
             <div className="flex gap-2">
-              <button onClick={() => { dispatch({ type: 'RESET', data: offer }); setEditing(false); setConfirmingDelete(false) }} className="px-3 py-1.5 text-xs font-medium text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+              <button onClick={() => { dispatch({ type: 'RESET', data: offer }); setEditing(false); setConfirmingDelete(false) }} className="px-3 py-1.5 text-xs font-medium text-stone-500 hover:text-stone-700 dark:text-stone-400 dark:hover:text-stone-200">
                 {t('detail.cancel')}
               </button>
-              <button onClick={handleSave} disabled={saving} className="px-3 py-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg disabled:opacity-50">
+              <button onClick={handleSave} disabled={saving} className="px-3 py-1.5 text-xs font-semibold text-white bg-stone-900 hover:bg-stone-800 rounded-lg disabled:opacity-50">
                 {saving ? '...' : t('offer.save')}
               </button>
             </div>

@@ -36,14 +36,14 @@ export default function VerifyEmailPage() {
   }, [searchParams, t])
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 p-4">
-      <div className="w-full max-w-md bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-8 text-center">
+    <div className="min-h-screen flex items-center justify-center bg-stone-50 dark:bg-stone-950 p-4">
+      <div className="w-full max-w-md bg-white dark:bg-stone-900 rounded-lg border border-stone-200/60 dark:border-stone-800 shadow-lg p-8 text-center">
         {status === 'loading' && (
           <>
             <div className="flex justify-center mb-4">
-              <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+              <div className="w-10 h-10 border-4 border-stone-500 border-t-transparent rounded-full animate-spin" />
             </div>
-            <p className="text-gray-600 dark:text-gray-400">{t('verifyEmail.verifying')}</p>
+            <p className="text-stone-600 dark:text-stone-400">{t('verifyEmail.verifying')}</p>
           </>
         )}
 
@@ -56,15 +56,15 @@ export default function VerifyEmailPage() {
                 </svg>
               </div>
             </div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+            <h1 className="text-2xl font-bold text-stone-900 dark:text-white mb-2">
               {t('verifyEmail.successTitle')}
             </h1>
-            <p className="text-gray-500 dark:text-gray-400 mb-6">
+            <p className="text-stone-500 dark:text-stone-400 mb-6">
               {t('verifyEmail.successMessage')}
             </p>
             <Link
               to="/login"
-              className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2.5 rounded-lg transition-colors"
+              className="inline-block bg-stone-900 hover:bg-stone-800 dark:bg-white dark:text-stone-900 dark:hover:bg-stone-100 text-white font-medium px-6 py-2.5 rounded-lg transition-colors"
             >
               {t('verifyEmail.goToLogin')}
             </Link>
@@ -80,13 +80,13 @@ export default function VerifyEmailPage() {
                 </svg>
               </div>
             </div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+            <h1 className="text-2xl font-bold text-stone-900 dark:text-white mb-2">
               {t('verifyEmail.errorTitle')}
             </h1>
-            <p className="text-gray-500 dark:text-gray-400 mb-6">{errorMsg}</p>
+            <p className="text-stone-500 dark:text-stone-400 mb-6">{errorMsg}</p>
             <Link
               to="/login"
-              className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2.5 rounded-lg transition-colors"
+              className="inline-block bg-stone-900 hover:bg-stone-800 dark:bg-white dark:text-stone-900 dark:hover:bg-stone-100 text-white font-medium px-6 py-2.5 rounded-lg transition-colors"
             >
               {t('verifyEmail.goToLogin')}
             </Link>

@@ -43,8 +43,8 @@ export default function SignInForm({ onSwitch }: Props) {
 
   return (
     <div className="flex flex-col items-center justify-center h-full px-6 sm:px-12">
-      <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-100 mb-1">{t('auth.signIn.title')}</h2>
-      <p className="text-sm text-gray-400 dark:text-gray-500 mb-8">{t('auth.signIn.subtitle')}</p>
+      <h2 className="text-2xl sm:text-3xl font-bold text-stone-800 dark:text-stone-100 mb-1">{t('auth.signIn.title')}</h2>
+      <p className="text-sm text-stone-400 dark:text-stone-500 mb-8">{t('auth.signIn.subtitle')}</p>
 
       <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-4">
         <div className="relative">
@@ -55,7 +55,7 @@ export default function SignInForm({ onSwitch }: Props) {
             autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 text-sm border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:bg-white dark:focus:bg-gray-800 transition-all"
+            className="w-full pl-10 pr-4 py-3 text-sm border border-stone-200 dark:border-stone-700 rounded-lg bg-stone-50 dark:bg-stone-800 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-stone-400 focus:border-transparent focus:bg-white dark:focus:bg-stone-800 transition-all"
           />
         </div>
 
@@ -67,12 +67,12 @@ export default function SignInForm({ onSwitch }: Props) {
             autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full pl-10 pr-10 py-3 text-sm border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:bg-white dark:focus:bg-gray-800 transition-all"
+            className="w-full pl-10 pr-10 py-3 text-sm border border-stone-200 dark:border-stone-700 rounded-lg bg-stone-50 dark:bg-stone-800 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-stone-400 focus:border-transparent focus:bg-white dark:focus:bg-stone-800 transition-all"
           />
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 dark:text-stone-500 hover:text-stone-600 dark:hover:text-stone-300 transition-colors"
             aria-label={t('dashboard.aria.togglePassword')}
           >
             <EyeIcon open={showPassword} />
@@ -80,7 +80,7 @@ export default function SignInForm({ onSwitch }: Props) {
         </div>
 
         <div className="flex justify-end">
-          <Link to="/forgot-password" className="text-xs text-blue-600 hover:underline">
+          <Link to="/forgot-password" className="text-xs text-stone-500 hover:text-stone-700 hover:underline">
             {t('auth.signIn.forgotPassword')}
           </Link>
         </div>
@@ -88,22 +88,22 @@ export default function SignInForm({ onSwitch }: Props) {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full py-3 rounded-xl text-sm font-semibold text-white tracking-wide bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 hover:shadow-lg hover:shadow-blue-200 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full py-3 rounded-lg text-sm font-medium text-white tracking-wide bg-stone-900 hover:bg-stone-800 dark:bg-white dark:text-stone-900 dark:hover:bg-stone-100 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isLoading ? '...' : t('auth.signIn.submit')}
         </button>
 
         <div className="flex items-center gap-3 py-1">
-          <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700" />
-          <span className="text-xs text-gray-400 dark:text-gray-500">{t('auth.signIn.or')}</span>
-          <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700" />
+          <div className="flex-1 h-px bg-stone-200 dark:bg-stone-700" />
+          <span className="text-xs text-stone-400 dark:text-stone-500">{t('auth.signIn.or')}</span>
+          <div className="flex-1 h-px bg-stone-200 dark:bg-stone-700" />
         </div>
 
         <SocialLoginButtons />
 
-        <p className="text-center text-sm text-gray-500 dark:text-gray-400 md:hidden">
+        <p className="text-center text-sm text-stone-500 dark:text-stone-400 md:hidden">
           {t('auth.signIn.noAccount')}{' '}
-          <button type="button" onClick={onSwitch} className="text-blue-600 font-medium hover:underline">
+          <button type="button" onClick={onSwitch} className="text-stone-900 dark:text-stone-100 font-medium hover:underline">
             {t('auth.signIn.switchToSignUp')}
           </button>
         </p>

@@ -23,6 +23,32 @@ import OfferDetailPanel from '../components/detail/OfferDetailPanel'
 import LoadingSpinner from '../components/ui/LoadingSpinner'
 import { ArrowLeftIcon, EditIcon, TrashIcon, CalendarIcon, ClockIcon, LinkIcon } from '../components/icons'
 
+function JobPostingSection({ content, t }: { content: string; t: (key: string) => string }) {
+  const [expanded, setExpanded] = useState(false)
+
+  return (
+    <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6">
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="w-full flex items-center justify-between text-left"
+      >
+        <p className="text-xs font-semibold text-stone-400 uppercase tracking-wide">{t('detail.jobDescription')}</p>
+        <svg
+          className={`w-4 h-4 text-stone-400 transition-transform ${expanded ? 'rotate-180' : ''}`}
+          fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      {expanded && (
+        <p className="text-sm text-stone-700 dark:text-stone-300 leading-relaxed whitespace-pre-wrap mt-3 max-h-96 overflow-y-auto">
+          {content}
+        </p>
+      )}
+    </div>
+  )
+}
+
 export default function ApplicationDetailPage() {
   const { t } = useTranslation()
   const { id } = useParams<{ id: string }>()
@@ -92,7 +118,7 @@ export default function ApplicationDetailPage() {
         action={
           <button
             onClick={() => navigate('/dashboard')}
-            className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+            className="inline-flex items-center gap-1.5 text-sm text-stone-500 hover:text-stone-700 dark:text-stone-400 dark:hover:text-stone-200 transition-colors"
           >
             <ArrowLeftIcon />
             {t('detail.backToDashboard')}
@@ -102,14 +128,14 @@ export default function ApplicationDetailPage() {
 
       <div className="max-w-3xl mx-auto space-y-6 pb-12">
         {/* Hero */}
-        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6">
+        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6">
           <div className="flex flex-col sm:flex-row sm:items-start gap-4">
-            <div className={`w-12 h-12 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center text-xl sm:text-2xl font-bold flex-shrink-0 ${getAvatarColor(app.company)}`}>
+            <div className={`w-12 h-12 sm:w-16 sm:h-16 rounded-lg flex items-center justify-center text-xl sm:text-2xl font-bold flex-shrink-0 ${getAvatarColor(app.company)}`}>
               {(app.company[0] ?? '?').toUpperCase()}
             </div>
             <div className="flex-1 min-w-0">
-              <h2 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100">{app.company}</h2>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{app.position}</p>
+              <h2 className="text-lg sm:text-xl font-bold text-stone-900 dark:text-stone-100">{app.company}</h2>
+              <p className="text-sm text-stone-500 dark:text-stone-400 mt-0.5">{app.position}</p>
               <div className="mt-2 flex flex-wrap items-center gap-2">
                 <StatusBadge status={app.status} />
                 {app.source && <SourceBadge source={app.source} />}
@@ -119,14 +145,14 @@ export default function ApplicationDetailPage() {
             <div className="flex items-center gap-2 flex-shrink-0">
               <button
                 onClick={() => setEditOpen(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold text-teal-700 bg-teal-50 hover:bg-teal-100 dark:bg-teal-900/30 dark:text-teal-400 dark:hover:bg-teal-900/50 transition-colors"
               >
                 <EditIcon />
                 {t('detail.edit')}
               </button>
               <button
                 onClick={() => setDeleteOpen(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-semibold text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50 transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50 transition-colors"
               >
                 <TrashIcon />
                 {t('detail.delete')}
@@ -136,24 +162,24 @@ export default function ApplicationDetailPage() {
         </div>
 
         {/* Details */}
-        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6 space-y-5">
+        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6 space-y-5">
           <div className="flex items-start gap-3">
-            <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+            <div className="w-8 h-8 rounded-lg bg-teal-50 dark:bg-teal-900/30 flex items-center justify-center flex-shrink-0 mt-0.5">
               <CalendarIcon />
             </div>
             <div>
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-0.5">{t('detail.applied')}</p>
-              <p className="text-sm text-gray-800 dark:text-gray-200">{formatLong(app.applied_date)}</p>
+              <p className="text-xs font-semibold text-stone-400 uppercase tracking-wide mb-0.5">{t('detail.applied')}</p>
+              <p className="text-sm text-stone-800 dark:text-stone-200">{formatLong(app.applied_date)}</p>
             </div>
           </div>
 
           <div className="flex items-start gap-3">
-            <div className="w-8 h-8 rounded-lg bg-gray-50 dark:bg-gray-800 flex items-center justify-center flex-shrink-0 mt-0.5">
+            <div className="w-8 h-8 rounded-lg bg-stone-50 dark:bg-stone-800 flex items-center justify-center flex-shrink-0 mt-0.5">
               <ClockIcon />
             </div>
             <div>
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-0.5">{t('detail.lastUpdated')}</p>
-              <p className="text-sm text-gray-800 dark:text-gray-200">{formatMedium(app.updated_at)}</p>
+              <p className="text-xs font-semibold text-stone-400 uppercase tracking-wide mb-0.5">{t('detail.lastUpdated')}</p>
+              <p className="text-sm text-stone-800 dark:text-stone-200">{formatMedium(app.updated_at)}</p>
             </div>
           </div>
 
@@ -164,12 +190,12 @@ export default function ApplicationDetailPage() {
                 <LinkIcon />
               </div>
               <div className="min-w-0">
-                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-0.5">{t('detail.jobPosting')}</p>
+                <p className="text-xs font-semibold text-stone-400 uppercase tracking-wide mb-0.5">{t('detail.jobPosting')}</p>
                 <a
                   href={app.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-blue-600 hover:text-blue-700 hover:underline truncate block"
+                  className="text-sm text-teal-600 hover:text-teal-700 hover:underline truncate block"
                 >
                   {app.url}
                 </a>
@@ -178,47 +204,52 @@ export default function ApplicationDetailPage() {
           )}
         </div>
 
+        {/* Job Description */}
+        {app.job_posting_content && (
+          <JobPostingSection content={app.job_posting_content} t={t} />
+        )}
+
         {/* Notes */}
         {app.notes && (
-          <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6">
-            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">{t('detail.notes')}</p>
-            <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">{app.notes}</p>
+          <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6">
+            <p className="text-xs font-semibold text-stone-400 uppercase tracking-wide mb-2">{t('detail.notes')}</p>
+            <p className="text-sm text-stone-700 dark:text-stone-300 leading-relaxed whitespace-pre-wrap">{app.notes}</p>
           </div>
         )}
 
         {/* Note timeline */}
-        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6">
+        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6">
           <NoteTimeline applicationId={app.id} />
         </div>
 
         {/* Contacts */}
-        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6">
+        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6">
           <ContactList applicationId={app.id} />
         </div>
 
         {/* Interview Stages */}
-        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6">
+        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6">
           <InterviewTimeline applicationId={app.id} company={app.company} position={app.position} />
         </div>
 
         {/* Offer Details */}
-        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6">
+        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6">
           <OfferDetailPanel applicationId={app.id} />
         </div>
 
         {/* Attachments */}
-        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6">
+        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6">
           <AttachmentList applicationId={app.id} />
         </div>
 
         {/* Linked Emails */}
-        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6">
+        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6">
           <EmailTimeline applicationId={app.id} />
         </div>
 
         {/* Stage */}
-        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6">
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-4">{t('detail.stage')}</p>
+        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6">
+          <p className="text-xs font-semibold text-stone-400 uppercase tracking-wide mb-4">{t('detail.stage')}</p>
           <div className="flex items-center gap-0">
             {(['applied', 'interview', 'offer'] as const).map((stage, i) => {
               const stages = ['applied', 'interview', 'offer'] as const
@@ -230,16 +261,16 @@ export default function ApplicationDetailPage() {
                 <div key={stage} className="flex items-center flex-1">
                   <div className="flex flex-col items-center flex-1">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors ${
-                      isActive ? 'bg-blue-600 text-white' : isPast ? 'bg-blue-200 text-blue-700' : 'bg-gray-100 dark:bg-gray-800 text-gray-400'
+                      isActive ? 'bg-teal-600 text-white' : isPast ? 'bg-teal-200 text-teal-700' : 'bg-stone-100 dark:bg-stone-800 text-stone-400'
                     }`}>
                       {i + 1}
                     </div>
-                    <span className={`text-xs mt-1.5 font-medium ${isActive ? 'text-blue-600' : 'text-gray-400'}`}>
+                    <span className={`text-xs mt-1.5 font-medium ${isActive ? 'text-teal-600' : 'text-stone-400'}`}>
                       {t(`dashboard.status.${stage}`)}
                     </span>
                   </div>
                   {i < 2 && (
-                    <div className={`h-0.5 flex-1 -mt-5 ${isPast || isActive ? 'bg-blue-200' : 'bg-gray-100 dark:bg-gray-800'}`} />
+                    <div className={`h-0.5 flex-1 -mt-5 ${isPast || isActive ? 'bg-teal-200' : 'bg-stone-100 dark:bg-stone-800'}`} />
                   )}
                 </div>
               )

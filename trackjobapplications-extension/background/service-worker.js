@@ -1,20 +1,21 @@
 // Default API URL — override via extension options or chrome.storage
-const DEFAULT_API_BASE = 'http://localhost:8000/api/v1';
+const DEFAULT_API_BASE = 'https://trackjobapplications-backend.onrender.com/api/v1';
 
 const ALLOWED_API_BASES = new Set([
   'http://localhost:8000/api/v1',
-  'https://trackjobapplications-backend.fly.dev/api/v1',
+  'https://trackjobapplications-backend.onrender.com/api/v1',
 ]);
 
 // --- Payload Validation ---
 
 const VALID_STATUSES = new Set(['to_apply', 'applied', 'interview', 'offer', 'rejected', 'withdrawn']);
-const VALID_SOURCES  = new Set(['linkedin', 'indeed', 'email', 'referral', 'company_site', 'other']);
+const VALID_SOURCES  = new Set(['linkedin', 'indeed', 'glassdoor', 'ziprecruiter', 'email', 'referral', 'company_site', 'other']);
 const DATE_RE        = /^\d{4}-\d{2}-\d{2}$/;
 
-const MAX_TEXT_LENGTH  = 200;
-const MAX_NOTES_LENGTH = 2000;
-const MAX_URL_LENGTH   = 2048;
+const MAX_TEXT_LENGTH          = 200;
+const MAX_NOTES_LENGTH         = 2000;
+const MAX_URL_LENGTH           = 2048;
+const MAX_JOB_POSTING_LENGTH   = 50000;
 
 // Cooldown tracking for ADD_APPLICATION to prevent rapid duplicate submissions
 const _addCooldowns = new Map(); // company+position → timestamp
@@ -133,7 +134,7 @@ const API_TIMEOUT_MS = 10000;
 function _fetchWithTimeout(url, options = {}) {
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), API_TIMEOUT_MS);
-  return fetch(url, { ...options, signal: controller.signal })
+  return fetch(url, { ...options, signal: controller.signal, credentials: 'omit' })
     .finally(() => clearTimeout(id));
 }
 
@@ -180,14 +181,12 @@ async function apiFetch(path, options = {}) {
 
 // --- Message Handler ---
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message, sender) => {
   // Only accept messages from this extension's own content scripts or popup
   if (sender.id !== chrome.runtime.id) {
-    sendResponse({ success: false, error: 'Unauthorized sender' });
-    return;
+    return Promise.resolve({ success: false, error: 'Unauthorized sender' });
   }
-  handleMessage(message).then(sendResponse);
-  return true; // keep channel open for async response
+  return handleMessage(message);
 });
 
 async function handleMessage(message) {
@@ -202,7 +201,8 @@ async function handleMessage(message) {
         });
         if (!res.ok) {
           const err = await res.json().catch(() => ({}));
-          return { success: false, error: err.detail || 'Login failed' };
+          const detail = err.detail || err.non_field_errors?.[0] || Object.values(err).flat().join(', ') || 'Login failed';
+          return { success: false, error: typeof detail === 'string' ? detail : JSON.stringify(detail) };
         }
         const data = await res.json();
         await saveTokens(data.access, data.refresh);
@@ -259,6 +259,11 @@ async function handleMessage(message) {
         };
         const notes = validateText(message.notes, MAX_NOTES_LENGTH);
         if (notes) payload.notes = notes;
+        const jobPostingContent = validateText(message.job_posting_content, MAX_JOB_POSTING_LENGTH);
+        if (jobPostingContent) payload.job_posting_content = jobPostingContent;
+        if (Array.isArray(message.tag_ids) && message.tag_ids.length > 0) {
+          payload.tag_ids = message.tag_ids.filter(id => typeof id === 'number' && id > 0);
+        }
         const res = await apiFetch('/applications/', {
           method: 'POST',
           body: JSON.stringify(payload),
@@ -274,6 +279,103 @@ async function handleMessage(message) {
         }
         const data = await res.json();
         return { success: true, data };
+      }
+
+      case 'ADD_CONTACT': {
+        const appId = message.application_id;
+        if (!appId || typeof appId !== 'number') {
+          return { success: false, error: 'Invalid application ID' };
+        }
+        const name = validateText(message.name, 100);
+        if (!name) return { success: false, error: 'Contact name is required' };
+        const payload = { name };
+        const email = validateText(message.email, 254);
+        if (email) payload.email = email;
+        const res = await apiFetch(`/applications/${appId}/contacts/`, {
+          method: 'POST',
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          return { success: false, error: err.detail || 'Failed to add contact' };
+        }
+        return { success: true, data: await res.json() };
+      }
+
+      case 'ADD_INTERVIEW': {
+        const appId = message.application_id;
+        if (!appId || typeof appId !== 'number') {
+          return { success: false, error: 'Invalid application ID' };
+        }
+        const validTypes = new Set([
+          'phone_screen', 'technical', 'behavioral', 'onsite', 'take_home', 'final', 'other',
+        ]);
+        const stageType = validTypes.has(message.stage_type) ? message.stage_type : 'other';
+        if (!message.scheduled_at) {
+          return { success: false, error: 'Interview date is required' };
+        }
+        const payload = { stage_type: stageType, scheduled_at: message.scheduled_at };
+        const res = await apiFetch(`/applications/${appId}/interviews/`, {
+          method: 'POST',
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          return { success: false, error: err.detail || err.scheduled_at?.[0] || 'Failed to add interview' };
+        }
+        return { success: true, data: await res.json() };
+      }
+
+      case 'TOGGLE_PIN': {
+        const appId = message.application_id;
+        if (!appId || typeof appId !== 'number') {
+          return { success: false, error: 'Invalid application ID' };
+        }
+        const res = await apiFetch(`/applications/${appId}/toggle-pin/`, {
+          method: 'POST',
+        });
+        if (!res.ok) return { success: false, error: 'Failed to toggle pin' };
+        return { success: true, data: await res.json() };
+      }
+
+      case 'ADD_OFFER': {
+        const appId = message.application_id;
+        if (!appId || typeof appId !== 'number') {
+          return { success: false, error: 'Invalid application ID' };
+        }
+        const payload = {};
+        if (message.salary) payload.salary = String(message.salary);
+        if (message.currency) payload.currency = message.currency;
+        if (message.salary_period) payload.salary_period = message.salary_period;
+        if (message.benefits) payload.benefits = validateText(message.benefits, MAX_NOTES_LENGTH);
+        const res = await apiFetch(`/applications/${appId}/offer/`, {
+          method: 'POST',
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          return { success: false, error: err.detail || err.salary?.[0] || 'Failed to add offer' };
+        }
+        return { success: true, data: await res.json() };
+      }
+
+      case 'GET_TAGS': {
+        const res = await apiFetch('/applications/tags/');
+        if (!res.ok) return { success: false, error: 'Failed to load tags' };
+        return { success: true, data: await res.json() };
+      }
+
+      case 'GET_STATS': {
+        const res = await apiFetch('/applications/stats/');
+        if (!res.ok) return { success: false, error: 'Failed to load stats' };
+        return { success: true, data: await res.json() };
+      }
+
+      case 'GET_RECENT': {
+        const res = await apiFetch('/applications/brief/');
+        if (!res.ok) return { success: false, error: 'Failed to load applications' };
+        const all = await res.json();
+        return { success: true, data: all.slice(0, 5) };
       }
 
       default:

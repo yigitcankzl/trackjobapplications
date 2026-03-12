@@ -77,21 +77,21 @@ export default function CalendarPage() {
     <DashboardLayout>
       <Header title={t('calendar.title')} />
 
-      <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm p-3 sm:p-6">
+      <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-3 sm:p-6">
         {/* Month navigation */}
         <div className="flex items-center justify-between mb-6">
           <button
             onClick={prevMonth}
             aria-label={t('calendar.prevMonth')}
-            className="px-3 py-1.5 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            className="px-3 py-1.5 rounded-lg text-sm font-medium text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
           >
             &larr;
           </button>
-          <h2 className="text-base font-semibold text-gray-800 dark:text-gray-200 capitalize">{monthLabel}</h2>
+          <h2 className="text-base font-semibold text-stone-800 dark:text-stone-200 capitalize">{monthLabel}</h2>
           <button
             onClick={nextMonth}
             aria-label={t('calendar.nextMonth')}
-            className="px-3 py-1.5 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            className="px-3 py-1.5 rounded-lg text-sm font-medium text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
           >
             &rarr;
           </button>
@@ -100,16 +100,16 @@ export default function CalendarPage() {
         {/* Weekday headers */}
         <div className="grid grid-cols-7 mb-2">
           {weekdays.map(d => (
-            <div key={d} className="text-center text-xs font-semibold text-gray-400 uppercase tracking-wide py-2">
+            <div key={d} className="text-center text-xs font-semibold text-stone-400 uppercase tracking-wide py-2">
               {d}
             </div>
           ))}
         </div>
 
         {/* Days grid */}
-        <div className="grid grid-cols-7 gap-px bg-gray-100 dark:bg-gray-800 rounded-xl overflow-hidden">
+        <div className="grid grid-cols-7 gap-px bg-stone-100 dark:bg-stone-800 rounded-lg overflow-hidden">
           {Array.from({ length: firstDay }).map((_, i) => (
-            <div key={`empty-${i}`} className="bg-white dark:bg-gray-900 min-h-16 sm:min-h-24" />
+            <div key={`empty-${i}`} className="bg-white dark:bg-stone-900 min-h-16 sm:min-h-24" />
           ))}
           {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(day => {
             const isToday = day === today
@@ -117,9 +117,9 @@ export default function CalendarPage() {
             return (
               <div
                 key={day}
-                className={`bg-white dark:bg-gray-900 min-h-16 sm:min-h-24 p-1 sm:p-1.5 ${isToday ? 'ring-2 ring-inset ring-blue-500' : ''}`}
+                className={`bg-white dark:bg-stone-900 min-h-16 sm:min-h-24 p-1 sm:p-1.5 ${isToday ? 'ring-2 ring-inset ring-teal-500' : ''}`}
               >
-                <span className={`text-xs font-medium ${isToday ? 'text-blue-600 font-bold' : 'text-gray-500 dark:text-gray-400'}`}>
+                <span className={`text-xs font-medium ${isToday ? 'text-teal-600 font-bold' : 'text-stone-500 dark:text-stone-400'}`}>
                   {day}
                 </span>
                 <div className="mt-1 space-y-0.5">
@@ -127,12 +127,12 @@ export default function CalendarPage() {
                     <button
                       key={app.id}
                       onClick={() => navigate(`/applications/${app.id}`)}
-                      className="w-full flex items-center gap-1 px-1 py-0.5 rounded text-left hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors"
+                      className="w-full flex items-center gap-1 px-1 py-0.5 rounded text-left hover:bg-stone-50 dark:hover:bg-stone-800/30 transition-colors"
                     >
                       <div className={`w-4 h-4 rounded flex items-center justify-center text-[8px] font-bold flex-shrink-0 ${getAvatarColor(app.company)}`}>
                         {(app.company[0] || '?').toUpperCase()}
                       </div>
-                      <span className="text-xs text-gray-700 dark:text-gray-300 truncate">{app.company}</span>
+                      <span className="text-xs text-stone-700 dark:text-stone-300 truncate">{app.company}</span>
                     </button>
                   ))}
                 </div>

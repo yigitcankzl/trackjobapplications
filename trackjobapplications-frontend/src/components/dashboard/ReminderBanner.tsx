@@ -14,7 +14,7 @@ export default function ReminderBanner({ reminders }: Props) {
   if (reminders.length === 0) return null
 
   return (
-    <div className="mb-6 rounded-xl border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20 p-4">
+    <div className="mb-6 rounded-lg border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20 p-4">
       <button
         onClick={() => setExpanded(!expanded)}
         className="flex items-center gap-2 w-full text-left"

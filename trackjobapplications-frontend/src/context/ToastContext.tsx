@@ -26,7 +26,7 @@ const ICONS: Record<ToastType, JSX.Element> = {
     </svg>
   ),
   info: (
-    <svg className="w-4 h-4 text-blue-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <svg className="w-4 h-4 text-teal-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
     </svg>
   ),
@@ -34,12 +34,12 @@ const ICONS: Record<ToastType, JSX.Element> = {
 
 function ToastCard({ item, onDismiss }: { item: Toast; onDismiss: (id: number) => void }) {
   return (
-    <div className="flex items-center gap-3 bg-gray-900 text-white px-4 py-3 rounded-xl shadow-lg min-w-64 max-w-sm animate-slide-up">
+    <div className="flex items-center gap-3 bg-stone-900 text-white px-4 py-3 rounded-lg shadow-lg min-w-64 max-w-sm animate-slide-up">
       {ICONS[item.type]}
       <span className="text-sm font-medium flex-1">{item.message}</span>
       <button
         onClick={() => onDismiss(item.id)}
-        className="text-gray-500 hover:text-gray-300 transition-colors flex-shrink-0"
+        className="text-stone-500 hover:text-stone-300 transition-colors flex-shrink-0"
       >
         <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />

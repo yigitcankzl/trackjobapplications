@@ -15,34 +15,34 @@ describe('StatusBadge', () => {
     expect(screen.getByText(`dashboard.status.${status}`)).toBeInTheDocument()
   })
 
-  it('applies bg-indigo-50 class for to_apply', () => {
+  it('applies bg-slate class for to_apply', () => {
     const { container } = render(<StatusBadge status="to_apply" />)
-    expect(container.firstChild).toHaveClass('bg-indigo-50')
+    expect(container.firstChild?.className).toContain('bg-slate-50')
   })
 
-  it('applies bg-blue-50 class for applied', () => {
+  it('applies bg-teal class for applied', () => {
     const { container } = render(<StatusBadge status="applied" />)
-    expect(container.firstChild).toHaveClass('bg-blue-50')
+    expect(container.firstChild?.className).toContain('bg-teal-50')
   })
 
-  it('applies bg-amber-50 class for interview', () => {
+  it('applies bg-orange class for interview', () => {
     const { container } = render(<StatusBadge status="interview" />)
-    expect(container.firstChild).toHaveClass('bg-amber-50')
+    expect(container.firstChild?.className).toContain('bg-orange-50')
   })
 
-  it('applies bg-emerald-50 class for offer', () => {
+  it('applies bg-lime class for offer', () => {
     const { container } = render(<StatusBadge status="offer" />)
-    expect(container.firstChild).toHaveClass('bg-emerald-50')
+    expect(container.firstChild?.className).toContain('bg-lime-50')
   })
 
-  it('applies bg-red-50 class for rejected', () => {
+  it('applies bg-rose class for rejected', () => {
     const { container } = render(<StatusBadge status="rejected" />)
-    expect(container.firstChild).toHaveClass('bg-red-50')
+    expect(container.firstChild?.className).toContain('bg-rose-50')
   })
 
-  it('applies bg-gray-100 class for withdrawn', () => {
+  it('applies bg-zinc-100 class for withdrawn', () => {
     const { container } = render(<StatusBadge status="withdrawn" />)
-    expect(container.firstChild).toHaveClass('bg-gray-100')
+    expect(container.firstChild?.className).toContain('bg-zinc-100')
   })
 
   it('renders a span element', () => {

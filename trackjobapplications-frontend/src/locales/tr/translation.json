@@ -158,6 +158,7 @@
       "lastUpdated": "Son Güncelleme",
       "interviewDate": "Mülakat Tarihi",
       "jobPosting": "İş İlanı",
+      "jobDescription": "İlan Açıklaması",
       "notes": "Notlar",
       "stage": "Aşama",
       "edit": "Düzenle",
@@ -213,7 +214,9 @@
       "darkMode": "Karanlık Mod",
       "lightMode": "Aydınlık Mod",
       "coverLetters": "Ön Yazılar",
-      "compare": "Karşılaştır"
+      "compare": "Karşılaştır",
+      "extension": "Tarayıcı Eklentisi",
+      "collapse": "Daralt"
     },
     "viewTable": "Tablo görünümü",
     "viewKanban": "Kanban görünümü",
@@ -563,5 +566,31 @@
     "invalidLink": "Geçersiz doğrulama bağlantısı.",
     "genericError": "Bir şeyler ters gitti. Lütfen tekrar deneyin.",
     "goToLogin": "Giriş Yap"
+  },
+  "extension": {
+    "title": "Tarayıcı Eklentisi",
+    "hero": {
+      "title": "Tek Tıkla İş İlanı Kaydet",
+      "description": "LinkedIn, Indeed, Glassdoor ve ZipRecruiter'dan sayfadan ayrılmadan iş başvurularını takip edin."
+    },
+    "download": "İndir",
+    "supportedSites": "Desteklenen Siteler",
+    "features": "Özellikler",
+    "howItWorks": "Nasıl Çalışır",
+    "featureList": {
+      "oneClick": { "title": "Tek Tıkla Kaydet", "desc": "'Başvurulacak' veya 'Başvuruldu' olarak tek tıkla kaydedin." },
+      "jobCapture": { "title": "İlan Metni Yakalama", "desc": "İlan metni otomatik kaydedilir — ilan silinse bile elinizde kalır." },
+      "tags": { "title": "Etiket Desteği", "desc": "Başvurularınızı eklentiden etiketleyerek kategorize edin." },
+      "notes": { "title": "Hızlı Not", "desc": "Başvuru kaydederken not ekleyin." },
+      "recruiter": { "title": "İşe Alım İletişimi", "desc": "Başvuruyla birlikte işe alım uzmanı adı ve e-postasını kaydedin." },
+      "interviews": { "title": "Mülakat Takibi", "desc": "Mülakat durumunda kaydederken mülakat tipi ve tarih belirleyin." },
+      "offers": { "title": "Teklif Kaydı", "desc": "Teklif aldığınızda maaş, para birimi ve yan hakları kaydedin." },
+      "pin": { "title": "Favorilere Sabitle", "desc": "Önemli başvuruları hızlı erişim için sabitleyin." }
+    },
+    "steps": {
+      "1": { "title": "Eklentiyi Yükleyin", "desc": "Chrome Web Store veya Firefox Eklentileri'nden indirin." },
+      "2": { "title": "Giriş Yapın", "desc": "TrackJobs hesabınızla eklentiyi bağlayın." },
+      "3": { "title": "Kaydetmeye Başlayın", "desc": "Bir iş ilanını ziyaret edin ve sayfada beliren butonlara tıklayın." }
+    }
   }
 }

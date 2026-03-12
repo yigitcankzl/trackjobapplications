@@ -42,10 +42,10 @@ export default memo(function DraggableStatCard({
       onDragOver={(e) => onDragOver(e, index)}
       onDragEnd={onDragEnd}
       onKeyDown={handleKeyDown}
-      className={`cursor-grab active:cursor-grabbing transition-all outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 rounded-2xl ${
+      className={`cursor-grab active:cursor-grabbing transition-all outline-none focus-visible:ring-2 focus-visible:ring-stone-500 focus-visible:ring-offset-2 rounded-lg ${
         isDragging ? 'opacity-40 scale-95' : ''
       } ${
-        isKeyboardGrabbed ? 'ring-2 ring-blue-500 ring-offset-2 scale-105 shadow-lg' : ''
+        isKeyboardGrabbed ? 'ring-2 ring-stone-500 ring-offset-2 scale-105 shadow-lg' : ''
       }`}
     >
       <StatCard label={label} value={value} color={color} />

@@ -422,12 +422,49 @@ button {
   box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.15);
 }
 
-/* No job message */
-#no-job p {
+/* Unified job form */
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.source-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.source-linkedin { background: #dbeafe; color: #1d4ed8; }
+.source-indeed { background: #ede9fe; color: #6d28d9; }
+.source-glassdoor { background: #dcfce7; color: #15803d; }
+.source-ziprecruiter { background: #fef3c7; color: #b45309; }
+.source-company_website { background: #f5f5f4; color: #78716c; }
+.source-other { background: #f5f5f4; color: #78716c; }
+
+#job-form input[type="text"] {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid #d6d3d1;
+  border-radius: 6px;
   font-size: 13px;
-  color: #78716c;
-  text-align: center;
-  padding: 12px 0;
+  font-family: inherit;
+  outline: none;
+}
+
+#job-form input[type="text"]:focus {
+  border-color: #a8a29e;
+  box-shadow: 0 0 0 2px rgba(168, 162, 158, 0.15);
+}
+
+.form-url {
+  font-size: 11px !important;
+  color: #a8a29e !important;
+  word-break: break-all;
 }
 
 /* Feedback */
@@ -805,8 +842,26 @@ body.dark .status-withdrawn {
   color: #a1a1aa;
 }
 
-body.dark #no-job p {
-  color: #a8a29e;
+body.dark .source-linkedin { background: #1e3a5f; color: #93c5fd; }
+body.dark .source-indeed { background: #2e1065; color: #c4b5fd; }
+body.dark .source-glassdoor { background: #052e16; color: #86efac; }
+body.dark .source-ziprecruiter { background: #451a03; color: #fcd34d; }
+body.dark .source-company_website { background: #292524; color: #a8a29e; }
+body.dark .source-other { background: #292524; color: #a8a29e; }
+
+body.dark #job-form input[type="text"] {
+  background: #292524;
+  border-color: #44403c;
+  color: #e7e5e4;
+}
+
+body.dark #job-form input[type="text"]:focus {
+  border-color: #78716c;
+  box-shadow: 0 0 0 2px rgba(120, 113, 108, 0.2);
+}
+
+body.dark .form-url {
+  color: #78716c !important;
 }
 
 body.dark #loading {

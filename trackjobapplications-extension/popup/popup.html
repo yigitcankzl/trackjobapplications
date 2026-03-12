@@ -42,18 +42,21 @@
         </div>
       </div>
 
-      <div id="job-info" hidden>
-        <div class="field">
-          <label>Company</label>
-          <span id="job-company"></span>
+      <div id="job-form" hidden>
+        <div class="form-header">
+          <span id="form-source-badge" class="source-badge" hidden></span>
         </div>
         <div class="field">
-          <label>Position</label>
-          <span id="job-position"></span>
+          <label for="form-company">Company</label>
+          <input type="text" id="form-company" placeholder="Company name" maxlength="200">
         </div>
         <div class="field">
-          <label>Source</label>
-          <span id="job-source"></span>
+          <label for="form-position">Position</label>
+          <input type="text" id="form-position" placeholder="Job title" maxlength="200">
+        </div>
+        <div id="form-url-field" class="field" hidden>
+          <label>URL</label>
+          <span id="form-url-display" class="form-url"></span>
         </div>
         <div id="tag-picker" class="tag-picker" hidden></div>
         <div class="extras-toggles">
@@ -104,10 +107,6 @@
           <button id="interview-btn" class="btn-interview">Interview</button>
           <button id="offer-btn" class="btn-offer">Offer</button>
         </div>
-      </div>
-
-      <div id="no-job" hidden>
-        <p>Navigate to a job listing on LinkedIn or Indeed, then open this popup.</p>
       </div>
 
       <div id="feedback" hidden></div>

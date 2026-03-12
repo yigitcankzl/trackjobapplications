@@ -1,5 +1,3 @@
-let currentJobData = null;
-
 // --- Theme ---
 
 const SUN_PATH = 'M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42M12 7a5 5 0 100 10 5 5 0 000-10z';
@@ -108,41 +106,126 @@ document.getElementById('logout-btn').addEventListener('click', async (e) => {
 
 // --- Job Data ---
 
+let formSource = 'company_website';
+let formUrl = '';
+let formJobPostingContent = '';
+const selectedTagIds = new Set();
+
+const SOURCE_LABELS = {
+  linkedin: 'LinkedIn', indeed: 'Indeed', glassdoor: 'Glassdoor',
+  ziprecruiter: 'ZipRecruiter', company_website: 'Website', other: 'Email',
+};
+
 async function loadJobData() {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  if (!tab) return showNoJob();
+  const url = tab?.url || '';
 
-  const url = tab.url || '';
+  // Try content script on supported sites
   const isSupported = url.includes('linkedin.com/jobs') || url.includes('indeed.com') || url.includes('glassdoor.com') || url.includes('ziprecruiter.com') || url.includes('mail.google.com');
 
-  if (!isSupported) return showNoJob();
-
-  try {
-    const jobData = await chrome.tabs.sendMessage(tab.id, { type: 'GET_JOB_DATA' });
-    if (jobData && jobData.company && jobData.position) {
-      showJobInfo(jobData);
-    } else {
-      showNoJob();
-    }
-  } catch {
-    showNoJob();
+  let jobData = null;
+  if (isSupported && tab) {
+    try {
+      jobData = await chrome.tabs.sendMessage(tab.id, { type: 'GET_JOB_DATA' });
+      if (!jobData?.company || !jobData?.position) jobData = null;
+    } catch { /* content script not ready */ }
   }
-}
 
-function showJobInfo(data) {
-  currentJobData = data;
-  document.getElementById('job-info').hidden = false;
-  document.getElementById('no-job').hidden = true;
-  document.getElementById('job-company').textContent = data.company;
-  document.getElementById('job-position').textContent = data.position;
-  const sourceNames = { linkedin: 'LinkedIn', indeed: 'Indeed', glassdoor: 'Glassdoor', ziprecruiter: 'ZipRecruiter', other: 'Email' };
-  document.getElementById('job-source').textContent = sourceNames[data.source] || data.source;
+  // Show unified form
+  document.getElementById('job-form').hidden = false;
+
+  if (jobData) {
+    // Pre-fill from content script
+    document.getElementById('form-company').value = jobData.company;
+    document.getElementById('form-position').value = jobData.position;
+    formSource = jobData.source || 'other';
+    formUrl = jobData.url || url;
+    formJobPostingContent = jobData.job_posting_content || '';
+  } else {
+    // Pre-fill from URL/title parsing
+    formUrl = url;
+    if (tab) prefillFromTab(tab);
+  }
+
+  // Show source badge
+  const badge = document.getElementById('form-source-badge');
+  badge.textContent = SOURCE_LABELS[formSource] || formSource;
+  badge.className = 'source-badge source-' + formSource;
+  badge.hidden = false;
+
+  // Show URL
+  if (formUrl && formUrl.startsWith('http')) {
+    document.getElementById('form-url-display').textContent = formUrl.length > 50 ? formUrl.slice(0, 50) + '...' : formUrl;
+    document.getElementById('form-url-field').hidden = false;
+  }
+
+  // Load tags
   loadTags();
 }
 
-// --- Tags ---
+function prefillFromTab(tab) {
+  const title = tab.title || '';
 
-const selectedTagIds = new Set();
+  try {
+    const parsed = new URL(formUrl);
+    const hostname = parsed.hostname.replace('www.', '');
+    const pathParts = parsed.pathname.split('/').filter(Boolean);
+
+    // ATS platforms: company name is in the URL path
+    const atsPatterns = {
+      'jobs.lever.co': 0,
+      'lever.co': 0,
+      'boards.greenhouse.io': 0,
+      'job-boards.greenhouse.io': 0,
+      'jobs.ashbyhq.com': 0,
+      'jobs.smartrecruiters.com': 0,
+      'apply.workable.com': 0,
+    };
+
+    let companyName = '';
+
+    if (hostname in atsPatterns && pathParts.length > 0) {
+      companyName = pathParts[atsPatterns[hostname]];
+    } else if (hostname.endsWith('.myworkdayjobs.com')) {
+      companyName = hostname.split('.')[0];
+    } else if (hostname.endsWith('.bamboohr.com')) {
+      companyName = hostname.split('.')[0];
+    } else {
+      const domainParts = hostname.split('.');
+      const skip = ['careers', 'jobs', 'apply', 'hire', 'recruiting', 'talent'];
+      companyName = domainParts[0];
+      if (skip.includes(domainParts[0]) && domainParts.length > 1) {
+        companyName = domainParts[1];
+      }
+    }
+
+    if (companyName && companyName.length > 1) {
+      companyName = companyName.replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+      document.getElementById('form-company').value = companyName;
+    }
+  } catch { /* ignore */ }
+
+  // Extract position from page title
+  if (title) {
+    const separators = [' - ', ' | ', ' — ', ' · ', ' :: '];
+    for (const sep of separators) {
+      if (title.includes(sep)) {
+        const titleParts = title.split(sep);
+        let candidate = titleParts[0].trim();
+        const companyInput = document.getElementById('form-company').value.toLowerCase();
+        if (companyInput && candidate.toLowerCase().includes(companyInput.toLowerCase()) && titleParts.length > 1) {
+          candidate = titleParts[1].trim();
+        }
+        if (candidate.length > 3 && candidate.length < 150) {
+          document.getElementById('form-position').value = candidate;
+        }
+        break;
+      }
+    }
+  }
+}
+
+// --- Tags ---
 
 async function loadTags() {
   const res = await chrome.runtime.sendMessage({ type: 'GET_TAGS' });
@@ -157,7 +240,7 @@ async function loadTags() {
     const chip = document.createElement('span');
     chip.className = 'tag-chip';
     chip.textContent = tag.name;
-    chip.style.backgroundColor = tag.color + '33'; // 20% opacity bg
+    chip.style.backgroundColor = tag.color + '33';
     chip.style.color = tag.color;
     chip.dataset.tagId = tag.id;
     chip.addEventListener('click', () => {
@@ -173,11 +256,6 @@ async function loadTags() {
     picker.appendChild(chip);
   }
   picker.hidden = false;
-}
-
-function showNoJob() {
-  document.getElementById('job-info').hidden = true;
-  document.getElementById('no-job').hidden = false;
 }
 
 // --- Extras Toggles ---
@@ -207,7 +285,6 @@ const interviewFields = document.getElementById('interview-fields');
 
 interviewBtn.addEventListener('click', () => {
   if (interviewFields.hidden) {
-    // First click: show interview fields, pre-fill date to tomorrow
     interviewFields.hidden = false;
     const dateInput = document.getElementById('interview-date');
     if (!dateInput.value) {
@@ -219,7 +296,6 @@ interviewBtn.addEventListener('click', () => {
     interviewBtn.textContent = 'Save Interview';
     return;
   }
-  // Second click: validate and save
   const dateVal = document.getElementById('interview-date').value;
   if (!dateVal) {
     showFeedback('Please select interview date/time', 'error');
@@ -243,12 +319,18 @@ offerBtn.addEventListener('click', () => {
   addApplication('offer');
 });
 
-// --- Add Application ---
+// --- Add Application (unified) ---
 
 const allActionBtns = ['save-btn', 'apply-btn', 'interview-btn', 'offer-btn'];
 
 async function addApplication(status) {
-  if (!currentJobData) return;
+  const company = document.getElementById('form-company').value.trim();
+  const position = document.getElementById('form-position').value.trim();
+
+  if (!company || !position) {
+    showFeedback('Company and position are required', 'error');
+    return;
+  }
 
   const btnMap = { to_apply: 'save-btn', applied: 'apply-btn', interview: 'interview-btn', offer: 'offer-btn' };
   const activeBtn = document.getElementById(btnMap[status]);
@@ -261,14 +343,14 @@ async function addApplication(status) {
 
   const msg = {
     type: 'ADD_APPLICATION',
-    company: currentJobData.company,
-    position: currentJobData.position,
-    url: currentJobData.url,
-    source: currentJobData.source,
+    company,
+    position,
+    url: formUrl.startsWith('http') ? formUrl : '',
+    source: formSource,
     applied_date: today,
-    status: status,
-    job_posting_content: currentJobData.job_posting_content,
+    status,
   };
+  if (formJobPostingContent) msg.job_posting_content = formJobPostingContent;
   if (notes) msg.notes = notes;
   if (selectedTagIds.size > 0) msg.tag_ids = [...selectedTagIds];
 

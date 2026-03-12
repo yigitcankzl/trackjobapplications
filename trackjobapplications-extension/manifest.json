@@ -68,8 +68,8 @@
       "id": "trackjobapplications@extension",
       "strict_min_version": "109.0",
       "data_collection_permissions": {
-        "technicaldataAllowed": true,
-        "interactiondataAllowed": true
+        "required": ["none"],
+        "optional": ["technicalAndInteraction"]
       }
     }
   },

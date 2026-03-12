@@ -25,7 +25,7 @@ export default function ExtensionPage() {
 
       <div className="max-w-3xl mx-auto space-y-6 pb-12">
         {/* Hero */}
-        <div className="bg-stone-50 dark:bg-stone-800/40 rounded-lg border border-stone-200 dark:border-stone-800 p-8 text-center">
+        <div className="bg-stone-50 dark:bg-stone-800/40 rounded-lg border border-stone-200/60 dark:border-stone-800 shadow-sm p-8 text-center">
           <div className="w-16 h-16 mx-auto mb-4 rounded-lg bg-stone-900 dark:bg-stone-100 flex items-center justify-center">
             <svg className="w-8 h-8 text-white dark:text-stone-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a2 2 0 012 2v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a2 2 0 01-2 2h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a2 2 0 01-2-2v-3a1 1 0 00-1-1H3a2 2 0 110-4h1a1 1 0 001-1V8a2 2 0 012-2h3a1 1 0 001-1V4z" />
@@ -40,7 +40,7 @@ export default function ExtensionPage() {
         </div>
 
         {/* Download buttons */}
-        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-200 dark:border-stone-800 p-6">
+        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-200/60 dark:border-stone-800 shadow-sm p-6">
           <p className="text-xs font-medium text-stone-400 uppercase tracking-wide mb-4">{t('extension.download')}</p>
           <div className="flex flex-col sm:flex-row gap-3">
             <a
@@ -69,7 +69,7 @@ export default function ExtensionPage() {
         </div>
 
         {/* Supported sites */}
-        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-200 dark:border-stone-800 p-6">
+        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-200/60 dark:border-stone-800 shadow-sm p-6">
           <p className="text-xs font-medium text-stone-400 uppercase tracking-wide mb-4">{t('extension.supportedSites')}</p>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {['LinkedIn', 'Indeed', 'Glassdoor', 'ZipRecruiter'].map((site) => (
@@ -82,7 +82,7 @@ export default function ExtensionPage() {
         </div>
 
         {/* Features */}
-        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-200 dark:border-stone-800 p-6">
+        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-200/60 dark:border-stone-800 shadow-sm p-6">
           <p className="text-xs font-medium text-stone-400 uppercase tracking-wide mb-4">{t('extension.features')}</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {FEATURES.map((f) => (
@@ -98,7 +98,7 @@ export default function ExtensionPage() {
         </div>
 
         {/* How it works */}
-        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-200 dark:border-stone-800 p-6">
+        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-200/60 dark:border-stone-800 shadow-sm p-6">
           <p className="text-xs font-medium text-stone-400 uppercase tracking-wide mb-4">{t('extension.howItWorks')}</p>
           <div className="space-y-4">
             {[1, 2, 3].map((step) => (

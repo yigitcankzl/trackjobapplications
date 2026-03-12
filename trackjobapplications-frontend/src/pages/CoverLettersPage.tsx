@@ -126,16 +126,16 @@ export default function CoverLettersPage() {
         {/* Template list */}
         <div className={`${isFormOpen || preview ? 'lg:col-span-1' : 'lg:col-span-3'}`}>
           {loading ? (
-            <div className="text-center py-12 text-gray-400 text-sm">{t('coverLetters.loading')}</div>
+            <div className="text-center py-12 text-stone-400 text-sm">{t('coverLetters.loading')}</div>
           ) : templates.length === 0 && !isFormOpen ? (
-            <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm p-12 text-center">
-              <div className="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center mx-auto mb-4">
+            <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100 dark:border-stone-800 shadow-sm p-12 text-center">
+              <div className="w-12 h-12 rounded-lg bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center mx-auto mb-4">
                 <svg className="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
               </div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">{t('coverLetters.empty.title')}</p>
-              <p className="text-xs text-gray-400 mb-4">{t('coverLetters.empty.subtitle')}</p>
+              <p className="text-sm font-medium text-stone-600 dark:text-stone-400 mb-1">{t('coverLetters.empty.title')}</p>
+              <p className="text-xs text-stone-400 mb-4">{t('coverLetters.empty.subtitle')}</p>
               <Button onClick={openCreate}>
                 <PlusIcon />
                 {t('coverLetters.newTemplate')}
@@ -150,33 +150,33 @@ export default function CoverLettersPage() {
                   tabIndex={0}
                   onClick={() => { setPreview(tpl); setFillValues({}); setCopied(false); setCreating(false); setEditing(null) }}
                   onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setPreview(tpl); setFillValues({}); setCopied(false); setCreating(false); setEditing(null) } }}
-                  className={`group bg-white dark:bg-gray-900 rounded-xl border shadow-sm p-4 cursor-pointer transition-all duration-200 ${
+                  className={`group bg-white dark:bg-stone-900 rounded-lg border shadow-sm p-4 cursor-pointer transition-all duration-200 ${
                     preview?.id === tpl.id || editing?.id === tpl.id
                       ? 'border-blue-200 dark:border-blue-800 ring-1 ring-blue-100 dark:ring-blue-900'
-                      : 'border-gray-100 dark:border-gray-800 hover:shadow-md hover:border-blue-100'
+                      : 'border-stone-100 dark:border-stone-800 hover:shadow-md hover:border-blue-100'
                   }`}
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
-                      <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">{tpl.name}</h3>
-                      <p className="text-xs text-gray-400 mt-1 line-clamp-2">{tpl.content.slice(0, 120)}...</p>
+                      <h3 className="text-sm font-semibold text-stone-900 dark:text-stone-100 truncate">{tpl.name}</h3>
+                      <p className="text-xs text-stone-400 mt-1 line-clamp-2">{tpl.content.slice(0, 120)}...</p>
                     </div>
                     <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
                       <button
                         onClick={e => { e.stopPropagation(); openEdit(tpl) }}
-                        className="p-1.5 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                        className="p-1.5 rounded-lg text-stone-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
                       >
                         <EditIcon />
                       </button>
                       <button
                         onClick={e => { e.stopPropagation(); setDeleting(tpl) }}
-                        className="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+                        className="p-1.5 rounded-lg text-stone-400 hover:text-red-500 hover:bg-red-50 transition-colors"
                       >
                         <TrashIcon />
                       </button>
                     </div>
                   </div>
-                  <p className="text-xs text-gray-300 mt-2">
+                  <p className="text-xs text-stone-300 mt-2">
                     {new Date(tpl.updated_at).toLocaleDateString()}
                   </p>
                 </div>
@@ -187,30 +187,30 @@ export default function CoverLettersPage() {
 
         {/* Editor panel */}
         {isFormOpen && (
-          <div className="lg:col-span-2 bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm p-6">
+          <div className="lg:col-span-2 bg-white dark:bg-stone-900 rounded-lg border border-stone-100 dark:border-stone-800 shadow-sm p-6">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-200">
+              <h2 className="text-sm font-semibold text-stone-800 dark:text-stone-200">
                 {editing ? t('coverLetters.editTemplate') : t('coverLetters.createTemplate')}
               </h2>
-              <button onClick={closeForm} className="p-1 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors">
+              <button onClick={closeForm} className="p-1 rounded-lg text-stone-400 hover:text-stone-600 hover:bg-stone-100 transition-colors">
                 <CloseIcon />
               </button>
             </div>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">{t('coverLetters.form.name')}</label>
+                <label className="block text-xs font-medium text-stone-500 mb-1">{t('coverLetters.form.name')}</label>
                 <input
                   type="text"
                   value={form.name}
                   onChange={e => setForm(prev => ({ ...prev, name: e.target.value }))}
-                  className="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                  className="w-full px-3 py-2 rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-sm text-stone-900 dark:text-stone-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
                   placeholder={t('coverLetters.form.namePlaceholder')}
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">{t('coverLetters.form.content')}</label>
+                <label className="block text-xs font-medium text-stone-500 mb-1">{t('coverLetters.form.content')}</label>
                 <div className="flex flex-wrap gap-1 mb-2">
                   {PLACEHOLDERS.map(p => (
                     <button
@@ -227,7 +227,7 @@ export default function CoverLettersPage() {
                   value={form.content}
                   onChange={e => setForm(prev => ({ ...prev, content: e.target.value }))}
                   rows={14}
-                  className="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none resize-none"
+                  className="w-full px-3 py-2 rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-sm text-stone-900 dark:text-stone-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none resize-none"
                   placeholder={t('coverLetters.form.contentPlaceholder')}
                 />
               </div>
@@ -242,19 +242,19 @@ export default function CoverLettersPage() {
 
         {/* Preview panel */}
         {preview && !isFormOpen && (
-          <div className="lg:col-span-2 bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm p-6 space-y-4">
+          <div className="lg:col-span-2 bg-white dark:bg-stone-900 rounded-lg border border-stone-100 dark:border-stone-800 shadow-sm p-6 space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-200">{preview.name}</h2>
+              <h2 className="text-sm font-semibold text-stone-800 dark:text-stone-200">{preview.name}</h2>
               <div className="flex items-center gap-1">
                 <button
                   onClick={() => openEdit(preview)}
-                  className="p-1.5 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                  className="p-1.5 rounded-lg text-stone-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
                 >
                   <EditIcon />
                 </button>
                 <button
                   onClick={() => setPreview(null)}
-                  className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+                  className="p-1.5 rounded-lg text-stone-400 hover:text-stone-600 hover:bg-stone-100 transition-colors"
                 >
                   <CloseIcon />
                 </button>
@@ -263,18 +263,18 @@ export default function CoverLettersPage() {
 
             {/* Fill placeholders */}
             {extractPlaceholders(preview.content).length > 0 && (
-              <div className="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4 space-y-3">
+              <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 space-y-3">
                 <p className="text-xs font-semibold text-blue-700 dark:text-blue-300 uppercase tracking-wide">{t('coverLetters.fillFields')}</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {extractPlaceholders(preview.content).map(placeholder => (
                     <div key={placeholder}>
-                      <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">{placeholder}</label>
+                      <label className="block text-xs font-medium text-stone-500 dark:text-stone-400 mb-1">{placeholder}</label>
                       <input
                         type="text"
                         value={fillValues[placeholder] || ''}
                         onChange={e => setFillValues(prev => ({ ...prev, [placeholder]: e.target.value }))}
                         placeholder={placeholder.replace(/[{}]/g, '')}
-                        className="w-full px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                        className="w-full px-3 py-1.5 rounded-lg border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800 text-sm text-stone-900 dark:text-stone-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
                       />
                     </div>
                   ))}
@@ -283,7 +283,7 @@ export default function CoverLettersPage() {
             )}
 
             {/* Rendered result */}
-            <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-4 text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed">
+            <div className="bg-stone-50 dark:bg-stone-800 rounded-lg p-4 text-sm text-stone-700 dark:text-stone-300 whitespace-pre-wrap leading-relaxed">
               {renderPreview(preview.content, fillValues)}
             </div>
 
@@ -306,9 +306,9 @@ export default function CoverLettersPage() {
       {/* Delete confirmation modal */}
       {deleting && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40" onClick={dismissDelete}>
-          <div role="dialog" aria-modal="true" aria-labelledby="delete-tpl-title" className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl p-6 w-full max-w-sm mx-4" onClick={e => e.stopPropagation()}>
-            <h3 id="delete-tpl-title" className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2">{t('coverLetters.deleteConfirm.title')}</h3>
-            <p className="text-xs text-gray-500 mb-4">{t('coverLetters.deleteConfirm.message', { name: deleting.name })}</p>
+          <div role="dialog" aria-modal="true" aria-labelledby="delete-tpl-title" className="bg-white dark:bg-stone-900 rounded-lg shadow-xl p-6 w-full max-w-sm mx-4" onClick={e => e.stopPropagation()}>
+            <h3 id="delete-tpl-title" className="text-sm font-semibold text-stone-900 dark:text-stone-100 mb-2">{t('coverLetters.deleteConfirm.title')}</h3>
+            <p className="text-xs text-stone-500 mb-4">{t('coverLetters.deleteConfirm.message', { name: deleting.name })}</p>
             <div className="flex justify-end gap-2">
               <Button variant="secondary" onClick={() => setDeleting(null)}>{t('coverLetters.form.cancel')}</Button>
               <Button variant="danger" onClick={handleDelete}>{t('coverLetters.deleteConfirm.confirm')}</Button>

@@ -4,7 +4,7 @@ import StatCard from '../dashboard/StatCard'
 
 describe('StatCard', () => {
   it('renders the label', () => {
-    render(<StatCard label="Total" value={42} color="text-gray-900" />)
+    render(<StatCard label="Total" value={42} color="text-stone-900" />)
     expect(screen.getByText('Total')).toBeInTheDocument()
   })
 
@@ -33,9 +33,9 @@ describe('StatCard', () => {
     expect(screen.getByText('2')).toHaveClass('text-amber-600')
   })
 
-  it('renders a container with rounded-2xl class', () => {
-    const { container } = render(<StatCard label="Total" value={10} color="text-gray-900" />)
-    expect(container.firstChild).toHaveClass('rounded-2xl')
+  it('renders a container with rounded-lg class', () => {
+    const { container } = render(<StatCard label="Total" value={10} color="text-stone-900" />)
+    expect(container.firstChild).toHaveClass('rounded-lg')
   })
 
   it('renders value 0 correctly', () => {

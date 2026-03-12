@@ -15,34 +15,34 @@ describe('StatusBadge', () => {
     expect(screen.getByText(`dashboard.status.${status}`)).toBeInTheDocument()
   })
 
-  it('applies bg-indigo-50 class for to_apply', () => {
+  it('applies bg-indigo class for to_apply', () => {
     const { container } = render(<StatusBadge status="to_apply" />)
-    expect(container.firstChild).toHaveClass('bg-indigo-50')
+    expect(container.firstChild?.className).toContain('bg-indigo-50')
   })
 
-  it('applies bg-blue-50 class for applied', () => {
+  it('applies bg-stone class for applied', () => {
     const { container } = render(<StatusBadge status="applied" />)
-    expect(container.firstChild).toHaveClass('bg-blue-50')
+    expect(container.firstChild?.className).toContain('bg-stone-100')
   })
 
-  it('applies bg-amber-50 class for interview', () => {
+  it('applies bg-amber class for interview', () => {
     const { container } = render(<StatusBadge status="interview" />)
-    expect(container.firstChild).toHaveClass('bg-amber-50')
+    expect(container.firstChild?.className).toContain('bg-amber-50')
   })
 
-  it('applies bg-emerald-50 class for offer', () => {
+  it('applies bg-emerald class for offer', () => {
     const { container } = render(<StatusBadge status="offer" />)
-    expect(container.firstChild).toHaveClass('bg-emerald-50')
+    expect(container.firstChild?.className).toContain('bg-emerald-50')
   })
 
-  it('applies bg-red-50 class for rejected', () => {
+  it('applies bg-red class for rejected', () => {
     const { container } = render(<StatusBadge status="rejected" />)
-    expect(container.firstChild).toHaveClass('bg-red-50')
+    expect(container.firstChild?.className).toContain('bg-red-50')
   })
 
-  it('applies bg-gray-100 class for withdrawn', () => {
+  it('applies bg-stone-100 class for withdrawn', () => {
     const { container } = render(<StatusBadge status="withdrawn" />)
-    expect(container.firstChild).toHaveClass('bg-gray-100')
+    expect(container.firstChild?.className).toContain('bg-stone-100')
   })
 
   it('renders a span element', () => {

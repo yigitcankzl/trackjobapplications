@@ -333,6 +333,8 @@ class ExtensionTokenView(APIView):
     this endpoint via credentialed XHR to get tokens it can store locally.
     """
     permission_classes = [permissions.IsAuthenticated]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "extension_token"
 
     def post(self, request):
         refresh = RefreshToken.for_user(request.user)

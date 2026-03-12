@@ -162,6 +162,8 @@ REST_FRAMEWORK = {
         "password_reset_confirm": "3/hour",
         "social_login": "30/minute",
         "social_callback": "30/minute",
+        "extension_token": "10/hour",
+        "csrf": "30/minute",
     },
 }
 

@@ -189,6 +189,13 @@ legend {
   color: #991b1b;
 }
 
+.privacy-note {
+  margin-top: 16px;
+  font-size: 11px;
+  color: #a8a29e;
+  text-align: center;
+}
+
 /* ===== Dark Mode ===== */
 body.dark {
   background: #0c0a09;
@@ -253,6 +260,10 @@ body.dark .btn-save {
 
 body.dark .btn-save:hover {
   background: #d6d3d1;
+}
+
+body.dark .privacy-note {
+  color: #57534e;
 }
 
 body.dark #feedback.success {

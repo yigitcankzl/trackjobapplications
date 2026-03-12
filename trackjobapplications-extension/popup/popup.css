@@ -878,8 +878,9 @@ body.dark #loading {
 }
 
 .popup-footer a {
-  color: #78716c;
+  color: #44403c;
   text-decoration: none;
+  font-weight: 500;
 }
 
 .popup-footer a:hover {

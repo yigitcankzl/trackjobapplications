@@ -44,32 +44,39 @@ function showLoginSection() {
   document.getElementById('main-section').hidden = true;
 }
 
-document.getElementById('login-form').addEventListener('submit', async (e) => {
-  e.preventDefault();
-
-  const email = document.getElementById('email').value.trim();
-  const password = document.getElementById('password').value;
-  const btn = document.getElementById('login-btn');
+document.getElementById('web-login-btn').addEventListener('click', async () => {
+  const btn = document.getElementById('web-login-btn');
   const errorEl = document.getElementById('login-error');
-
   errorEl.hidden = true;
   btn.disabled = true;
-  btn.textContent = 'Logging in...';
+  btn.textContent = 'Opening...';
 
-  const result = await chrome.runtime.sendMessage({ type: 'LOGIN', email, password });
+  const result = await chrome.runtime.sendMessage({ type: 'WEB_LOGIN' });
 
   if (result && result.success) {
-    const auth = await chrome.runtime.sendMessage({ type: 'CHECK_AUTH' });
-    document.getElementById('login-section').hidden = true;
-    showMainSection(auth.email);
-    await Promise.all([loadJobData(), loadDashboard()]);
+    btn.textContent = 'Waiting for login...';
+    // The service worker will watch for the tab to complete login.
+    // Listen for storage changes to know when tokens are saved.
+    chrome.storage.onChanged.addListener(function onTokenSaved(changes) {
+      if (changes.access_token) {
+        chrome.storage.onChanged.removeListener(onTokenSaved);
+        // Tokens saved — refresh the popup state
+        (async () => {
+          const auth = await chrome.runtime.sendMessage({ type: 'CHECK_AUTH' });
+          if (auth.authenticated) {
+            document.getElementById('login-section').hidden = true;
+            showMainSection(auth.email);
+            await Promise.all([loadJobData(), loadDashboard()]);
+          }
+        })();
+      }
+    });
   } else {
     const err = result?.error;
-    errorEl.textContent = (typeof err === 'string') ? err : JSON.stringify(err || result || 'Login failed');
+    errorEl.textContent = (typeof err === 'string') ? err : JSON.stringify(err || 'Failed to open login');
     errorEl.hidden = false;
     btn.disabled = false;
-    btn.textContent = 'Log In';
-    document.getElementById('password').value = '';
+    btn.textContent = 'Sign in with TrackJobs';
   }
 });
 
@@ -85,8 +92,9 @@ document.getElementById('logout-btn').addEventListener('click', async (e) => {
   await chrome.runtime.sendMessage({ type: 'LOGOUT' });
   document.getElementById('main-section').hidden = true;
   document.getElementById('login-error').hidden = true;
-  document.getElementById('email').value = '';
-  document.getElementById('password').value = '';
+  const btn = document.getElementById('web-login-btn');
+  btn.disabled = false;
+  btn.textContent = 'Sign in with TrackJobs';
   showLoginSection();
 });
 

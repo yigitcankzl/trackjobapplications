@@ -74,26 +74,6 @@ body {
 }
 
 /* Login */
-#login-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-input[type="email"],
-input[type="password"] {
-  padding: 8px 10px;
-  border: 1px solid #d6d3d1;
-  border-radius: 6px;
-  font-size: 13px;
-  outline: none;
-}
-
-input:focus {
-  border-color: #a8a29e;
-  box-shadow: 0 0 0 2px rgba(168, 162, 158, 0.15);
-}
-
 button {
   padding: 8px 14px;
   border: none;
@@ -104,16 +84,36 @@ button {
   transition: background 0.15s;
 }
 
-#login-btn {
-  background: #1c1917;
-  color: #fff;
+.web-login-box {
+  text-align: center;
+  padding: 20px 0 8px;
 }
 
-#login-btn:hover {
+.web-login-text {
+  font-size: 13px;
+  color: #78716c;
+  margin-bottom: 14px;
+  line-height: 1.4;
+}
+
+.btn-web-login {
+  width: 100%;
+  padding: 10px 14px;
+  background: #1c1917;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn-web-login:hover {
   background: #292524;
 }
 
-#login-btn:disabled {
+.btn-web-login:disabled {
   background: #a8a29e;
   cursor: not-allowed;
 }
@@ -582,8 +582,24 @@ body.dark .theme-btn:hover {
   color: #e7e5e4;
 }
 
-body.dark input[type="email"],
-body.dark input[type="password"],
+body.dark .web-login-text {
+  color: #a8a29e;
+}
+
+body.dark .btn-web-login {
+  background: #e7e5e4;
+  color: #1c1917;
+}
+
+body.dark .btn-web-login:hover {
+  background: #d6d3d1;
+}
+
+body.dark .btn-web-login:disabled {
+  background: #44403c;
+  color: #78716c;
+}
+
 body.dark .contact-fields input,
 body.dark .job-notes,
 body.dark .offer-row input,

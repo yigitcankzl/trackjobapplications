@@ -35,12 +35,10 @@ export default function Sidebar({ mobileOpen, onMobileClose, collapsed, onToggle
   ]
 
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
-    `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 ${
-      collapsed ? 'justify-center' : ''
-    } ${
-      isActive
-        ? 'bg-stone-100 dark:bg-stone-800 text-stone-900 dark:text-stone-100'
-        : 'text-stone-500 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-stone-800 hover:text-stone-800 dark:hover:text-stone-200'
+    `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 ${collapsed ? 'justify-center' : ''
+    } ${isActive
+      ? 'bg-stone-100 dark:bg-stone-800 text-stone-900 dark:text-stone-100'
+      : 'text-stone-500 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-stone-800 hover:text-stone-800 dark:hover:text-stone-200'
     }`
 
   const sidebarContent = (isCollapsed: boolean) => (
@@ -88,11 +86,9 @@ export default function Sidebar({ mobileOpen, onMobileClose, collapsed, onToggle
 
       {/* Bottom — theme toggle + user + sign out */}
       <div className="px-3 pb-5 space-y-2">
-        {!isCollapsed && (
-          <div className="px-1">
-            <LanguageSwitcher />
-          </div>
-        )}
+        <div className={isCollapsed ? 'flex justify-center' : 'px-1'}>
+          <LanguageSwitcher compact={isCollapsed} />
+        </div>
         <button
           onClick={toggleTheme}
           title={isCollapsed ? (theme === 'dark' ? t('dashboard.nav.lightMode') : t('dashboard.nav.darkMode')) : undefined}

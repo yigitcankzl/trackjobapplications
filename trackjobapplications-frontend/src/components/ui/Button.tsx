@@ -8,9 +8,9 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const VARIANT_CLASSES: Record<Variant, string> = {
   primary:
-    'text-white bg-stone-900 hover:bg-stone-800 dark:bg-white dark:text-stone-900 dark:hover:bg-stone-100',
-  secondary: 'text-stone-600 dark:text-stone-400 border border-stone-200 dark:border-stone-700 hover:bg-stone-50 dark:hover:bg-stone-800',
-  danger: 'text-white bg-red-600 hover:bg-red-700',
+    'text-white bg-stone-900 hover:bg-stone-800 dark:bg-white dark:text-stone-900 dark:hover:bg-stone-100 shadow-sm hover:shadow-md',
+  secondary: 'text-stone-600 dark:text-stone-400 border border-stone-200/80 dark:border-stone-700 bg-white dark:bg-stone-800 hover:bg-stone-50 dark:hover:bg-stone-700 shadow-sm',
+  danger: 'text-white bg-red-600 hover:bg-red-700 shadow-sm hover:shadow-md',
 }
 
 export default function Button({ variant = 'primary', className = '', children, disabled, ...props }: Props) {

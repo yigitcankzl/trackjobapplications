@@ -22,6 +22,18 @@ document.getElementById('theme-toggle').addEventListener('click', () => {
   applyTheme(next);
 });
 
+// --- Review link (Chrome vs Firefox) ---
+(function initReviewLink() {
+  const link = document.getElementById('review-link');
+  if (!link) return;
+  const isFirefox = typeof browser !== 'undefined';
+  if (isFirefox) {
+    link.href = 'https://addons.mozilla.org/en-US/firefox/addon/trackjobapplications/reviews/';
+  } else {
+    link.href = 'https://chromewebstore.google.com/detail/trackjobapplications/EXTENSION_ID/reviews';
+  }
+})();
+
 document.addEventListener('DOMContentLoaded', async () => {
   const authStatus = await chrome.runtime.sendMessage({ type: 'CHECK_AUTH' });
 

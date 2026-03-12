@@ -867,3 +867,42 @@ body.dark .form-url {
 body.dark #loading {
   color: #78716c;
 }
+
+/* Footer */
+.popup-footer {
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid #e7e5e4;
+  text-align: center;
+  font-size: 11px;
+}
+
+.popup-footer a {
+  color: #78716c;
+  text-decoration: none;
+}
+
+.popup-footer a:hover {
+  color: #0d9488;
+}
+
+.footer-sep {
+  color: #d6d3d1;
+  margin: 0 4px;
+}
+
+body.dark .popup-footer {
+  border-top-color: #292524;
+}
+
+body.dark .popup-footer a {
+  color: #a8a29e;
+}
+
+body.dark .popup-footer a:hover {
+  color: #5eead4;
+}
+
+body.dark .footer-sep {
+  color: #44403c;
+}

@@ -97,16 +97,6 @@ class ThrottledTokenObtainPairView(TokenObtainPairView):
     throttle_scope = "login"
 
     def post(self, request, *args, **kwargs):
-        email = request.data.get("email", "").lower().strip()
-        try:
-            u = User.objects.get(email__iexact=email)
-            if not u.has_usable_password():
-                return Response(
-                    {"detail": "This account uses Google Sign-In. Please use the 'Sign in with Google' button."},
-                    status=status.HTTP_401_UNAUTHORIZED,
-                )
-        except User.DoesNotExist:
-            pass
         response = super().post(request, *args, **kwargs)
         if response.status_code != 200:
             logger.warning(
@@ -156,7 +146,7 @@ class RegisterView(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         email = request.data.get("email", "").lower().strip()
         if User.objects.filter(email__iexact=email).exists():
-            return Response({"email": ["An account with this email already exists."]}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"detail": "Registration submitted."}, status=status.HTTP_201_CREATED)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()

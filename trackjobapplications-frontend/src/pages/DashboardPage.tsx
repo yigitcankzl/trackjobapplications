@@ -64,12 +64,12 @@ export default function DashboardPage() {
 
   const statConfig = useMemo(() => ({
     total:     { label: t('dashboard.stats.total'),     value: stats.total,           color: 'text-stone-900'  as const },
-    to_apply:  { label: t('dashboard.stats.to_apply'),  value: stats.to_apply ?? 0,   color: 'text-indigo-600' as const },
-    applied:   { label: t('dashboard.stats.applied'),   value: stats.applied,         color: 'text-blue-600'   as const },
-    interview: { label: t('dashboard.stats.interview'), value: stats.interview,       color: 'text-amber-600'  as const },
-    offer:     { label: t('dashboard.stats.offer'),     value: stats.offer,           color: 'text-emerald-600' as const },
-    rejected:  { label: t('dashboard.stats.rejected'),  value: stats.rejected,        color: 'text-red-500'    as const },
-    withdrawn: { label: t('dashboard.stats.withdrawn'), value: stats.withdrawn,       color: 'text-orange-500' as const },
+    to_apply:  { label: t('dashboard.stats.to_apply'),  value: stats.to_apply ?? 0,   color: 'text-slate-600'  as const },
+    applied:   { label: t('dashboard.stats.applied'),   value: stats.applied,         color: 'text-teal-600'   as const },
+    interview: { label: t('dashboard.stats.interview'), value: stats.interview,       color: 'text-orange-500' as const },
+    offer:     { label: t('dashboard.stats.offer'),     value: stats.offer,           color: 'text-lime-600'   as const },
+    rejected:  { label: t('dashboard.stats.rejected'),  value: stats.rejected,        color: 'text-rose-500'   as const },
+    withdrawn: { label: t('dashboard.stats.withdrawn'), value: stats.withdrawn,       color: 'text-zinc-500'   as const },
   }), [t, stats])
 
   const reminders = useApplicationReminders(apps)

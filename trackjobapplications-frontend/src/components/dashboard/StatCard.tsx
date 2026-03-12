@@ -2,12 +2,12 @@ import { memo } from 'react'
 
 export type StatCardColor =
   | 'text-stone-900'
-  | 'text-indigo-600'
-  | 'text-blue-600'
-  | 'text-amber-600'
-  | 'text-emerald-600'
-  | 'text-red-500'
+  | 'text-slate-600'
+  | 'text-teal-600'
   | 'text-orange-500'
+  | 'text-lime-600'
+  | 'text-rose-500'
+  | 'text-zinc-500'
 
 interface Props {
   label: string
@@ -18,12 +18,12 @@ interface Props {
 export default memo(function StatCard({ label, value, color }: Props) {
   const accentMap: Record<string, string> = {
     'text-stone-900': 'bg-stone-400',
-    'text-indigo-600': 'bg-indigo-500',
-    'text-blue-600': 'bg-blue-500',
-    'text-amber-600': 'bg-amber-500',
-    'text-emerald-600': 'bg-emerald-500',
-    'text-red-500': 'bg-red-500',
+    'text-slate-600': 'bg-slate-500',
+    'text-teal-600': 'bg-teal-600',
     'text-orange-500': 'bg-orange-500',
+    'text-lime-600': 'bg-lime-600',
+    'text-rose-500': 'bg-rose-500',
+    'text-zinc-500': 'bg-zinc-400',
   }
 
   return (

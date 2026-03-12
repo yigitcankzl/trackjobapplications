@@ -86,9 +86,9 @@ export default function AnalyticsPage() {
       {/* Summary cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
         <StatCard label={t('analytics.totalApplications')} value={total} color="text-stone-900" />
-        <StatCard label={t('analytics.interviewRate')} value={`${interviewRate}%`} color="text-amber-600" />
-        <StatCard label={t('analytics.offerRate')} value={`${offerRate}%`} color="text-emerald-600" />
-        <StatCard label={t('analytics.active')} value={counts.applied + counts.interview} color="text-blue-600" />
+        <StatCard label={t('analytics.interviewRate')} value={`${interviewRate}%`} color="text-orange-500" />
+        <StatCard label={t('analytics.offerRate')} value={`${offerRate}%`} color="text-lime-600" />
+        <StatCard label={t('analytics.active')} value={counts.applied + counts.interview} color="text-teal-600" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -139,7 +139,7 @@ export default function AnalyticsPage() {
               <button
                 onClick={() => setTimeView('weekly')}
                 className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
-                  timeView === 'weekly' ? 'bg-white dark:bg-stone-700 text-blue-600 shadow-sm' : 'text-stone-500 dark:text-stone-400 hover:text-stone-700'
+                  timeView === 'weekly' ? 'bg-white dark:bg-stone-700 text-stone-900 dark:text-stone-100 shadow-sm' : 'text-stone-500 dark:text-stone-400 hover:text-stone-700'
                 }`}
               >
                 {t('analytics.weekly')}
@@ -147,7 +147,7 @@ export default function AnalyticsPage() {
               <button
                 onClick={() => setTimeView('monthly')}
                 className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
-                  timeView === 'monthly' ? 'bg-white dark:bg-stone-700 text-blue-600 shadow-sm' : 'text-stone-500 dark:text-stone-400 hover:text-stone-700'
+                  timeView === 'monthly' ? 'bg-white dark:bg-stone-700 text-stone-900 dark:text-stone-100 shadow-sm' : 'text-stone-500 dark:text-stone-400 hover:text-stone-700'
                 }`}
               >
                 {t('analytics.monthly')}
@@ -172,7 +172,7 @@ export default function AnalyticsPage() {
                       <span className="text-xs font-bold text-stone-700 dark:text-stone-300">{count}</span>
                       <div className="w-full relative" style={{ height: '120px' }}>
                         <div
-                          className="absolute bottom-0 w-full bg-blue-500 rounded-t-lg transition-all duration-500"
+                          className="absolute bottom-0 w-full bg-teal-500 rounded-t-lg transition-all duration-500"
                           style={{ height: `${heightPct}%` }}
                         />
                       </div>

@@ -1,5 +1,26 @@
 let currentJobData = null;
 
+// --- Theme ---
+
+function applyTheme(theme) {
+  document.body.classList.toggle('dark', theme === 'dark');
+  document.getElementById('theme-icon-sun').hidden = theme === 'dark';
+  document.getElementById('theme-icon-moon').hidden = theme !== 'dark';
+}
+
+(function initTheme() {
+  const saved = localStorage.getItem('theme');
+  const theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  applyTheme(theme);
+})();
+
+document.getElementById('theme-toggle').addEventListener('click', () => {
+  const isDark = document.body.classList.contains('dark');
+  const next = isDark ? 'light' : 'dark';
+  localStorage.setItem('theme', next);
+  applyTheme(next);
+});
+
 document.addEventListener('DOMContentLoaded', async () => {
   const authStatus = await chrome.runtime.sendMessage({ type: 'CHECK_AUTH' });
 

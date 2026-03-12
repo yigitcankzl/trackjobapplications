@@ -93,7 +93,7 @@ export default function AnalyticsPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Status distribution */}
-        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100 dark:border-stone-800 shadow-sm p-6">
+        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6">
           <h2 className="text-sm font-semibold text-stone-800 dark:text-stone-200 mb-5">{t('analytics.statusDistribution')}</h2>
           <div className="space-y-3.5">
             {STATUSES.map(status => {
@@ -119,7 +119,7 @@ export default function AnalyticsPage() {
           </div>
 
           {/* Legend */}
-          <div className="mt-6 pt-5 border-t border-stone-100 dark:border-stone-800 flex flex-wrap gap-3">
+          <div className="mt-6 pt-5 border-t border-stone-100/60 dark:border-stone-800 flex flex-wrap gap-3">
             {STATUSES.map(status => (
               <div key={status} className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg ${STATUS_BG[status]}`}>
                 <span className={`w-2 h-2 rounded-full flex-shrink-0 ${STATUS_COLORS[status]}`} />
@@ -132,7 +132,7 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Applications over time */}
-        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100 dark:border-stone-800 shadow-sm p-6">
+        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6">
           <div className="flex items-center justify-between mb-5">
             <h2 className="text-sm font-semibold text-stone-800 dark:text-stone-200">{t('analytics.applicationsOverTime')}</h2>
             <div className="flex items-center bg-stone-100 dark:bg-stone-800 rounded-lg p-1 gap-0.5">
@@ -187,7 +187,7 @@ export default function AnalyticsPage() {
       </div>
 
       {/* Pipeline funnel */}
-      <div className="mt-6 bg-white dark:bg-stone-900 rounded-lg border border-stone-100 dark:border-stone-800 shadow-sm p-6">
+      <div className="mt-6 bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6">
         <h2 className="text-sm font-semibold text-stone-800 dark:text-stone-200 mb-5">{t('analytics.pipeline')}</h2>
         <div className="flex items-center gap-0 overflow-x-auto pb-2">
           {(['applied', 'interview', 'offer'] as ApplicationStatus[]).map((status, i, arr) => {
@@ -220,7 +220,7 @@ export default function AnalyticsPage() {
         if (entries.length === 0) return null
         const maxSrc = Math.max(...entries.map(([, c]) => c), 1)
         return (
-          <div className="mt-6 bg-white dark:bg-stone-900 rounded-lg border border-stone-100 dark:border-stone-800 shadow-sm p-6">
+          <div className="mt-6 bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6">
             <h2 className="text-sm font-semibold text-stone-800 dark:text-stone-200 mb-5">{t('analytics.sourceDistribution')}</h2>
             <div className="space-y-3.5">
               {entries.map(([src, count]) => {

@@ -27,7 +27,7 @@ function JobPostingSection({ content, t }: { content: string; t: (key: string) =
   const [expanded, setExpanded] = useState(false)
 
   return (
-    <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100 dark:border-stone-800 p-6">
+    <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6">
       <button
         onClick={() => setExpanded(!expanded)}
         className="w-full flex items-center justify-between text-left"
@@ -128,7 +128,7 @@ export default function ApplicationDetailPage() {
 
       <div className="max-w-3xl mx-auto space-y-6 pb-12">
         {/* Hero */}
-        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100 dark:border-stone-800 p-6">
+        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6">
           <div className="flex flex-col sm:flex-row sm:items-start gap-4">
             <div className={`w-12 h-12 sm:w-16 sm:h-16 rounded-lg flex items-center justify-center text-xl sm:text-2xl font-bold flex-shrink-0 ${getAvatarColor(app.company)}`}>
               {(app.company[0] ?? '?').toUpperCase()}
@@ -162,7 +162,7 @@ export default function ApplicationDetailPage() {
         </div>
 
         {/* Details */}
-        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100 dark:border-stone-800 p-6 space-y-5">
+        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6 space-y-5">
           <div className="flex items-start gap-3">
             <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center flex-shrink-0 mt-0.5">
               <CalendarIcon />
@@ -211,44 +211,44 @@ export default function ApplicationDetailPage() {
 
         {/* Notes */}
         {app.notes && (
-          <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100 dark:border-stone-800 p-6">
+          <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6">
             <p className="text-xs font-semibold text-stone-400 uppercase tracking-wide mb-2">{t('detail.notes')}</p>
             <p className="text-sm text-stone-700 dark:text-stone-300 leading-relaxed whitespace-pre-wrap">{app.notes}</p>
           </div>
         )}
 
         {/* Note timeline */}
-        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100 dark:border-stone-800 p-6">
+        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6">
           <NoteTimeline applicationId={app.id} />
         </div>
 
         {/* Contacts */}
-        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100 dark:border-stone-800 p-6">
+        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6">
           <ContactList applicationId={app.id} />
         </div>
 
         {/* Interview Stages */}
-        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100 dark:border-stone-800 p-6">
+        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6">
           <InterviewTimeline applicationId={app.id} company={app.company} position={app.position} />
         </div>
 
         {/* Offer Details */}
-        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100 dark:border-stone-800 p-6">
+        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6">
           <OfferDetailPanel applicationId={app.id} />
         </div>
 
         {/* Attachments */}
-        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100 dark:border-stone-800 p-6">
+        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6">
           <AttachmentList applicationId={app.id} />
         </div>
 
         {/* Linked Emails */}
-        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100 dark:border-stone-800 p-6">
+        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6">
           <EmailTimeline applicationId={app.id} />
         </div>
 
         {/* Stage */}
-        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100 dark:border-stone-800 p-6">
+        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6">
           <p className="text-xs font-semibold text-stone-400 uppercase tracking-wide mb-4">{t('detail.stage')}</p>
           <div className="flex items-center gap-0">
             {(['applied', 'interview', 'offer'] as const).map((stage, i) => {

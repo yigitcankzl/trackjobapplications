@@ -57,7 +57,7 @@ export default memo(function ApplicationsTable({ applications, onEdit, onDelete,
 
   if (applications.length === 0) {
     return (
-      <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100 dark:border-stone-800 shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm overflow-hidden">
         <EmptyState />
       </div>
     )
@@ -65,7 +65,7 @@ export default memo(function ApplicationsTable({ applications, onEdit, onDelete,
 
   return (
     <div
-      className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100 dark:border-stone-800 shadow-sm overflow-x-auto"
+      className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm overflow-x-auto"
       style={useVirtual ? { maxHeight: TABLE_MAX_HEIGHT, overflowY: 'auto' } : undefined}
       onScroll={useVirtual ? handleScroll : undefined}
     >

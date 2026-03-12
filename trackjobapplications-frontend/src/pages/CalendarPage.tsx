@@ -77,7 +77,7 @@ export default function CalendarPage() {
     <DashboardLayout>
       <Header title={t('calendar.title')} />
 
-      <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100 dark:border-stone-800 shadow-sm p-3 sm:p-6">
+      <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-3 sm:p-6">
         {/* Month navigation */}
         <div className="flex items-center justify-between mb-6">
           <button

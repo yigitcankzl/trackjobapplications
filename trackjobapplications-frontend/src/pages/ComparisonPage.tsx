@@ -172,7 +172,7 @@ export default function ComparisonPage() {
       <div className="max-w-6xl mx-auto space-y-6 pb-12">
         {/* Application selector */}
         {compareData.length === 0 && (
-          <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100 dark:border-stone-800 p-6">
+          <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6">
             <p className="text-sm font-medium text-stone-600 dark:text-stone-300 mb-3">
               {t('compare.selectApps')} <span className="text-stone-400">({selectedIds.length}/5)</span>
             </p>
@@ -284,7 +284,7 @@ export default function ComparisonPage() {
 
             {/* Decision matrix */}
             {showMatrix && (
-              <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100 dark:border-stone-800 p-6 space-y-4">
+              <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6 space-y-4">
                 <h3 className="text-sm font-semibold text-stone-900 dark:text-stone-100">{t('compare.decisionMatrix')}</h3>
 
                 {/* Weight sliders */}

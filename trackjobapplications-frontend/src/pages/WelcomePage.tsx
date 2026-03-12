@@ -28,7 +28,7 @@ export default function WelcomePage() {
           </button>
           <button
             onClick={() => navigate('/login')}
-            className="px-5 py-2 rounded-lg text-sm font-medium text-white bg-stone-900 hover:bg-stone-800 dark:bg-white dark:text-stone-900 dark:hover:bg-stone-100 transition-all duration-200"
+            className="px-5 py-2 rounded-lg text-sm font-medium text-white bg-stone-900 hover:bg-stone-800 dark:bg-white dark:text-stone-900 dark:hover:bg-stone-100 shadow-sm hover:shadow-md transition-all duration-200"
           >
             {t('nav.getStarted')}
           </button>
@@ -38,34 +38,34 @@ export default function WelcomePage() {
       {/* Hero */}
       <main className="flex-1 flex flex-col items-center justify-center text-center px-6 pb-16">
         {/* Badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 text-xs font-medium mb-6 border border-stone-200 dark:border-stone-700">
-          <span className="w-1.5 h-1.5 rounded-full bg-stone-500 animate-pulse" />
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 text-xs font-medium mb-8 border border-stone-200/60 dark:border-stone-700 shadow-sm">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
           {t('welcome.badge')}
         </div>
 
         {/* Headline */}
-        <h1 className="text-5xl font-bold text-stone-900 dark:text-stone-100 leading-tight max-w-2xl mb-5">
+        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-stone-900 dark:text-stone-100 leading-[1.1] max-w-3xl mb-6 tracking-tight">
           {t('welcome.headline')}{' '}
-          <span className="text-stone-500 dark:text-stone-400">
+          <span className="text-stone-400 dark:text-stone-500">
             {t('welcome.headlineHighlight')}
           </span>
         </h1>
 
-        <p className="text-stone-500 dark:text-stone-400 text-lg max-w-xl mb-10 leading-relaxed">
+        <p className="text-stone-500 dark:text-stone-400 text-lg max-w-xl mb-12 leading-relaxed">
           {t('welcome.subtitle')}
         </p>
 
         {/* CTAs */}
-        <div className="flex items-center gap-4 mb-16">
+        <div className="flex items-center gap-4 mb-20">
           <button
             onClick={() => navigate('/login')}
-            className="px-8 py-3.5 rounded-lg text-sm font-medium text-white bg-stone-900 hover:bg-stone-800 dark:bg-white dark:text-stone-900 dark:hover:bg-stone-100 transition-all duration-200"
+            className="px-8 py-3.5 rounded-lg text-sm font-medium text-white bg-stone-900 hover:bg-stone-800 dark:bg-white dark:text-stone-900 dark:hover:bg-stone-100 shadow-md hover:shadow-lg transition-all duration-200"
           >
             {t('welcome.cta')}
           </button>
           <button
             onClick={() => navigate('/login')}
-            className="px-8 py-3.5 rounded-lg text-sm font-medium text-stone-600 dark:text-stone-300 bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 hover:border-stone-400 dark:hover:border-stone-500 transition-all duration-200"
+            className="px-8 py-3.5 rounded-lg text-sm font-medium text-stone-600 dark:text-stone-300 bg-white dark:bg-stone-800 border border-stone-200/60 dark:border-stone-700 shadow-sm hover:shadow-md transition-all duration-200"
           >
             {t('nav.signIn')}
           </button>
@@ -100,7 +100,7 @@ export default function WelcomePage() {
           <p className="text-sm text-stone-500 dark:text-stone-400 mb-8">{t('welcome.extensions.subtitle')}</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {/* Chrome Extension */}
-            <div className="group bg-white dark:bg-stone-900 rounded-lg border border-stone-200 dark:border-stone-800 p-6 hover:border-stone-400 dark:hover:border-stone-600 transition-all duration-200">
+            <div className="group bg-white dark:bg-stone-900 rounded-lg border border-stone-200/60 dark:border-stone-800 p-6 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
               <div className="flex items-start gap-4">
                 <div className="w-10 h-10 rounded-lg bg-stone-900 dark:bg-stone-100 flex items-center justify-center flex-shrink-0">
                   <svg className="w-5 h-5 text-white dark:text-stone-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -124,7 +124,7 @@ export default function WelcomePage() {
             </div>
 
             {/* Gmail Add-on */}
-            <div className="group bg-white dark:bg-stone-900 rounded-lg border border-stone-200 dark:border-stone-800 p-6 hover:border-stone-400 dark:hover:border-stone-600 transition-all duration-200">
+            <div className="group bg-white dark:bg-stone-900 rounded-lg border border-stone-200/60 dark:border-stone-800 p-6 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
               <div className="flex items-start gap-4">
                 <div className="w-10 h-10 rounded-lg bg-stone-900 dark:bg-stone-100 flex items-center justify-center flex-shrink-0">
                   <svg className="w-5 h-5 text-white dark:text-stone-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">

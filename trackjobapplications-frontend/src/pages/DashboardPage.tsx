@@ -63,7 +63,7 @@ export default function DashboardPage() {
   const [pdfProgress, setPdfProgress] = useState<number | null>(null)
 
   const statConfig = useMemo(() => ({
-    total:     { label: t('dashboard.stats.total'),     value: stats.total,           color: 'text-gray-900'   as const },
+    total:     { label: t('dashboard.stats.total'),     value: stats.total,           color: 'text-stone-900'  as const },
     to_apply:  { label: t('dashboard.stats.to_apply'),  value: stats.to_apply ?? 0,   color: 'text-indigo-600' as const },
     applied:   { label: t('dashboard.stats.applied'),   value: stats.applied,         color: 'text-blue-600'   as const },
     interview: { label: t('dashboard.stats.interview'), value: stats.interview,       color: 'text-amber-600'  as const },
@@ -101,10 +101,10 @@ export default function DashboardPage() {
         title={t('dashboard.title')}
         action={
           <div className="flex items-center gap-2 flex-wrap">
-            <div className="flex items-center bg-gray-100 dark:bg-gray-800 rounded-xl p-1 gap-0.5">
+            <div className="flex items-center bg-stone-100 dark:bg-stone-800 rounded-lg p-1 gap-0.5">
               <button
                 onClick={() => setView('table')}
-                className={`p-1.5 rounded-lg transition-colors ${view === 'table' ? 'bg-white dark:bg-gray-700 text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200'}`}
+                className={`p-1.5 rounded-md transition-colors ${view === 'table' ? 'bg-white dark:bg-stone-700 text-stone-900 dark:text-stone-100 shadow-sm' : 'text-stone-400 hover:text-stone-600 dark:hover:text-stone-200'}`}
                 aria-label={t('dashboard.viewTable')}
                 aria-pressed={view === 'table'}
               >
@@ -112,7 +112,7 @@ export default function DashboardPage() {
               </button>
               <button
                 onClick={() => setView('kanban')}
-                className={`p-1.5 rounded-lg transition-colors ${view === 'kanban' ? 'bg-white dark:bg-gray-700 text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200'}`}
+                className={`p-1.5 rounded-md transition-colors ${view === 'kanban' ? 'bg-white dark:bg-stone-700 text-stone-900 dark:text-stone-100 shadow-sm' : 'text-stone-400 hover:text-stone-600 dark:hover:text-stone-200'}`}
                 aria-label={t('dashboard.viewKanban')}
                 aria-pressed={view === 'kanban'}
               >

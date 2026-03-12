@@ -2,10 +2,13 @@ let currentJobData = null;
 
 // --- Theme ---
 
+const SUN_PATH = 'M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42M12 7a5 5 0 100 10 5 5 0 000-10z';
+const MOON_PATH = 'M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z';
+
 function applyTheme(theme) {
   document.body.classList.toggle('dark', theme === 'dark');
-  document.getElementById('theme-icon-sun').hidden = theme === 'dark';
-  document.getElementById('theme-icon-moon').hidden = theme !== 'dark';
+  const icon = document.querySelector('#theme-icon path');
+  if (icon) icon.setAttribute('d', theme === 'dark' ? SUN_PATH : MOON_PATH);
 }
 
 (function initTheme() {

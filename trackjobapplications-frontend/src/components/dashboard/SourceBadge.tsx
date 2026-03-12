@@ -11,7 +11,7 @@ export default function SourceBadge({ source }: Props) {
   const config = SOURCE_CONFIG[source]
 
   return (
-    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${config.className}`}>
+    <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium ${config.className}`}>
       {t(`source.${source}`)}
     </span>
   )

@@ -26,12 +26,12 @@ export default function Sidebar({ mobileOpen, onMobileClose, collapsed, onToggle
   }, [location.pathname])
 
   const NAV_ITEMS = [
-    { label: t('dashboard.nav.dashboard'), to: '/dashboard', icon: <HomeIcon /> },
-    { label: t('dashboard.nav.calendar'), to: '/calendar', icon: <CalendarIcon /> },
-    { label: t('dashboard.nav.coverLetters'), to: '/cover-letters', icon: <DocumentIcon /> },
-    { label: t('dashboard.nav.compare'), to: '/compare', icon: <ScaleIcon /> },
-    { label: t('dashboard.nav.analytics'), to: '/analytics', icon: <BarChartIcon /> },
-    { label: t('dashboard.nav.profile'), to: '/profile', icon: <ProfileIcon /> },
+    { label: t('dashboard.nav.dashboard'), to: '/dashboard', icon: <HomeIcon />, iconColor: 'text-blue-500 dark:text-blue-400' },
+    { label: t('dashboard.nav.calendar'), to: '/calendar', icon: <CalendarIcon />, iconColor: 'text-orange-500 dark:text-orange-400' },
+    { label: t('dashboard.nav.coverLetters'), to: '/cover-letters', icon: <DocumentIcon />, iconColor: 'text-sky-500 dark:text-sky-400' },
+    { label: t('dashboard.nav.compare'), to: '/compare', icon: <ScaleIcon />, iconColor: 'text-purple-500 dark:text-purple-400' },
+    { label: t('dashboard.nav.analytics'), to: '/analytics', icon: <BarChartIcon />, iconColor: 'text-rose-500 dark:text-rose-400' },
+    { label: t('dashboard.nav.profile'), to: '/profile', icon: <ProfileIcon />, iconColor: 'text-amber-500 dark:text-amber-400' },
   ]
 
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
@@ -68,8 +68,12 @@ export default function Sidebar({ mobileOpen, onMobileClose, collapsed, onToggle
       <nav className="flex-1 px-3 py-2 space-y-0.5">
         {NAV_ITEMS.map((item) => (
           <NavLink key={item.to} to={item.to} end className={navLinkClass} title={isCollapsed ? item.label : undefined}>
-            {item.icon}
-            {!isCollapsed && item.label}
+            {({ isActive }) => (
+              <>
+                <span className={isActive ? '' : item.iconColor}>{item.icon}</span>
+                {!isCollapsed && item.label}
+              </>
+            )}
           </NavLink>
         ))}
       </nav>
@@ -129,7 +133,7 @@ export default function Sidebar({ mobileOpen, onMobileClose, collapsed, onToggle
   return (
     <>
       {/* Desktop sidebar */}
-      <aside className={`hidden lg:flex h-screen sticky top-0 bg-white dark:bg-stone-900 border-r border-stone-200/60 dark:border-stone-800 shadow-sm flex-col overflow-y-auto transition-all duration-200 ${collapsed ? 'w-16' : 'w-60'}`}>
+      <aside className={`hidden lg:flex h-screen sticky top-0 bg-white dark:bg-stone-900 border-r border-stone-200/60 dark:border-stone-800 shadow-sm flex-col overflow-visible transition-all duration-200 ${collapsed ? 'w-16' : 'w-60'}`}>
         {sidebarContent(!!collapsed)}
       </aside>
 

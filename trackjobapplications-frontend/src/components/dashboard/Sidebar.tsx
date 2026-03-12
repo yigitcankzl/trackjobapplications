@@ -3,7 +3,7 @@ import { Link, NavLink, useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useAuth } from '../../context/AuthContext'
 import { useTheme } from '../../context/ThemeContext'
-import { HomeIcon, BarChartIcon, CalendarIcon, DocumentIcon, SignOutIcon, BriefcaseIcon, ProfileIcon, SunIcon, MoonIcon, CloseIcon, ScaleIcon, PuzzleIcon, ChevronLeftIcon, ChevronRightIcon } from '../icons'
+import { HomeIcon, BarChartIcon, CalendarIcon, DocumentIcon, SignOutIcon, BriefcaseIcon, ProfileIcon, SunIcon, MoonIcon, CloseIcon, ScaleIcon, PuzzleIcon, ChevronLeftIcon, ChevronRightIcon, MailIcon } from '../icons'
 import LanguageSwitcher from '../welcome/LanguageSwitcher'
 
 interface Props {
@@ -86,6 +86,18 @@ export default function Sidebar({ mobileOpen, onMobileClose, collapsed, onToggle
             {!isCollapsed && t('dashboard.nav.extension')}
           </NavLink>
         </div>
+      </div>
+
+      {/* Feedback */}
+      <div className="px-3">
+        <a
+          href="mailto:trackjobapplications@gmail.com"
+          title={isCollapsed ? t('dashboard.nav.feedback') : undefined}
+          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-stone-500 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-stone-800 hover:text-stone-800 dark:hover:text-stone-200 transition-all duration-150 ${isCollapsed ? 'justify-center' : ''}`}
+        >
+          <MailIcon />
+          {!isCollapsed && t('dashboard.nav.feedback')}
+        </a>
       </div>
 
       {/* Bottom — theme toggle + user + sign out */}

@@ -240,8 +240,9 @@ async function loadTags() {
     const chip = document.createElement('span');
     chip.className = 'tag-chip';
     chip.textContent = tag.name;
-    chip.style.backgroundColor = tag.color + '33';
-    chip.style.color = tag.color;
+    const safeColor = /^#[0-9a-fA-F]{3,8}$/.test(tag.color) ? tag.color : '#888888';
+    chip.style.backgroundColor = safeColor + '33';
+    chip.style.color = safeColor;
     chip.dataset.tagId = tag.id;
     chip.addEventListener('click', () => {
       const id = Number(chip.dataset.tagId);
@@ -468,9 +469,14 @@ async function loadDashboard() {
 
       const info = document.createElement('div');
       info.className = 'recent-info';
-      info.innerHTML =
-        `<div class="recent-company">${escapeHtml(app.company)}</div>` +
-        `<div class="recent-position">${escapeHtml(app.position)}</div>`;
+      const companyDiv = document.createElement('div');
+      companyDiv.className = 'recent-company';
+      companyDiv.textContent = app.company;
+      const posDiv = document.createElement('div');
+      posDiv.className = 'recent-position';
+      posDiv.textContent = app.position;
+      info.appendChild(companyDiv);
+      info.appendChild(posDiv);
 
       const badge = document.createElement('span');
       badge.className = `status-badge status-${app.status}`;

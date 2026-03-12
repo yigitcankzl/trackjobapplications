@@ -179,6 +179,18 @@ async function apiFetch(path, options = {}) {
   return response;
 }
 
+// --- Frontend URL for web login ---
+
+const FRONTEND_URLS = {
+  'http://localhost:8000/api/v1': 'http://localhost:3003',
+  'https://trackjobapplications-backend.onrender.com/api/v1': 'https://trackjobapplications.vercel.app',
+};
+
+async function getFrontendUrl() {
+  const apiBase = await getApiBase();
+  return FRONTEND_URLS[apiBase] || 'https://trackjobapplications.vercel.app';
+}
+
 // --- Message Handler ---
 
 chrome.runtime.onMessage.addListener((message, sender) => {
@@ -192,6 +204,64 @@ chrome.runtime.onMessage.addListener((message, sender) => {
 async function handleMessage(message) {
   try {
     switch (message.type) {
+      case 'WEB_LOGIN': {
+        const frontendUrl = await getFrontendUrl();
+        const loginUrl = `${frontendUrl}/login?next=/extension-auth`;
+        const tab = await chrome.tabs.create({ url: loginUrl });
+        const tabId = tab.id;
+
+        // Watch for the tab to navigate to /extension-auth with hash containing tokens
+        return new Promise((resolve) => {
+          const TIMEOUT_MS = 300000; // 5 minutes
+          let timeoutId = setTimeout(() => {
+            chrome.tabs.onUpdated.removeListener(listener);
+            resolve({ success: false, error: 'Login timed out' });
+          }, TIMEOUT_MS);
+
+          function listener(updatedTabId, changeInfo, updatedTab) {
+            if (updatedTabId !== tabId) return;
+            const url = changeInfo.url || updatedTab.url || '';
+            if (!url.includes('/extension-auth#')) return;
+
+            // Extract tokens from hash
+            try {
+              const hash = url.split('#')[1];
+              if (!hash) return;
+              const params = new URLSearchParams(hash);
+              const access = params.get('access');
+              const refresh = params.get('refresh');
+              const email = params.get('email');
+              if (!access || !refresh) return;
+
+              clearTimeout(timeoutId);
+              chrome.tabs.onUpdated.removeListener(listener);
+
+              // Save tokens and close tab
+              (async () => {
+                await saveTokens(access, refresh);
+                if (email) await chrome.storage.local.set({ user_email: email });
+                try { await chrome.tabs.remove(tabId); } catch {}
+                resolve({ success: true });
+              })();
+            } catch {
+              // Ignore parse errors, keep listening
+            }
+          }
+
+          chrome.tabs.onUpdated.addListener(listener);
+
+          // If tab is closed before login completes
+          function onRemoved(removedTabId) {
+            if (removedTabId !== tabId) return;
+            clearTimeout(timeoutId);
+            chrome.tabs.onUpdated.removeListener(listener);
+            chrome.tabs.onRemoved.removeListener(onRemoved);
+            resolve({ success: false, error: 'Login tab was closed' });
+          }
+          chrome.tabs.onRemoved.addListener(onRemoved);
+        });
+      }
+
       case 'LOGIN': {
         const apiBase = await getApiBase();
         const res = await _fetchWithTimeout(`${apiBase}/auth/login/`, {

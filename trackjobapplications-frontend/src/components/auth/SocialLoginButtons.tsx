@@ -16,7 +16,7 @@ export default function SocialLoginButtons() {
             key={id}
             href={`${BACKEND}/auth/social/login/${id}/`}
             title={label}
-            className="flex items-center justify-center w-11 h-11 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+            className="flex items-center justify-center w-11 h-11 rounded-lg border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800 hover:bg-stone-50 dark:hover:bg-stone-700 transition-colors"
           >
             <Icon />
           </a>

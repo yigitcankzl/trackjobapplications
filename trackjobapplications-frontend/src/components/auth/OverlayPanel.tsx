@@ -19,17 +19,17 @@ export default function OverlayPanel({ isSignUp, onSwitch }: Props) {
         style={{ transform: isSignUp ? 'translateX(0)' : 'translateX(-50%)' }}
       >
         {/* Left panel — visible in Sign Up mode */}
-        <div className="w-1/2 h-full flex flex-col items-center justify-center px-10 bg-gradient-to-br from-blue-700 to-blue-500 text-white relative overflow-hidden">
+        <div className="w-1/2 h-full flex flex-col items-center justify-center px-10 bg-stone-900 text-white relative overflow-hidden">
           <Decoration />
           <div className="relative z-10 text-center">
             <BriefcaseLogo />
             <h3 className="text-3xl font-bold mb-3 tracking-tight">TrackJobs</h3>
-            <p className="text-blue-100 text-sm leading-relaxed mb-8 max-w-xs">
+            <p className="text-stone-400 text-sm leading-relaxed mb-8 max-w-xs">
               {t('auth.overlay.signInPanel.description')}
             </p>
             <button
               onClick={onSwitch}
-              className="px-8 py-2.5 rounded-full border-2 border-white text-white text-sm font-semibold tracking-wide hover:bg-white hover:text-blue-700 transition-all duration-200"
+              className="px-8 py-2.5 rounded-lg border-2 border-white text-white text-sm font-medium tracking-wide hover:bg-white hover:text-stone-900 transition-all duration-200"
             >
               {t('auth.overlay.signInPanel.button')}
             </button>
@@ -37,17 +37,17 @@ export default function OverlayPanel({ isSignUp, onSwitch }: Props) {
         </div>
 
         {/* Right panel — visible in Sign In mode */}
-        <div className="w-1/2 h-full flex flex-col items-center justify-center px-10 bg-gradient-to-br from-blue-600 to-blue-800 text-white relative overflow-hidden">
+        <div className="w-1/2 h-full flex flex-col items-center justify-center px-10 bg-stone-900 text-white relative overflow-hidden">
           <Decoration />
           <div className="relative z-10 text-center">
             <BriefcaseLogo />
             <h3 className="text-3xl font-bold mb-3 tracking-tight">TrackJobs</h3>
-            <p className="text-blue-100 text-sm leading-relaxed mb-8 max-w-xs">
+            <p className="text-stone-400 text-sm leading-relaxed mb-8 max-w-xs">
               {t('auth.overlay.signUpPanel.description')}
             </p>
             <button
               onClick={onSwitch}
-              className="px-8 py-2.5 rounded-full border-2 border-white text-white text-sm font-semibold tracking-wide hover:bg-white hover:text-blue-700 transition-all duration-200"
+              className="px-8 py-2.5 rounded-lg border-2 border-white text-white text-sm font-medium tracking-wide hover:bg-white hover:text-stone-900 transition-all duration-200"
             >
               {t('auth.overlay.signUpPanel.button')}
             </button>
@@ -61,7 +61,7 @@ export default function OverlayPanel({ isSignUp, onSwitch }: Props) {
 function BriefcaseLogo() {
   return (
     <div className="flex justify-center mb-6">
-      <div className="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center backdrop-blur-sm">
+      <div className="w-16 h-16 rounded-lg bg-white/10 flex items-center justify-center backdrop-blur-sm">
         <span className="[&_svg]:w-8 [&_svg]:h-8">
           <BriefcaseIcon />
         </span>

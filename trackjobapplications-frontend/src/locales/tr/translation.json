@@ -214,7 +214,8 @@
       "darkMode": "Karanlık Mod",
       "lightMode": "Aydınlık Mod",
       "coverLetters": "Ön Yazılar",
-      "compare": "Karşılaştır"
+      "compare": "Karşılaştır",
+      "extension": "Tarayıcı Eklentisi"
     },
     "viewTable": "Tablo görünümü",
     "viewKanban": "Kanban görünümü",

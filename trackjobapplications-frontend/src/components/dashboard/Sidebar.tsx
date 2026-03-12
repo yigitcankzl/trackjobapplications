@@ -3,7 +3,7 @@ import { Link, NavLink, useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useAuth } from '../../context/AuthContext'
 import { useTheme } from '../../context/ThemeContext'
-import { HomeIcon, BarChartIcon, CalendarIcon, DocumentIcon, SignOutIcon, BriefcaseIcon, ProfileIcon, SunIcon, MoonIcon, CloseIcon, ScaleIcon } from '../icons'
+import { HomeIcon, BarChartIcon, CalendarIcon, DocumentIcon, SignOutIcon, BriefcaseIcon, ProfileIcon, SunIcon, MoonIcon, CloseIcon, ScaleIcon, PuzzleIcon } from '../icons'
 import LanguageSwitcher from '../welcome/LanguageSwitcher'
 
 interface Props {
@@ -73,6 +73,25 @@ export default function Sidebar({ mobileOpen, onMobileClose }: Props) {
           </NavLink>
         ))}
       </nav>
+
+      {/* Extension */}
+      <div className="px-3 pt-2">
+        <div className="border-t border-gray-100 dark:border-gray-800 pt-3">
+          <NavLink
+            to="/extension"
+            className={({ isActive }) =>
+              `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 ${
+                isActive
+                  ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
+                  : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-800 dark:hover:text-gray-200'
+              }`
+            }
+          >
+            <PuzzleIcon />
+            {t('dashboard.nav.extension')}
+          </NavLink>
+        </div>
+      </div>
 
       {/* Bottom — theme toggle + user + sign out */}
       <div className="px-3 pb-5 space-y-2">

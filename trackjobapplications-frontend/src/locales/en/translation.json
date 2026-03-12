@@ -214,7 +214,8 @@
       "darkMode": "Dark Mode",
       "lightMode": "Light Mode",
       "coverLetters": "Cover Letters",
-      "compare": "Compare"
+      "compare": "Compare",
+      "extension": "Browser Extension"
     },
     "viewTable": "Table view",
     "viewKanban": "Kanban view",

@@ -19,12 +19,12 @@ export default function OverlayPanel({ isSignUp, onSwitch }: Props) {
         style={{ transform: isSignUp ? 'translateX(0)' : 'translateX(-50%)' }}
       >
         {/* Left panel — visible in Sign Up mode */}
-        <div className="w-1/2 h-full flex flex-col items-center justify-center px-10 bg-stone-900 text-white relative overflow-hidden">
+        <div className="w-1/2 h-full flex flex-col items-center justify-center px-10 bg-stone-900 dark:bg-stone-800 text-white relative overflow-hidden">
           <Decoration />
           <div className="relative z-10 text-center">
             <BriefcaseLogo />
             <h3 className="text-3xl font-bold mb-3 tracking-tight">TrackJobs</h3>
-            <p className="text-stone-400 text-sm leading-relaxed mb-8 max-w-xs">
+            <p className="text-stone-400 dark:text-stone-300 text-sm leading-relaxed mb-8 max-w-xs">
               {t('auth.overlay.signInPanel.description')}
             </p>
             <button
@@ -37,12 +37,12 @@ export default function OverlayPanel({ isSignUp, onSwitch }: Props) {
         </div>
 
         {/* Right panel — visible in Sign In mode */}
-        <div className="w-1/2 h-full flex flex-col items-center justify-center px-10 bg-stone-900 text-white relative overflow-hidden">
+        <div className="w-1/2 h-full flex flex-col items-center justify-center px-10 bg-stone-900 dark:bg-stone-800 text-white relative overflow-hidden">
           <Decoration />
           <div className="relative z-10 text-center">
             <BriefcaseLogo />
             <h3 className="text-3xl font-bold mb-3 tracking-tight">TrackJobs</h3>
-            <p className="text-stone-400 text-sm leading-relaxed mb-8 max-w-xs">
+            <p className="text-stone-400 dark:text-stone-300 text-sm leading-relaxed mb-8 max-w-xs">
               {t('auth.overlay.signUpPanel.description')}
             </p>
             <button
@@ -61,8 +61,8 @@ export default function OverlayPanel({ isSignUp, onSwitch }: Props) {
 function BriefcaseLogo() {
   return (
     <div className="flex justify-center mb-6">
-      <div className="w-16 h-16 rounded-lg bg-white/10 flex items-center justify-center backdrop-blur-sm">
-        <span className="[&_svg]:w-8 [&_svg]:h-8">
+      <div className="w-16 h-16 rounded-lg bg-white/10 dark:bg-white/20 flex items-center justify-center backdrop-blur-sm">
+        <span className="[&_svg]:w-8 [&_svg]:h-8 [&_svg]:!text-white">
           <BriefcaseIcon />
         </span>
       </div>
@@ -73,9 +73,9 @@ function BriefcaseLogo() {
 function Decoration() {
   return (
     <>
-      <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-white/5" />
-      <div className="absolute -bottom-16 -left-16 w-56 h-56 rounded-full bg-white/5" />
-      <div className="absolute top-1/2 -right-8 w-32 h-32 rounded-full bg-white/5" />
+      <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-white/5 dark:bg-white/10" />
+      <div className="absolute -bottom-16 -left-16 w-56 h-56 rounded-full bg-white/5 dark:bg-white/10" />
+      <div className="absolute top-1/2 -right-8 w-32 h-32 rounded-full bg-white/5 dark:bg-white/10" />
     </>
   )
 }

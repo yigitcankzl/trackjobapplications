@@ -1,17 +1,20 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.http import JsonResponse
 from django.middleware.csrf import get_token
 from django.urls import include, path
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework.throttling import ScopedRateThrottle
+from rest_framework.throttling import AnonRateThrottle, ScopedRateThrottle
 from rest_framework.views import APIView
 
 
-def health_check(request):
-    return JsonResponse({"status": "ok"})
+class HealthCheckView(APIView):
+    permission_classes = [AllowAny]
+    throttle_classes = [AnonRateThrottle]
+
+    def get(self, request):
+        return Response({"status": "ok"})
 
 
 class CsrfCookieView(APIView):
@@ -28,7 +31,7 @@ class CsrfCookieView(APIView):
 from applications.media_views import SecureMediaView
 
 urlpatterns = [
-    path("api/health/", health_check),
+    path("api/health/", HealthCheckView.as_view()),
     path("api/v1/csrf/", CsrfCookieView.as_view()),
     path("api/v1/auth/", include("users.urls")),
     path("api/v1/applications/", include("applications.urls")),

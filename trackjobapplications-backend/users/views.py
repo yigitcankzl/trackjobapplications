@@ -1,6 +1,9 @@
 import logging
+import re
 import time
 import uuid
+
+UUID_RE = re.compile(r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
 
 from django.core.cache import cache
 from django.conf import settings
@@ -411,7 +414,7 @@ class SocialTokenExchangeView(APIView):
 
     def post(self, request):
         code = request.data.get("code", "").strip()
-        if not code:
+        if not code or not UUID_RE.match(code):
             return Response({"detail": "Code required."}, status=status.HTTP_400_BAD_REQUEST)
 
         user_id = cache.get(f"oauth_code:{code}")

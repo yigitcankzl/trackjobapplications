@@ -21,6 +21,7 @@ const ForgotPasswordPage = lazy(() => import('./pages/ForgotPasswordPage'))
 const ResetPasswordPage = lazy(() => import('./pages/ResetPasswordPage'))
 const OAuthCallbackPage = lazy(() => import('./pages/OAuthCallbackPage'))
 const ExtensionPage = lazy(() => import('./pages/ExtensionPage'))
+const ExtensionAuthPage = lazy(() => import('./pages/ExtensionAuthPage'))
 
 export default function App() {
   return (
@@ -45,6 +46,7 @@ export default function App() {
               <Route path="/forgot-password" element={<ForgotPasswordPage />} />
               <Route path="/reset-password" element={<ResetPasswordPage />} />
               <Route path="/oauth-callback" element={<OAuthCallbackPage />} />
+              <Route path="/extension-auth" element={<ExtensionAuthPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
             </Suspense>

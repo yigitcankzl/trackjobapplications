@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate, useSearchParams, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { MailIcon, LockIcon, EyeIcon } from '../icons'
 import { useAuth } from '../../context/AuthContext'
@@ -13,6 +13,7 @@ interface Props {
 export default function SignInForm({ onSwitch }: Props) {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const { login } = useAuth()
   const { addToast } = useToast()
   const [email, setEmail] = useState('')
@@ -25,7 +26,8 @@ export default function SignInForm({ onSwitch }: Props) {
     setIsLoading(true)
     try {
       await login(email, password)
-      navigate('/dashboard')
+      const next = searchParams.get('next')
+      navigate(next && next.startsWith('/') ? next : '/dashboard')
     } catch (err: unknown) {
       const data = (err as { response?: { data?: unknown } })?.response?.data as Record<string, unknown> | undefined
       const raw = data?.detail ?? data?.non_field_errors

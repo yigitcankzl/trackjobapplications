@@ -2,6 +2,7 @@ from django.urls import path
 
 from .views import (
     ChangePasswordView,
+    ExtensionTokenView,
     LogoutAllView,
     LogoutView,
     MeView,
@@ -34,4 +35,5 @@ urlpatterns = [
     path("social/login/<str:backend_name>/", SocialLoginInitView.as_view(), name="social-login"),
     path("social/callback/<str:backend_name>/", OAuthCallbackView.as_view(), name="social-callback"),
     path("social/token/", SocialTokenExchangeView.as_view(), name="social-token-exchange"),
+    path("extension-token/", ExtensionTokenView.as_view(), name="extension-token"),
 ]

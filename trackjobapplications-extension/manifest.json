@@ -5,7 +5,8 @@
   "description": "Track job applications from LinkedIn, Indeed, Glassdoor, and ZipRecruiter with one click.",
   "permissions": [
     "storage",
-    "activeTab"
+    "activeTab",
+    "tabs"
   ],
   "host_permissions": [
     "http://localhost:8000/api/v1/*",

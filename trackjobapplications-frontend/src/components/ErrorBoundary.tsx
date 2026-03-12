@@ -37,21 +37,21 @@ export default class ErrorBoundary extends Component<Props, State> {
     if (this.state.hasError) {
       const canRetry = this.state.retryCount < MAX_RETRIES
       return (
-        <div className="flex min-h-screen items-center justify-center bg-gray-50">
+        <div className="flex min-h-screen items-center justify-center bg-stone-50">
           <div className="text-center max-w-sm mx-4">
-            <p className="text-lg font-semibold text-gray-800 mb-2">Something went wrong</p>
-            <p className="text-sm text-gray-500 mb-4">Please refresh the page and try again.</p>
+            <p className="text-lg font-semibold text-stone-800 mb-2">Something went wrong</p>
+            <p className="text-sm text-stone-500 mb-4">Please refresh the page and try again.</p>
             {canRetry ? (
               <button
                 onClick={this.handleRetry}
-                className="px-4 py-2 rounded-xl text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+                className="px-4 py-2 rounded-lg text-sm font-semibold text-white bg-stone-900 hover:bg-stone-800 transition-colors"
               >
                 Try again
               </button>
             ) : (
               <button
                 onClick={this.handleReload}
-                className="px-4 py-2 rounded-xl text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+                className="px-4 py-2 rounded-lg text-sm font-semibold text-white bg-stone-900 hover:bg-stone-800 transition-colors"
               >
                 Reload page
               </button>

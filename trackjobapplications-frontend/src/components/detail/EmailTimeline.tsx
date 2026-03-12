@@ -14,7 +14,7 @@ const TYPE_STYLES: Record<string, { bg: string; text: string }> = {
   rejection: { bg: 'bg-red-50 dark:bg-red-900/20', text: 'text-red-700 dark:text-red-400' },
   interview_invite: { bg: 'bg-green-50 dark:bg-green-900/20', text: 'text-green-700 dark:text-green-400' },
   offer: { bg: 'bg-emerald-50 dark:bg-emerald-900/20', text: 'text-emerald-700 dark:text-emerald-400' },
-  follow_up: { bg: 'bg-blue-50 dark:bg-blue-900/20', text: 'text-blue-700 dark:text-blue-400' },
+  follow_up: { bg: 'bg-teal-50 dark:bg-teal-900/30', text: 'text-teal-700 dark:text-teal-300' },
   general: { bg: 'bg-stone-50 dark:bg-stone-800', text: 'text-stone-700 dark:text-stone-400' },
 }
 

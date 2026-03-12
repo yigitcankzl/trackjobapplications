@@ -167,7 +167,7 @@ export default function OfferDetailPanel({ applicationId }: Props) {
         {!editing && (
           <button
             onClick={() => setEditing(true)}
-            className="text-xs font-medium text-blue-600 dark:text-blue-400 hover:underline"
+            className="text-xs font-medium text-teal-600 dark:text-teal-400 hover:underline"
           >
             {offer ? t('offer.edit') : t('offer.add')}
           </button>
@@ -307,7 +307,7 @@ export default function OfferDetailPanel({ applicationId }: Props) {
               <button onClick={() => { dispatch({ type: 'RESET', data: offer }); setEditing(false); setConfirmingDelete(false) }} className="px-3 py-1.5 text-xs font-medium text-stone-500 hover:text-stone-700 dark:text-stone-400 dark:hover:text-stone-200">
                 {t('detail.cancel')}
               </button>
-              <button onClick={handleSave} disabled={saving} className="px-3 py-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg disabled:opacity-50">
+              <button onClick={handleSave} disabled={saving} className="px-3 py-1.5 text-xs font-semibold text-white bg-stone-900 hover:bg-stone-800 rounded-lg disabled:opacity-50">
                 {saving ? '...' : t('offer.save')}
               </button>
             </div>

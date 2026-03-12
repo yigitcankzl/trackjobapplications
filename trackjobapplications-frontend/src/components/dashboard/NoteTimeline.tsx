@@ -79,12 +79,12 @@ export default function NoteTimeline({ applicationId }: Props) {
           value={content}
           onChange={e => setContent(e.target.value)}
           placeholder={t('dashboard.notes.placeholder')}
-          className="flex-1 px-3 py-2 text-sm rounded-lg border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-stone-500/20 focus:border-blue-400"
+          className="flex-1 px-3 py-2 text-sm rounded-lg border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-stone-500/20 focus:border-stone-400"
         />
         <button
           type="submit"
           disabled={submitting || !content.trim()}
-          className="px-3 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+          className="px-3 py-2 text-sm font-medium text-white bg-stone-900 rounded-lg hover:bg-stone-800 transition-colors disabled:opacity-50"
         >
           {t('dashboard.notes.add')}
         </button>
@@ -100,7 +100,7 @@ export default function NoteTimeline({ applicationId }: Props) {
           {notes.map(note => (
             <div key={note.id} className="flex gap-3 group">
               <div className="flex flex-col items-center pt-1.5">
-                <div className="w-2 h-2 rounded-full bg-blue-400 flex-shrink-0" />
+                <div className="w-2 h-2 rounded-full bg-teal-500 flex-shrink-0" />
                 <div className="w-px flex-1 bg-stone-200 dark:bg-stone-700 mt-1" />
               </div>
               <div className="flex-1 pb-3">

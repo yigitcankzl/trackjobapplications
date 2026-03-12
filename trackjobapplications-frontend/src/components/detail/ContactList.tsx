@@ -62,7 +62,7 @@ export default function ContactList({ applicationId }: Props) {
         <h3 className="text-sm font-semibold text-stone-700 dark:text-stone-200">{t('detail.contactList.title')}</h3>
         <button
           onClick={() => setShowAdd(!showAdd)}
-          className="text-xs text-blue-600 hover:text-blue-700 font-medium"
+          className="text-xs text-teal-600 hover:text-teal-700 font-medium"
         >
           {showAdd ? t('detail.cancel') : t('detail.add')}
         </button>
@@ -74,7 +74,7 @@ export default function ContactList({ applicationId }: Props) {
           <input value={form.role} onChange={e => setForm(p => ({ ...p, role: e.target.value }))} placeholder={t('detail.contactList.rolePlaceholder')} className="px-2 py-1.5 text-sm rounded border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 dark:text-stone-100" />
           <input value={form.email} onChange={e => setForm(p => ({ ...p, email: e.target.value }))} placeholder={t('detail.contactList.emailPlaceholder')} className="px-2 py-1.5 text-sm rounded border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 dark:text-stone-100" />
           <input value={form.phone} onChange={e => setForm(p => ({ ...p, phone: e.target.value }))} placeholder={t('detail.contactList.phonePlaceholder')} className="px-2 py-1.5 text-sm rounded border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 dark:text-stone-100" />
-          <button onClick={handleAdd} className="col-span-2 py-1.5 text-sm bg-blue-600 text-white rounded hover:bg-blue-700">{t('detail.contactList.addContact')}</button>
+          <button onClick={handleAdd} className="col-span-2 py-1.5 text-sm bg-stone-900 text-white rounded hover:bg-stone-800">{t('detail.contactList.addContact')}</button>
         </div>
       )}
 
@@ -90,7 +90,7 @@ export default function ContactList({ applicationId }: Props) {
                 <p className="text-sm font-medium dark:text-stone-200">{c.name}</p>
                 {c.role && <p className="text-xs text-stone-500">{c.role}</p>}
                 <div className="flex gap-3 mt-0.5">
-                  {c.email && <a href={`mailto:${c.email}`} className="text-xs text-blue-500 hover:underline">{c.email}</a>}
+                  {c.email && <a href={`mailto:${c.email}`} className="text-xs text-teal-500 hover:underline">{c.email}</a>}
                   {c.phone && <span className="text-xs text-stone-500">{c.phone}</span>}
                 </div>
               </div>

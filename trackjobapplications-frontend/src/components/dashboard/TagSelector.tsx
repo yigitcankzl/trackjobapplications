@@ -95,7 +95,7 @@ export default function TagSelector({ selectedIds, onChange }: Props) {
               />
             ))}
           </div>
-          <button type="button" onClick={handleCreate} className="text-xs text-blue-600 hover:text-blue-700 font-medium">
+          <button type="button" onClick={handleCreate} className="text-xs text-teal-600 hover:text-teal-700 font-medium">
             {t('detail.tags.add')}
           </button>
         </div>

@@ -81,7 +81,7 @@ export default function InterviewTimeline({ applicationId, company, position }: 
     <div className="space-y-3">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold text-stone-700 dark:text-stone-200">{t('detail.interviewStages.title')}</h3>
-        <button onClick={() => setShowAdd(!showAdd)} className="text-xs text-blue-600 hover:text-blue-700 font-medium">
+        <button onClick={() => setShowAdd(!showAdd)} className="text-xs text-teal-600 hover:text-teal-700 font-medium">
           {showAdd ? t('detail.cancel') : t('detail.add')}
         </button>
       </div>
@@ -108,7 +108,7 @@ export default function InterviewTimeline({ applicationId, company, position }: 
             rows={2}
             className="w-full px-2 py-1.5 text-sm rounded border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 dark:text-stone-100"
           />
-          <button onClick={handleAdd} className="w-full py-1.5 text-sm bg-blue-600 text-white rounded hover:bg-blue-700">{t('detail.interviewStages.addStage')}</button>
+          <button onClick={handleAdd} className="w-full py-1.5 text-sm bg-stone-900 text-white rounded hover:bg-stone-800">{t('detail.interviewStages.addStage')}</button>
         </div>
       )}
 
@@ -156,7 +156,7 @@ export default function InterviewTimeline({ applicationId, company, position }: 
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={e => e.stopPropagation()}
-                    className="text-xs text-blue-500 hover:text-blue-700"
+                    className="text-xs text-teal-500 hover:text-teal-700"
                     title={t('detail.interviewStages.addToCalendar')}
                   >
                     <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

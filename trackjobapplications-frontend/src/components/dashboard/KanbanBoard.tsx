@@ -68,7 +68,7 @@ const KanbanCard = memo(function KanbanCard({
       role="link"
       aria-grabbed={isKeyboardGrabbed}
       aria-label={`${app.company}, ${app.position}. ${isKeyboardGrabbed ? 'Grabbed — use Arrow Left/Right to move column, Space or Escape to drop.' : 'Press Space to move with keyboard.'}`}
-      className={`group bg-white dark:bg-stone-900 rounded-lg border shadow-sm p-4 transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500/30 ${
+      className={`group bg-white dark:bg-stone-900 rounded-lg border shadow-sm p-4 transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-stone-500/30 ${
         isDragging
           ? 'opacity-40 scale-95 border-blue-200'
           : isKeyboardGrabbed

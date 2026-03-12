@@ -157,7 +157,7 @@ export default function OfferDetailPanel({ applicationId }: Props) {
 
   if (loading) return <LoadingSpinner size="sm" centered />
 
-  const inputClass = 'w-full px-3 py-2 text-sm rounded-lg border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800 text-stone-900 dark:text-stone-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+  const inputClass = 'w-full px-3 py-2 text-sm rounded-lg border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800 text-stone-900 dark:text-stone-100 focus:ring-2 focus:ring-stone-500 focus:border-transparent'
   const labelClass = 'block text-xs font-medium text-stone-500 dark:text-stone-400 mb-1'
 
   return (

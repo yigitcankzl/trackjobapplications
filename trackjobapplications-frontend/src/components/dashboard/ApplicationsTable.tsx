@@ -78,7 +78,7 @@ export default memo(function ApplicationsTable({ applications, onEdit, onDelete,
                   type="checkbox"
                   checked={applications.length > 0 && selectedIds.length === applications.length}
                   onChange={onToggleSelectAll}
-                  className="rounded border-stone-300 text-blue-600 focus:ring-blue-500"
+                  className="rounded border-stone-300 text-blue-600 focus:ring-stone-500"
                 />
               </th>
             )}
@@ -93,7 +93,7 @@ export default memo(function ApplicationsTable({ applications, onEdit, onDelete,
             <tr style={{ height: paddingTop }}><td colSpan={colSpan} /></tr>
           )}
           {visibleRows.map(app => (
-            <tr key={app.id} onClick={() => navigate(`/applications/${app.id}`)} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate(`/applications/${app.id}`) } }} tabIndex={0} role="link" className="group hover:bg-blue-50/30 dark:hover:bg-blue-900/20 transition-colors duration-150 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:ring-inset">
+            <tr key={app.id} onClick={() => navigate(`/applications/${app.id}`)} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate(`/applications/${app.id}`) } }} tabIndex={0} role="link" className="group hover:bg-blue-50/30 dark:hover:bg-blue-900/20 transition-colors duration-150 cursor-pointer focus:outline-none focus:ring-2 focus:ring-stone-500/30 focus:ring-inset">
               {hasBulk && (
                 <td className="px-3 py-4">
                   <input
@@ -101,7 +101,7 @@ export default memo(function ApplicationsTable({ applications, onEdit, onDelete,
                     checked={selectedIds.includes(app.id)}
                     onChange={e => { e.stopPropagation(); onToggleSelect(app.id) }}
                     onClick={e => e.stopPropagation()}
-                    className="rounded border-stone-300 text-blue-600 focus:ring-blue-500"
+                    className="rounded border-stone-300 text-blue-600 focus:ring-stone-500"
                   />
                 </td>
               )}

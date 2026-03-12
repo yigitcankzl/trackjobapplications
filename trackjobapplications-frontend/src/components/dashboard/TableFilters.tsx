@@ -85,7 +85,7 @@ export default memo(function TableFilters({
                 addSearch(search)
               }
             }}
-            className="w-full pl-9 pr-4 py-2 rounded-lg border border-stone-200 dark:border-stone-700 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900 transition-colors placeholder:text-stone-300 bg-white dark:bg-stone-900 dark:text-stone-100"
+            className="w-full pl-9 pr-4 py-2 rounded-lg border border-stone-200 dark:border-stone-700 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-stone-100 dark:focus:ring-stone-900 transition-colors placeholder:text-stone-300 bg-white dark:bg-stone-900 dark:text-stone-100"
           />
           {search && (
             <button

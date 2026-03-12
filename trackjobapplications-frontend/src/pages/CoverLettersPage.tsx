@@ -204,7 +204,7 @@ export default function CoverLettersPage() {
                   type="text"
                   value={form.name}
                   onChange={e => setForm(prev => ({ ...prev, name: e.target.value }))}
-                  className="w-full px-3 py-2 rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-sm text-stone-900 dark:text-stone-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                  className="w-full px-3 py-2 rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-sm text-stone-900 dark:text-stone-100 focus:ring-2 focus:ring-stone-500 focus:border-transparent outline-none"
                   placeholder={t('coverLetters.form.namePlaceholder')}
                 />
               </div>
@@ -227,7 +227,7 @@ export default function CoverLettersPage() {
                   value={form.content}
                   onChange={e => setForm(prev => ({ ...prev, content: e.target.value }))}
                   rows={14}
-                  className="w-full px-3 py-2 rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-sm text-stone-900 dark:text-stone-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none resize-none"
+                  className="w-full px-3 py-2 rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-sm text-stone-900 dark:text-stone-100 focus:ring-2 focus:ring-stone-500 focus:border-transparent outline-none resize-none"
                   placeholder={t('coverLetters.form.contentPlaceholder')}
                 />
               </div>
@@ -274,7 +274,7 @@ export default function CoverLettersPage() {
                         value={fillValues[placeholder] || ''}
                         onChange={e => setFillValues(prev => ({ ...prev, [placeholder]: e.target.value }))}
                         placeholder={placeholder.replace(/[{}]/g, '')}
-                        className="w-full px-3 py-1.5 rounded-lg border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800 text-sm text-stone-900 dark:text-stone-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                        className="w-full px-3 py-1.5 rounded-lg border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800 text-sm text-stone-900 dark:text-stone-100 focus:ring-2 focus:ring-stone-500 focus:border-transparent outline-none"
                       />
                     </div>
                   ))}

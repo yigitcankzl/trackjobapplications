@@ -79,7 +79,7 @@ export default function NoteTimeline({ applicationId }: Props) {
           value={content}
           onChange={e => setContent(e.target.value)}
           placeholder={t('dashboard.notes.placeholder')}
-          className="flex-1 px-3 py-2 text-sm rounded-lg border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
+          className="flex-1 px-3 py-2 text-sm rounded-lg border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-stone-500/20 focus:border-blue-400"
         />
         <button
           type="submit"

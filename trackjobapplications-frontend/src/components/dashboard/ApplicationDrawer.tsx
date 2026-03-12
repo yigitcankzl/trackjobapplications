@@ -39,7 +39,7 @@ export default function ApplicationDrawer({ app, onClose, onEdit, onDelete }: Pr
         role="dialog"
         aria-modal="true"
         aria-labelledby="drawer-title"
-        className={`fixed top-0 right-0 h-full w-full max-w-md z-50 bg-white dark:bg-stone-900 shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${open ? 'translate-x-0' : 'translate-x-full'}`}
+        className={`fixed top-0 right-0 h-full w-full max-w-md z-50 bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 flex flex-col transition-transform duration-300 ease-in-out ${open ? 'translate-x-0' : 'translate-x-full'}`}
       >
         {!app ? null : (
           <>

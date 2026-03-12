@@ -6,7 +6,7 @@ const LANGUAGES = [
   { code: 'tr', label: 'Türkçe', flag: '🇹🇷' },
 ]
 
-export default function LanguageSwitcher({ compact = false }: { compact?: boolean }) {
+export default function LanguageSwitcher({ compact = false, dropdownBelow = false }: { compact?: boolean; dropdownBelow?: boolean }) {
   const { t, i18n } = useTranslation()
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
@@ -45,7 +45,7 @@ export default function LanguageSwitcher({ compact = false }: { compact?: boolea
       </button>
 
       {open && (
-        <div role="menu" className={`absolute w-40 bg-white dark:bg-stone-800 rounded-lg shadow-lg border border-stone-100 dark:border-stone-700 py-1 z-50 ${compact ? 'left-full top-0 ml-2' : 'right-0 mt-1.5'}`}>
+        <div role="menu" className={`absolute w-40 bg-white dark:bg-stone-800 rounded-lg shadow-lg border border-stone-100 dark:border-stone-700 py-1 z-50 ${compact && !dropdownBelow ? 'left-full bottom-0 ml-2' : 'right-0 mt-1.5'}`}>
           {LANGUAGES.map(({ code, label, flag }) => {
             const isActive = current.code === code
             return (

@@ -6,9 +6,7 @@ import { AuthProvider } from './context/AuthContext'
 import ErrorBoundary from './components/ErrorBoundary'
 import PrivateRoute from './components/auth/PrivateRoute'
 import LoadingSpinner from './components/ui/LoadingSpinner'
-import { initGA, trackPageView } from './lib/analytics'
-
-initGA()
+import { trackPageView } from './lib/analytics'
 
 function PageViewTracker() {
   const { pathname } = useLocation()

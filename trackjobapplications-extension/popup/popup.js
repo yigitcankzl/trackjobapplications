@@ -59,12 +59,12 @@ document.getElementById('web-login-btn').addEventListener('click', async () => {
   const errorEl = document.getElementById('login-error');
   errorEl.hidden = true;
   btn.disabled = true;
-  btn.textContent = 'Opening...';
+  btn.textContent = t('loginOpening');
 
   const result = await chrome.runtime.sendMessage({ type: 'WEB_LOGIN' });
 
   if (result && result.success) {
-    btn.textContent = 'Waiting for login...';
+    btn.textContent = t('loginWaiting');
     // The service worker will watch for the tab to complete login.
     // Listen for storage changes to know when tokens are saved.
     chrome.storage.onChanged.addListener(function onTokenSaved(changes) {
@@ -83,10 +83,10 @@ document.getElementById('web-login-btn').addEventListener('click', async () => {
     });
   } else {
     const err = result?.error;
-    errorEl.textContent = (typeof err === 'string') ? err : JSON.stringify(err || 'Failed to open login');
+    errorEl.textContent = (typeof err === 'string') ? err : JSON.stringify(err || t('loginFailed'));
     errorEl.hidden = false;
     btn.disabled = false;
-    btn.textContent = 'Sign in with TrackJobs';
+    btn.textContent = t('loginBtn');
   }
 });
 
@@ -112,7 +112,7 @@ document.getElementById('logout-btn').addEventListener('click', async (e) => {
   document.getElementById('login-error').hidden = true;
   const btn = document.getElementById('web-login-btn');
   btn.disabled = false;
-  btn.textContent = 'Sign in with TrackJobs';
+  btn.textContent = t('loginBtn');
   showLoginSection();
 });
 
@@ -124,8 +124,8 @@ let formJobPostingContent = '';
 const selectedTagIds = new Set();
 
 const SOURCE_LABELS = {
-  linkedin: 'LinkedIn', indeed: 'Indeed', glassdoor: 'Glassdoor',
-  ziprecruiter: 'ZipRecruiter', company_website: 'Website', other: 'Email',
+  linkedin: 'sourceLinkdIn', indeed: 'sourceIndeed', glassdoor: 'sourceGlassdoor',
+  ziprecruiter: 'sourceZipRecruiter', company_website: 'sourceWebsite', other: 'sourceEmail',
 };
 
 async function loadJobData() {
@@ -161,7 +161,8 @@ async function loadJobData() {
 
   // Show source badge
   const badge = document.getElementById('form-source-badge');
-  badge.textContent = SOURCE_LABELS[formSource] || formSource;
+  const labelKey = SOURCE_LABELS[formSource];
+  badge.textContent = labelKey ? t(labelKey) : formSource;
   badge.className = 'source-badge source-' + formSource;
   badge.hidden = false;
 
@@ -278,7 +279,7 @@ document.getElementById('notes-toggle-btn').addEventListener('click', (e) => {
   const textarea = document.getElementById('job-notes');
   const link = e.currentTarget;
   textarea.hidden = !textarea.hidden;
-  link.textContent = textarea.hidden ? '+ Note' : '- Note';
+  link.textContent = textarea.hidden ? t('addNote') : t('removeNote');
   if (!textarea.hidden) textarea.focus();
 });
 
@@ -287,7 +288,7 @@ document.getElementById('contact-toggle-btn').addEventListener('click', (e) => {
   const fields = document.getElementById('contact-fields');
   const link = e.currentTarget;
   fields.hidden = !fields.hidden;
-  link.textContent = fields.hidden ? '+ Recruiter' : '- Recruiter';
+  link.textContent = fields.hidden ? t('addRecruiter') : t('removeRecruiter');
   if (!fields.hidden) document.getElementById('contact-name').focus();
 });
 
@@ -306,12 +307,12 @@ interviewBtn.addEventListener('click', () => {
       tomorrow.setHours(10, 0, 0, 0);
       dateInput.value = tomorrow.toISOString().slice(0, 16);
     }
-    interviewBtn.textContent = 'Save Interview';
+    interviewBtn.textContent = t('saveInterview');
     return;
   }
   const dateVal = document.getElementById('interview-date').value;
   if (!dateVal) {
-    showFeedback('Please select interview date/time', 'error');
+    showFeedback(t('selectInterviewDate'), 'error');
     return;
   }
   addApplication('interview');
@@ -325,7 +326,7 @@ const offerFields = document.getElementById('offer-fields');
 offerBtn.addEventListener('click', () => {
   if (offerFields.hidden) {
     offerFields.hidden = false;
-    offerBtn.textContent = 'Save Offer';
+    offerBtn.textContent = t('saveOffer');
     document.getElementById('offer-salary').focus();
     return;
   }
@@ -341,7 +342,7 @@ async function addApplication(status) {
   const position = document.getElementById('form-position').value.trim();
 
   if (!company || !position) {
-    showFeedback('Company and position are required', 'error');
+    showFeedback(t('companyPositionRequired'), 'error');
     return;
   }
 
@@ -349,7 +350,7 @@ async function addApplication(status) {
   const activeBtn = document.getElementById(btnMap[status]);
   allActionBtns.forEach(id => { document.getElementById(id).disabled = true; });
   const originalText = activeBtn.textContent;
-  activeBtn.textContent = 'Saving...';
+  activeBtn.textContent = t('saving');
 
   const today = new Date().toISOString().split('T')[0];
   const notes = document.getElementById('job-notes').value.trim();
@@ -393,7 +394,7 @@ async function addApplication(status) {
         scheduled_at: scheduledAt,
       });
       if (!interviewRes.success) {
-        showFeedback(interviewRes.error || 'App saved, but interview failed', 'error');
+        showFeedback(interviewRes.error || t('interviewFailed'), 'error');
         loadDashboard();
         return;
       }
@@ -413,15 +414,15 @@ async function addApplication(status) {
       if (benefits) offerMsg.benefits = benefits;
       const offerRes = await chrome.runtime.sendMessage(offerMsg);
       if (!offerRes.success) {
-        showFeedback(offerRes.error || 'App saved, but offer failed', 'error');
+        showFeedback(offerRes.error || t('offerFailed'), 'error');
         loadDashboard();
         return;
       }
     }
 
-    const labels = { to_apply: 'Saved!', applied: 'Applied!', interview: 'Interview saved!', offer: 'Offer saved!' };
-    showFeedback(labels[status], 'success');
-    activeBtn.textContent = labels[status];
+    const labels = { to_apply: 'saved', applied: 'appliedSuccess', interview: 'interviewSaved', offer: 'offerSaved' };
+    showFeedback(t(labels[status]), 'success');
+    activeBtn.textContent = t(labels[status]);
     loadDashboard();
   } else {
     const err = result?.error;
@@ -457,8 +458,8 @@ async function loadDashboard() {
     const list = document.getElementById('recent-list');
     list.innerHTML = '';
     const statusLabels = {
-      to_apply: 'To Apply', applied: 'Applied', interview: 'Interview',
-      offer: 'Offer', rejected: 'Rejected', withdrawn: 'Withdrawn',
+      to_apply: 'toApply', applied: 'applied', interview: 'interview',
+      offer: 'offer', rejected: 'rejected', withdrawn: 'withdrawn',
     };
     for (const app of recentRes.data) {
       const li = document.createElement('li');
@@ -466,7 +467,7 @@ async function loadDashboard() {
       const pinBtn = document.createElement('button');
       pinBtn.className = `pin-btn${app.is_pinned ? ' pinned' : ''}`;
       pinBtn.textContent = '\u{1F4CC}';
-      pinBtn.title = app.is_pinned ? 'Unpin' : 'Pin';
+      pinBtn.title = app.is_pinned ? t('unpin') : t('pin');
       pinBtn.addEventListener('click', async () => {
         pinBtn.disabled = true;
         const res = await chrome.runtime.sendMessage({
@@ -474,7 +475,7 @@ async function loadDashboard() {
         });
         if (res.success) {
           pinBtn.classList.toggle('pinned', res.data.is_pinned);
-          pinBtn.title = res.data.is_pinned ? 'Unpin' : 'Pin';
+          pinBtn.title = res.data.is_pinned ? t('unpin') : t('pin');
         }
         pinBtn.disabled = false;
       });
@@ -492,7 +493,8 @@ async function loadDashboard() {
 
       const badge = document.createElement('span');
       badge.className = `status-badge status-${app.status}`;
-      badge.textContent = statusLabels[app.status] || app.status;
+      const labelKey = statusLabels[app.status];
+      badge.textContent = labelKey ? t(labelKey) : app.status;
 
       li.appendChild(pinBtn);
       li.appendChild(info);
@@ -525,7 +527,7 @@ async function initAutofill() {
 
   const btn = document.getElementById('autofill-btn');
   if (!hasProfile) {
-    btn.title = 'Set up your profile first';
+    btn.title = t('autofillSetupProfile');
   }
 }
 
@@ -533,22 +535,22 @@ document.getElementById('autofill-btn').addEventListener('click', async () => {
   const btn = document.getElementById('autofill-btn');
   const resultEl = document.getElementById('autofill-result');
   btn.disabled = true;
-  btn.textContent = 'Filling...';
+  btn.textContent = t('autofillFilling');
   resultEl.hidden = true;
 
   const res = await chrome.runtime.sendMessage({ type: 'INJECT_AND_AUTOFILL' });
 
   if (res.success) {
     const d = res.data;
-    resultEl.textContent = `Filled ${d.filledCount} of ${d.totalFields} fields`;
+    resultEl.textContent = t('autofillResult', [String(d.filledCount), String(d.totalFields)]);
     resultEl.className = 'autofill-result autofill-success';
   } else {
-    resultEl.textContent = res.error || 'Auto-fill failed';
+    resultEl.textContent = res.error || t('autofillFailed');
     resultEl.className = 'autofill-result autofill-error';
   }
   resultEl.hidden = false;
   btn.disabled = false;
-  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 113 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Auto-Fill';
+  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 113 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> ' + t('autofill');
 });
 
 document.getElementById('autofill-settings-btn').addEventListener('click', (e) => {

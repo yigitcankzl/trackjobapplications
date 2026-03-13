@@ -98,14 +98,14 @@ function createActionButton(label, color, hoverColor, status) {
   btn.addEventListener('click', async () => {
     const data = extractLinkedInJob();
     if (!data.company || !data.position) {
-      btn.textContent = 'Could not extract job info';
+      btn.textContent = chrome.i18n.getMessage('contentExtractError');
       btn.style.background = '#ef4444';
       return;
     }
 
     const container = document.getElementById(CONTAINER_ID);
     container.querySelectorAll('button').forEach(b => { b.disabled = true; });
-    btn.textContent = 'Saving...';
+    btn.textContent = chrome.i18n.getMessage('contentSaving');
 
     const today = new Date().toISOString().split('T')[0];
     const result = await chrome.runtime.sendMessage({
@@ -120,10 +120,10 @@ function createActionButton(label, color, hoverColor, status) {
     });
 
     if (result.success) {
-      btn.textContent = status === 'to_apply' ? 'Saved!' : 'Applied!';
+      btn.textContent = status === 'to_apply' ? chrome.i18n.getMessage('contentSaved') : chrome.i18n.getMessage('contentAppliedSuccess');
       btn.style.background = color;
     } else {
-      btn.textContent = result.error || 'Error';
+      btn.textContent = result.error || chrome.i18n.getMessage('contentError');
       btn.style.background = '#ef4444';
       setTimeout(() => {
         container.querySelectorAll('button').forEach(b => { b.disabled = false; });
@@ -155,8 +155,8 @@ function injectButton() {
     const container = document.createElement('span');
     container.id = CONTAINER_ID;
     container.style.cssText = 'display: inline-flex; gap: 6px; margin-left: 10px; vertical-align: middle;';
-    container.appendChild(createActionButton('To Apply', '#6366f1', '#4f46e5', 'to_apply'));
-    container.appendChild(createActionButton('Applied', '#3b82f6', '#2563eb', 'applied'));
+    container.appendChild(createActionButton(chrome.i18n.getMessage('contentToApply'), '#6366f1', '#4f46e5', 'to_apply'));
+    container.appendChild(createActionButton(chrome.i18n.getMessage('contentApplied'), '#3b82f6', '#2563eb', 'applied'));
     titleEl.parentElement.appendChild(container);
   }
 }

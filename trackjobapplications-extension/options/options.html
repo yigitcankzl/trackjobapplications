@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TrackJobApplications — Auto-Fill Profile</title>
+  <title data-i18n="optionsTitle">TrackJobApplications — Auto-Fill Profile</title>
   <link rel="stylesheet" href="options.css">
 </head>
 <body>
@@ -17,9 +17,9 @@
             <line x1="12" y1="22.08" x2="12" y2="12"/>
           </svg>
         </div>
-        <span class="logo-text">Auto-Fill Profile</span>
+        <span class="logo-text" data-i18n="optionsHeading">Auto-Fill Profile</span>
       </div>
-      <button class="theme-btn" id="theme-toggle" title="Toggle theme">
+      <button class="theme-btn" id="theme-toggle" data-i18n-title="toggleDarkMode" title="Toggle theme">
         <svg id="theme-icon-light" class="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
         </svg>
@@ -29,164 +29,165 @@
       </button>
     </div>
 
-    <p class="subtitle">This information will be used to auto-fill job application forms.</p>
+    <p class="subtitle" data-i18n="optionsSubtitle">This information will be used to auto-fill job application forms.</p>
 
     <form id="profile-form">
       <fieldset>
-        <legend>Personal Information</legend>
+        <legend data-i18n="personalInfo">Personal Information</legend>
         <div class="form-row">
           <div class="form-field">
-            <label for="firstName">First Name</label>
+            <label for="firstName" data-i18n="firstName">First Name</label>
             <input type="text" id="firstName" placeholder="John">
           </div>
           <div class="form-field">
-            <label for="lastName">Last Name</label>
+            <label for="lastName" data-i18n="lastName">Last Name</label>
             <input type="text" id="lastName" placeholder="Doe">
           </div>
         </div>
         <div class="form-row">
           <div class="form-field">
-            <label for="email">Email</label>
+            <label for="email" data-i18n="email">Email</label>
             <input type="email" id="email" placeholder="john@example.com">
           </div>
           <div class="form-field">
-            <label for="phone">Phone</label>
+            <label for="phone" data-i18n="phone">Phone</label>
             <input type="tel" id="phone" placeholder="+1 (555) 123-4567">
           </div>
         </div>
         <div class="form-row">
           <div class="form-field">
-            <label for="location">Location</label>
+            <label for="location" data-i18n="location">Location</label>
             <input type="text" id="location" placeholder="San Francisco, CA">
           </div>
           <div class="form-field">
-            <label for="currentCompany">Current Company</label>
+            <label for="currentCompany" data-i18n="currentCompany">Current Company</label>
             <input type="text" id="currentCompany" placeholder="Google">
           </div>
         </div>
       </fieldset>
 
       <fieldset>
-        <legend>Online Profiles</legend>
+        <legend data-i18n="onlineProfiles">Online Profiles</legend>
         <div class="form-field">
-          <label for="linkedin">LinkedIn URL</label>
+          <label for="linkedin" data-i18n="linkedinUrl">LinkedIn URL</label>
           <input type="url" id="linkedin" placeholder="https://linkedin.com/in/johndoe">
         </div>
         <div class="form-field">
-          <label for="github">GitHub URL</label>
+          <label for="github" data-i18n="githubUrl">GitHub URL</label>
           <input type="url" id="github" placeholder="https://github.com/johndoe">
         </div>
         <div class="form-field">
-          <label for="portfolio">Portfolio / Website</label>
+          <label for="portfolio" data-i18n="portfolioWebsite">Portfolio / Website</label>
           <input type="url" id="portfolio" placeholder="https://johndoe.dev">
         </div>
       </fieldset>
 
       <fieldset>
-        <legend>Education</legend>
+        <legend data-i18n="education">Education</legend>
         <div class="form-row">
           <div class="form-field">
-            <label for="university">University / School</label>
+            <label for="university" data-i18n="university">University / School</label>
             <input type="text" id="university" placeholder="Stanford University">
           </div>
           <div class="form-field">
-            <label for="degree">Degree</label>
+            <label for="degree" data-i18n="degree">Degree</label>
             <input type="text" id="degree" placeholder="B.S. Computer Science">
           </div>
         </div>
         <div class="form-row">
           <div class="form-field">
-            <label for="gpa">GPA</label>
+            <label for="gpa" data-i18n="gpa">GPA</label>
             <input type="text" id="gpa" placeholder="3.8">
           </div>
           <div class="form-field">
-            <label for="graduationYear">Graduation Year</label>
+            <label for="graduationYear" data-i18n="graduationYear">Graduation Year</label>
             <input type="text" id="graduationYear" placeholder="2024">
           </div>
         </div>
       </fieldset>
 
       <fieldset>
-        <legend>Work Authorization</legend>
+        <legend data-i18n="workAuthorization">Work Authorization</legend>
         <div class="form-field">
-          <label for="workAuthorization">Are you authorized to work?</label>
+          <label for="workAuthorization" data-i18n="authorizedToWork">Are you authorized to work?</label>
           <select id="workAuthorization">
-            <option value="">-- Select --</option>
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
+            <option value="" data-i18n="select">-- Select --</option>
+            <option value="yes" data-i18n="yes">Yes</option>
+            <option value="no" data-i18n="no">No</option>
           </select>
         </div>
         <div class="form-field">
-          <label for="sponsorship">Do you require sponsorship?</label>
+          <label for="sponsorship" data-i18n="requireSponsorship">Do you require sponsorship?</label>
           <select id="sponsorship">
-            <option value="">-- Select --</option>
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
+            <option value="" data-i18n="select">-- Select --</option>
+            <option value="yes" data-i18n="yes">Yes</option>
+            <option value="no" data-i18n="no">No</option>
           </select>
         </div>
       </fieldset>
 
       <fieldset>
-        <legend>Demographics (Optional)</legend>
+        <legend data-i18n="demographics">Demographics (Optional)</legend>
         <div class="form-row">
           <div class="form-field">
-            <label for="gender">Gender</label>
+            <label for="gender" data-i18n="gender">Gender</label>
             <select id="gender">
-              <option value="">-- Select --</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-              <option value="non-binary">Non-binary</option>
-              <option value="other">Other</option>
-              <option value="decline">Prefer not to say</option>
+              <option value="" data-i18n="select">-- Select --</option>
+              <option value="male" data-i18n="male">Male</option>
+              <option value="female" data-i18n="female">Female</option>
+              <option value="non-binary" data-i18n="nonBinary">Non-binary</option>
+              <option value="other" data-i18n="other">Other</option>
+              <option value="decline" data-i18n="preferNotToSay">Prefer not to say</option>
             </select>
           </div>
           <div class="form-field">
-            <label for="veteranStatus">Veteran Status</label>
+            <label for="veteranStatus" data-i18n="veteranStatus">Veteran Status</label>
             <select id="veteranStatus">
-              <option value="">-- Select --</option>
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
-              <option value="decline">Prefer not to say</option>
+              <option value="" data-i18n="select">-- Select --</option>
+              <option value="yes" data-i18n="yes">Yes</option>
+              <option value="no" data-i18n="no">No</option>
+              <option value="decline" data-i18n="preferNotToSay">Prefer not to say</option>
             </select>
           </div>
         </div>
         <div class="form-row">
           <div class="form-field">
-            <label for="ethnicity">Ethnicity</label>
+            <label for="ethnicity" data-i18n="ethnicity">Ethnicity</label>
             <select id="ethnicity">
-              <option value="">-- Select --</option>
-              <option value="hispanic">Hispanic or Latino</option>
-              <option value="white">White</option>
-              <option value="black">Black or African American</option>
-              <option value="asian">Asian</option>
-              <option value="native">American Indian or Alaska Native</option>
-              <option value="pacific">Native Hawaiian or Pacific Islander</option>
-              <option value="two_or_more">Two or More Races</option>
-              <option value="decline">Prefer not to say</option>
+              <option value="" data-i18n="select">-- Select --</option>
+              <option value="hispanic" data-i18n="hispanic">Hispanic or Latino</option>
+              <option value="white" data-i18n="white">White</option>
+              <option value="black" data-i18n="black">Black or African American</option>
+              <option value="asian" data-i18n="asian">Asian</option>
+              <option value="native" data-i18n="native">American Indian or Alaska Native</option>
+              <option value="pacific" data-i18n="pacific">Native Hawaiian or Pacific Islander</option>
+              <option value="two_or_more" data-i18n="twoOrMore">Two or More Races</option>
+              <option value="decline" data-i18n="preferNotToSay">Prefer not to say</option>
             </select>
           </div>
           <div class="form-field">
-            <label for="disabilityStatus">Disability Status</label>
+            <label for="disabilityStatus" data-i18n="disabilityStatus">Disability Status</label>
             <select id="disabilityStatus">
-              <option value="">-- Select --</option>
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
-              <option value="decline">Prefer not to say</option>
+              <option value="" data-i18n="select">-- Select --</option>
+              <option value="yes" data-i18n="yes">Yes</option>
+              <option value="no" data-i18n="no">No</option>
+              <option value="decline" data-i18n="preferNotToSay">Prefer not to say</option>
             </select>
           </div>
         </div>
       </fieldset>
 
       <div class="btn-row">
-        <button type="submit" class="btn-save" id="save-btn">Save Profile</button>
+        <button type="submit" class="btn-save" id="save-btn" data-i18n="saveProfile">Save Profile</button>
       </div>
     </form>
 
     <div id="feedback" hidden></div>
 
-    <p class="privacy-note">Your profile data is stored locally on your device and never sent to any server.</p>
+    <p class="privacy-note" data-i18n="privacyNote">Your profile data is stored locally on your device and never sent to any server.</p>
   </div>
 
+  <script src="../shared/i18n.js"></script>
   <script src="options.js"></script>
 </body>
 </html>

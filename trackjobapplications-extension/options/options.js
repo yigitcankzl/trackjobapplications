@@ -50,7 +50,7 @@ document.getElementById('profile-form').addEventListener('submit', (e) => {
   }
 
   chrome.storage.local.set({ autofillProfile: profile }, () => {
-    showFeedback('Profile saved!', 'success');
+    showFeedback(t('profileSaved'), 'success');
   });
 });
 

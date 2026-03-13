@@ -56,9 +56,9 @@ body {
 }
 
 .lang-btn {
-  height: 26px;
-  padding: 0 7px;
-  border-radius: 5px;
+  height: 28px;
+  padding: 0 8px;
+  border-radius: 6px;
   background: none;
   border: 1px solid #d6d3d1;
   color: #78716c;
@@ -67,6 +67,9 @@ body {
   cursor: pointer;
   transition: background 0.15s, color 0.15s;
   letter-spacing: 0.3px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .lang-btn:hover {

@@ -40,8 +40,8 @@ const LANG_LABELS = { en: 'EN', tr: 'TR' };
 const LANG_ORDER = ['en', 'tr'];
 
 function updateLangButton() {
-  const btn = document.getElementById('lang-toggle');
-  btn.textContent = LANG_LABELS[getCurrentLang()] || 'EN';
+  const label = document.getElementById('lang-label');
+  label.textContent = LANG_LABELS[getCurrentLang()] || 'EN';
 }
 
 document.getElementById('lang-toggle').addEventListener('click', async () => {

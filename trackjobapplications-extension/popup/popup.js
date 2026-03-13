@@ -34,28 +34,46 @@ document.getElementById('theme-toggle').addEventListener('click', () => {
   }
 })();
 
-// --- Language Toggle ---
+// --- Language Dropdown ---
 
-const LANG_LABELS = { en: 'EN', tr: 'TR' };
-const LANG_ORDER = ['en', 'tr'];
+const langToggle = document.getElementById('lang-toggle');
+const langDropdown = document.getElementById('lang-dropdown');
 
-function updateLangButton() {
-  const label = document.getElementById('lang-label');
-  label.textContent = LANG_LABELS[getCurrentLang()] || 'EN';
+function updateLangDropdown() {
+  const current = getCurrentLang();
+  langDropdown.querySelectorAll('.lang-option').forEach(opt => {
+    opt.classList.toggle('active', opt.dataset.lang === current);
+  });
 }
 
-document.getElementById('lang-toggle').addEventListener('click', async () => {
-  const current = getCurrentLang();
-  const idx = LANG_ORDER.indexOf(current);
-  const next = LANG_ORDER[(idx + 1) % LANG_ORDER.length];
-  await setLang(next);
-  updateLangButton();
+langToggle.addEventListener('click', (e) => {
+  e.stopPropagation();
+  const isOpen = !langDropdown.hidden;
+  langDropdown.hidden = isOpen;
+  if (!isOpen) updateLangDropdown();
+});
+
+langDropdown.addEventListener('click', async (e) => {
+  const opt = e.target.closest('.lang-option');
+  if (!opt) return;
+  const lang = opt.dataset.lang;
+  if (lang && lang !== getCurrentLang()) {
+    await setLang(lang);
+  }
+  updateLangDropdown();
+  langDropdown.hidden = true;
+});
+
+document.addEventListener('click', (e) => {
+  if (!langToggle.contains(e.target) && !langDropdown.contains(e.target)) {
+    langDropdown.hidden = true;
+  }
 });
 
 document.addEventListener('DOMContentLoaded', async () => {
   // Init i18n first so all text is translated
   await initI18n();
-  updateLangButton();
+  updateLangDropdown();
 
   const authStatus = await chrome.runtime.sendMessage({ type: 'CHECK_AUTH' });
 

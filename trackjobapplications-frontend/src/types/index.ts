@@ -170,6 +170,9 @@ export interface CoverLetterTemplate {
   id: number
   name: string
   content: string
+  application: number | null
+  application_company: string | null
+  application_position: string | null
   created_at: string
   updated_at: string
 }

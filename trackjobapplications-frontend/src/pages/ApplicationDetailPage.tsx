@@ -20,6 +20,7 @@ import InterviewTimeline from '../components/detail/InterviewTimeline'
 import AttachmentList from '../components/detail/AttachmentList'
 import EmailTimeline from '../components/detail/EmailTimeline'
 import OfferDetailPanel from '../components/detail/OfferDetailPanel'
+import CoverLetterPanel from '../components/detail/CoverLetterPanel'
 import LoadingSpinner from '../components/ui/LoadingSpinner'
 import { ArrowLeftIcon, EditIcon, TrashIcon, CalendarIcon, ClockIcon, LinkIcon } from '../components/icons'
 
@@ -235,6 +236,11 @@ export default function ApplicationDetailPage() {
         {/* Offer Details */}
         <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6">
           <OfferDetailPanel applicationId={app.id} />
+        </div>
+
+        {/* Cover Letters */}
+        <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6">
+          <CoverLetterPanel applicationId={app.id} />
         </div>
 
         {/* Attachments */}

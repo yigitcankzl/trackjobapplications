@@ -3,11 +3,12 @@ import { useTranslation } from 'react-i18next'
 import DashboardLayout from '../components/layout/DashboardLayout'
 import Header from '../components/dashboard/Header'
 import StatusBadge from '../components/dashboard/StatusBadge'
+import OfferEditModal from '../components/dashboard/OfferEditModal'
 import LoadingSpinner from '../components/ui/LoadingSpinner'
 import { useToast } from '../context/ToastContext'
 import { getApplicationsBrief, compareApplications, type ApplicationBrief } from '../services/applications'
 import { getAvatarColor } from '../lib/avatar'
-import { CompareApplication } from '../types'
+import { CompareApplication, OfferDetail } from '../types'
 
 type CriterionKey = 'salary' | 'location' | 'remote' | 'benefits' | 'companySize' | 'bonus'
 
@@ -101,6 +102,7 @@ export default function ComparisonPage() {
   const [comparing, setComparing] = useState(false)
   const [criteria, setCriteria] = useState<Criterion[]>(DEFAULT_CRITERIA)
   const [showMatrix, setShowMatrix] = useState(false)
+  const [editingOffer, setEditingOffer] = useState<CompareApplication | null>(null)
 
   useEffect(() => {
     getApplicationsBrief()
@@ -113,6 +115,10 @@ export default function ComparisonPage() {
     setSelectedIds(prev =>
       prev.includes(id) ? prev.filter(i => i !== id) : prev.length < 5 ? [...prev, id] : prev
     )
+  }
+
+  function handleOfferSaved(appId: number, offer: OfferDetail) {
+    setCompareData(prev => prev.map(a => a.id === appId ? { ...a, offer_detail: offer } : a))
   }
 
   async function handleCompare() {
@@ -242,6 +248,12 @@ export default function ComparisonPage() {
                           </div>
                           <span className="font-semibold text-stone-900 dark:text-stone-100">{app.company}</span>
                           <span className="text-xs text-stone-500 dark:text-stone-400">{app.position}</span>
+                          <button
+                            onClick={() => setEditingOffer(app)}
+                            className="mt-1 px-2.5 py-1 text-xs font-medium text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-900/30 hover:bg-teal-100 dark:hover:bg-teal-900/50 rounded-md transition-colors"
+                          >
+                            {t('offer.edit')}
+                          </button>
                         </div>
                       </th>
                     ))}
@@ -361,6 +373,14 @@ export default function ComparisonPage() {
           </>
         )}
       </div>
+
+      <OfferEditModal
+        open={!!editingOffer}
+        applicationId={editingOffer?.id ?? 0}
+        company={editingOffer?.company ?? ''}
+        onClose={() => setEditingOffer(null)}
+        onSaved={handleOfferSaved}
+      />
     </DashboardLayout>
   )
 }

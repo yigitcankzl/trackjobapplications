@@ -341,6 +341,11 @@
     "contacts": "Kişiler",
     "interviews": "Mülakat Aşamaları",
     "attachments": "Ekler",
+    "coverLetters": {
+      "title": "Ön Yazılar",
+      "viewAll": "Tümünü Gör",
+      "empty": "Bu başvuruya bağlı ön yazı yok."
+    },
     "addToCalendar": "Takvime Ekle",
     "add": "+ Ekle",
     "cancel": "İptal",
@@ -412,41 +417,42 @@
   },
   "coverLetters": {
     "title": "Ön Yazılar",
-    "newTemplate": "Yeni Şablon",
-    "editTemplate": "Şablonu Düzenle",
-    "createTemplate": "Şablon Oluştur",
-    "loading": "Şablonlar yükleniyor...",
-    "previewNote": "{company}, {position}, {date} gibi yer tutucular gerçek değerlerle değiştirilecektir.",
-    "fillFields": "Alanları doldur",
+    "new": "Yeni",
+    "edit": "Düzenle",
+    "create": "Oluştur",
+    "loading": "Yükleniyor...",
     "copy": "Kopyala",
     "copied": "Kopyalandı!",
+    "exportPdf": "PDF",
     "empty": {
-      "title": "Henüz ön yazı şablonu yok",
-      "subtitle": "Hızlı ön yazı oluşturmak için yer tutuculu yeniden kullanılabilir şablonlar oluşturun."
+      "title": "Henüz ön yazı yok",
+      "subtitle": "Ön yazılarınızı buraya kaydedin."
     },
     "form": {
-      "name": "Şablon Adı",
-      "namePlaceholder": "ör. Genel Ön Yazı",
+      "name": "Başlık",
+      "namePlaceholder": "ör. Google SWE Ön Yazı",
+      "application": "Başvuru (opsiyonel)",
+      "noApplication": "— Yok —",
       "content": "İçerik",
-      "contentPlaceholder": "Sayın {company} İnsan Kaynakları Yetkilisi,\n\n{position} pozisyonu için başvurumu iletmek istiyorum...",
+      "contentPlaceholder": "Sayın İlgili,\n\nBaşvurumu iletmek istiyorum...",
       "cancel": "İptal",
       "save": "Kaydet"
     },
     "deleteConfirm": {
-      "title": "Şablonu Sil",
+      "title": "Ön Yazıyı Sil",
       "message": "\"{{name}}\" silinsin mi? Bu işlem geri alınamaz.",
       "confirm": "Sil"
     },
     "toast": {
-      "created": "Şablon oluşturuldu",
-      "updated": "Şablon güncellendi",
-      "deleted": "Şablon silindi"
+      "created": "Ön yazı kaydedildi",
+      "updated": "Ön yazı güncellendi",
+      "deleted": "Ön yazı silindi"
     },
     "errors": {
-      "loadFailed": "Şablonlar yüklenemedi.",
-      "saveFailed": "Şablon kaydedilemedi.",
-      "deleteFailed": "Şablon silinemedi.",
-      "required": "Ad ve içerik gereklidir."
+      "loadFailed": "Ön yazılar yüklenemedi.",
+      "saveFailed": "Ön yazı kaydedilemedi.",
+      "deleteFailed": "Ön yazı silinemedi.",
+      "required": "Başlık ve içerik gereklidir."
     }
   },
   "compare": {

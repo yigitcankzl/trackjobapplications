@@ -1,5 +1,8 @@
 'use strict';
 
+/* ── i18n ── */
+initI18n();
+
 const PROFILE_FIELDS = [
   'firstName', 'lastName', 'email', 'phone', 'location', 'currentCompany',
   'linkedin', 'github', 'portfolio',
@@ -50,7 +53,7 @@ document.getElementById('profile-form').addEventListener('submit', (e) => {
   }
 
   chrome.storage.local.set({ autofillProfile: profile }, () => {
-    showFeedback('Profile saved!', 'success');
+    showFeedback(t('profileSaved'), 'success');
   });
 });
 

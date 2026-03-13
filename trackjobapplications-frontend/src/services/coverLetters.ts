@@ -11,12 +11,12 @@ export async function getTemplate(id: number): Promise<CoverLetterTemplate> {
   return data
 }
 
-export async function createTemplate(payload: { name: string; content: string }): Promise<CoverLetterTemplate> {
+export async function createTemplate(payload: { name: string; content: string; application?: number | null }): Promise<CoverLetterTemplate> {
   const { data } = await api.post<CoverLetterTemplate>('/applications/cover-letters/', payload)
   return data
 }
 
-export async function updateTemplate(id: number, payload: { name?: string; content?: string }): Promise<CoverLetterTemplate> {
+export async function updateTemplate(id: number, payload: { name?: string; content?: string; application?: number | null }): Promise<CoverLetterTemplate> {
   const { data } = await api.patch<CoverLetterTemplate>(`/applications/cover-letters/${id}/`, payload)
   return data
 }

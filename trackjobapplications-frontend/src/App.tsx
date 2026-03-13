@@ -1,11 +1,20 @@
-import { lazy, Suspense } from 'react'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { lazy, Suspense, useEffect } from 'react'
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { ThemeProvider } from './context/ThemeContext'
 import { ToastProvider } from './context/ToastContext'
 import { AuthProvider } from './context/AuthContext'
 import ErrorBoundary from './components/ErrorBoundary'
 import PrivateRoute from './components/auth/PrivateRoute'
 import LoadingSpinner from './components/ui/LoadingSpinner'
+import { initGA, trackPageView } from './lib/analytics'
+
+initGA()
+
+function PageViewTracker() {
+  const { pathname } = useLocation()
+  useEffect(() => { trackPageView(pathname) }, [pathname])
+  return null
+}
 
 const WelcomePage = lazy(() => import('./pages/WelcomePage'))
 const LoginPage = lazy(() => import('./pages/LoginPage'))
@@ -29,6 +38,7 @@ export default function App() {
       <ThemeProvider>
       <ToastProvider>
         <BrowserRouter>
+          <PageViewTracker />
           <AuthProvider>
             <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><LoadingSpinner /></div>}>
             <Routes>

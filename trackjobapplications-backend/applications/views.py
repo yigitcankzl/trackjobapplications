@@ -118,6 +118,32 @@ class ApplicationViewSet(viewsets.ModelViewSet):
         serializer = ApplicationBriefSerializer(qs, many=True)
         return Response(serializer.data)
 
+    @action(detail=False, methods=["get"], url_path="calendar-events")
+    def calendar_events(self, request):
+        apps = request.user.applications.values("id", "company", "position", "applied_date")
+        interviews = InterviewStage.objects.filter(
+            application__user=request.user
+        ).select_related("application").values(
+            "id", "stage_type", "scheduled_at", "completed", "notes",
+            "application__id", "application__company", "application__position",
+        )
+        return Response({
+            "applications": list(apps),
+            "interviews": [
+                {
+                    "id": iv["id"],
+                    "stage_type": iv["stage_type"],
+                    "scheduled_at": iv["scheduled_at"],
+                    "completed": iv["completed"],
+                    "notes": iv["notes"],
+                    "application_id": iv["application__id"],
+                    "company": iv["application__company"],
+                    "position": iv["application__position"],
+                }
+                for iv in interviews
+            ],
+        })
+
     @action(detail=False, methods=["get"], url_path="stats")
     def stats(self, request):
         from django.db.models import Count

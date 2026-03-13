@@ -535,6 +535,37 @@ button {
   color: #991b1b;
 }
 
+/* Coming Soon */
+.coming-soon-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: #f5f5f4;
+  color: #a8a29e;
+  font-size: 12px;
+}
+
+.coming-soon-row svg {
+  flex-shrink: 0;
+  opacity: 0.5;
+}
+
+.badge-coming-soon {
+  margin-left: auto;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  background: #e7e5e4;
+  color: #78716c;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
 /* Feedback */
 #feedback {
   margin-top: 10px;
@@ -955,6 +986,16 @@ body.dark .autofill-settings {
 
 body.dark .autofill-settings:hover {
   color: #a5b4fc;
+}
+
+body.dark .coming-soon-row {
+  background: #292524;
+  color: #78716c;
+}
+
+body.dark .badge-coming-soon {
+  background: #44403c;
+  color: #a8a29e;
 }
 
 body.dark .autofill-success {

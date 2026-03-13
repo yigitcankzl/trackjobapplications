@@ -51,12 +51,15 @@ body {
 
 .header-actions {
   display: flex;
+  flex-direction: row;
   align-items: center;
   gap: 4px;
+  flex-shrink: 0;
 }
 
 .lang-wrapper {
   position: relative;
+  display: inline-flex;
 }
 
 .lang-btn {
@@ -135,11 +138,12 @@ body {
   width: 30px;
   height: 30px;
   padding: 0;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   border-radius: 6px;
   background: none;
+  border: none;
   color: #78716c;
   cursor: pointer;
   transition: background 0.15s, color 0.15s;

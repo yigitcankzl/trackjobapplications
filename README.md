@@ -5,7 +5,7 @@
 **Never lose track of a job application again.**
 
 [![CI](https://github.com/yigitcankzl/trackjobapplications/actions/workflows/ci.yml/badge.svg)](https://github.com/yigitcankzl/trackjobapplications/actions)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/yigitcankzl/trackjobapplications/blob/master/LICENSE)
 [![Live](https://img.shields.io/badge/Live-trackjobapplications.com-green)](https://www.trackjobapplications.com)
 [![Python 3.12](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)](https://python.org)
 [![Django 4](https://img.shields.io/badge/Django-4-092E20?logo=django&logoColor=white)](https://djangoproject.com)

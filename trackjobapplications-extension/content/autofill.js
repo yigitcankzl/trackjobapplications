@@ -457,11 +457,49 @@
       'two or more': ['two or more races', 'multiracial', 'mixed', 'two or more races (not hispanic or latino)'],
     };
 
+    /**
+     * Detect if an input is a typeahead/autocomplete (location picker, etc.)
+     */
+    static isTypeahead(element) {
+      const role = element.getAttribute('role');
+      const ariaAuto = element.getAttribute('aria-autocomplete');
+      const ariaExpanded = element.getAttribute('aria-expanded');
+      const ariaOwns = element.getAttribute('aria-owns') || element.getAttribute('aria-controls');
+      const list = element.getAttribute('list');
+      const autocompAttr = element.getAttribute('autocomplete');
+
+      // Explicit ARIA combobox / autocomplete signals
+      if (role === 'combobox' || ariaAuto === 'list' || ariaAuto === 'both') return true;
+      if (ariaExpanded !== null || ariaOwns) return true;
+      if (list) return true;
+
+      // Heuristic: container has listbox/dropdown siblings or known class patterns
+      const container = element.closest(
+        '[class*="autocomplete"], [class*="typeahead"], [class*="combobox"], ' +
+        '[class*="location-input"], [class*="search-input"], [class*="suggestion"]'
+      );
+      if (container) return true;
+
+      // Heuristic: id/name suggests autocomplete location field
+      const id = (element.id || '').toLowerCase();
+      const name = (element.name || '').toLowerCase();
+      if (id.includes('location-input') || id.includes('location_input')) return true;
+      if (name === 'location' && element.type === 'text') return true;
+
+      return false;
+    }
+
     static setValue(element, value) {
       const originalValue = element.value;
 
       if (element.tagName === 'SELECT') {
         return this.setSelectValue(element, value);
+      }
+
+      // Typeahead fields need special async handling
+      if (this.isTypeahead(element)) {
+        this.setTypeaheadValue(element, value);
+        return true; // optimistically return true, dropdown click is async
       }
 
       const nativeInputValueSetter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')?.set;
@@ -500,6 +538,89 @@
       element.dispatchEvent(new FocusEvent('blur', { bubbles: true }));
 
       return element.value !== originalValue || element.value === value;
+    }
+
+    /**
+     * Handle typeahead/autocomplete inputs:
+     * 1. Focus + type value (triggers dropdown)
+     * 2. Wait for dropdown suggestions to render
+     * 3. Click the first matching suggestion
+     */
+    static setTypeaheadValue(element, value) {
+      const nativeSetter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')?.set;
+
+      // Focus
+      element.dispatchEvent(new FocusEvent('focus', { bubbles: true }));
+      element.focus();
+
+      // Clear existing value
+      if (nativeSetter) nativeSetter.call(element, '');
+      const tracker = element._valueTracker;
+      if (tracker) tracker.setValue('');
+      element.dispatchEvent(new Event('input', { bubbles: true }));
+
+      // Type value (triggers React state update → dropdown opens)
+      if (nativeSetter) nativeSetter.call(element, value);
+      element.value = value;
+      if (tracker) tracker.setValue('');
+
+      // Dispatch events to trigger dropdown
+      element.dispatchEvent(new Event('input', { bubbles: true }));
+      element.dispatchEvent(new InputEvent('input', { bubbles: true, inputType: 'insertText', data: value }));
+      element.dispatchEvent(new Event('change', { bubbles: true }));
+      element.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key: 'a', keyCode: 65 }));
+      element.dispatchEvent(new KeyboardEvent('keyup', { bubbles: true, key: 'a', keyCode: 65 }));
+
+      // Wait for dropdown, then find and click the first individual option
+      const tryClickOption = (attempt) => {
+        if (attempt > 8) {
+          return;
+        }
+
+        // Find dropdown container
+        const dropdownEl = document.querySelector(
+          '[role="listbox"], [class*="suggestion"]:not(:empty), ' +
+          '[class*="dropdown"]:not(:empty), [class*="autocomplete-dropdown"]:not(:empty)'
+        );
+
+        if (!dropdownEl || !DOMUtils.isVisible(dropdownEl)) {
+          setTimeout(() => tryClickOption(attempt + 1), 400);
+          return;
+        }
+
+        // Find clickable option: walk all descendants, pick leaf elements with short text
+        const allDescendants = dropdownEl.querySelectorAll('*');
+        const leafOptions = [];
+        for (const el of allDescendants) {
+          // Must be visible
+          if (!DOMUtils.isVisible(el)) continue;
+          const text = el.textContent.trim();
+          if (!text || text.length < 2 || text.length > 100) continue;
+          if (text.toLowerCase().includes('no location') || text.toLowerCase().includes('loading')) continue;
+          // Leaf check: no child elements with meaningful text
+          const childWithText = Array.from(el.children).some((c) => c.textContent.trim().length > 2);
+          // Prefer true leaves, but also accept elements with only inline children
+          if (!childWithText || el.children.length <= 2) {
+            leafOptions.push({ el, textLen: text.length, text });
+          }
+        }
+
+        // Sort by text length — shortest is most likely a single option
+        leafOptions.sort((a, b) => a.textLen - b.textLen);
+
+        if (leafOptions.length > 0) {
+          const target = leafOptions[0].el;
+          target.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
+          target.dispatchEvent(new MouseEvent('mouseup', { bubbles: true, cancelable: true }));
+          target.click();
+          return;
+        }
+
+        setTimeout(() => tryClickOption(attempt + 1), 400);
+      };
+
+      // Start after 700ms (give API time to fetch suggestions)
+      setTimeout(() => tryClickOption(1), 700);
     }
 
     static setSelectValue(selectEl, value) {

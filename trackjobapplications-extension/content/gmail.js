@@ -100,7 +100,7 @@ function createGmailActionButton(label, color, hoverColor, status, data) {
   btn.addEventListener('click', async () => {
     const container = document.getElementById(CONTAINER_ID);
     container.querySelectorAll('button').forEach(b => { b.disabled = true; });
-    btn.textContent = 'Saving...';
+    btn.textContent = chrome.i18n.getMessage('contentSaving');
 
     const today = new Date().toISOString().split('T')[0];
     const senderDomain = data.senderEmail ? data.senderEmail.split('@')[1] || '' : '';
@@ -118,10 +118,10 @@ function createGmailActionButton(label, color, hoverColor, status, data) {
     });
 
     if (result.success) {
-      btn.textContent = status === 'to_apply' ? 'Saved!' : 'Applied!';
+      btn.textContent = status === 'to_apply' ? chrome.i18n.getMessage('contentSaved') : chrome.i18n.getMessage('contentAppliedSuccess');
       btn.style.background = color;
     } else {
-      btn.textContent = result.error || 'Error';
+      btn.textContent = result.error || chrome.i18n.getMessage('contentError');
       btn.style.background = '#ef4444';
       setTimeout(() => {
         container.querySelectorAll('button').forEach(b => { b.disabled = false; });
@@ -147,8 +147,8 @@ function injectButton() {
   const container = document.createElement('span');
   container.id = CONTAINER_ID;
   container.style.cssText = 'display: inline-flex; gap: 6px; margin-left: 10px; vertical-align: middle;';
-  container.appendChild(createGmailActionButton('To Apply', '#6366f1', '#4f46e5', 'to_apply', data));
-  container.appendChild(createGmailActionButton('Applied', '#3b82f6', '#2563eb', 'applied', data));
+  container.appendChild(createGmailActionButton(chrome.i18n.getMessage('contentToApply'), '#6366f1', '#4f46e5', 'to_apply', data));
+  container.appendChild(createGmailActionButton(chrome.i18n.getMessage('contentApplied'), '#3b82f6', '#2563eb', 'applied', data));
   subjectEl.parentElement.appendChild(container);
 }
 

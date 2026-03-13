@@ -47,6 +47,12 @@ Compare multiple job offers side by side. Evaluate salary, signing bonus, equity
 ### Browser Extension
 Save job listings with one click directly from **LinkedIn**, **Indeed**, **Glassdoor**, and **ZipRecruiter**. The extension captures job title, company, location, and the full job description automatically. Add tags, notes, and recruiter contacts right from the extension popup. Supports auto-filling job application forms with your saved profile.
 
+<div align="center">
+<img src="docs/extension3.png" alt="Extension Login" width="220" style="vertical-align: middle">&nbsp;&nbsp;
+<img src="docs/extension1.png" alt="Extension Job Form" width="220" style="vertical-align: middle">&nbsp;&nbsp;
+<img src="docs/extension2.png" alt="Extension Dashboard" width="220" style="vertical-align: middle">
+</div>
+
 ### Gmail Add-on
 Track applications directly from your Gmail inbox. The sidebar automatically extracts company, position, and metadata from job-related emails. Link emails to existing applications or create new ones. Get smart status suggestions based on email content (interview invites, offers, rejections).
 
@@ -58,9 +64,13 @@ Full English and Turkish support across the entire application, including SEO me
 
 ---
 
-## Screenshots
+## Demo
 
-> _Coming soon_
+<div align="center">
+
+<video src="docs/demo/demo-3-screencast.mp4" width="800" controls autoplay loop muted></video>
+
+</div>
 
 ---
 

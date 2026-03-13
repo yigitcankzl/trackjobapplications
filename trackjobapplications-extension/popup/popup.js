@@ -30,7 +30,7 @@ document.getElementById('theme-toggle').addEventListener('click', () => {
   if (isFirefox) {
     link.href = 'https://addons.mozilla.org/en-US/firefox/addon/trackjobapplications/reviews/';
   } else {
-    link.href = 'https://chromewebstore.google.com/detail/trackjobapplications/EXTENSION_ID/reviews';
+    link.href = `https://chromewebstore.google.com/detail/trackjobapplications/${chrome.runtime.id}/reviews`;
   }
 })();
 

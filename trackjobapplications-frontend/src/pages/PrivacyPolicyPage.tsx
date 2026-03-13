@@ -22,7 +22,7 @@ export default function PrivacyPolicyPage() {
 
       <main className="max-w-3xl mx-auto px-6 py-12">
         <h1 className="text-3xl font-bold text-stone-900 dark:text-stone-100 mb-2">{t('legal.privacy.title')}</h1>
-        <p className="text-sm text-stone-400 dark:text-stone-500 mb-8">{t('legal.privacy.lastUpdated')}: 2026-03-13</p>
+        <p className="text-sm text-stone-400 dark:text-stone-500 mb-8">{t('legal.privacy.lastUpdated')}: 2026-03-14</p>
 
         <div className="prose prose-stone dark:prose-invert max-w-none space-y-6 text-sm leading-relaxed text-stone-600 dark:text-stone-300">
           {isEN ? (
@@ -33,6 +33,7 @@ export default function PrivacyPolicyPage() {
                 <p><strong>Application Data:</strong> Job applications you create including company name, position, status, notes, interview details, contacts, attachments, and offer details.</p>
                 <p><strong>Usage Data:</strong> We use Google Analytics 4 to collect anonymous usage data such as pages visited, browser type, and general location (country level). IP addresses are anonymized.</p>
                 <p><strong>Cookies:</strong> We use essential httpOnly cookies for authentication (JWT tokens). Google Analytics sets additional cookies for analytics purposes. See our <Link to="/cookies" className="text-stone-900 dark:text-stone-100 underline">Cookie Policy</Link> for details.</p>
+                <p><strong>Browser Extension Data:</strong> When you use the TrackJobs browser extension, it accesses the active tab URL and page title to detect job postings. Authentication tokens are encrypted locally using AES-256-GCM via the Web Crypto API. No browsing data is sent to our servers beyond the job application details you explicitly save.</p>
               </section>
 
               <section>
@@ -61,7 +62,7 @@ export default function PrivacyPolicyPage() {
 
               <section>
                 <h2 className="text-lg font-semibold text-stone-800 dark:text-stone-200 mt-8 mb-3">4. Data Storage & Security</h2>
-                <p>Your data is stored on secure cloud infrastructure. Passwords are hashed using industry-standard algorithms. Authentication tokens are stored in httpOnly cookies to prevent XSS attacks. All data is transmitted over HTTPS.</p>
+                <p>Your data is stored on secure cloud infrastructure. Passwords are hashed using industry-standard algorithms. Authentication tokens are stored in httpOnly cookies to prevent XSS attacks. All data is transmitted over HTTPS. The browser extension encrypts authentication tokens locally using AES-256-GCM via the Web Crypto API before storing them in browser storage.</p>
               </section>
 
               <section>
@@ -105,6 +106,7 @@ export default function PrivacyPolicyPage() {
                 <p><strong>Başvuru Verileri:</strong> Oluşturduğunuz iş başvuruları; şirket adı, pozisyon, durum, notlar, mülakat detayları, kişiler, ekler ve teklif detayları dahil.</p>
                 <p><strong>Kullanım Verileri:</strong> Ziyaret edilen sayfalar, tarayıcı türü ve genel konum (ülke düzeyi) gibi anonim kullanım verilerini toplamak için Google Analytics 4 kullanırız. IP adresleri anonimleştirilir.</p>
                 <p><strong>Çerezler:</strong> Kimlik doğrulama için temel httpOnly çerezler (JWT token) kullanırız. Google Analytics, analiz amaçlı ek çerezler ayarlar. Detaylar için <Link to="/cookies" className="text-stone-900 dark:text-stone-100 underline">Çerez Politikamıza</Link> bakınız.</p>
+                <p><strong>Tarayıcı Eklentisi Verileri:</strong> TrackJobs tarayıcı eklentisini kullandığınızda, iş ilanlarını tespit etmek için aktif sekmenin URL'sine ve sayfa başlığına erişir. Kimlik doğrulama tokenları Web Crypto API aracılığıyla AES-256-GCM kullanılarak yerel olarak şifrelenir. Açıkça kaydettiğiniz iş başvuru bilgileri dışında hiçbir tarama verisi sunucularımıza gönderilmez.</p>
               </section>
 
               <section>
@@ -133,7 +135,7 @@ export default function PrivacyPolicyPage() {
 
               <section>
                 <h2 className="text-lg font-semibold text-stone-800 dark:text-stone-200 mt-8 mb-3">4. Veri Depolama ve Güvenlik</h2>
-                <p>Verileriniz güvenli bulut altyapısında saklanır. Şifreler endüstri standardı algoritmalarla hashlenir. Kimlik doğrulama tokenları XSS saldırılarını önlemek için httpOnly çerezlerde saklanır. Tüm veriler HTTPS üzerinden iletilir.</p>
+                <p>Verileriniz güvenli bulut altyapısında saklanır. Şifreler endüstri standardı algoritmalarla hashlenir. Kimlik doğrulama tokenları XSS saldırılarını önlemek için httpOnly çerezlerde saklanır. Tüm veriler HTTPS üzerinden iletilir. Tarayıcı eklentisi, kimlik doğrulama tokenlarını tarayıcı deposunda saklamadan önce Web Crypto API aracılığıyla AES-256-GCM ile yerel olarak şifreler.</p>
               </section>
 
               <section>

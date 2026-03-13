@@ -7,6 +7,7 @@ const FIREFOX_ADDON_URL = '#'
 
 const FEATURES = [
   { key: 'oneClick' },
+  { key: 'autofill' },
   { key: 'jobCapture' },
   { key: 'tags' },
   { key: 'notes' },
@@ -14,6 +15,7 @@ const FEATURES = [
   { key: 'interviews' },
   { key: 'offers' },
   { key: 'pin' },
+  { key: 'aiCoverLetter', badge: true },
 ] as const
 
 export default function ExtensionPage() {
@@ -93,7 +95,14 @@ export default function ExtensionPage() {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {FEATURES.map((f) => (
               <div key={f.key} className="rounded-lg bg-stone-50 dark:bg-stone-800/50 px-4 py-3">
-                <p className="text-sm font-medium text-stone-700 dark:text-stone-300">{t(`extension.featureList.${f.key}.title`)}</p>
+                <div className="flex items-center gap-2">
+                  <p className="text-sm font-medium text-stone-700 dark:text-stone-300">{t(`extension.featureList.${f.key}.title`)}</p>
+                  {'badge' in f && f.badge && (
+                    <span className="px-1.5 py-0.5 rounded bg-amber-50 dark:bg-amber-900/30 text-[10px] font-medium text-amber-600 dark:text-amber-400">
+                      {t(`extension.featureList.${f.key}.badge`)}
+                    </span>
+                  )}
+                </div>
                 <p className="text-xs text-stone-400 dark:text-stone-500 mt-0.5">{t(`extension.featureList.${f.key}.desc`)}</p>
               </div>
             ))}

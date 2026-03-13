@@ -23,6 +23,15 @@
       "followup": {
         "title": "Geri dönüşü kaçırma",
         "description": "Not ve tarih ekle, sırada ne yapman gerektiğini her zaman bil."
+      },
+      "autofill": {
+        "title": "Otomatik form doldurma",
+        "description": "Kayıtlı profilinle başvuru formlarını anında doldur."
+      },
+      "aiCoverLetter": {
+        "title": "AI Ön Yazı",
+        "description": "İş ilanlarından kişiye özel ön yazı oluştur.",
+        "badge": "Yakında"
       }
     },
     "extensions": {
@@ -586,7 +595,9 @@
       "recruiter": { "title": "İşe Alım İletişimi", "desc": "Başvuruyla birlikte işe alım uzmanı adı ve e-postasını kaydedin." },
       "interviews": { "title": "Mülakat Takibi", "desc": "Mülakat durumunda kaydederken mülakat tipi ve tarih belirleyin." },
       "offers": { "title": "Teklif Kaydı", "desc": "Teklif aldığınızda maaş, para birimi ve yan hakları kaydedin." },
-      "pin": { "title": "Favorilere Sabitle", "desc": "Önemli başvuruları hızlı erişim için sabitleyin." }
+      "pin": { "title": "Favorilere Sabitle", "desc": "Önemli başvuruları hızlı erişim için sabitleyin." },
+      "autofill": { "title": "Otomatik Form Doldurma", "desc": "Kayıtlı profilinizle iş başvuru formlarını otomatik doldurun — ad, e-posta, eğitim ve daha fazlası." },
+      "aiCoverLetter": { "title": "AI Ön Yazı", "desc": "İş ilanlarından yapay zeka ile kişiye özel ön yazı oluşturun.", "badge": "Yakında" }
     },
     "steps": {
       "1": { "title": "Eklentiyi Yükleyin", "desc": "Chrome Web Store veya Firefox Eklentileri'nden indirin." },

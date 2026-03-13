@@ -20,7 +20,7 @@ import { PlusIcon, TableIcon, KanbanIcon, DownloadIcon, RefreshIcon } from '../c
 import { exportApplicationsCsv } from '../lib/exportCsv'
 import { isSafeUrl } from '../lib/url'
 import { exportPdf } from '../services/applications'
-import { ApplicationFilters, JobApplication, ViewMode } from '../types'
+import { ApplicationFilters, JobApplication, StatusFilter, ViewMode } from '../types'
 import { useToast } from '../context/ToastContext'
 import { useApplicationFilters } from '../hooks/useApplicationFilters'
 import { useApplicationReminders } from '../hooks/useApplicationReminders'
@@ -162,12 +162,15 @@ export default function DashboardPage() {
       <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4 mb-8">
         {order.map((key, idx) => {
           const c = statConfig[key as keyof typeof statConfig]
+          const filterKey = key === 'total' ? 'all' : key
           return (
             <DraggableStatCard
               key={key}
               label={c.label}
               value={c.value}
               color={c.color}
+              active={statusFilter === filterKey && filterKey !== 'all'}
+              onClick={() => setStatusFilter(statusFilter === filterKey ? 'all' : filterKey as StatusFilter)}
               index={idx}
               isDragging={dragIdx === idx}
               isKeyboardGrabbed={keyDragIdx === idx}

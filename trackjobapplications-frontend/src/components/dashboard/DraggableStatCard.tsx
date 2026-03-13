@@ -5,6 +5,8 @@ interface Props {
   label: string
   value: string | number
   color: StatCardColor
+  active?: boolean
+  onClick?: () => void
   index: number
   isDragging: boolean
   isKeyboardGrabbed: boolean
@@ -17,7 +19,7 @@ interface Props {
 }
 
 export default memo(function DraggableStatCard({
-  label, value, color, index, isDragging, isKeyboardGrabbed,
+  label, value, color, active, onClick, index, isDragging, isKeyboardGrabbed,
   onDragStart, onDragOver, onDragEnd,
   onKeyboardGrab, onKeyboardMove, onKeyboardDrop,
 }: Props) {
@@ -48,7 +50,7 @@ export default memo(function DraggableStatCard({
         isKeyboardGrabbed ? 'ring-2 ring-stone-500 ring-offset-2 scale-105 shadow-lg' : ''
       }`}
     >
-      <StatCard label={label} value={value} color={color} />
+      <StatCard label={label} value={value} color={color} active={active} onClick={onClick} />
     </div>
   )
 })

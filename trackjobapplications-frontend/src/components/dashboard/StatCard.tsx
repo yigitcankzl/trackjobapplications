@@ -13,9 +13,11 @@ interface Props {
   label: string
   value: string | number
   color: StatCardColor
+  active?: boolean
+  onClick?: () => void
 }
 
-export default memo(function StatCard({ label, value, color }: Props) {
+export default memo(function StatCard({ label, value, color, active, onClick }: Props) {
   const accentMap: Record<string, string> = {
     'text-stone-900': 'bg-stone-400',
     'text-slate-600': 'bg-slate-500',
@@ -27,7 +29,14 @@ export default memo(function StatCard({ label, value, color }: Props) {
   }
 
   return (
-    <div className="bg-white dark:bg-stone-900 rounded-lg p-5 border border-stone-200/60 dark:border-stone-800 shadow-sm relative overflow-hidden">
+    <div
+      onClick={onClick}
+      className={`bg-white dark:bg-stone-900 rounded-lg p-5 border shadow-sm relative overflow-hidden transition-all ${
+        active
+          ? 'border-stone-900 dark:border-stone-100 ring-1 ring-stone-900 dark:ring-stone-100'
+          : 'border-stone-200/60 dark:border-stone-800'
+      } ${onClick ? 'cursor-pointer hover:shadow-md' : ''}`}
+    >
       <div className={`absolute top-0 left-0 w-1 h-full ${accentMap[color] ?? 'bg-stone-400'}`} />
       <p className="text-xs font-medium text-stone-500 dark:text-stone-400 uppercase tracking-wide mb-2 pl-2">{label}</p>
       <p className={`text-3xl font-bold pl-2 ${color === 'text-stone-900' ? 'text-stone-900 dark:text-stone-100' : color}`}>{value}</p>

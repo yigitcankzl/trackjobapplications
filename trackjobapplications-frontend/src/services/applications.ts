@@ -29,6 +29,27 @@ export async function getApplicationsBrief(): Promise<ApplicationBrief[]> {
   return data
 }
 
+export interface CalendarInterview {
+  id: number
+  stage_type: string
+  scheduled_at: string
+  completed: boolean
+  notes: string
+  application_id: number
+  company: string
+  position: string
+}
+
+export interface CalendarEvents {
+  applications: { id: number; company: string; position: string; applied_date: string }[]
+  interviews: CalendarInterview[]
+}
+
+export async function getCalendarEvents(): Promise<CalendarEvents> {
+  const { data } = await api.get<CalendarEvents>('/applications/calendar-events/')
+  return data
+}
+
 export async function getApplication(id: number): Promise<JobApplication> {
   const { data } = await api.get<JobApplication>(`/applications/${id}/`)
   return data

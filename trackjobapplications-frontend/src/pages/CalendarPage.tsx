@@ -3,10 +3,11 @@ import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import DashboardLayout from '../components/layout/DashboardLayout'
 import Header from '../components/dashboard/Header'
-import { getAllApplications } from '../services/applications'
+import { getCalendarEvents, type CalendarEvents, type CalendarInterview } from '../services/applications'
 import { useToast } from '../context/ToastContext'
-import { JobApplication } from '../types'
 import { getAvatarColor } from '../lib/avatar'
+import { buildGoogleCalendarUrl } from '../lib/calendar'
+import { isSafeUrl } from '../lib/url'
 
 function getWeekdays(locale?: string): string[] {
   const base = new Date(2024, 0, 1) // Monday
@@ -26,11 +27,16 @@ function getFirstDayOfWeek(year: number, month: number) {
   return day === 0 ? 6 : day - 1
 }
 
+interface DayEvents {
+  apps: CalendarEvents['applications']
+  interviews: CalendarInterview[]
+}
+
 export default function CalendarPage() {
   const { t, i18n } = useTranslation()
   const navigate = useNavigate()
   const { addToast } = useToast()
-  const [apps, setApps] = useState<JobApplication[]>([])
+  const [events, setEvents] = useState<CalendarEvents>({ applications: [], interviews: [] })
   const weekdays = useMemo(() => getWeekdays(i18n.language), [i18n.language])
 
   const now = new Date()
@@ -39,23 +45,26 @@ export default function CalendarPage() {
 
   useEffect(() => {
     let active = true
-    getAllApplications()
-      .then(data => { if (active) setApps(data) })
+    getCalendarEvents()
+      .then(data => { if (active) setEvents(data) })
       .catch(() => { if (active) addToast(t('dashboard.errors.loadFailed'), 'error') })
     return () => { active = false }
   }, [addToast, t])
 
   const dayMap = useMemo(() => {
-    const map: Record<number, JobApplication[]> = {}
-    for (const app of apps) {
+    const map: Record<number, DayEvents> = {}
+    function ensure(d: number) { if (!map[d]) map[d] = { apps: [], interviews: [] }; return map[d] }
+
+    for (const app of events.applications) {
       const [y, m, d] = app.applied_date.split('-').map(Number)
-      if (y === year && m - 1 === month) {
-        if (!map[d]) map[d] = []
-        map[d].push(app)
-      }
+      if (y === year && m - 1 === month) ensure(d).apps.push(app)
+    }
+    for (const iv of events.interviews) {
+      const dt = new Date(iv.scheduled_at)
+      if (dt.getFullYear() === year && dt.getMonth() === month) ensure(dt.getDate()).interviews.push(iv)
     }
     return map
-  }, [apps, year, month])
+  }, [events, year, month])
 
   const daysInMonth = getDaysInMonth(year, month)
   const firstDay = getFirstDayOfWeek(year, month)
@@ -69,6 +78,10 @@ export default function CalendarPage() {
   function nextMonth() {
     if (month === 11) { setYear(y => y + 1); setMonth(0) }
     else setMonth(m => m + 1)
+  }
+
+  function stageLabel(type: string) {
+    return t(`detail.interviewStages.stageTypes.${type}`, type)
   }
 
   const monthLabel = new Date(year, month).toLocaleDateString(undefined, { month: 'long', year: 'numeric' })
@@ -113,7 +126,9 @@ export default function CalendarPage() {
           ))}
           {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(day => {
             const isToday = day === today
-            const dayApps = dayMap[day] || []
+            const dayEvents = dayMap[day]
+            const dayApps = dayEvents?.apps || []
+            const dayInterviews = dayEvents?.interviews || []
             return (
               <div
                 key={day}
@@ -125,7 +140,7 @@ export default function CalendarPage() {
                 <div className="mt-1 space-y-0.5">
                   {dayApps.map(app => (
                     <button
-                      key={app.id}
+                      key={`app-${app.id}`}
                       onClick={() => navigate(`/applications/${app.id}`)}
                       className="w-full flex items-center gap-1 px-1 py-0.5 rounded text-left hover:bg-stone-50 dark:hover:bg-stone-800/30 transition-colors"
                     >
@@ -135,6 +150,45 @@ export default function CalendarPage() {
                       <span className="text-xs text-stone-700 dark:text-stone-300 truncate">{app.company}</span>
                     </button>
                   ))}
+                  {dayInterviews.map(iv => {
+                    const calUrl = buildGoogleCalendarUrl({
+                      title: `${stageLabel(iv.stage_type)} — ${iv.company} (${iv.position})`,
+                      start: iv.scheduled_at,
+                      description: iv.notes,
+                    })
+                    const time = new Date(iv.scheduled_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                    return (
+                      <div key={`iv-${iv.id}`} className="flex items-center gap-0.5">
+                        <button
+                          onClick={() => navigate(`/applications/${iv.application_id}`)}
+                          className="flex-1 min-w-0 flex items-center gap-1 px-1 py-0.5 rounded text-left hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors"
+                        >
+                          <div className="w-4 h-4 rounded flex items-center justify-center flex-shrink-0 bg-purple-100 dark:bg-purple-900/40">
+                            <svg className="w-2.5 h-2.5 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                          </div>
+                          <span className="text-xs text-purple-700 dark:text-purple-300 truncate">
+                            {time} {iv.company}
+                          </span>
+                        </button>
+                        {!iv.completed && (
+                          <a
+                            href={isSafeUrl(calUrl) ? calUrl : '#'}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={e => e.stopPropagation()}
+                            className="flex-shrink-0 p-0.5 rounded text-teal-500 hover:text-teal-700 hover:bg-teal-50 dark:hover:bg-teal-900/30 transition-colors"
+                            title={t('detail.interviewStages.addToCalendar')}
+                          >
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                            </svg>
+                          </a>
+                        )}
+                      </div>
+                    )
+                  })}
                 </div>
               </div>
             )

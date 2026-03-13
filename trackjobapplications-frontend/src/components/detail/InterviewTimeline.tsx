@@ -147,22 +147,24 @@ export default function InterviewTimeline({ applicationId, company, position }: 
                   {stage.notes && <p className="text-xs text-stone-400 mt-1">{stage.notes}</p>}
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <a
-                    href={(() => { const url = buildGoogleCalendarUrl({
-                      title: `${stageLabel(stage.stage_type)}${company ? ` — ${company}` : ''}${position ? ` (${position})` : ''}`,
-                      start: stage.scheduled_at,
-                      description: stage.notes,
-                    }); return isSafeUrl(url) ? url : '#' })()}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={e => e.stopPropagation()}
-                    className="text-xs text-teal-500 hover:text-teal-700"
-                    title={t('detail.interviewStages.addToCalendar')}
-                  >
-                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                  </a>
+                  {!stage.completed && (
+                    <a
+                      href={(() => { const url = buildGoogleCalendarUrl({
+                        title: `${stageLabel(stage.stage_type)}${company ? ` — ${company}` : ''}${position ? ` (${position})` : ''}`,
+                        start: stage.scheduled_at,
+                        description: stage.notes,
+                      }); return isSafeUrl(url) ? url : '#' })()}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={e => e.stopPropagation()}
+                      className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium text-teal-600 bg-teal-50 hover:bg-teal-100 dark:text-teal-400 dark:bg-teal-900/30 dark:hover:bg-teal-900/50 transition-colors"
+                    >
+                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      {t('detail.interviewStages.addToCalendar')}
+                    </a>
+                  )}
                   <button onClick={() => handleDelete(stage.id)} className="text-xs text-red-400 hover:text-red-600">&times;</button>
                 </div>
               </div>

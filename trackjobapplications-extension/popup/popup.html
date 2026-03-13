@@ -14,9 +14,9 @@
             <path d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
           </svg>
         </div>
-        <span class="logo-text">TrackJobs</span>
+        <span class="logo-text" data-i18n="appName">TrackJobs</span>
       </div>
-      <button id="theme-toggle" class="theme-btn" title="Toggle dark mode">
+      <button id="theme-toggle" class="theme-btn" data-i18n-title="toggleDarkMode" title="Toggle dark mode">
         <svg id="theme-icon" class="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
         </svg>
@@ -26,8 +26,8 @@
     <!-- Login Section -->
     <div id="login-section" hidden>
       <div class="web-login-box">
-        <p class="web-login-text">Sign in on the TrackJobs website to connect your account.</p>
-        <button id="web-login-btn" class="btn-web-login">Sign in with TrackJobs</button>
+        <p class="web-login-text" data-i18n="loginText">Sign in on the TrackJobs website to connect your account.</p>
+        <button id="web-login-btn" class="btn-web-login" data-i18n="loginBtn">Sign in with TrackJobs</button>
         <p id="login-error" class="error" hidden></p>
       </div>
     </div>
@@ -37,8 +37,8 @@
       <div class="user-bar">
         <span id="user-email"></span>
         <div class="user-actions">
-          <a href="#" id="go-to-website-btn" title="Open TrackJobs dashboard">Dashboard ↗</a>
-          <a href="#" id="logout-btn">Logout</a>
+          <a href="#" id="go-to-website-btn" data-i18n="dashboard">Dashboard</a>
+          <a href="#" id="logout-btn" data-i18n="logout">Logout</a>
         </div>
       </div>
 
@@ -47,42 +47,42 @@
           <span id="form-source-badge" class="source-badge" hidden></span>
         </div>
         <div class="field">
-          <label for="form-company">Company</label>
-          <input type="text" id="form-company" placeholder="Company name" maxlength="200">
+          <label for="form-company" data-i18n="company">Company</label>
+          <input type="text" id="form-company" data-i18n-placeholder="companyPlaceholder" placeholder="Company name" maxlength="200">
         </div>
         <div class="field">
-          <label for="form-position">Position</label>
-          <input type="text" id="form-position" placeholder="Job title" maxlength="200">
+          <label for="form-position" data-i18n="position">Position</label>
+          <input type="text" id="form-position" data-i18n-placeholder="positionPlaceholder" placeholder="Job title" maxlength="200">
         </div>
         <div id="form-url-field" class="field" hidden>
-          <label>URL</label>
+          <label data-i18n="url">URL</label>
           <span id="form-url-display" class="form-url"></span>
         </div>
         <div id="tag-picker" class="tag-picker" hidden></div>
         <div class="extras-toggles">
-          <a href="#" id="notes-toggle-btn">+ Note</a>
-          <a href="#" id="contact-toggle-btn">+ Recruiter</a>
+          <a href="#" id="notes-toggle-btn" data-i18n="addNote">+ Note</a>
+          <a href="#" id="contact-toggle-btn" data-i18n="addRecruiter">+ Recruiter</a>
         </div>
-        <textarea id="job-notes" class="job-notes" placeholder="Quick note (optional)..." hidden></textarea>
+        <textarea id="job-notes" class="job-notes" data-i18n-placeholder="notePlaceholder" placeholder="Quick note (optional)..." hidden></textarea>
         <div id="contact-fields" class="contact-fields" hidden>
-          <input type="text" id="contact-name" placeholder="Recruiter name" maxlength="100">
-          <input type="email" id="contact-email" placeholder="Email (optional)" maxlength="254">
+          <input type="text" id="contact-name" data-i18n-placeholder="recruiterNamePlaceholder" placeholder="Recruiter name" maxlength="100">
+          <input type="email" id="contact-email" data-i18n-placeholder="recruiterEmailPlaceholder" placeholder="Email (optional)" maxlength="254">
         </div>
         <div id="interview-fields" class="interview-fields" hidden>
           <select id="interview-type">
-            <option value="phone_screen">Phone Screen</option>
-            <option value="technical">Technical</option>
-            <option value="behavioral">Behavioral</option>
-            <option value="onsite">On-site</option>
-            <option value="take_home">Take-home</option>
-            <option value="final">Final Round</option>
-            <option value="other">Other</option>
+            <option value="phone_screen" data-i18n="phoneScreen">Phone Screen</option>
+            <option value="technical" data-i18n="technical">Technical</option>
+            <option value="behavioral" data-i18n="behavioral">Behavioral</option>
+            <option value="onsite" data-i18n="onsite">On-site</option>
+            <option value="take_home" data-i18n="takeHome">Take-home</option>
+            <option value="final" data-i18n="finalRound">Final Round</option>
+            <option value="other" data-i18n="other">Other</option>
           </select>
           <input type="datetime-local" id="interview-date">
         </div>
         <div id="offer-fields" class="offer-fields" hidden>
           <div class="offer-row">
-            <input type="number" id="offer-salary" placeholder="Salary" min="0" step="1000">
+            <input type="number" id="offer-salary" data-i18n-placeholder="salaryPlaceholder" placeholder="Salary" min="0" step="1000">
             <select id="offer-currency">
               <option value="USD">USD</option>
               <option value="EUR">EUR</option>
@@ -94,39 +94,39 @@
               <option value="INR">INR</option>
             </select>
             <select id="offer-period">
-              <option value="yearly">Year</option>
-              <option value="monthly">Month</option>
-              <option value="hourly">Hour</option>
+              <option value="yearly" data-i18n="yearly">Year</option>
+              <option value="monthly" data-i18n="monthly">Month</option>
+              <option value="hourly" data-i18n="hourly">Hour</option>
             </select>
           </div>
-          <textarea id="offer-benefits" class="offer-benefits" placeholder="Benefits (optional)..." rows="2"></textarea>
+          <textarea id="offer-benefits" class="offer-benefits" data-i18n-placeholder="benefitsPlaceholder" placeholder="Benefits (optional)..." rows="2"></textarea>
         </div>
         <div class="btn-group">
-          <button id="save-btn" class="btn-save">To Apply</button>
-          <button id="apply-btn" class="btn-apply">Applied</button>
-          <button id="interview-btn" class="btn-interview">Interview</button>
-          <button id="offer-btn" class="btn-offer">Offer</button>
+          <button id="save-btn" class="btn-save" data-i18n="toApply">To Apply</button>
+          <button id="apply-btn" class="btn-apply" data-i18n="applied">Applied</button>
+          <button id="interview-btn" class="btn-interview" data-i18n="interview">Interview</button>
+          <button id="offer-btn" class="btn-offer" data-i18n="offer">Offer</button>
         </div>
       </div>
 
       <!-- Auto-Fill -->
       <div id="autofill-section" class="autofill-section" hidden>
         <div class="autofill-row">
-          <button id="autofill-btn" class="btn-autofill" title="Auto-fill application form on this page">
+          <button id="autofill-btn" class="btn-autofill" data-i18n-title="autofillSetupProfile" title="Auto-fill application form on this page">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 113 3L7 19l-4 1 1-4L16.5 3.5z"/>
             </svg>
-            Auto-Fill
+            <span data-i18n="autofill">Auto-Fill</span>
           </button>
-          <a href="#" id="autofill-settings-btn" class="autofill-settings" title="Edit auto-fill profile">Settings</a>
+          <a href="#" id="autofill-settings-btn" class="autofill-settings" data-i18n="settings" data-i18n-title="settings" title="Edit auto-fill profile">Settings</a>
         </div>
         <div id="autofill-result" class="autofill-result" hidden></div>
         <div class="coming-soon-row">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
           </svg>
-          <span>Cover Letter Generation</span>
-          <span class="badge-coming-soon">Coming Soon</span>
+          <span data-i18n="coverLetterGeneration">Cover Letter Generation</span>
+          <span class="badge-coming-soon" data-i18n="comingSoon">Coming Soon</span>
         </div>
       </div>
 
@@ -137,48 +137,49 @@
         <div class="stats-grid">
           <div class="stat-item">
             <span class="stat-num" id="stat-total">-</span>
-            <span class="stat-label">Total</span>
+            <span class="stat-label" data-i18n="total">Total</span>
           </div>
           <div class="stat-item">
             <span class="stat-num stat-to-apply" id="stat-to-apply">-</span>
-            <span class="stat-label">To Apply</span>
+            <span class="stat-label" data-i18n="toApply">To Apply</span>
           </div>
           <div class="stat-item">
             <span class="stat-num stat-applied" id="stat-applied">-</span>
-            <span class="stat-label">Applied</span>
+            <span class="stat-label" data-i18n="applied">Applied</span>
           </div>
           <div class="stat-item">
             <span class="stat-num stat-interview" id="stat-interview">-</span>
-            <span class="stat-label">Interview</span>
+            <span class="stat-label" data-i18n="interview">Interview</span>
           </div>
           <div class="stat-item">
             <span class="stat-num stat-offer" id="stat-offer">-</span>
-            <span class="stat-label">Offer</span>
+            <span class="stat-label" data-i18n="offer">Offer</span>
           </div>
           <div class="stat-item">
             <span class="stat-num stat-rejected" id="stat-rejected">-</span>
-            <span class="stat-label">Rejected</span>
+            <span class="stat-label" data-i18n="rejected">Rejected</span>
           </div>
         </div>
       </div>
 
       <!-- Recent Applications -->
       <div id="recent-section" hidden>
-        <h3 class="section-title">Recent</h3>
+        <h3 class="section-title" data-i18n="recent">Recent</h3>
         <ul id="recent-list"></ul>
       </div>
     </div>
 
     <!-- Loading -->
-    <div id="loading">Loading...</div>
+    <div id="loading" data-i18n="loading">Loading...</div>
 
     <!-- Footer -->
     <div class="popup-footer">
-      <a href="#" id="review-link" target="_blank">&#9733; Rate & Review</a>
+      <a href="#" id="review-link" target="_blank" data-i18n="rateReview">&#9733; Rate & Review</a>
       <span class="footer-sep">&middot;</span>
-      <a href="mailto:trackjobapplications@gmail.com">Feedback</a>
+      <a href="mailto:trackjobapplications@gmail.com" data-i18n="feedback">Feedback</a>
     </div>
   </div>
+  <script src="../shared/i18n.js"></script>
   <script src="popup.js"></script>
 </body>
 </html>

@@ -52,7 +52,7 @@
     location: {
       // Chromium city: city|town|\bort\b|stadt|suburb|ciudad|localidad|poblacion|ville
       pattern: /location|^city$|city.?state|current.?location|city.?country|town|\bort\b|stadt|ciudad|ville|where.?(?:are|do).?you|based.?in|your.?location/i,
-      excludePattern: /street|zip|postal|state|province|eligib|authori[sz]|sponsorship|legally|work.?permit|right.?to.?work|visa|ethnicity|race|gender|disabilit|veteran|job.?location|office.?location/i,
+      excludePattern: /street.?addr|zip.?code|postal.?code|^state$|province|job.?location|office.?location/i,
       autocomplete: ['address-level2'],
       inputTypes: ['text'],
       priority: 5,

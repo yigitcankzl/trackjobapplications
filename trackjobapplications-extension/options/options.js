@@ -1,7 +1,7 @@
 'use strict';
 
 const PROFILE_FIELDS = [
-  'firstName', 'lastName', 'email', 'phone', 'location',
+  'firstName', 'lastName', 'email', 'phone', 'location', 'currentCompany',
   'linkedin', 'github', 'portfolio',
   'university', 'degree', 'gpa', 'graduationYear',
   'workAuthorization', 'sponsorship',

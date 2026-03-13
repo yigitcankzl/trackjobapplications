@@ -19,7 +19,7 @@
     firstName: {
       // Chromium: first.*name|initials|fname|first$|given.*name|vorname|nombre|forename|prénom|prenom
       pattern: /first.*name|^first$|given.*name|fname|forename|prénom|prenom|vorname|nombre|initials/i,
-      excludePattern: /last|surname|family|company|firm/i,
+      excludePattern: /last|surname|family|company|firm|full.?name/i,
       autocomplete: ['given-name'],
       inputTypes: ['text'],
       priority: 1,
@@ -27,7 +27,7 @@
     lastName: {
       // Chromium: last.*name|lname|surname|last$|secondname|family.*name|nachname|apellidos?
       pattern: /last.*name|^last$|surname|family.*name|lname|nachname|apellidos?|cognome|secondname/i,
-      excludePattern: /first|given|forename|company|maiden/i,
+      excludePattern: /first|given|forename|company|maiden|full.?name/i,
       autocomplete: ['family-name'],
       inputTypes: ['text'],
       priority: 2,
@@ -51,8 +51,8 @@
     },
     location: {
       // Chromium city: city|town|\bort\b|stadt|suburb|ciudad|localidad|poblacion|ville
-      pattern: /location|^city$|city.?state|current.?location|city.?country|town|\bort\b|stadt|ciudad|ville/i,
-      excludePattern: /street|zip|postal|state|province|eligib|authori[sz]|sponsorship|legally|work.?permit|right.?to.?work|visa|ethnicity|race|gender|disabilit|veteran/i,
+      pattern: /location|^city$|city.?state|current.?location|city.?country|town|\bort\b|stadt|ciudad|ville|where.?(?:are|do).?you|based.?in|your.?location/i,
+      excludePattern: /street|zip|postal|state|province|eligib|authori[sz]|sponsorship|legally|work.?permit|right.?to.?work|visa|ethnicity|race|gender|disabilit|veteran|job.?location|office.?location/i,
       autocomplete: ['address-level2'],
       inputTypes: ['text'],
       priority: 5,
@@ -150,6 +150,29 @@
       autocomplete: [],
       inputTypes: ['select-one', 'text'],
       priority: 18,
+    },
+  };
+
+  // Composite/virtual fields — derived from profile data, not stored directly
+  const COMPOSITE_FIELDS = {
+    fullName: {
+      pattern: /full.?name|^name$|your.?name|candidate.?name|applicant.?name|^legal.?name$/i,
+      excludePattern: /first|last|surname|family|given|company|school|university|display|user|nick/i,
+      autocomplete: ['name'],
+      inputTypes: ['text'],
+      priority: 0, // highest priority — match before first/last
+      getValue: (profile) => {
+        const parts = [profile.firstName, profile.lastName].filter(Boolean);
+        return parts.join(' ') || null;
+      },
+    },
+    currentCompany: {
+      pattern: /current.?(?:company|employer|organization|organisation)|company.?name|employer|most.?recent.?(?:company|employer)|present.?(?:company|employer)|where.?do.?you.?(?:work|currently)/i,
+      excludePattern: /hiring|job|apply|target|desired|preferred/i,
+      autocomplete: ['organization'],
+      inputTypes: ['text'],
+      priority: 19,
+      getValue: (profile) => profile.currentCompany || null,
     },
   };
 
@@ -383,7 +406,7 @@
     }
 
     static findBestMatch(fieldName, inputs, usedInputs) {
-      const mapping = FIELD_MAPPINGS[fieldName];
+      const mapping = FIELD_MAPPINGS[fieldName] || COMPOSITE_FIELDS[fieldName];
       if (!mapping) return null;
 
       let bestMatch = null;
@@ -622,8 +645,35 @@
     let filledCount = 0;
     const filledFields = [];
 
+    // 1. Try composite fields first (fullName, currentCompany)
+    for (const [fieldName, mapping] of Object.entries(COMPOSITE_FIELDS)) {
+      const value = mapping.getValue(profile);
+      if (!value) continue;
+
+      const match = FieldMatcher.findBestMatch(fieldName, inputArray, usedInputs);
+      if (match) {
+        try {
+          const filled = FormFiller.setValue(match, String(value));
+          if (filled) {
+            usedInputs.add(match);
+            filledCount++;
+            filledFields.push(fieldName);
+            FormFiller.addVisualFeedback(match, true);
+          }
+        } catch (_) {
+          FormFiller.addVisualFeedback(match, false);
+        }
+      }
+    }
+
+    // 2. Regular profile fields (skip firstName/lastName if fullName was filled)
     const sortedFields = Object.entries(profile)
-      .filter(([, value]) => value)
+      .filter(([key, value]) => {
+        if (!value) return false;
+        // If fullName was already filled, skip individual first/last name
+        if (filledFields.includes('fullName') && (key === 'firstName' || key === 'lastName')) return false;
+        return true;
+      })
       .sort((a, b) => {
         const priorityA = FIELD_MAPPINGS[a[0]]?.priority || 99;
         const priorityB = FIELD_MAPPINGS[b[0]]?.priority || 99;
@@ -647,7 +697,7 @@
       }
     }
 
-    return { filledCount, totalFields: sortedFields.length, filledFields };
+    return { filledCount, totalFields: sortedFields.length + Object.keys(COMPOSITE_FIELDS).length, filledFields };
   }
 
   // ==================== MESSAGE LISTENER ====================

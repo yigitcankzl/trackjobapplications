@@ -49,6 +49,31 @@ body {
   letter-spacing: -0.3px;
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.lang-btn {
+  height: 26px;
+  padding: 0 7px;
+  border-radius: 5px;
+  background: none;
+  border: 1px solid #d6d3d1;
+  color: #78716c;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  letter-spacing: 0.3px;
+}
+
+.lang-btn:hover {
+  background: #f5f5f4;
+  color: #1c1917;
+}
+
 .theme-btn {
   width: 30px;
   height: 30px;
@@ -756,6 +781,16 @@ body.dark .logo-icon {
 }
 
 body.dark .logo-text {
+  color: #e7e5e4;
+}
+
+body.dark .lang-btn {
+  border-color: #44403c;
+  color: #a8a29e;
+}
+
+body.dark .lang-btn:hover {
+  background: #292524;
   color: #e7e5e4;
 }
 

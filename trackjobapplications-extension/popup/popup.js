@@ -34,7 +34,29 @@ document.getElementById('theme-toggle').addEventListener('click', () => {
   }
 })();
 
+// --- Language Toggle ---
+
+const LANG_LABELS = { en: 'EN', tr: 'TR' };
+const LANG_ORDER = ['en', 'tr'];
+
+function updateLangButton() {
+  const btn = document.getElementById('lang-toggle');
+  btn.textContent = LANG_LABELS[getCurrentLang()] || 'EN';
+}
+
+document.getElementById('lang-toggle').addEventListener('click', async () => {
+  const current = getCurrentLang();
+  const idx = LANG_ORDER.indexOf(current);
+  const next = LANG_ORDER[(idx + 1) % LANG_ORDER.length];
+  await setLang(next);
+  updateLangButton();
+});
+
 document.addEventListener('DOMContentLoaded', async () => {
+  // Init i18n first so all text is translated
+  await initI18n();
+  updateLangButton();
+
   const authStatus = await chrome.runtime.sendMessage({ type: 'CHECK_AUTH' });
 
   document.getElementById('loading').hidden = true;

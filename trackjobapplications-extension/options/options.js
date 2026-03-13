@@ -1,5 +1,8 @@
 'use strict';
 
+/* ── i18n ── */
+initI18n();
+
 const PROFILE_FIELDS = [
   'firstName', 'lastName', 'email', 'phone', 'location', 'currentCompany',
   'linkedin', 'github', 'portfolio',

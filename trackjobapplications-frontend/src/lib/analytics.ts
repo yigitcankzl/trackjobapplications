@@ -2,14 +2,13 @@ const GA_ID = import.meta.env.VITE_GA_MEASUREMENT_ID as string | undefined
 
 declare global {
   interface Window {
-    dataLayer: IArguments[]
+    dataLayer: unknown[][]
   }
 }
 
-function gtag() {
+function gtag(...args: unknown[]) {
   window.dataLayer = window.dataLayer || []
-  // eslint-disable-next-line prefer-rest-params
-  window.dataLayer.push(arguments)
+  window.dataLayer.push(args)
 }
 
 export function initGA() {
@@ -20,8 +19,9 @@ export function initGA() {
   script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`
   document.head.appendChild(script)
 
-  gtag('js', new Date())
-  gtag('config', GA_ID, { send_page_view: false })
+  window.dataLayer = window.dataLayer || []
+  window.dataLayer.push(['js', new Date()])
+  window.dataLayer.push(['config', GA_ID, { send_page_view: false }])
 }
 
 export function trackPageView(path: string) {

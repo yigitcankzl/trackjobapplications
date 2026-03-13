@@ -16,7 +16,6 @@ export default function CoverLettersPage() {
   const [editing, setEditing] = useState<CoverLetterTemplate | null>(null)
   const [creating, setCreating] = useState(false)
   const [form, setForm] = useState({ name: '', content: '' })
-  const [selected, setSelected] = useState<CoverLetterTemplate | null>(null)
   const [copied, setCopied] = useState(false)
   const [deleting, setDeleting] = useState<CoverLetterTemplate | null>(null)
 
@@ -32,14 +31,14 @@ export default function CoverLettersPage() {
     setForm({ name: '', content: '' })
     setCreating(true)
     setEditing(null)
-    setSelected(null)
+    setCopied(false)
   }
 
   function openEdit(letter: CoverLetterTemplate) {
     setForm({ name: letter.name, content: letter.content })
     setEditing(letter)
     setCreating(false)
-    setSelected(null)
+    setCopied(false)
   }
 
   function closeForm() {
@@ -78,7 +77,6 @@ export default function CoverLettersPage() {
       addToast(t('coverLetters.toast.deleted'), 'success')
       setDeleting(null)
       if (editing?.id === target.id) closeForm()
-      if (selected?.id === target.id) setSelected(null)
     } catch {
       addToast(t('coverLetters.errors.deleteFailed'), 'error')
     }
@@ -108,7 +106,7 @@ export default function CoverLettersPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Letter list */}
-        <div className={`${isFormOpen || selected ? 'lg:col-span-1' : 'lg:col-span-3'}`}>
+        <div className={`${isFormOpen ? 'lg:col-span-1' : 'lg:col-span-3'}`}>
           {loading ? (
             <div className="text-center py-12 text-stone-400 text-sm">{t('coverLetters.loading')}</div>
           ) : letters.length === 0 && !isFormOpen ? (
@@ -132,10 +130,10 @@ export default function CoverLettersPage() {
                   key={letter.id}
                   role="button"
                   tabIndex={0}
-                  onClick={() => { setSelected(letter); setCopied(false); setCreating(false); setEditing(null) }}
-                  onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelected(letter); setCopied(false); setCreating(false); setEditing(null) } }}
+                  onClick={() => openEdit(letter)}
+                  onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openEdit(letter) } }}
                   className={`group bg-white dark:bg-stone-900 rounded-lg border shadow-sm p-4 cursor-pointer transition-all duration-200 ${
-                    selected?.id === letter.id || editing?.id === letter.id
+                    editing?.id === letter.id
                       ? 'border-teal-200 dark:border-teal-800 ring-1 ring-teal-100 dark:ring-teal-900'
                       : 'border-stone-100/60 dark:border-stone-800 hover:shadow-md hover:border-stone-200'
                   }`}
@@ -205,6 +203,18 @@ export default function CoverLettersPage() {
               </div>
 
               <div className="flex justify-end gap-2">
+                {form.content.trim() && (
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(form.content)
+                        .then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000) })
+                        .catch(() => {})
+                    }}
+                    className="px-3 py-1.5 rounded-lg text-xs font-medium text-stone-500 hover:text-stone-700 dark:text-stone-400 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
+                  >
+                    {copied ? t('coverLetters.copied') : t('coverLetters.copy')}
+                  </button>
+                )}
                 <Button variant="secondary" onClick={closeForm}>{t('coverLetters.form.cancel')}</Button>
                 <Button onClick={handleSave}>{t('coverLetters.form.save')}</Button>
               </div>
@@ -212,45 +222,6 @@ export default function CoverLettersPage() {
           </div>
         )}
 
-        {/* View panel */}
-        {selected && !isFormOpen && (
-          <div className="lg:col-span-2 bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6 space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-sm font-semibold text-stone-800 dark:text-stone-200">{selected.name}</h2>
-              <div className="flex items-center gap-1">
-                <button
-                  onClick={() => openEdit(selected)}
-                  className="p-1.5 rounded-lg text-stone-400 hover:text-teal-600 hover:bg-teal-50 transition-colors"
-                >
-                  <EditIcon />
-                </button>
-                <button
-                  onClick={() => setSelected(null)}
-                  className="p-1.5 rounded-lg text-stone-400 hover:text-stone-600 hover:bg-stone-100 transition-colors"
-                >
-                  <CloseIcon />
-                </button>
-              </div>
-            </div>
-
-            <div className="bg-stone-50 dark:bg-stone-800 rounded-lg p-4 text-sm text-stone-700 dark:text-stone-300 whitespace-pre-wrap leading-relaxed">
-              {selected.content}
-            </div>
-
-            <div className="flex justify-end">
-              <button
-                onClick={() => {
-                  navigator.clipboard.writeText(selected.content)
-                    .then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000) })
-                    .catch(() => { /* clipboard API unavailable */ })
-                }}
-                className="px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-stone-900 hover:bg-stone-800 dark:bg-stone-100 dark:text-stone-900 dark:hover:bg-stone-200 transition-colors"
-              >
-                {copied ? t('coverLetters.copied') : t('coverLetters.copy')}
-              </button>
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Delete confirmation modal */}

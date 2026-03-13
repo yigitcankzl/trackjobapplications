@@ -58,9 +58,13 @@ Full English and Turkish support across the entire application, including SEO me
 
 ---
 
-## Screenshots
+## Demo
 
-> _Coming soon_
+<div align="center">
+
+<video src="docs/demo/demo-3-screencast.mp4" width="800" controls autoplay loop muted></video>
+
+</div>
 
 ---
 

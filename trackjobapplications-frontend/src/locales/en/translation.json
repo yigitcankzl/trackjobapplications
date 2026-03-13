@@ -418,6 +418,7 @@
     "loading": "Loading...",
     "copy": "Copy",
     "copied": "Copied!",
+    "exportPdf": "PDF",
     "empty": {
       "title": "No cover letters yet",
       "subtitle": "Save your cover letters here for easy access."

@@ -5,7 +5,7 @@ import Header from '../components/dashboard/Header'
 import { useToast } from '../context/ToastContext'
 import { CoverLetterTemplate } from '../types'
 import { getTemplates, createTemplate, updateTemplate, deleteTemplate } from '../services/coverLetters'
-import { PlusIcon, EditIcon, TrashIcon, CloseIcon } from '../components/icons'
+import { PlusIcon, EditIcon, TrashIcon, CloseIcon, DownloadIcon } from '../components/icons'
 import Button from '../components/ui/Button'
 
 export default function CoverLettersPage() {
@@ -45,6 +45,14 @@ export default function CoverLettersPage() {
     setCreating(false)
     setEditing(null)
     setForm({ name: '', content: '' })
+  }
+
+  function exportPdf() {
+    const w = window.open('', '_blank')
+    if (!w) return
+    w.document.write(`<!DOCTYPE html><html><head><title>${form.name || 'Cover Letter'}</title><style>body{font-family:Georgia,serif;max-width:700px;margin:40px auto;padding:0 20px;line-height:1.7;color:#1a1a1a;font-size:14px;white-space:pre-wrap}@media print{body{margin:0;padding:20px}}</style></head><body>${form.content.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</body></html>`)
+    w.document.close()
+    setTimeout(() => { w.print() }, 250)
   }
 
   async function handleSave() {
@@ -204,16 +212,25 @@ export default function CoverLettersPage() {
 
               <div className="flex justify-end gap-2">
                 {form.content.trim() && (
-                  <button
-                    onClick={() => {
-                      navigator.clipboard.writeText(form.content)
-                        .then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000) })
-                        .catch(() => {})
-                    }}
-                    className="px-3 py-1.5 rounded-lg text-xs font-medium text-stone-500 hover:text-stone-700 dark:text-stone-400 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
-                  >
-                    {copied ? t('coverLetters.copied') : t('coverLetters.copy')}
-                  </button>
+                  <>
+                    <button
+                      onClick={exportPdf}
+                      className="px-3 py-1.5 rounded-lg text-xs font-medium text-stone-500 hover:text-stone-700 dark:text-stone-400 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors inline-flex items-center gap-1"
+                    >
+                      <DownloadIcon />
+                      {t('coverLetters.exportPdf')}
+                    </button>
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(form.content)
+                          .then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000) })
+                          .catch(() => {})
+                      }}
+                      className="px-3 py-1.5 rounded-lg text-xs font-medium text-stone-500 hover:text-stone-700 dark:text-stone-400 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
+                    >
+                      {copied ? t('coverLetters.copied') : t('coverLetters.copy')}
+                    </button>
+                  </>
                 )}
                 <Button variant="secondary" onClick={closeForm}>{t('coverLetters.form.cancel')}</Button>
                 <Button onClick={handleSave}>{t('coverLetters.form.save')}</Button>

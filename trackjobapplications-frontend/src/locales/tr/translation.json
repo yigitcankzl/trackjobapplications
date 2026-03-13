@@ -418,6 +418,7 @@
     "loading": "Yükleniyor...",
     "copy": "Kopyala",
     "copied": "Kopyalandı!",
+    "exportPdf": "PDF",
     "empty": {
       "title": "Henüz ön yazı yok",
       "subtitle": "Ön yazılarınızı buraya kaydedin."

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useLocation } from 'react-router-dom'
+import { useLocation, Link } from 'react-router-dom'
 import SignInForm from '../components/auth/SignInForm'
 import SignUpForm from '../components/auth/SignUpForm'
 import OverlayPanel from '../components/auth/OverlayPanel'
@@ -59,9 +59,11 @@ export default function LoginPage() {
         )}
       </div>
 
-      <p className="absolute bottom-4 left-0 right-0 text-center text-xs text-stone-400 dark:text-stone-500 hidden md:block">
-        {t('footer.copyright', { year: new Date().getFullYear() })}
-      </p>
+      <div className="absolute bottom-4 left-0 right-0 text-center text-xs text-stone-400 dark:text-stone-500 hidden md:flex items-center justify-center gap-4">
+        <span>{t('footer.copyright', { year: new Date().getFullYear() })}</span>
+        <Link to="/privacy" className="hover:text-stone-600 dark:hover:text-stone-300 transition-colors">{t('footer.privacy')}</Link>
+        <Link to="/terms" className="hover:text-stone-600 dark:hover:text-stone-300 transition-colors">{t('footer.terms')}</Link>
+      </div>
     </div>
   )
 }

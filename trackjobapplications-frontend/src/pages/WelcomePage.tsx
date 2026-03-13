@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Helmet } from 'react-helmet-async'
 import LanguageSwitcher from '../components/welcome/LanguageSwitcher'
@@ -208,7 +208,12 @@ export default function WelcomePage() {
 
       {/* Footer */}
       <footer className="text-center py-5 text-xs text-stone-400 dark:text-stone-500">
-        {t('footer.copyright', { year: new Date().getFullYear() })}
+        <div className="flex items-center justify-center gap-4">
+          <span>{t('footer.copyright', { year: new Date().getFullYear() })}</span>
+          <Link to="/privacy" className="hover:text-stone-600 dark:hover:text-stone-300 transition-colors">{t('footer.privacy')}</Link>
+          <Link to="/terms" className="hover:text-stone-600 dark:hover:text-stone-300 transition-colors">{t('footer.terms')}</Link>
+          <Link to="/cookies" className="hover:text-stone-600 dark:hover:text-stone-300 transition-colors">{t('footer.cookies')}</Link>
+        </div>
       </footer>
     </div>
   )

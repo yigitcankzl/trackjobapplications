@@ -29,6 +29,9 @@ const ResetPasswordPage = lazy(() => import('./pages/ResetPasswordPage'))
 const OAuthCallbackPage = lazy(() => import('./pages/OAuthCallbackPage'))
 const ExtensionPage = lazy(() => import('./pages/ExtensionPage'))
 const ExtensionAuthPage = lazy(() => import('./pages/ExtensionAuthPage'))
+const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage'))
+const TermsPage = lazy(() => import('./pages/TermsPage'))
+const CookiePolicyPage = lazy(() => import('./pages/CookiePolicyPage'))
 
 export default function App() {
   return (
@@ -55,6 +58,9 @@ export default function App() {
               <Route path="/reset-password" element={<ResetPasswordPage />} />
               <Route path="/oauth-callback" element={<OAuthCallbackPage />} />
               <Route path="/extension-auth" element={<ExtensionAuthPage />} />
+              <Route path="/privacy" element={<PrivacyPolicyPage />} />
+              <Route path="/terms" element={<TermsPage />} />
+              <Route path="/cookies" element={<CookiePolicyPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
             </Suspense>

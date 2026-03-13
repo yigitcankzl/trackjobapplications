@@ -559,7 +559,28 @@
   "footer": {
     "rights": "All rights reserved.",
     "copyright": "© {{year}} TrackJobs. All rights reserved.",
-    "contact": "Contact"
+    "contact": "Contact",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "cookies": "Cookies"
+  },
+  "legal": {
+    "privacy": {
+      "title": "Privacy Policy",
+      "seoTitle": "Privacy Policy | TrackJobs",
+      "seoDescription": "Learn how TrackJobs collects, uses, and protects your personal data.",
+      "lastUpdated": "Last updated"
+    },
+    "terms": {
+      "title": "Terms of Service",
+      "seoTitle": "Terms of Service | TrackJobs",
+      "seoDescription": "Read the terms and conditions for using the TrackJobs service."
+    },
+    "cookies": {
+      "title": "Cookie Policy",
+      "seoTitle": "Cookie Policy | TrackJobs",
+      "seoDescription": "Learn about the cookies TrackJobs uses and how to manage them."
+    }
   },
   "forgotPassword": {
     "title": "Forgot Password",

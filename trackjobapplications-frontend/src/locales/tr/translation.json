@@ -559,7 +559,28 @@
   "footer": {
     "rights": "Tüm hakları saklıdır.",
     "copyright": "© {{year}} TrackJobs. Tüm hakları saklıdır.",
-    "contact": "İletişim"
+    "contact": "İletişim",
+    "privacy": "Gizlilik",
+    "terms": "Koşullar",
+    "cookies": "Çerezler"
+  },
+  "legal": {
+    "privacy": {
+      "title": "Gizlilik Politikası",
+      "seoTitle": "Gizlilik Politikası | TrackJobs",
+      "seoDescription": "TrackJobs'un kişisel verilerinizi nasıl topladığını, kullandığını ve koruduğunu öğrenin.",
+      "lastUpdated": "Son güncelleme"
+    },
+    "terms": {
+      "title": "Kullanım Koşulları",
+      "seoTitle": "Kullanım Koşulları | TrackJobs",
+      "seoDescription": "TrackJobs hizmetini kullanmak için şartları ve koşulları okuyun."
+    },
+    "cookies": {
+      "title": "Çerez Politikası",
+      "seoTitle": "Çerez Politikası | TrackJobs",
+      "seoDescription": "TrackJobs'un kullandığı çerezleri ve bunları nasıl yöneteceğinizi öğrenin."
+    }
   },
   "forgotPassword": {
     "title": "Şifremi Unuttum",

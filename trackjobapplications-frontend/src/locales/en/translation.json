@@ -23,6 +23,15 @@
       "followup": {
         "title": "Never miss a follow-up",
         "description": "Add notes and dates so you always know what to do next."
+      },
+      "autofill": {
+        "title": "Auto-fill applications",
+        "description": "Fill job application forms instantly with your saved profile."
+      },
+      "aiCoverLetter": {
+        "title": "AI Cover Letters",
+        "description": "Generate personalized cover letters from job descriptions.",
+        "badge": "Coming Soon"
       }
     },
     "extensions": {
@@ -586,7 +595,9 @@
       "recruiter": { "title": "Recruiter Contacts", "desc": "Save recruiter name and email along with the application." },
       "interviews": { "title": "Interview Tracking", "desc": "Set interview type and date when saving with interview status." },
       "offers": { "title": "Offer Capture", "desc": "Record salary, currency, and benefits when you receive an offer." },
-      "pin": { "title": "Pin Favorites", "desc": "Pin important applications for quick access." }
+      "pin": { "title": "Pin Favorites", "desc": "Pin important applications for quick access." },
+      "autofill": { "title": "Auto-Fill Forms", "desc": "Automatically fill job application forms with your saved profile — name, email, education, and more." },
+      "aiCoverLetter": { "title": "AI Cover Letter", "desc": "Generate personalized cover letters from job descriptions using AI.", "badge": "Coming Soon" }
     },
     "steps": {
       "1": { "title": "Install the Extension", "desc": "Download from Chrome Web Store or Firefox Add-ons." },

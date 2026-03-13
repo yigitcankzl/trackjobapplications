@@ -106,6 +106,31 @@ export default function WelcomePage() {
           />
         </div>
 
+        {/* Auto-Fill & AI features */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-3xl w-full mt-5">
+          <FeatureCard
+            icon={
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 20h9M16.5 3.5a2.121 2.121 0 113 3L7 19l-4 1 1-4L16.5 3.5z" />
+              </svg>
+            }
+            title={t('welcome.features.autofill.title')}
+            description={t('welcome.features.autofill.description')}
+            color="indigo"
+          />
+          <FeatureCard
+            icon={
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+              </svg>
+            }
+            title={t('welcome.features.aiCoverLetter.title')}
+            description={t('welcome.features.aiCoverLetter.description')}
+            badge={t('welcome.features.aiCoverLetter.badge')}
+            color="orange"
+          />
+        </div>
+
         {/* Extensions section */}
         <div className="mt-20 max-w-3xl w-full">
           <h2 className="text-2xl font-bold text-stone-900 dark:text-stone-100 mb-2">{t('welcome.extensions.title')}</h2>

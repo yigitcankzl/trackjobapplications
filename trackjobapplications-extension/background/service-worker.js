@@ -183,12 +183,12 @@ async function apiFetch(path, options = {}) {
 
 const FRONTEND_URLS = {
   'http://localhost:8000/api/v1': 'http://localhost:3003',
-  'https://trackjobapplications-backend.onrender.com/api/v1': 'https://trackjobapplications-eight.vercel.app',
+  'https://trackjobapplications-backend.onrender.com/api/v1': 'https://trackjobapplications.com',
 };
 
 async function getFrontendUrl() {
   const apiBase = await getApiBase();
-  return FRONTEND_URLS[apiBase] || 'https://trackjobapplications-eight.vercel.app';
+  return FRONTEND_URLS[apiBase] || 'https://trackjobapplications.com';
 }
 
 // --- Message Handler ---
@@ -471,6 +471,49 @@ async function handleMessage(message) {
         if (!res.ok) return { success: false, error: 'Failed to load applications' };
         const all = await res.json();
         return { success: true, data: all.slice(0, 5) };
+      }
+
+      case 'GET_AUTOFILL_PROFILE': {
+        const result = await chrome.storage.local.get('autofillProfile');
+        return { success: true, data: result.autofillProfile || {} };
+      }
+
+      case 'SAVE_AUTOFILL_PROFILE': {
+        if (!message.profile || typeof message.profile !== 'object') {
+          return { success: false, error: 'Invalid profile data' };
+        }
+        await chrome.storage.local.set({ autofillProfile: message.profile });
+        return { success: true };
+      }
+
+      case 'INJECT_AND_AUTOFILL': {
+        const profileResult = await chrome.storage.local.get('autofillProfile');
+        const profile = profileResult.autofillProfile || {};
+        if (Object.keys(profile).length === 0) {
+          return { success: false, error: 'No profile saved. Open Settings to add your info.' };
+        }
+
+        const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+        if (!tab?.id) {
+          return { success: false, error: 'No active tab found' };
+        }
+
+        // Inject autofill.js into the active tab
+        await chrome.scripting.executeScript({
+          target: { tabId: tab.id },
+          files: ['content/autofill.js'],
+        });
+
+        // Send the profile data to the injected script
+        const response = await chrome.tabs.sendMessage(tab.id, {
+          type: 'AUTOFILL',
+          profile,
+        });
+
+        return {
+          success: true,
+          data: response || { filledCount: 0, totalFields: 0 },
+        };
       }
 
       default:

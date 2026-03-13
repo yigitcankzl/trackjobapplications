@@ -11,7 +11,7 @@
 [![React 18](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://typescriptlang.org)
 
-[**Try It Now**](https://trackjobapplications-eight.vercel.app) · [API Docs](https://trackjobapplications-backend.onrender.com/api/v1/schema/swagger-ui/) · [Report Bug](https://github.com/yigitcankzl/trackjobapplications/issues)
+[**Try It Now**](https://trackjobapplications.com) · [API Docs](https://trackjobapplications-backend.onrender.com/api/v1/schema/swagger-ui/) · [Report Bug](https://github.com/yigitcankzl/trackjobapplications/issues)
 
 </div>
 

@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSEO } from '../hooks/useSEO'
 import DashboardLayout from '../components/layout/DashboardLayout'
 import Header from '../components/dashboard/Header'
 import StatusBadge from '../components/dashboard/StatusBadge'
@@ -94,6 +95,7 @@ function formatMoney(val: number | null, currency: string): string {
 export default function ComparisonPage() {
   const { t } = useTranslation()
   const { addToast } = useToast()
+  const seo = useSEO({ title: t('seo.compare.title'), description: t('seo.compare.description'), path: '/compare', noIndex: true })
 
   const [allApps, setAllApps] = useState<ApplicationBrief[]>([])
   const [selectedIds, setSelectedIds] = useState<number[]>([])
@@ -173,6 +175,7 @@ export default function ComparisonPage() {
 
   return (
     <DashboardLayout>
+      {seo}
       <Header title={t('compare.title')} />
 
       <div className="max-w-6xl mx-auto space-y-6 pb-12">

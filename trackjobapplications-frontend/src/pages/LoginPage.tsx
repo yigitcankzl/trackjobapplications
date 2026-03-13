@@ -5,11 +5,13 @@ import SignInForm from '../components/auth/SignInForm'
 import SignUpForm from '../components/auth/SignUpForm'
 import OverlayPanel from '../components/auth/OverlayPanel'
 import { useToast } from '../context/ToastContext'
+import { useSEO } from '../hooks/useSEO'
 
 export default function LoginPage() {
   const { t } = useTranslation()
   const { addToast } = useToast()
   const { search } = useLocation()
+  const seo = useSEO({ title: t('seo.login.title'), description: t('seo.login.description'), path: '/login' })
   const [isSignUp, setIsSignUp] = useState(false)
 
   useEffect(() => {
@@ -19,6 +21,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-stone-50 dark:bg-stone-950 p-4">
+      {seo}
       {/* Desktop: split card layout */}
       <div className="relative w-full max-w-4xl h-[560px] bg-white dark:bg-stone-900 rounded-lg border border-stone-200/60 dark:border-stone-800 shadow-lg overflow-hidden hidden md:block">
         {/* Sign Up Form — right side */}

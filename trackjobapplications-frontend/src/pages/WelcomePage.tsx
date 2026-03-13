@@ -1,17 +1,39 @@
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { Helmet } from 'react-helmet-async'
 import LanguageSwitcher from '../components/welcome/LanguageSwitcher'
 import FeatureCard from '../components/welcome/FeatureCard'
 import { useTheme } from '../context/ThemeContext'
+import { useSEO } from '../hooks/useSEO'
 import { BriefcaseIcon, BarChartIcon, ClipboardIcon, SunIcon, MoonIcon } from '../components/icons'
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'TrackJobs',
+  description: 'Track every job application in one place. Manage status, follow-ups, interviews and offers.',
+  url: 'https://www.trackjobapplications.com',
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Web',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+  },
+}
 
 export default function WelcomePage() {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const { theme, toggleTheme } = useTheme()
+  const seo = useSEO({ title: t('seo.welcome.title'), description: t('seo.welcome.description'), path: '/' })
 
   return (
     <div className="min-h-screen bg-stone-50 dark:bg-stone-950 flex flex-col">
+      {seo}
+      <Helmet>
+        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+      </Helmet>
       {/* Navbar */}
       <nav className="flex items-center justify-between px-6 sm:px-10 py-5">
         <div className="flex items-center gap-2.5">

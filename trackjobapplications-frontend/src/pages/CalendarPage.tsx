@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { useSEO } from '../hooks/useSEO'
 import DashboardLayout from '../components/layout/DashboardLayout'
 import Header from '../components/dashboard/Header'
 import { getCalendarEvents, type CalendarEvents, type CalendarInterview } from '../services/applications'
@@ -36,6 +37,7 @@ export default function CalendarPage() {
   const { t, i18n } = useTranslation()
   const navigate = useNavigate()
   const { addToast } = useToast()
+  const seo = useSEO({ title: t('seo.calendar.title'), description: t('seo.calendar.description'), path: '/calendar', noIndex: true })
   const [events, setEvents] = useState<CalendarEvents>({ applications: [], interviews: [] })
   const weekdays = useMemo(() => getWeekdays(i18n.language), [i18n.language])
 
@@ -88,6 +90,7 @@ export default function CalendarPage() {
 
   return (
     <DashboardLayout>
+      {seo}
       <Header title={t('calendar.title')} />
 
       <div className="bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-3 sm:p-6">

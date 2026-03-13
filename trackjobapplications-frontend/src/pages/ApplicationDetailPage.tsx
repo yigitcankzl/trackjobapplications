@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { useSEO } from '../hooks/useSEO'
 import DashboardLayout from '../components/layout/DashboardLayout'
 import Header from '../components/dashboard/Header'
 import StatusBadge from '../components/dashboard/StatusBadge'
@@ -55,6 +56,7 @@ export default function ApplicationDetailPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { addToast } = useToast()
+  const seo = useSEO({ title: t('seo.applicationDetail.title'), description: t('seo.applicationDetail.description'), path: `/applications/${id}`, noIndex: true })
 
   const [app, setApp] = useState<JobApplication | null>(null)
   const [loading, setLoading] = useState(true)
@@ -114,6 +116,7 @@ export default function ApplicationDetailPage() {
 
   return (
     <DashboardLayout>
+      {seo}
       <Header
         title={t('detail.title')}
         action={

@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import DashboardLayout from '../components/layout/DashboardLayout'
 import Header from '../components/dashboard/Header'
+import { useSEO } from '../hooks/useSEO'
 
 const CHROME_STORE_URL = '#'
 const FIREFOX_ADDON_URL = '#'
@@ -20,9 +21,11 @@ const FEATURES = [
 
 export default function ExtensionPage() {
   const { t } = useTranslation()
+  const seo = useSEO({ title: t('seo.extension.title'), description: t('seo.extension.description'), path: '/extension' })
 
   return (
     <DashboardLayout>
+      {seo}
       <Header title={t('extension.title')} />
 
       <div className="space-y-6">

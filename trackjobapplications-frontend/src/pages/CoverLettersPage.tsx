@@ -59,7 +59,7 @@ export default function CoverLettersPage() {
     const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
     w.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"/><title>${title}</title>
 <style>
-  @page { size: A4; margin: 2.5cm 2.5cm 2.5cm 2.5cm; }
+  @page { size: A4; margin: 0; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: 'Times New Roman', Georgia, serif; font-size: 12pt; line-height: 1.6; color: #111; }
   .page { max-width: 700px; margin: 0 auto; padding: 40px 0; }
@@ -68,7 +68,7 @@ export default function CoverLettersPage() {
   .header .date { font-size: 10pt; color: #555; }
   .content p { margin-bottom: 14px; text-align: justify; }
   .content p:last-child { margin-bottom: 0; }
-  @media print { .page { padding: 0; } }
+  @media print { .page { padding: 2.5cm; max-width: none; } }
   @media screen { body { background: #f5f5f5; } .page { background: #fff; padding: 60px 50px; margin: 30px auto; box-shadow: 0 1px 6px rgba(0,0,0,0.12); } }
 </style></head><body><div class="page"><div class="header"><h1>${title}</h1><div class="date">${date}</div></div><div class="content">${paragraphs}</div></div></body></html>`)
     w.document.close()

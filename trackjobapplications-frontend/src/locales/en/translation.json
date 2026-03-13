@@ -558,7 +558,8 @@
   },
   "footer": {
     "rights": "All rights reserved.",
-    "copyright": "© {{year}} TrackJobs. All rights reserved."
+    "copyright": "© {{year}} TrackJobs. All rights reserved.",
+    "contact": "Contact"
   },
   "forgotPassword": {
     "title": "Forgot Password",

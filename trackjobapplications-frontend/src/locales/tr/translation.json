@@ -558,7 +558,8 @@
   },
   "footer": {
     "rights": "Tüm hakları saklıdır.",
-    "copyright": "© {{year}} TrackJobs. Tüm hakları saklıdır."
+    "copyright": "© {{year}} TrackJobs. Tüm hakları saklıdır.",
+    "contact": "İletişim"
   },
   "forgotPassword": {
     "title": "Şifremi Unuttum",

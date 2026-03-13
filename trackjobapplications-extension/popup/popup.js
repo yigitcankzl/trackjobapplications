@@ -287,7 +287,7 @@ async function loadTags() {
     picker.hidden = true;
     return;
   }
-  picker.innerHTML = '';
+  picker.replaceChildren();
   selectedTagIds.clear();
   for (const tag of res.data) {
     const chip = document.createElement('span');
@@ -496,7 +496,7 @@ async function loadDashboard() {
 
   if (recentRes.success && recentRes.data.length > 0) {
     const list = document.getElementById('recent-list');
-    list.innerHTML = '';
+    list.replaceChildren();
     const statusLabels = {
       to_apply: 'toApply', applied: 'applied', interview: 'interview',
       offer: 'offer', rejected: 'rejected', withdrawn: 'withdrawn',
@@ -546,9 +546,7 @@ async function loadDashboard() {
 }
 
 function escapeHtml(str) {
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
 }
 
 function showFeedback(message, type) {
@@ -590,7 +588,24 @@ document.getElementById('autofill-btn').addEventListener('click', async () => {
   }
   resultEl.hidden = false;
   btn.disabled = false;
-  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 113 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> ' + t('autofill');
+  btn.textContent = '';
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('width', '14');
+  svg.setAttribute('height', '14');
+  svg.setAttribute('viewBox', '0 0 24 24');
+  svg.setAttribute('fill', 'none');
+  svg.setAttribute('stroke', 'currentColor');
+  svg.setAttribute('stroke-width', '2');
+  svg.setAttribute('stroke-linecap', 'round');
+  svg.setAttribute('stroke-linejoin', 'round');
+  const path1 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  path1.setAttribute('d', 'M12 20h9');
+  const path2 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  path2.setAttribute('d', 'M16.5 3.5a2.121 2.121 0 113 3L7 19l-4 1 1-4L16.5 3.5z');
+  svg.appendChild(path1);
+  svg.appendChild(path2);
+  btn.appendChild(svg);
+  btn.appendChild(document.createTextNode(' ' + t('autofill')));
 });
 
 document.getElementById('autofill-settings-btn').addEventListener('click', (e) => {

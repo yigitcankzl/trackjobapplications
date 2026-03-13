@@ -68,7 +68,7 @@ Full English and Turkish support across the entire application, including SEO me
 
 <div align="center">
 
-<video src="docs/demo/demo-3-screencast.mp4" width="800" controls autoplay loop muted></video>
+<img src="docs/demo/demo.gif" alt="TrackJobs Demo" width="800">
 
 </div>
 

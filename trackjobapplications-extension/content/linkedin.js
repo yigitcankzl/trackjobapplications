@@ -1,16 +1,31 @@
 // --- DOM Extraction ---
 
 function extractLinkedInJob() {
+  // Scope searches to the job detail panel to avoid picking up nav/sidebar elements
+  const detailPanel =
+    document.querySelector('.scaffold-layout__detail') ||
+    document.querySelector('.jobs-search__job-details') ||
+    document.querySelector('.job-details-jobs-unified-top-card') ||
+    document;
+
   const position =
-    document.querySelector('.job-details-jobs-unified-top-card__job-title')?.textContent?.trim() ||
-    document.querySelector('h1.t-24')?.textContent?.trim() ||
-    document.querySelector('.jobs-unified-top-card h1')?.textContent?.trim() ||
+    detailPanel.querySelector('.job-details-jobs-unified-top-card__job-title a')?.textContent?.trim() ||
+    detailPanel.querySelector('.job-details-jobs-unified-top-card__job-title h1')?.textContent?.trim() ||
+    detailPanel.querySelector('.job-details-jobs-unified-top-card__job-title')?.textContent?.trim() ||
+    detailPanel.querySelector('.t-24.t-bold.inline')?.textContent?.trim() ||
+    detailPanel.querySelector('.jobs-unified-top-card__job-title a')?.textContent?.trim() ||
+    detailPanel.querySelector('.jobs-unified-top-card__job-title')?.textContent?.trim() ||
+    detailPanel.querySelector('h1.t-24.t-bold')?.textContent?.trim() ||
+    detailPanel.querySelector('.artdeco-entity-lockup__title')?.textContent?.trim() ||
     '';
 
   const company =
-    document.querySelector('.job-details-jobs-unified-top-card__company-name a')?.textContent?.trim() ||
-    document.querySelector('.jobs-unified-top-card__company-name a')?.textContent?.trim() ||
-    document.querySelector('.job-details-jobs-unified-top-card__company-name')?.textContent?.trim() ||
+    detailPanel.querySelector('.job-details-jobs-unified-top-card__company-name a')?.textContent?.trim() ||
+    detailPanel.querySelector('.job-details-jobs-unified-top-card__company-name')?.textContent?.trim() ||
+    detailPanel.querySelector('.jobs-unified-top-card__company-name a')?.textContent?.trim() ||
+    detailPanel.querySelector('.jobs-unified-top-card__company-name')?.textContent?.trim() ||
+    detailPanel.querySelector('.artdeco-entity-lockup__subtitle a')?.textContent?.trim() ||
+    detailPanel.querySelector('.artdeco-entity-lockup__subtitle')?.textContent?.trim() ||
     '';
 
   // Try to get the specific job URL from the page
@@ -124,10 +139,17 @@ function createActionButton(label, color, hoverColor, status) {
 function injectButton() {
   if (document.getElementById(CONTAINER_ID)) return;
 
+  const detailPanel =
+    document.querySelector('.scaffold-layout__detail') ||
+    document.querySelector('.jobs-search__job-details') ||
+    document;
+
   const titleEl =
-    document.querySelector('.job-details-jobs-unified-top-card__job-title') ||
-    document.querySelector('h1.t-24') ||
-    document.querySelector('.jobs-unified-top-card h1');
+    detailPanel.querySelector('.job-details-jobs-unified-top-card__job-title') ||
+    detailPanel.querySelector('.jobs-unified-top-card__job-title') ||
+    detailPanel.querySelector('.t-24.t-bold.inline') ||
+    detailPanel.querySelector('h1.t-24.t-bold') ||
+    detailPanel.querySelector('.artdeco-entity-lockup__title');
 
   if (titleEl) {
     const container = document.createElement('span');

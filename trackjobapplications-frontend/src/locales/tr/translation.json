@@ -1,4 +1,10 @@
 {
+  "cookieConsent": {
+    "message": "Deneyiminizi iyileştirmek için analitik çerezler kullanıyoruz.",
+    "learnMore": "Daha fazla bilgi",
+    "accept": "Kabul Et",
+    "reject": "Reddet"
+  },
   "comingSoon": "Yakında",
   "comingSoonDesc": "Bu özellik çok yakında kullanılabilir olacak.",
   "nav": {

@@ -1,4 +1,10 @@
 {
+  "cookieConsent": {
+    "message": "We use cookies for analytics to improve your experience.",
+    "learnMore": "Learn more",
+    "accept": "Accept",
+    "reject": "Reject"
+  },
   "comingSoon": "Coming Soon",
   "comingSoonDesc": "This feature will be available soon.",
   "nav": {

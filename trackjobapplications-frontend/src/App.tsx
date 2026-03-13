@@ -7,6 +7,7 @@ import ErrorBoundary from './components/ErrorBoundary'
 import PrivateRoute from './components/auth/PrivateRoute'
 import LoadingSpinner from './components/ui/LoadingSpinner'
 import { trackPageView } from './lib/analytics'
+import CookieConsent from './components/CookieConsent'
 
 function PageViewTracker() {
   const { pathname } = useLocation()
@@ -64,6 +65,7 @@ export default function App() {
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
             </Suspense>
+            <CookieConsent />
           </AuthProvider>
         </BrowserRouter>
       </ToastProvider>

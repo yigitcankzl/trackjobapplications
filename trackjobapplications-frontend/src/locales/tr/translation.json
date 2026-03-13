@@ -610,5 +610,47 @@
       "2": { "title": "Giriş Yapın", "desc": "TrackJobs hesabınızla eklentiyi bağlayın." },
       "3": { "title": "Kaydetmeye Başlayın", "desc": "Bir iş ilanını ziyaret edin ve sayfada beliren butonlara tıklayın." }
     }
+  },
+  "seo": {
+    "welcome": {
+      "title": "İş Başvurularını Takip Et - İş Aramanı Yönet | TrackJobs",
+      "description": "Tüm iş başvurularını tek yerden takip et. Durum, takip, mülakat ve teklifleri yönet. Tarayıcı eklentisi ile ücretsiz iş başvuru takipçisi."
+    },
+    "login": {
+      "title": "Giriş Yap | TrackJobs",
+      "description": "İş başvurularını yönetmek ve takip etmek için TrackJobs'a giriş yap."
+    },
+    "extension": {
+      "title": "Tarayıcı Eklentisi - Tek Tıkla İş Kaydet | TrackJobs",
+      "description": "LinkedIn, Indeed, Glassdoor ve diğer sitelerden tek tıkla iş ilanı kaydet. Başvuruları otomatik doldur ve TrackJobs'ta takip et."
+    },
+    "dashboard": {
+      "title": "Kontrol Paneli | TrackJobs",
+      "description": "Tüm iş başvurularını tek panelden görüntüle ve yönet."
+    },
+    "applicationDetail": {
+      "title": "Başvuru Detayı | TrackJobs",
+      "description": "İş başvurusu detaylarını, notları ve mülakat aşamalarını görüntüle."
+    },
+    "analytics": {
+      "title": "Analitik | TrackJobs",
+      "description": "İş arama sürecini analitik ve istatistiklerle görselleştir."
+    },
+    "calendar": {
+      "title": "Takvim | TrackJobs",
+      "description": "Mülakat takvimini ve başvuru zaman çizelgeni görüntüle."
+    },
+    "coverLetters": {
+      "title": "Ön Yazılar | TrackJobs",
+      "description": "İş başvuruların için ön yazıları yönet ve oluştur."
+    },
+    "compare": {
+      "title": "Teklifleri Karşılaştır | TrackJobs",
+      "description": "En iyi kararı vermek için iş tekliflerini yan yana karşılaştır."
+    },
+    "profile": {
+      "title": "Profil | TrackJobs",
+      "description": "TrackJobs profil ve tercihlerini yönet."
+    }
   }
 }

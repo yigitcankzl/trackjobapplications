@@ -412,41 +412,39 @@
   },
   "coverLetters": {
     "title": "Cover Letters",
-    "newTemplate": "New Template",
-    "editTemplate": "Edit Template",
-    "createTemplate": "Create Template",
-    "loading": "Loading templates...",
-    "previewNote": "Placeholders like {company}, {position}, {date} will be replaced with actual values.",
-    "fillFields": "Fill in fields",
+    "new": "New",
+    "edit": "Edit",
+    "create": "Create",
+    "loading": "Loading...",
     "copy": "Copy",
     "copied": "Copied!",
     "empty": {
-      "title": "No cover letter templates",
-      "subtitle": "Create reusable templates with placeholders for quick cover letter generation."
+      "title": "No cover letters yet",
+      "subtitle": "Save your cover letters here for easy access."
     },
     "form": {
-      "name": "Template Name",
-      "namePlaceholder": "e.g. General Cover Letter",
+      "name": "Title",
+      "namePlaceholder": "e.g. Google SWE Cover Letter",
       "content": "Content",
-      "contentPlaceholder": "Dear Hiring Manager at {company},\n\nI am writing to express my interest in the {position} role...",
+      "contentPlaceholder": "Dear Hiring Manager,\n\nI am writing to express my interest in...",
       "cancel": "Cancel",
       "save": "Save"
     },
     "deleteConfirm": {
-      "title": "Delete Template",
+      "title": "Delete Cover Letter",
       "message": "Delete \"{{name}}\"? This cannot be undone.",
       "confirm": "Delete"
     },
     "toast": {
-      "created": "Template created",
-      "updated": "Template updated",
-      "deleted": "Template deleted"
+      "created": "Cover letter saved",
+      "updated": "Cover letter updated",
+      "deleted": "Cover letter deleted"
     },
     "errors": {
-      "loadFailed": "Failed to load templates.",
-      "saveFailed": "Failed to save template.",
-      "deleteFailed": "Failed to delete template.",
-      "required": "Name and content are required."
+      "loadFailed": "Failed to load cover letters.",
+      "saveFailed": "Failed to save cover letter.",
+      "deleteFailed": "Failed to delete cover letter.",
+      "required": "Title and content are required."
     }
   },
   "compare": {

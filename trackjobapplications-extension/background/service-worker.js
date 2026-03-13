@@ -89,8 +89,6 @@ async function decryptToken(stored) {
   if (!stored) return '';
   const sep = stored.indexOf(':');
   if (sep === -1) {
-    // Legacy plaintext token — reject and force re-authentication
-    console.warn('[TJA] Legacy plaintext token detected, clearing to force re-auth');
     return '';
   }
   try {

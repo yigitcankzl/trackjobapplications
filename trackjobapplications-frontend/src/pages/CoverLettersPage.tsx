@@ -50,9 +50,29 @@ export default function CoverLettersPage() {
   function exportPdf() {
     const w = window.open('', '_blank')
     if (!w) return
-    w.document.write(`<!DOCTYPE html><html><head><title>${form.name || 'Cover Letter'}</title><style>body{font-family:Georgia,serif;max-width:700px;margin:40px auto;padding:0 20px;line-height:1.7;color:#1a1a1a;font-size:14px;white-space:pre-wrap}@media print{body{margin:0;padding:20px}}</style></head><body>${form.content.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</body></html>`)
+    const escaped = form.content.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    const paragraphs = escaped.split(/\n\n+/).map(p => {
+      const lines = p.split(/\n/).join('<br/>')
+      return `<p>${lines}</p>`
+    }).join('')
+    const title = (form.name || 'Cover Letter').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+    w.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"/><title>${title}</title>
+<style>
+  @page { size: A4; margin: 2.5cm 2.5cm 2.5cm 2.5cm; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Times New Roman', Georgia, serif; font-size: 12pt; line-height: 1.6; color: #111; }
+  .page { max-width: 700px; margin: 0 auto; padding: 40px 0; }
+  .header { text-align: center; margin-bottom: 32px; padding-bottom: 20px; border-bottom: 1.5px solid #333; }
+  .header h1 { font-size: 18pt; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .header .date { font-size: 10pt; color: #555; }
+  .content p { margin-bottom: 14px; text-align: justify; }
+  .content p:last-child { margin-bottom: 0; }
+  @media print { .page { padding: 0; } }
+  @media screen { body { background: #f5f5f5; } .page { background: #fff; padding: 60px 50px; margin: 30px auto; box-shadow: 0 1px 6px rgba(0,0,0,0.12); } }
+</style></head><body><div class="page"><div class="header"><h1>${title}</h1><div class="date">${date}</div></div><div class="content">${paragraphs}</div></div></body></html>`)
     w.document.close()
-    setTimeout(() => { w.print() }, 250)
+    setTimeout(() => { w.print() }, 300)
   }
 
   async function handleSave() {

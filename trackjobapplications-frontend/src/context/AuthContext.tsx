@@ -32,9 +32,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     function handleForceLogout() {
       setUser(null)
-      const publicPaths = ['/login', '/forgot-password', '/reset-password', '/verify-email', '/oauth-callback', '/extension-auth']
+      const publicPaths = ['/', '/login', '/forgot-password', '/reset-password', '/verify-email', '/oauth-callback', '/extension-auth', '/privacy', '/terms', '/cookies']
       if (!publicPaths.some(p => window.location.pathname.startsWith(p))) {
-        navigate('/login')
+        navigate('/')
       }
     }
     window.addEventListener('auth:logout', handleForceLogout)
@@ -80,7 +80,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if ('caches' in window) {
       caches.delete('trackjobs-v1').catch(() => {})
     }
-    navigate('/login')
+    navigate('/')
   }, [navigate])
 
   return (

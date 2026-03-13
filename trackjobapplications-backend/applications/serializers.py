@@ -89,10 +89,12 @@ class ApplicationNoteSerializer(serializers.ModelSerializer):
 
 class CoverLetterTemplateSerializer(serializers.ModelSerializer):
     content = serializers.CharField(max_length=50000)
+    application_company = serializers.CharField(source="application.company", read_only=True, default=None)
+    application_position = serializers.CharField(source="application.position", read_only=True, default=None)
 
     class Meta:
         model = CoverLetterTemplate
-        fields = ("id", "name", "content", "created_at", "updated_at")
+        fields = ("id", "name", "content", "application", "application_company", "application_position", "created_at", "updated_at")
         read_only_fields = ("id", "created_at", "updated_at")
 
 

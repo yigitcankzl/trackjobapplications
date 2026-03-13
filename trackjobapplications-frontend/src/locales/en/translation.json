@@ -426,6 +426,8 @@
     "form": {
       "name": "Title",
       "namePlaceholder": "e.g. Google SWE Cover Letter",
+      "application": "Application (optional)",
+      "noApplication": "— None —",
       "content": "Content",
       "contentPlaceholder": "Dear Hiring Manager,\n\nI am writing to express my interest in...",
       "cancel": "Cancel",

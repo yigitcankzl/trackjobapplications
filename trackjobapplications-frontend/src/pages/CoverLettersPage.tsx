@@ -5,6 +5,7 @@ import Header from '../components/dashboard/Header'
 import { useToast } from '../context/ToastContext'
 import { CoverLetterTemplate } from '../types'
 import { getTemplates, createTemplate, updateTemplate, deleteTemplate } from '../services/coverLetters'
+import { getApplicationsBrief, type ApplicationBrief } from '../services/applications'
 import { PlusIcon, EditIcon, TrashIcon, CloseIcon, DownloadIcon } from '../components/icons'
 import Button from '../components/ui/Button'
 
@@ -15,27 +16,28 @@ export default function CoverLettersPage() {
   const [loading, setLoading] = useState(true)
   const [editing, setEditing] = useState<CoverLetterTemplate | null>(null)
   const [creating, setCreating] = useState(false)
-  const [form, setForm] = useState({ name: '', content: '' })
+  const [form, setForm] = useState({ name: '', content: '', application: null as number | null })
   const [copied, setCopied] = useState(false)
   const [deleting, setDeleting] = useState<CoverLetterTemplate | null>(null)
+  const [apps, setApps] = useState<ApplicationBrief[]>([])
 
   useEffect(() => {
     let active = true
-    getTemplates()
-      .then(data => { if (active) { setLetters(data); setLoading(false) } })
+    Promise.all([getTemplates(), getApplicationsBrief()])
+      .then(([tpl, appList]) => { if (active) { setLetters(tpl); setApps(appList); setLoading(false) } })
       .catch(() => { if (active) { addToast(t('coverLetters.errors.loadFailed'), 'error'); setLoading(false) } })
     return () => { active = false }
   }, [addToast, t])
 
   function openCreate() {
-    setForm({ name: '', content: '' })
+    setForm({ name: '', content: '', application: null })
     setCreating(true)
     setEditing(null)
     setCopied(false)
   }
 
   function openEdit(letter: CoverLetterTemplate) {
-    setForm({ name: letter.name, content: letter.content })
+    setForm({ name: letter.name, content: letter.content, application: letter.application })
     setEditing(letter)
     setCreating(false)
     setCopied(false)
@@ -44,7 +46,7 @@ export default function CoverLettersPage() {
   function closeForm() {
     setCreating(false)
     setEditing(null)
-    setForm({ name: '', content: '' })
+    setForm({ name: '', content: '', application: null })
   }
 
   function exportPdf() {
@@ -80,13 +82,14 @@ export default function CoverLettersPage() {
       addToast(t('coverLetters.errors.required'), 'error')
       return
     }
+    const payload = { name: form.name, content: form.content, application: form.application }
     try {
       if (editing) {
-        const updated = await updateTemplate(editing.id, form)
+        const updated = await updateTemplate(editing.id, payload)
         setLetters(prev => prev.map(l => l.id === updated.id ? updated : l))
         addToast(t('coverLetters.toast.updated'), 'success')
       } else {
-        const created = await createTemplate(form)
+        const created = await createTemplate(payload)
         setLetters(prev => [created, ...prev])
         addToast(t('coverLetters.toast.created'), 'success')
       }
@@ -169,6 +172,9 @@ export default function CoverLettersPage() {
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
                       <h3 className="text-sm font-semibold text-stone-900 dark:text-stone-100 truncate">{letter.name}</h3>
+                      {letter.application_company && (
+                        <p className="text-xs text-teal-600 dark:text-teal-400 mt-0.5">{letter.application_company} — {letter.application_position}</p>
+                      )}
                       <p className="text-xs text-stone-400 mt-1 line-clamp-2">{letter.content.slice(0, 120)}...</p>
                     </div>
                     <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
@@ -217,6 +223,20 @@ export default function CoverLettersPage() {
                   className="w-full px-3 py-2 rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-sm text-stone-900 dark:text-stone-100 focus:ring-2 focus:ring-stone-500 focus:border-transparent outline-none"
                   placeholder={t('coverLetters.form.namePlaceholder')}
                 />
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium text-stone-500 mb-1">{t('coverLetters.form.application')}</label>
+                <select
+                  value={form.application ?? ''}
+                  onChange={e => setForm(prev => ({ ...prev, application: e.target.value ? Number(e.target.value) : null }))}
+                  className="w-full px-3 py-2 rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-sm text-stone-900 dark:text-stone-100 focus:ring-2 focus:ring-stone-500 focus:border-transparent outline-none"
+                >
+                  <option value="">{t('coverLetters.form.noApplication')}</option>
+                  {apps.map(a => (
+                    <option key={a.id} value={a.id}>{a.company} — {a.position}</option>
+                  ))}
+                </select>
               </div>
 
               <div>

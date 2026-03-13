@@ -162,6 +162,13 @@ class CoverLetterTemplate(models.Model):
         on_delete=models.CASCADE,
         related_name="cover_letter_templates",
     )
+    application = models.ForeignKey(
+        "Application",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="cover_letters",
+    )
     name = models.CharField(max_length=200)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)

@@ -341,6 +341,11 @@
     "contacts": "Contacts",
     "interviews": "Interview Stages",
     "attachments": "Attachments",
+    "coverLetters": {
+      "title": "Cover Letters",
+      "viewAll": "View All",
+      "empty": "No cover letters linked to this application."
+    },
     "addToCalendar": "Add to Calendar",
     "add": "+ Add",
     "cancel": "Cancel",

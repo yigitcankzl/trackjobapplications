@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSEO } from '../hooks/useSEO'
 import DashboardLayout from '../components/layout/DashboardLayout'
 import Header from '../components/dashboard/Header'
 import { useAuth } from '../context/AuthContext'
@@ -13,6 +14,7 @@ export default function ProfilePage() {
   const { t } = useTranslation()
   const { user, refreshUser } = useAuth()
   const { addToast } = useToast()
+  const seo = useSEO({ title: t('seo.profile.title'), description: t('seo.profile.description'), path: '/profile', noIndex: true })
 
   const [firstName, setFirstName] = useState(user?.first_name ?? '')
   const [lastName, setLastName] = useState(user?.last_name ?? '')
@@ -103,6 +105,7 @@ export default function ProfilePage() {
 
   return (
     <DashboardLayout>
+      {seo}
       <Header title={t('profile.title')} />
       <div className="max-w-2xl mx-auto space-y-8 pb-12">
         {/* Profile Info */}

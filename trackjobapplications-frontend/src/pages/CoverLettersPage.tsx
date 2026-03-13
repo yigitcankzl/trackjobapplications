@@ -1,5 +1,6 @@
 import { useEffect, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSEO } from '../hooks/useSEO'
 import DashboardLayout from '../components/layout/DashboardLayout'
 import Header from '../components/dashboard/Header'
 import { useToast } from '../context/ToastContext'
@@ -12,6 +13,7 @@ import Button from '../components/ui/Button'
 export default function CoverLettersPage() {
   const { t } = useTranslation()
   const { addToast } = useToast()
+  const seo = useSEO({ title: t('seo.coverLetters.title'), description: t('seo.coverLetters.description'), path: '/cover-letters', noIndex: true })
   const [letters, setLetters] = useState<CoverLetterTemplate[]>([])
   const [loading, setLoading] = useState(true)
   const [editing, setEditing] = useState<CoverLetterTemplate | null>(null)
@@ -128,6 +130,7 @@ export default function CoverLettersPage() {
 
   return (
     <DashboardLayout>
+      {seo}
       <Header title={t('coverLetters.title')} action={
         <Button onClick={openCreate}>
           <PlusIcon />

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSEO } from '../hooks/useSEO'
 import DashboardLayout from '../components/layout/DashboardLayout'
 import Header from '../components/dashboard/Header'
 import StatCard from '../components/dashboard/StatCard'
@@ -16,6 +17,7 @@ const STATUSES: ApplicationStatus[] = ['to_apply', 'applied', 'interview', 'offe
 export default function AnalyticsPage() {
   const { t } = useTranslation()
   const { addToast } = useToast()
+  const seo = useSEO({ title: t('seo.analytics.title'), description: t('seo.analytics.description'), path: '/analytics', noIndex: true })
   const [apps, setApps] = useState<JobApplication[]>([])
 
   useEffect(() => {
@@ -81,6 +83,7 @@ export default function AnalyticsPage() {
 
   return (
     <DashboardLayout>
+      {seo}
       <Header title={t('analytics.title')} />
 
       {/* Summary cards */}

@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /applications
+Disallow: /calendar
+Disallow: /cover-letters
+Disallow: /compare
+Disallow: /analytics
+Disallow: /profile
+Disallow: /verify-email
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /oauth-callback
+Disallow: /extension-auth
+
+Sitemap: https://www.trackjobapplications.com/sitemap.xml

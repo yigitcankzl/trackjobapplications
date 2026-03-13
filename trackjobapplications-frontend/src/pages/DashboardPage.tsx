@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSEO } from '../hooks/useSEO'
 import DashboardLayout from '../components/layout/DashboardLayout'
 import Header from '../components/dashboard/Header'
 import DraggableStatCard from '../components/dashboard/DraggableStatCard'
@@ -31,6 +32,7 @@ import useDashboardData from '../hooks/useDashboardData'
 export default function DashboardPage() {
   const { t } = useTranslation()
   const { addToast } = useToast()
+  const seo = useSEO({ title: t('seo.dashboard.title'), description: t('seo.dashboard.description'), path: '/dashboard', noIndex: true })
 
   const {
     apps, page, totalPages, loading, stats, selectedIds,
@@ -97,6 +99,7 @@ export default function DashboardPage() {
 
   return (
     <DashboardLayout>
+      {seo}
       <Header
         title={t('dashboard.title')}
         action={

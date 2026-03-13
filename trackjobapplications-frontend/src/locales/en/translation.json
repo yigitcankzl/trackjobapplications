@@ -610,5 +610,47 @@
       "2": { "title": "Log In", "desc": "Use your TrackJobs account to connect the extension." },
       "3": { "title": "Start Saving", "desc": "Visit a job listing and click the buttons that appear on the page." }
     }
+  },
+  "seo": {
+    "welcome": {
+      "title": "Track Job Applications - Manage Your Job Search | TrackJobs",
+      "description": "Track every job application in one place. Manage status, follow-ups, interviews and offers. Free job application tracker with browser extension."
+    },
+    "login": {
+      "title": "Sign In | TrackJobs",
+      "description": "Sign in to TrackJobs to manage and track your job applications."
+    },
+    "extension": {
+      "title": "Browser Extension - Save Jobs With One Click | TrackJobs",
+      "description": "Save job listings from LinkedIn, Indeed, Glassdoor and more with one click. Auto-fill applications and track everything in TrackJobs."
+    },
+    "dashboard": {
+      "title": "Dashboard | TrackJobs",
+      "description": "View and manage all your job applications in one dashboard."
+    },
+    "applicationDetail": {
+      "title": "Application Detail | TrackJobs",
+      "description": "View job application details, notes, and interview stages."
+    },
+    "analytics": {
+      "title": "Analytics | TrackJobs",
+      "description": "Visualize your job search progress with analytics and insights."
+    },
+    "calendar": {
+      "title": "Calendar | TrackJobs",
+      "description": "View your interview schedule and application timeline."
+    },
+    "coverLetters": {
+      "title": "Cover Letters | TrackJobs",
+      "description": "Manage and create cover letters for your job applications."
+    },
+    "compare": {
+      "title": "Compare Offers | TrackJobs",
+      "description": "Compare job offers side by side to make the best decision."
+    },
+    "profile": {
+      "title": "Profile | TrackJobs",
+      "description": "Manage your TrackJobs profile and preferences."
+    }
   }
 }

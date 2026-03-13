@@ -183,12 +183,12 @@ async function apiFetch(path, options = {}) {
 
 const FRONTEND_URLS = {
   'http://localhost:8000/api/v1': 'http://localhost:3003',
-  'https://trackjobapplications-backend.onrender.com/api/v1': 'https://trackjobapplications-eight.vercel.app',
+  'https://trackjobapplications-backend.onrender.com/api/v1': 'https://trackjobapplications.com',
 };
 
 async function getFrontendUrl() {
   const apiBase = await getApiBase();
-  return FRONTEND_URLS[apiBase] || 'https://trackjobapplications-eight.vercel.app';
+  return FRONTEND_URLS[apiBase] || 'https://trackjobapplications.com';
 }
 
 // --- Message Handler ---

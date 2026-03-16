@@ -3,7 +3,6 @@ import DashboardLayout from '../components/layout/DashboardLayout'
 import Header from '../components/dashboard/Header'
 import { useSEO } from '../hooks/useSEO'
 
-const CHROME_STORE_URL = '#'
 const FIREFOX_ADDON_URL = 'https://addons.mozilla.org/en-US/firefox/addon/trackjobapplications/'
 
 const FEATURES = [

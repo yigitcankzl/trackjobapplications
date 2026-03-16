@@ -4,7 +4,7 @@ import Header from '../components/dashboard/Header'
 import { useSEO } from '../hooks/useSEO'
 
 const CHROME_STORE_URL = '#'
-const FIREFOX_ADDON_URL = '#'
+const FIREFOX_ADDON_URL = 'https://addons.mozilla.org/en-US/firefox/addon/trackjobapplications/'
 
 const FEATURES = [
   { key: 'oneClick' },
@@ -41,27 +41,25 @@ export default function ExtensionPage() {
               </p>
               <div className="flex flex-wrap gap-3">
                 <a
-                  href={CHROME_STORE_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 dark:bg-white dark:hover:bg-stone-100 text-white dark:text-stone-900 font-medium text-sm shadow-sm hover:shadow-md transition-all"
-                >
-                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 18a6 6 0 110-12 6 6 0 010 12zm0-9a3 3 0 100 6 3 3 0 000-6z"/>
-                  </svg>
-                  Chrome
-                </a>
-                <a
                   href={FIREFOX_ADDON_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-stone-200/80 dark:border-stone-700 bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-700 font-medium text-sm shadow-sm transition-all"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 dark:bg-white dark:hover:bg-stone-100 text-white dark:text-stone-900 font-medium text-sm shadow-sm hover:shadow-md transition-all"
                 >
                   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.568 7.2a5.4 5.4 0 01.432 2.4c0 3.6-2.4 7.2-7.2 7.2A7.2 7.2 0 014.8 14.4a5.4 5.4 0 003.6 1.2c2.4 0 4.8-2.4 4.8-4.8 0-1.2-.6-2.4-1.2-3.6z"/>
                   </svg>
                   Firefox
                 </a>
+                <span
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-stone-200/80 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-400 dark:text-stone-500 font-medium text-sm cursor-default"
+                >
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 18a6 6 0 110-12 6 6 0 010 12zm0-9a3 3 0 100 6 3 3 0 000-6z"/>
+                  </svg>
+                  Chrome
+                  <span className="px-1.5 py-0.5 rounded bg-amber-50 dark:bg-amber-900/30 text-[10px] font-medium text-amber-600 dark:text-amber-400">Coming Soon</span>
+                </span>
               </div>
             </div>
             <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 flex-shrink-0">

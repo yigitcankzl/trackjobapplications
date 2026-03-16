@@ -43,13 +43,14 @@
     "extensions": {
       "title": "Bulunduğun yerde çalışır",
       "subtitle": "Favori platformlarından işleri doğrudan kaydet — kopyala yapıştır yok.",
-      "chrome": {
-        "title": "Tarayıcı Eklentisi",
+      "firefox": {
+        "title": "Firefox Eklentisi",
+        "badge": "Mevcut",
         "description": "LinkedIn, Indeed ve diğer iş sitelerinden tek tıkla başvuruları dashboard'una kaydet."
       },
-      "gmail": {
-        "title": "Gmail Eklentisi",
-        "description": "İşe alım e-postalarından iş detaylarını yakala ve Gmail'den çıkmadan takip listene ekle."
+      "chrome": {
+        "title": "Chrome Eklentisi",
+        "description": "LinkedIn, Indeed ve diğer iş sitelerinden tek tıkla başvuruları dashboard'una kaydet."
       }
     }
   },

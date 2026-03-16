@@ -43,13 +43,14 @@
     "extensions": {
       "title": "Works where you work",
       "subtitle": "Save jobs directly from your favorite platforms — no copy-pasting needed.",
-      "chrome": {
-        "title": "Browser Extension",
+      "firefox": {
+        "title": "Firefox Extension",
+        "badge": "Available",
         "description": "Save jobs with one click from LinkedIn, Indeed, and other job boards directly to your dashboard."
       },
-      "gmail": {
-        "title": "Gmail Add-on",
-        "description": "Capture job details from recruiter emails and save them to your tracker without leaving Gmail."
+      "chrome": {
+        "title": "Chrome Extension",
+        "description": "Save jobs with one click from LinkedIn, Indeed, and other job boards directly to your dashboard."
       }
     }
   },

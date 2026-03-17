@@ -19,6 +19,9 @@ Thumbs.db
 # Node
 node_modules/
 
+# Extension builds
+dist/
+
 # Python
 __pycache__/
 *.py[cod]

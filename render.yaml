@@ -48,3 +48,15 @@ services:
         sync: false
       - key: CRON_SECRET
         sync: false
+
+  - type: web
+    name: trackjobs-mcp
+    runtime: python
+    rootDir: trackjobapplications-mcp
+    buildCommand: pip install .
+    startCommand: trackjobs-mcp
+    plan: free
+    region: frankfurt
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.7"

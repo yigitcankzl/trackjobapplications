@@ -198,3 +198,44 @@ class TestPasswordResetFlow:
             "new_password2": "Pass2!",
         })
         assert res.status_code == 400
+
+
+@pytest.mark.django_db
+class TestApiToken:
+    URL = "/api/v1/auth/api-token/"
+    APPS = "/api/v1/applications/"
+
+    def test_issue_use_rotate_revoke(self, auth_client, user, other_user):
+        from applications.tests.factories import ApplicationFactory
+
+        assert auth_client.get(self.URL).data == {"exists": False}
+        raw = auth_client.post(self.URL).data["token"]
+        assert raw.startswith("tj_")
+
+        ApplicationFactory(user=user, company="Mine")
+        ApplicationFactory(user=other_user, company="Theirs")
+        client = APIClient()
+        client.credentials(HTTP_AUTHORIZATION=f"Bearer {raw}")
+        res = client.get(self.APPS)
+        assert res.status_code == 200
+        assert [a["company"] for a in res.data["results"]] == ["Mine"]
+        assert auth_client.get(self.URL).data["last_used_at"] is not None
+
+        # scoped: cannot touch account endpoints
+        assert client.get("/api/v1/auth/me/").status_code == 401
+
+        # rotating invalidates the old token
+        new_raw = auth_client.post(self.URL).data["token"]
+        assert client.get(self.APPS).status_code == 401
+        client.credentials(HTTP_AUTHORIZATION=f"Bearer {new_raw}")
+        assert client.get(self.APPS).status_code == 200
+
+        assert auth_client.delete(self.URL).status_code == 204
+        assert client.get(self.APPS).status_code == 401
+
+    def test_invalid_token_rejected(self, anon_client):
+        anon_client.credentials(HTTP_AUTHORIZATION="Bearer tj_nope")
+        assert anon_client.get(self.APPS).status_code == 401
+
+    def test_requires_login(self, anon_client):
+        assert anon_client.post(self.URL).status_code == 401

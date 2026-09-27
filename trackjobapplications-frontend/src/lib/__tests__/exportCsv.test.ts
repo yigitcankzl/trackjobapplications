@@ -45,7 +45,8 @@ describe('exportApplicationsCsv', () => {
 
   it('sanitizes formula injection in company name', () => {
     const blobSpy = vi.spyOn(globalThis, 'Blob').mockImplementation(
-      (parts) => ({ parts } as unknown as Blob)
+      // Blob is called with `new`, so the mock must be a regular function, not an arrow
+      function (parts) { return { parts } as unknown as Blob }
     )
     exportApplicationsCsv([makeApp({ company: '=CMD("calc")' })])
     const csv = (blobSpy.mock.calls[0][0] as string[])[0]

@@ -1,0 +1,19 @@
+[project]
+name = "trackjobs-mcp"
+version = "0.1.0"
+description = "MCP server for TrackJobs: manage your job applications from Claude and other MCP clients"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+dependencies = ["mcp>=2.2,<3", "httpx"]
+
+[project.scripts]
+trackjobs-mcp = "trackjobs_mcp:main"
+
+[project.urls]
+Homepage = "https://www.trackjobapplications.com"
+Repository = "https://github.com/yigitcankzl/trackjobapplications"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

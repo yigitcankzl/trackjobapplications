@@ -143,6 +143,8 @@ MEDIA_ROOT = BASE_DIR / "media"
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "users.authentication.JWTCookieAuthentication",
+        # Must sit before plain JWTAuthentication, which would reject "Bearer tj_..." as a malformed JWT
+        "users.authentication.ApiTokenAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
@@ -167,6 +169,7 @@ REST_FRAMEWORK = {
         "social_login": "30/minute",
         "social_callback": "30/minute",
         "extension_token": "10/hour",
+        "api_token": "10/hour",
         "csrf": "30/minute",
     },
 }

@@ -2,6 +2,9 @@
   "name": "trackjobapplications-extension",
   "private": true,
   "scripts": {
+    "build": "node scripts/build.js",
+    "build:chrome": "node scripts/build.js chrome",
+    "build:firefox": "node scripts/build.js firefox",
     "test": "vitest run",
     "test:watch": "vitest"
   },

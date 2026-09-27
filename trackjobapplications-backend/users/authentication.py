@@ -1,9 +1,13 @@
 from django.conf import settings
+from django.utils import timezone
 from django.middleware.csrf import CsrfViewMiddleware
 from rest_framework import exceptions
+from rest_framework.authentication import BaseAuthentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
+
+from users.models import ApiToken
 
 
 class JWTCookieAuthentication(JWTAuthentication):
@@ -47,3 +51,24 @@ class JWTCookieAuthentication(JWTAuthentication):
         if header and header.startswith(b"Bearer "):
             return header[len(b"Bearer "):]
         return super().get_raw_token(header)
+
+
+class ApiTokenAuthentication(BaseAuthentication):
+    """
+    Personal API tokens ("Authorization: Bearer tj_...") for MCP clients and scripts.
+    Scoped to application endpoints so a leaked token cannot change the password or delete the account.
+    """
+
+    ALLOWED_PREFIX = "/api/v1/applications/"
+
+    def authenticate(self, request):
+        header = request.headers.get("Authorization", "")
+        if not header.startswith(f"Bearer {ApiToken.PREFIX}"):
+            return None
+        if not request.path.startswith(self.ALLOWED_PREFIX):
+            raise AuthenticationFailed("API tokens can only access application endpoints.")
+        token = ApiToken.objects.select_related("user").filter(key_hash=ApiToken.hash(header[len("Bearer "):])).first()
+        if token is None or not token.user.is_active:
+            raise AuthenticationFailed("Invalid API token.")
+        ApiToken.objects.filter(pk=token.pk).update(last_used_at=timezone.now())
+        return token.user, token

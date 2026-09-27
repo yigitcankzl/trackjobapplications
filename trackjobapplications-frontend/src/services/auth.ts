@@ -91,3 +91,24 @@ export async function confirmPasswordReset(
     new_password2: newPassword2,
   })
 }
+
+export interface ApiTokenStatus {
+  exists: boolean
+  created_at?: string
+  last_used_at?: string | null
+}
+
+export async function fetchApiToken(): Promise<ApiTokenStatus> {
+  const { data } = await api.get<ApiTokenStatus>('/auth/api-token/')
+  return data
+}
+
+/** Creates or rotates the token; the raw value is only returned here, once. */
+export async function createApiToken(): Promise<string> {
+  const { data } = await api.post<{ token: string }>('/auth/api-token/')
+  return data.token
+}
+
+export async function revokeApiToken(): Promise<void> {
+  await api.delete('/auth/api-token/')
+}

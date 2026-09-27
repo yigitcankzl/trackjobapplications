@@ -1,5 +1,7 @@
+import hashlib
 import logging
 import os
+import secrets
 import uuid
 
 from django.conf import settings
@@ -104,3 +106,29 @@ class NotificationPreference(models.Model):
 
     def __str__(self):
         return f"NotificationPreference for {self.user}"
+
+
+class ApiToken(models.Model):
+    """Personal API token for MCP clients and scripts; only its SHA-256 is stored."""
+
+    PREFIX = "tj_"
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="api_token")
+    key_hash = models.CharField(max_length=64, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_used_at = models.DateTimeField(null=True, blank=True)
+
+    @staticmethod
+    def hash(raw: str) -> str:
+        return hashlib.sha256(raw.encode()).hexdigest()
+
+    @classmethod
+    def issue(cls, user) -> str:
+        """Create or rotate the user's token and return the raw value (shown once)."""
+        raw = cls.PREFIX + secrets.token_urlsafe(32)
+        cls.objects.filter(user=user).delete()
+        cls.objects.create(user=user, key_hash=cls.hash(raw))
+        return raw
+
+    def __str__(self):
+        return f"ApiToken for {self.user}"

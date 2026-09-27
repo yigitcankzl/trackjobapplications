@@ -28,7 +28,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from social_core.exceptions import AuthCanceled, AuthForbidden, AuthMissingParameter, MissingBackend, SocialAuthBaseException
 from social_django.utils import load_backend, load_strategy
 
-from users.models import NotificationPreference
+from users.models import ApiToken, NotificationPreference
 
 logger = logging.getLogger(__name__)
 User = get_user_model()
@@ -352,6 +352,30 @@ class ExtensionTokenView(APIView):
             "refresh": str(refresh),
             "email": request.user.email,
         })
+
+
+class ApiTokenView(APIView):
+    """Personal API token for MCP clients: GET status, POST create/rotate (raw token returned once), DELETE revoke."""
+    permission_classes = [permissions.IsAuthenticated]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "api_token"
+
+    def get_throttles(self):
+        # Only minting is rate-limited; the profile page reads status on every visit
+        return super().get_throttles() if self.request.method == "POST" else []
+
+    def get(self, request):
+        token = ApiToken.objects.filter(user=request.user).first()
+        if token is None:
+            return Response({"exists": False})
+        return Response({"exists": True, "created_at": token.created_at, "last_used_at": token.last_used_at})
+
+    def post(self, request):
+        return Response({"token": ApiToken.issue(request.user)}, status=status.HTTP_201_CREATED)
+
+    def delete(self, request):
+        ApiToken.objects.filter(user=request.user).delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class SocialLoginInitView(APIView):

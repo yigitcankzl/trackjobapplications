@@ -9,6 +9,7 @@ import { updateProfile, changePassword } from '../services/auth'
 import { getAvatarColor } from '../lib/avatar'
 import { CameraIcon, UploadIcon, DownloadIcon } from '../components/icons'
 import DragDropZone from '../components/profile/DragDropZone'
+import ApiTokenSection from '../components/profile/ApiTokenSection'
 
 export default function ProfilePage() {
   const { t } = useTranslation()
@@ -230,6 +231,8 @@ export default function ProfilePage() {
             {saving ? '...' : t('profile.saveProfile')}
           </button>
         </form>
+
+        <ApiTokenSection />
 
         {/* Email Notifications - Coming Soon */}
         <div className="relative bg-white dark:bg-stone-900 rounded-lg border border-stone-100/60 dark:border-stone-800 shadow-sm p-6 space-y-5 overflow-hidden">

@@ -1,4 +1,5 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useSEO } from '../hooks/useSEO'
 import DashboardLayout from '../components/layout/DashboardLayout'
@@ -14,14 +15,14 @@ import ReminderBanner from '../components/dashboard/ReminderBanner'
 import BulkActionBar from '../components/dashboard/BulkActionBar'
 import ImportModal from '../components/dashboard/ImportModal'
 import InterviewReminderPopup from '../components/dashboard/InterviewReminderPopup'
-import Pagination from '../components/ui/Pagination'
 import Button from '../components/ui/Button'
 import LoadingSpinner from '../components/ui/LoadingSpinner'
 import { PlusIcon, TableIcon, KanbanIcon, DownloadIcon, RefreshIcon } from '../components/icons'
 import { exportApplicationsCsv } from '../lib/exportCsv'
 import { isSafeUrl } from '../lib/url'
 import { exportPdf } from '../services/applications'
-import { ApplicationFilters, JobApplication, StatusFilter, ViewMode } from '../types'
+import { getTags } from '../services/tags'
+import { ApplicationFilters, JobApplication, StatusFilter, Tag, ViewMode } from '../types'
 import { useToast } from '../context/ToastContext'
 import { useApplicationFilters } from '../hooks/useApplicationFilters'
 import { useApplicationReminders } from '../hooks/useApplicationReminders'
@@ -35,14 +36,22 @@ export default function DashboardPage() {
   const seo = useSEO({ title: t('seo.dashboard.title'), description: t('seo.dashboard.description'), path: '/dashboard', noIndex: true })
 
   const {
-    apps, page, totalPages, loading, stats, selectedIds,
-    loadPage, handleAdd, handleEdit, handleStatusChange,
+    apps, loading, stats, selectedIds,
+    load, handleAdd, handleEdit, handleStatusChange,
     handleTogglePin, handleDelete,
     handleBulkUpdateStatus, handleBulkDelete,
     toggleSelect, toggleSelectAll, setSelectedIds,
   } = useDashboardData()
 
-  const [view, setView] = useState<ViewMode>('table')
+  const [searchParams, setSearchParams] = useSearchParams()
+  const view: ViewMode = searchParams.get('view') === 'kanban' ? 'kanban' : 'table'
+  const setView = (v: ViewMode) => setSearchParams(prev => {
+    const next = new URLSearchParams(prev)
+    if (v === 'kanban') next.set('view', v)
+    else next.delete('view')
+    return next
+  }, { replace: true })
+  const [tags, setTags] = useState<Tag[]>([])
   const [drawerApp, setDrawerApp] = useState<JobApplication | null>(null)
   const [addOpen, setAddOpen] = useState(false)
   const [editTarget, setEditTarget] = useState<JobApplication | null>(null)
@@ -50,8 +59,12 @@ export default function DashboardPage() {
   const [importOpen, setImportOpen] = useState(false)
 
   const handleFiltersChange = useCallback((filters: ApplicationFilters) => {
-    loadPage(1, filters)
-  }, [loadPage])
+    load(filters)
+  }, [load])
+
+  useEffect(() => {
+    getTags().then(setTags).catch(() => {})
+  }, [])
 
   const {
     search, setSearch,
@@ -59,6 +72,7 @@ export default function DashboardPage() {
     sourceFilter, setSourceFilter,
     dateAfter, setDateAfter,
     dateBefore, setDateBefore,
+    tagFilter, setTagFilter,
     sortKey, sortDir, handleSortChange,
   } = useApplicationFilters(handleFiltersChange)
 
@@ -123,7 +137,7 @@ export default function DashboardPage() {
               </button>
             </div>
 
-            <Button variant="secondary" onClick={() => loadPage(page)}>
+            <Button variant="secondary" onClick={() => load()}>
               <RefreshIcon />
             </Button>
             <Button variant="secondary" onClick={() => setImportOpen(true)}>
@@ -195,6 +209,9 @@ export default function DashboardPage() {
         onStatusFilterChange={setStatusFilter}
         sourceFilter={sourceFilter}
         onSourceFilterChange={setSourceFilter}
+        tags={tags}
+        tagFilter={tagFilter}
+        onTagFilterChange={setTagFilter}
         dateAfter={dateAfter}
         onDateAfterChange={setDateAfter}
         dateBefore={dateBefore}
@@ -218,6 +235,7 @@ export default function DashboardPage() {
           onDelete={setDeleteTarget}
           onTogglePin={handleTogglePin}
           onApply={handleApply}
+          onTagClick={id => setTagFilter(String(id))}
         />
       ) : (
         <KanbanBoard
@@ -226,10 +244,9 @@ export default function DashboardPage() {
           onDelete={setDeleteTarget}
           onTogglePin={handleTogglePin}
           onStatusChange={handleStatusChange}
+          onTagClick={id => setTagFilter(String(id))}
         />
       )}
-
-      <Pagination page={page} totalPages={totalPages} onPageChange={p => loadPage(p)} />
 
       <BulkActionBar
         selectedCount={selectedIds.length}
@@ -241,7 +258,7 @@ export default function DashboardPage() {
       <ImportModal
         open={importOpen}
         onClose={() => setImportOpen(false)}
-        onSuccess={() => loadPage(1)}
+        onSuccess={() => load()}
       />
 
       <InterviewReminderPopup

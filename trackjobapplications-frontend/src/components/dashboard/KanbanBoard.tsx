@@ -5,6 +5,7 @@ import { JobApplication, ApplicationStatus } from '../../types'
 import { STATUS_COLORS } from '../../constants/applicationStatus'
 import { EditIcon, TrashIcon } from '../icons'
 import { getAvatarColor } from '../../lib/avatar'
+import { openApplication } from '../../lib/url'
 import { formatShort } from '../../lib/dates'
 import TagBadge from './TagBadge'
 import { needsFollowUp } from '../../lib/followUp'
@@ -16,6 +17,7 @@ interface Props {
   onDelete: (app: JobApplication) => void
   onTogglePin?: (id: number) => void
   onStatusChange: (id: number, newStatus: ApplicationStatus) => void
+  onTagClick?: (tagId: number) => void
 }
 
 const COLUMNS: ApplicationStatus[] = ['to_apply', 'applied', 'interview', 'offer', 'rejected', 'withdrawn']
@@ -35,12 +37,13 @@ interface CardProps {
   onKeyboardGrab: (id: number) => void
   onKeyboardMove: (id: number, dir: 'left' | 'right') => void
   onKeyboardDrop: () => void
+  onTagClick?: (tagId: number) => void
 }
 
 const KanbanCard = memo(function KanbanCard({
   app, onEdit, onDelete, onDragStart, onDragEnd,
   isDragging, isKeyboardGrabbed,
-  onKeyboardGrab, onKeyboardMove, onKeyboardDrop,
+  onKeyboardGrab, onKeyboardMove, onKeyboardDrop, onTagClick,
 }: CardProps) {
   const { t } = useTranslation()
   const navigate = useNavigate()
@@ -62,7 +65,8 @@ const KanbanCard = memo(function KanbanCard({
       draggable
       onDragStart={() => onDragStart(app.id)}
       onDragEnd={onDragEnd}
-      onClick={() => navigate(`/applications/${app.id}`)}
+      onClick={e => openApplication(e, app.id, navigate)}
+      onAuxClick={e => { if (e.button === 1) openApplication(e, app.id, navigate) }}
       onKeyDown={handleKeyDown}
       tabIndex={0}
       role="link"
@@ -114,7 +118,7 @@ const KanbanCard = memo(function KanbanCard({
 
       {app.tags && app.tags.length > 0 && (
         <div className="flex flex-wrap gap-1 mb-2">
-          {app.tags.map(tag => <TagBadge key={tag.id} tag={tag} />)}
+          {app.tags.map(tag => <TagBadge key={tag.id} tag={tag} onClick={onTagClick && (() => onTagClick(tag.id))} />)}
         </div>
       )}
 
@@ -135,12 +139,13 @@ interface ColumnBodyProps {
   onKeyboardGrab: (id: number) => void
   onKeyboardMove: (id: number, dir: 'left' | 'right') => void
   onKeyboardDrop: () => void
+  onTagClick?: (tagId: number) => void
 }
 
 function ColumnBody({
   apps, isOver, draggingId, keyboardDragId,
   onEdit, onDelete, onDragStart, onDragEnd,
-  onKeyboardGrab, onKeyboardMove, onKeyboardDrop,
+  onKeyboardGrab, onKeyboardMove, onKeyboardDrop, onTagClick,
 }: ColumnBodyProps) {
   const { t } = useTranslation()
   const useVirtual = apps.length >= VIRTUAL_THRESHOLD
@@ -190,6 +195,7 @@ function ColumnBody({
             onKeyboardGrab={onKeyboardGrab}
             onKeyboardMove={onKeyboardMove}
             onKeyboardDrop={onKeyboardDrop}
+            onTagClick={onTagClick}
           />
         ))}
       </div>
@@ -197,7 +203,7 @@ function ColumnBody({
   )
 }
 
-export default function KanbanBoard({ applications, onEdit, onDelete, onStatusChange }: Props) {
+export default function KanbanBoard({ applications, onEdit, onDelete, onStatusChange, onTagClick }: Props) {
   const { t } = useTranslation()
   const draggedId = useRef<number | null>(null)
   const [draggingId, setDraggingId] = useState<number | null>(null)
@@ -299,6 +305,7 @@ export default function KanbanBoard({ applications, onEdit, onDelete, onStatusCh
               onKeyboardGrab={handleKeyboardGrab}
               onKeyboardMove={handleKeyboardMove}
               onKeyboardDrop={handleKeyboardDrop}
+              onTagClick={onTagClick}
             />
           </div>
         )

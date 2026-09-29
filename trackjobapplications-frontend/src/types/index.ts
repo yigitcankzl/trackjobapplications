@@ -187,5 +187,7 @@ export interface ApplicationFilters {
   source?: ApplicationSource
   applied_date_after?: string
   applied_date_before?: string
+  /** Tag id */
+  tags?: string
   ordering?: string
 }

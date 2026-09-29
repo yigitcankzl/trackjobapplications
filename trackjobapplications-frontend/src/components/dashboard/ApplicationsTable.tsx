@@ -3,11 +3,13 @@ import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { JobApplication } from '../../types'
 import StatusBadge from './StatusBadge'
+import TagBadge from './TagBadge'
 import { EditIcon, TrashIcon, ClipboardIcon, ExternalLinkIcon } from '../icons'
 import { getAvatarColor } from '../../lib/avatar'
 import { formatMedium } from '../../lib/dates'
 import { needsFollowUp } from '../../lib/followUp'
 import { useVirtualList } from '../../hooks/useVirtualList'
+import { openApplication } from '../../lib/url'
 
 const ROW_HEIGHT = 73
 const TABLE_MAX_HEIGHT = 600
@@ -22,6 +24,7 @@ interface Props {
   selectedIds?: number[]
   onToggleSelect?: (id: number) => void
   onToggleSelectAll?: () => void
+  onTagClick?: (tagId: number) => void
 }
 
 function EmptyState() {
@@ -37,7 +40,7 @@ function EmptyState() {
   )
 }
 
-export default memo(function ApplicationsTable({ applications, onEdit, onDelete, onTogglePin, onApply, selectedIds, onToggleSelect, onToggleSelectAll }: Props) {
+export default memo(function ApplicationsTable({ applications, onEdit, onDelete, onTogglePin, onApply, selectedIds, onToggleSelect, onToggleSelectAll, onTagClick }: Props) {
   const hasBulk = !!(selectedIds && onToggleSelect && onToggleSelectAll)
   const { t } = useTranslation()
   const navigate = useNavigate()
@@ -93,7 +96,7 @@ export default memo(function ApplicationsTable({ applications, onEdit, onDelete,
             <tr style={{ height: paddingTop }}><td colSpan={colSpan} /></tr>
           )}
           {visibleRows.map(app => (
-            <tr key={app.id} onClick={() => navigate(`/applications/${app.id}`)} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate(`/applications/${app.id}`) } }} tabIndex={0} role="link" className="group hover:bg-stone-50/50 dark:hover:bg-stone-800/30 transition-colors duration-150 cursor-pointer focus:outline-none focus:ring-2 focus:ring-stone-500/30 focus:ring-inset">
+            <tr key={app.id} onClick={e => openApplication(e, app.id, navigate)} onAuxClick={e => { if (e.button === 1) openApplication(e, app.id, navigate) }} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate(`/applications/${app.id}`) } }} tabIndex={0} role="link" className="group hover:bg-stone-50/50 dark:hover:bg-stone-800/30 transition-colors duration-150 cursor-pointer focus:outline-none focus:ring-2 focus:ring-stone-500/30 focus:ring-inset">
               {hasBulk && (
                 <td className="px-3 py-4">
                   <input
@@ -115,6 +118,10 @@ export default memo(function ApplicationsTable({ applications, onEdit, onDelete,
                     <p className="text-sm font-semibold text-stone-900 dark:text-stone-100 leading-tight flex items-center gap-1.5">
                       {app.company}
                       {needsFollowUp(app) && <span className="w-2 h-2 rounded-full bg-amber-400 flex-shrink-0" title={t('dashboard.aria.followUpNeeded')} />}
+                      {/* Inline with the company name so row height (ROW_HEIGHT) stays fixed for virtualization */}
+                      {app.tags?.slice(0, 3).map(tag => (
+                        <TagBadge key={tag.id} tag={tag} onClick={onTagClick && (() => onTagClick(tag.id))} />
+                      ))}
                     </p>
                     <p className="text-xs text-stone-500 dark:text-stone-400 mt-0.5 truncate">{app.position}</p>
                     {app.notes && (

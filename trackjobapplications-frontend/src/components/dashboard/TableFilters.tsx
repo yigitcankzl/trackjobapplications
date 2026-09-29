@@ -1,6 +1,6 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ApplicationSource, SortKey, StatusFilter } from '../../types'
+import { ApplicationSource, SortKey, StatusFilter, Tag } from '../../types'
 import { SearchIcon, CloseIcon, ChevronUpIcon } from '../icons'
 import { useSearchHistory } from '../../hooks/useSearchHistory'
 import SearchHistoryDropdown from './SearchHistoryDropdown'
@@ -12,6 +12,9 @@ interface Props {
   onStatusFilterChange: (v: StatusFilter) => void
   sourceFilter: ApplicationSource | ''
   onSourceFilterChange: (v: ApplicationSource | '') => void
+  tags: Tag[]
+  tagFilter: string
+  onTagFilterChange: (v: string) => void
   dateAfter: string
   onDateAfterChange: (v: string) => void
   dateBefore: string
@@ -30,6 +33,9 @@ export default memo(function TableFilters({
   onStatusFilterChange,
   sourceFilter,
   onSourceFilterChange,
+  tags,
+  tagFilter,
+  onTagFilterChange,
   dateAfter,
   onDateAfterChange,
   dateBefore,
@@ -115,6 +121,21 @@ export default memo(function TableFilters({
             <option key={key} value={key}>{key === '' ? t('dashboard.filters.allSources') : t(`source.${key}`)}</option>
           ))}
         </select>
+
+        {/* Tag filter */}
+        {tags.length > 0 && (
+          <select
+            value={tagFilter}
+            onChange={e => onTagFilterChange(e.target.value)}
+            aria-label={t('dashboard.filters.allTags')}
+            className="px-3 py-2 rounded-lg border border-stone-200 dark:border-stone-700 text-sm bg-white dark:bg-stone-900 dark:text-stone-100 outline-none focus:border-stone-400"
+          >
+            <option value="">{t('dashboard.filters.allTags')}</option>
+            {tags.map(tag => (
+              <option key={tag.id} value={String(tag.id)}>{tag.name}</option>
+            ))}
+          </select>
+        )}
 
         {/* Date range */}
         <div className="flex items-center gap-1.5">

@@ -143,6 +143,8 @@
       "clearAll": "Tümünü temizle",
       "source": "Kaynak",
       "allSources": "Tüm Kaynaklar",
+      "allTags": "Tüm Etiketler",
+      "filterByTag": "{{name}} etiketine göre filtrele",
       "dateAfter": "Başlangıç",
       "dateBefore": "Bitiş"
     },
@@ -576,10 +578,6 @@
     "title": "Takvim",
     "prevMonth": "Önceki ay",
     "nextMonth": "Sonraki ay"
-  },
-  "pagination": {
-    "prev": "Önceki",
-    "next": "Sonraki"
   },
   "footer": {
     "rights": "Tüm hakları saklıdır.",

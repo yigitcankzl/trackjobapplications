@@ -2,7 +2,7 @@
 
 Manage your [TrackJobs](https://www.trackjobapplications.com) applications from Claude Code, Claude Desktop, Cursor, or any MCP client.
 
-Tools: `list_applications`, `get_application`, `add_application`, `update_application`, `delete_application`.
+Tools: `list_applications` (filter by status, search or tag), `list_tags`, `get_application`, `add_application`, `update_application`, `delete_application`. Tags are passed by name and created on the fly.
 
 ## Setup
 
@@ -36,6 +36,6 @@ Claude Desktop / Cursor (`mcpServers` config):
 }
 ```
 
-Then ask: *"Add a Backend Engineer application at Stripe, applied today via LinkedIn"* or *"Move my Google application to interview."*
+Then ask: *"Add a Backend Engineer application at Stripe, applied today via LinkedIn"*, *"Move my Google application to interview"* or *"Show everything tagged remote"*.
 
 Self-host: set `PORT` to serve over HTTP at `/mcp` (tokens then come from each request's `Authorization` header, never from env). Custom backend: set `TRACKJOBS_API_URL` (default `https://trackjobapplications-backend.onrender.com/api/v1`).

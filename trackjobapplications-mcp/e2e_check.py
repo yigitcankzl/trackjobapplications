@@ -23,6 +23,13 @@ async def crud(s):
     assert new["status"] == "applied"
     assert data(await s.call_tool("update_application", {"id": new["id"], "status": "interview"}))["status"] == "interview"
     assert data(await s.call_tool("list_applications", {"search": "strip"}))["count"] == 1
+    tagged = data(await s.call_tool("add_application", {"company": "Acme", "position": "SRE", "tags": ["Remote", "Dream"]}))
+    assert sorted(tagged["tags"]) == ["Dream", "Remote"]
+    assert [a["company"] for a in data(await s.call_tool("list_applications", {"tag": "remote"}))["results"]] == ["Acme"]
+    assert data(await s.call_tool("list_applications", {"tag": "nope"}))["count"] == 0
+    assert data(await s.call_tool("update_application", {"id": tagged["id"], "tags": ["remote", "Urgent"]}))["tags"] == ["Remote", "Urgent"]
+    assert data(await s.call_tool("update_application", {"id": tagged["id"], "tags": []}))["tags"] == []
+    await s.call_tool("delete_application", {"id": tagged["id"]})
     res = await s.call_tool("add_application", {"company": "X", "position": "Y", "status": "bogus"})
     assert res.is_error and "not a valid choice" in res.content[0].text
     return new["id"]

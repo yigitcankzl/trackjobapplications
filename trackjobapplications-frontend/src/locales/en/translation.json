@@ -143,6 +143,8 @@
       "clearAll": "Clear all",
       "source": "Source",
       "allSources": "All Sources",
+      "allTags": "All Tags",
+      "filterByTag": "Filter by {{name}}",
       "dateAfter": "From",
       "dateBefore": "To"
     },
@@ -576,10 +578,6 @@
     "title": "Calendar",
     "prevMonth": "Previous month",
     "nextMonth": "Next month"
-  },
-  "pagination": {
-    "prev": "Previous",
-    "next": "Next"
   },
   "footer": {
     "rights": "All rights reserved.",

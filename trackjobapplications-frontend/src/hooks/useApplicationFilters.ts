@@ -9,7 +9,7 @@ const SORT_MAP: Record<SortKey, string> = {
 }
 
 const STATUSES: StatusFilter[] = ['all', 'to_apply', 'applied', 'interview', 'offer', 'rejected', 'withdrawn']
-const SOURCES: ApplicationSource[] = ['linkedin', 'indeed', 'glassdoor', 'ziprecruiter', 'referral', 'company_website', 'other']
+const SOURCES: ApplicationSource[] = ['linkedin', 'indeed', 'glassdoor', 'referral', 'company_website', 'other']
 
 function oneOf<T extends string>(value: string | null, allowed: readonly T[], fallback: T): T {
   return allowed.includes(value as T) ? (value as T) : fallback
@@ -29,7 +29,7 @@ export function useApplicationFilters(onFiltersChange: (filters: ApplicationFilt
   const dateBefore = params.get('to') ?? ''
   const tagFilter = params.get('tag') ?? ''
   const sortKey = oneOf<SortKey>(params.get('sort'), ['date', 'company', 'status'], 'date')
-  const sortDir = params.get('dir') === 'asc' ? 'asc' : 'desc'
+  const sortDir: 'asc' | 'desc' = params.get('dir') === 'asc' ? 'asc' : 'desc'
 
   // Batch changes into one navigation; separate setParams calls in the same tick would overwrite each other
   const update = useCallback((patch: Record<string, string>) => {

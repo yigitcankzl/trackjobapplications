@@ -106,6 +106,7 @@
     "addApplication": "Add Application",
     "editApplication": "Edit Application",
     "exportCsv": "Export CSV",
+    "loadingMore": "Loading more…",
     "exportPdf": "Export PDF",
     "stats": {
       "total": "Total",

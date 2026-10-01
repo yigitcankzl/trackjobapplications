@@ -106,6 +106,7 @@
     "addApplication": "Başvuru Ekle",
     "editApplication": "Başvuruyu Düzenle",
     "exportCsv": "CSV İndir",
+    "loadingMore": "Daha fazlası yükleniyor…",
     "exportPdf": "PDF İndir",
     "stats": {
       "total": "Toplam",

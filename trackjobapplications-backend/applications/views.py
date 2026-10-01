@@ -97,10 +97,10 @@ class ApplicationViewSet(viewsets.ModelViewSet):
     ordering = ["-applied_date"]
 
     def get_queryset(self):
-        qs = self.request.user.applications.all()
-        if self.action == "list":
-            return qs.prefetch_related("tags")
-        return qs.prefetch_related("note_entries", "tags", "email_logs").select_related("offer_detail")
+        # The serializer nests notes, email logs and offer details, so list needs them prefetched too (else 3 queries per row)
+        return self.request.user.applications.prefetch_related(
+            "note_entries", "tags", "email_logs"
+        ).select_related("offer_detail")
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)

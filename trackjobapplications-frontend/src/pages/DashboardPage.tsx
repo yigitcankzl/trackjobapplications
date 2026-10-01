@@ -36,7 +36,7 @@ export default function DashboardPage() {
   const seo = useSEO({ title: t('seo.dashboard.title'), description: t('seo.dashboard.description'), path: '/dashboard', noIndex: true })
 
   const {
-    apps, loading, stats, selectedIds,
+    apps, loading, loadingMore, stats, selectedIds,
     load, handleAdd, handleEdit, handleStatusChange,
     handleTogglePin, handleDelete,
     handleBulkUpdateStatus, handleBulkDelete,
@@ -246,6 +246,10 @@ export default function DashboardPage() {
           onStatusChange={handleStatusChange}
           onTagClick={id => setTagFilter(String(id))}
         />
+      )}
+
+      {loadingMore && (
+        <p className="text-xs text-stone-400 text-center py-3" role="status">{t('dashboard.loadingMore')}</p>
       )}
 
       <BulkActionBar

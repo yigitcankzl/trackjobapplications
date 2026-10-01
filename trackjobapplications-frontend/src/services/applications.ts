@@ -5,9 +5,10 @@ import { ApplicationFilters, ApplicationNote, CompareApplication, EmailLog, JobA
 type CreatePayload = Omit<JobApplication, 'id' | 'created_at' | 'updated_at'>
 type UpdatePayload = Partial<CreatePayload>
 
-// ponytail: loads everything in one request (backend caps page_size=all at 500); paginate again past that
-export async function getApplications(filters: ApplicationFilters = {}): Promise<PaginatedResponse<JobApplication>> {
-  const params: Record<string, string | number> = { page_size: 'all' }
+export async function getApplications(
+  filters: ApplicationFilters = {}, page = 1, pageSize = 100,
+): Promise<PaginatedResponse<JobApplication>> {
+  const params: Record<string, string | number> = { page, page_size: pageSize }
   if (filters.search) params.search = filters.search
   if (filters.status) params.status = filters.status
   if (filters.source) params.source = filters.source

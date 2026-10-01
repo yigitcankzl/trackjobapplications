@@ -7,12 +7,15 @@ import {
 } from '../services/applications'
 import { ApplicationFilters, ApplicationStatus, JobApplication } from '../types'
 
+const BATCH_SIZE = 100
+
 export default function useDashboardData() {
   const { t } = useTranslation()
   const { addToast } = useToast()
 
   const [apps, setApps] = useState<JobApplication[]>([])
   const [loading, setLoading] = useState(true)
+  const [loadingMore, setLoadingMore] = useState(false)
   const [selectedIds, setSelectedIds] = useState<number[]>([])
   const [stats, setStats] = useState<AppStats>({ total: 0, to_apply: 0, applied: 0, interview: 0, offer: 0, rejected: 0, withdrawn: 0 })
 
@@ -29,13 +32,23 @@ export default function useDashboardData() {
     setLoading(true)
     setSelectedIds([])
     const reqId = ++requestIdRef.current
-    getApplications(f)
-      .then(res => {
-        if (reqId !== requestIdRef.current) return
-        setApps(res.results)
+    const isCurrent = () => reqId === requestIdRef.current
+    // First batch renders right away; the rest load in parallel in the background
+    getApplications(f, 1, BATCH_SIZE)
+      .then(async first => {
+        if (!isCurrent()) return
+        setApps(first.results)
+        setLoading(false)
+        const pages = Math.ceil(first.count / BATCH_SIZE)
+        if (pages <= 1) return
+        setLoadingMore(true)
+        const rest = await Promise.all(
+          Array.from({ length: pages - 1 }, (_, i) => getApplications(f, i + 2, BATCH_SIZE)),
+        )
+        if (isCurrent()) setApps(prev => [...prev, ...rest.flatMap(r => r.results)])
       })
-      .catch(() => { if (reqId === requestIdRef.current) addToast(t('dashboard.errors.loadFailed'), 'error') })
-      .finally(() => { if (reqId === requestIdRef.current) setLoading(false) })
+      .catch(() => { if (isCurrent()) addToast(t('dashboard.errors.loadFailed'), 'error') })
+      .finally(() => { if (isCurrent()) { setLoading(false); setLoadingMore(false) } })
     loadStats()
   }, [addToast, t, loadStats])
 
@@ -124,7 +137,7 @@ export default function useDashboardData() {
   }, [apps])
 
   return {
-    apps, loading, stats, selectedIds,
+    apps, loading, loadingMore, stats, selectedIds,
     load, handleAdd, handleEdit, handleStatusChange,
     handleTogglePin, handleDelete,
     handleBulkUpdateStatus, handleBulkDelete,

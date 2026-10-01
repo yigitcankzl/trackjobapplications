@@ -5,6 +5,7 @@ from applications.models import Application, ApplicationContact, InterviewStage,
 from .factories import (
     ApplicationContactFactory,
     ApplicationFactory,
+    ApplicationNoteFactory,
     InterviewStageFactory,
     TagFactory,
 )
@@ -376,3 +377,25 @@ class TestCoverLetterTemplateViewSet:
         tpl = CoverLetterTemplate.objects.create(user=user, name="ToDelete", content="...")
         res = auth_client.delete(f"{self.URL}{tpl.id}/")
         assert res.status_code == 204
+
+
+@pytest.mark.django_db
+def test_list_query_count_does_not_grow_with_rows(auth_client, user):
+    from django.db import connection
+    from django.test.utils import CaptureQueriesContext
+
+    def count_queries():
+        with CaptureQueriesContext(connection) as ctx:
+            assert auth_client.get("/api/v1/applications/?page_size=all").status_code == 200
+        return len(ctx)
+
+    def add(n):
+        for _ in range(n):
+            app = ApplicationFactory(user=user)
+            ApplicationNoteFactory(application=app)
+            app.tags.add(TagFactory(user=user))
+
+    add(2)
+    few = count_queries()
+    add(10)
+    assert count_queries() == few
